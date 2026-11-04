@@ -1,0 +1,724 @@
+<!doctype html>
+<html lang="pt-PT">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Casa, lar e cidade hostil · CLC 6</title>
+<meta name="description" content="Cultura, Língua e Comunicação 6 · DR1 · Aula 2: arquitetura hostil, ter lar sem ter casa, texto de opinião.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Caladea:ital,wght@0,400;0,700;1,400&family=Carlito:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<!--
+  index.html — conteúdo da aula. Cada <section class="slide"> é um slide.
+  Atributos usados pelo app.js:
+    id="s-..."            endereço do slide (#s-...)
+    data-lesson="..."     agrupa o slide na barra lateral
+    data-title="..."      nome curto na barra lateral
+    data-step="n"         elemento revelado no passo n (seta para a direita)
+  Componentes (ver README): .flip, .poll, .quiz, .research, .timer, .check
+-->
+
+<button class="menu-btn" aria-label="Abrir índice">☰ Índice</button>
+
+<nav class="sidebar" aria-label="Índice da aula">
+  <header>
+    <a class="home-link" href="../index.html">← Todas as disciplinas</a>
+    <p class="kicker">CLC 6 · DR1 · Aulas 1 e 2</p>
+    <h1>Casa, lar e cidade hostil</h1>
+    <div class="progress" aria-hidden="true"><span></span></div>
+  </header>
+  <div class="toc"></div>
+  <footer><kbd>←</kbd> <kbd>→</kbd> navegar · <kbd>N</kbd> notas · <kbd>F</kbd> ecrã inteiro</footer>
+</nav>
+
+<main class="stage">
+
+<!-- ================= PROGRAMA DA UNIDADE ================= -->
+
+<section class="slide divider" id="p-unidade" data-lesson="Programa · CLC 6" data-title="Culturas de urbanismo e mobilidade">
+  <div class="wrap">
+    <p class="kicker">Cultura, Língua e Comunicação · CLC 6</p>
+    <h2>Culturas de urbanismo e mobilidade</h2>
+    <p class="sub">Onde vivemos, como nos movemos</p>
+  </div>
+</section>
+
+<section class="slide" id="p-temas" data-lesson="Programa · CLC 6" data-title="Como surgem os temas do programa?">
+  <p class="kicker">CLC 6 · programa</p>
+  <h2>Como surgem os temas do programa?</h2>
+  <div class="ng" data-step="1">
+    <p class="label" style="color:var(--accent)">Núcleo gerador</p>
+    <b>Urbanismo e Mobilidade</b>
+    <span>O tema abrangente que define a unidade de competência 6 de CLC.</span>
+  </div>
+  <svg class="ng-lines" viewBox="0 0 1000 60" preserveAspectRatio="none" aria-hidden="true" data-step="2">
+    <path class="draw" pathLength="1" d="M500 0 V20 H125 V60 M500 20 H375 V60 M500 20 H625 V60 M500 20 H875 V60" stroke="#A44A16" stroke-width="3" fill="none"/>
+  </svg>
+  <div class="grid g4 drs">
+    <div class="card" data-step="2"><span class="num">1</span><p class="ctx">Contexto privado</p><p class="sm">vida pessoal e doméstica</p><h3>Construção e Arquitetura</h3><p class="sm" data-step="3">A casa como espaço de bem-estar e lazer: planeamento, terminologia, comunicação com técnicos.</p></div>
+    <div class="card" data-step="2"><span class="num">2</span><p class="ctx">Contexto profissional</p><p class="sm">trabalho e emprego</p><h3>Ruralidade e Urbanidade</h3><p class="sm" data-step="3">Oportunidades laborais no território rural e urbano: sotaques, regionalismos, valorização do património.</p></div>
+    <div class="card" data-step="2"><span class="num">3</span><p class="ctx">Contexto institucional</p><p class="sm">saberes, poderes, instituições</p><h3>Administração, Segurança e Território</h3><p class="sm" data-step="3">Redes de equipamentos culturais, mapas, sinalização e legislação territorial.</p></div>
+    <div class="card" data-step="2"><span class="num">4</span><p class="ctx">Contexto macroestrutural</p><p class="sm">estabilidade e mudança</p><h3>Mobilidades Locais e Globais</h3><p class="sm" data-step="3">Fluxos migratórios, multiculturalismo, defesa da língua portuguesa no mundo.</p></div>
+  </div>
+  <p class="source" data-step="4">DR = Domínio de Referência para a Ação. Cada tema nasce do cruzamento entre o Núcleo Gerador e um dos quatro Domínios de Referência definidos pelo Referencial de Competências-Chave para a Educação e Formação de Adultos — Nível Secundário (2006).</p>
+</section>
+
+<section class="slide" id="p-escalas" data-lesson="Programa · CLC 6" data-title="Do eu ao mundo: os quatro DR">
+  <p class="kicker">O percurso da unidade</p>
+  <h2>Da casa ao mundo, um círculo de cada vez</h2>
+  <div class="scales">
+    <svg viewBox="0 0 520 520" class="rings" aria-label="Quatro círculos concêntricos: casa, vizinhança, instituições, mundo">
+      <g data-step="4"><circle class="ring" cx="260" cy="260" r="250" fill="#DCE8F2"/><text x="260" y="46" text-anchor="middle" font-family="Cambria, Caladea, serif" font-weight="700" font-size="24" fill="#2F6E9E">DR4 · o mundo</text></g>
+      <g data-step="3"><circle class="ring" cx="260" cy="260" r="188" fill="#F6F3EC"/><text x="260" y="110" text-anchor="middle" font-family="Cambria, Caladea, serif" font-weight="700" font-size="22" fill="#1E2A33">DR3 · as instituições</text></g>
+      <g data-step="2"><circle class="ring" cx="260" cy="260" r="126" fill="#FBE3D2"/><text x="260" y="172" text-anchor="middle" font-family="Cambria, Caladea, serif" font-weight="700" font-size="20" fill="#A44A16">DR2 · o outro</text></g>
+      <g data-step="1"><circle class="ring" cx="260" cy="260" r="64" fill="#A44A16"/><svg x="240" y="222" width="40" height="40" viewBox="0 0 576 512" fill="#FFFFFF"><path d="M575.8 255.5c0 18-15 32.1-32 32.1l-32 0 .7 160.2c0 2.7-.2 5.4-.5 8.1l0 16.2c0 22.1-17.9 40-40 40l-16 0c-1.1 0-2.2 0-3.3-.1c-1.4 .1-2.8 .1-4.2 .1L416 512l-24 0c-22.1 0-40-17.9-40-40l0-24 0-64c0-17.7-14.3-32-32-32l-64 0c-17.7 0-32 14.3-32 32l0 64 0 24c0 22.1-17.9 40-40 40l-24 0-31.9 0c-1.5 0-3-.1-4.5-.2c-1.2 .1-2.4 .2-3.6 .2l-16 0c-22.1 0-40-17.9-40-40l0-112c0-.9 0-1.9 .1-2.8l0-69.7-32 0c-18 0-32-14-32-32.1c0-9 3-17 10-24L266.4 8c7-7 15-8 22-8s15 2 21 7L564.8 231.5c8 7 12 15 11 24z"></path></svg><text x="260" y="292" text-anchor="middle" font-family="Calibri, Carlito, sans-serif" font-weight="700" font-size="18" fill="#fff">DR1 · o eu</text></g>
+    </svg>
+    <div class="grid" style="gap:14px">
+      <div class="card peach row" data-step="1"><span class="ic sm"><svg stroke-width="0" viewBox="0 0 576 512" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"><path d="M575.8 255.5c0 18-15 32.1-32 32.1l-32 0 .7 160.2c0 2.7-.2 5.4-.5 8.1l0 16.2c0 22.1-17.9 40-40 40l-16 0c-1.1 0-2.2 0-3.3-.1c-1.4 .1-2.8 .1-4.2 .1L416 512l-24 0c-22.1 0-40-17.9-40-40l0-24 0-64c0-17.7-14.3-32-32-32l-64 0c-17.7 0-32 14.3-32 32l0 64 0 24c0 22.1-17.9 40-40 40l-24 0-31.9 0c-1.5 0-3-.1-4.5-.2c-1.2 .1-2.4 .2-3.6 .2l-16 0c-22.1 0-40-17.9-40-40l0-112c0-.9 0-1.9 .1-2.8l0-69.7-32 0c-18 0-32-14-32-32.1c0-9 3-17 10-24L266.4 8c7-7 15-8 22-8s15 2 21 7L564.8 231.5c8 7 12 15 11 24z"></path></svg></span><div><p class="ctx">DR1 · contexto privado</p><h3>A casa</h3><p class="sm">A primeira concretização, no mundo real, da existência do eu.</p></div></div>
+      <div class="card row" data-step="2"><span class="ic sm"><svg stroke-width="0" viewBox="0 0 640 512" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"><path d="M72 88a56 56 0 1 1 112 0A56 56 0 1 1 72 88zM64 245.7C54 256.9 48 271.8 48 288s6 31.1 16 42.3l0-84.7zm144.4-49.3C178.7 222.7 160 261.2 160 304c0 34.3 12 65.8 32 90.5l0 21.5c0 17.7-14.3 32-32 32l-64 0c-17.7 0-32-14.3-32-32l0-26.8C26.2 371.2 0 332.7 0 288c0-61.9 50.1-112 112-112l32 0c24 0 46.2 7.5 64.4 20.3zM448 416l0-21.5c20-24.7 32-56.2 32-90.5c0-42.8-18.7-81.3-48.4-107.7C449.8 183.5 472 176 496 176l32 0c61.9 0 112 50.1 112 112c0 44.7-26.2 83.2-64 101.2l0 26.8c0 17.7-14.3 32-32 32l-64 0c-17.7 0-32-14.3-32-32zm8-328a56 56 0 1 1 112 0A56 56 0 1 1 456 88zM576 245.7l0 84.7c10-11.3 16-26.1 16-42.3s-6-31.1-16-42.3zM320 32a64 64 0 1 1 0 128 64 64 0 1 1 0-128zM240 304c0 16.2 6 31 16 42.3l0-84.7c-10 11.3-16 26.1-16 42.3zm144-42.3l0 84.7c10-11.3 16-26.1 16-42.3s-6-31.1-16-42.3zM448 304c0 44.7-26.2 83.2-64 101.2l0 42.8c0 17.7-14.3 32-32 32l-64 0c-17.7 0-32-14.3-32-32l0-42.8c-37.8-18-64-56.5-64-101.2c0-61.9 50.1-112 112-112l32 0c61.9 0 112 50.1 112 112z"></path></svg></span><div><p class="ctx">DR2 · contexto profissional</p><h3>A vizinhança e os equipamentos urbanos</h3><p class="sm">Exploramos o outro, através da vizinhança e dos equipamentos urbanos, e entramos no contexto profissional.</p></div></div>
+      <div class="card row" data-step="3"><span class="ic sm"><svg stroke-width="0" viewBox="0 0 512 512" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"><path d="M240.1 4.2c9.8-5.6 21.9-5.6 31.8 0l171.8 98.1L448 104l0 .9 47.9 27.4c12.6 7.2 18.8 22 15.1 36s-16.4 23.8-30.9 23.8L32 192c-14.5 0-27.2-9.8-30.9-23.8s2.5-28.8 15.1-36L64 104.9l0-.9 4.4-1.6L240.1 4.2zM64 224l64 0 0 192 40 0 0-192 64 0 0 192 48 0 0-192 64 0 0 192 40 0 0-192 64 0 0 196.3c.6 .3 1.2 .7 1.8 1.1l48 32c11.7 7.8 17 22.4 12.9 35.9S494.1 512 480 512L32 512c-14.1 0-26.5-9.2-30.6-22.7s1.1-28.1 12.9-35.9l48-32c.6-.4 1.2-.7 1.8-1.1L64 224z"></path></svg></span><div><p class="ctx">DR3 · contexto institucional</p><h3>As instituições</h3><p class="sm">Como as instituições têm impacto: o exemplo das políticas públicas de urbanismo e mobilidade.</p></div></div>
+      <div class="card blue row" data-step="4"><span class="ic sm blue"><svg stroke-width="0" viewBox="0 0 512 512" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"><path d="M266.3 48.3L232.5 73.6c-5.4 4-8.5 10.4-8.5 17.1l0 9.1c0 6.8 5.5 12.3 12.3 12.3c2.4 0 4.8-.7 6.8-2.1l41.8-27.9c2-1.3 4.4-2.1 6.8-2.1l1 0c6.2 0 11.3 5.1 11.3 11.3c0 3-1.2 5.9-3.3 8l-19.9 19.9c-5.8 5.8-12.9 10.2-20.7 12.8l-26.5 8.8c-5.8 1.9-9.6 7.3-9.6 13.4c0 3.7-1.5 7.3-4.1 10l-17.9 17.9c-6.4 6.4-9.9 15-9.9 24l0 4.3c0 16.4 13.6 29.7 29.9 29.7c11 0 21.2-6.2 26.1-16l4-8.1c2.4-4.8 7.4-7.9 12.8-7.9c4.5 0 8.7 2.1 11.4 5.7l16.3 21.7c2.1 2.9 5.5 4.5 9.1 4.5c8.4 0 13.9-8.9 10.1-16.4l-1.1-2.3c-3.5-7 0-15.5 7.5-18l21.2-7.1c7.6-2.5 12.7-9.6 12.7-17.6c0-10.3 8.3-18.6 18.6-18.6l29.4 0c8.8 0 16 7.2 16 16s-7.2 16-16 16l-20.7 0c-7.2 0-14.2 2.9-19.3 8l-4.7 4.7c-2.1 2.1-3.3 5-3.3 8c0 6.2 5.1 11.3 11.3 11.3l11.3 0c6 0 11.8 2.4 16 6.6l6.5 6.5c1.8 1.8 2.8 4.3 2.8 6.8s-1 5-2.8 6.8l-7.5 7.5C386 262 384 266.9 384 272s2 10 5.7 13.7L408 304c10.2 10.2 24.1 16 38.6 16l7.3 0c6.5-20.2 10-41.7 10-64c0-111.4-87.6-202.4-197.7-207.7zm172 307.9c-3.7-2.6-8.2-4.1-13-4.1c-6 0-11.8-2.4-16-6.6L396 332c-7.7-7.7-18-12-28.9-12c-9.7 0-19.2-3.5-26.6-9.8L314 287.4c-11.6-9.9-26.4-15.4-41.7-15.4l-20.9 0c-12.6 0-25 3.7-35.5 10.7L188.5 301c-17.8 11.9-28.5 31.9-28.5 53.3l0 3.2c0 17 6.7 33.3 18.7 45.3l16 16c8.5 8.5 20 13.3 32 13.3l21.3 0c13.3 0 24 10.7 24 24c0 2.5 .4 5 1.1 7.3c71.3-5.8 132.5-47.6 165.2-107.2zM0 256a256 256 0 1 1 512 0A256 256 0 1 1 0 256zM187.3 100.7c-6.2-6.2-16.4-6.2-22.6 0l-32 32c-6.2 6.2-6.2 16.4 0 22.6s16.4 6.2 22.6 0l32-32c6.2-6.2 6.2-16.4 0-22.6z"></path></svg></span><div><p class="ctx" style="color:var(--blue)">DR4 · contexto macroestrutural</p><h3>A escala global</h3><p class="sm">Como a mudança, e a mudança de posição, está presente no espaço urbano.</p></div></div>
+    </div>
+  </div>
+  <p class="ask" data-step="5">Começamos pela casa. Hoje, vamos ver o que acontece a quem não a tem.</p>
+</section>
+
+<section class="slide" id="p-avaliacao" data-lesson="Programa · CLC 6" data-title="Avaliação">
+  <p class="kicker">CLC · Unidade 6</p>
+  <h2>Avaliação</h2>
+  <div class="grid g2">
+    <div class="card row" data-step="1" style="align-items:flex-start"><span class="ic"><svg stroke-width="0" viewBox="0 0 384 512" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"><path d="M64 0C28.7 0 0 28.7 0 64L0 448c0 35.3 28.7 64 64 64l256 0c35.3 0 64-28.7 64-64l0-288-128 0c-17.7 0-32-14.3-32-32L224 0 64 0zM256 0l0 128 128 0L256 0zM112 256l160 0c8.8 0 16 7.2 16 16s-7.2 16-16 16l-160 0c-8.8 0-16-7.2-16-16s7.2-16 16-16zm0 64l160 0c8.8 0 16 7.2 16 16s-7.2 16-16 16l-160 0c-8.8 0-16-7.2-16-16s7.2-16 16-16zm0 64l160 0c8.8 0 16 7.2 16 16s-7.2 16-16 16l-160 0c-8.8 0-16-7.2-16-16s7.2-16 16-16z"></path></svg></span><div><h3>Fichas durante as aulas</h3><p style="margin:0">Como o texto de opinião desta aula.</p></div></div>
+    <div class="card row" data-step="2" style="align-items:flex-start"><span class="ic"><svg stroke-width="0" viewBox="0 0 640 512" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"><path d="M192 96a48 48 0 1 0 0-96 48 48 0 1 0 0 96zm-8 384l0-128 16 0 0 128c0 17.7 14.3 32 32 32s32-14.3 32-32l0-288 56 0 64 0 16 0c17.7 0 32-14.3 32-32s-14.3-32-32-32l-16 0 0-64 192 0 0 192-192 0 0-32-64 0 0 48c0 26.5 21.5 48 48 48l224 0c26.5 0 48-21.5 48-48l0-224c0-26.5-21.5-48-48-48L368 0c-26.5 0-48 21.5-48 48l0 80-76.9 0-65.9 0c-33.7 0-64.9 17.7-82.3 46.6l-58.3 97c-9.1 15.1-4.2 34.8 10.9 43.9s34.8 4.2 43.9-10.9L120 256.9 120 480c0 17.7 14.3 32 32 32s32-14.3 32-32z"></path></svg></span><div><h3>Apresentação no final de cada DR</h3><p style="margin:0">10 minutos.</p></div></div>
+  </div>
+  <div class="card blue row" data-step="3" style="margin-top:22px"><span class="ic blue"><svg stroke-width="0" viewBox="0 0 640 512" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"><path d="M128 32C92.7 32 64 60.7 64 96l0 256 64 0 0-256 384 0 0 256 64 0 0-256c0-35.3-28.7-64-64-64L128 32zM19.2 384C8.6 384 0 392.6 0 403.2C0 445.6 34.4 480 76.8 480l486.4 0c42.4 0 76.8-34.4 76.8-76.8c0-10.6-8.6-19.2-19.2-19.2L19.2 384z"></path></svg></span><p style="margin:0;color:var(--navy)"><b>Recomendação:</b> trazer caderno, caneta e – se possuírem – portátil/PC ou tablet ou até telemóvel onde possam fazer os slides.</p></div>
+</section>
+
+
+<!-- ================= AULA ANTERIOR · A CASA E O LAR ================= -->
+
+<section class="slide divider" id="a1-abertura" data-lesson="Aula 1 · A casa e o lar" data-title="A casa e a nossa vida">
+  <div class="wrap">
+    <p class="kicker">DR1 · Aula 1 · revisão</p>
+    <h2>A casa e a nossa vida</h2>
+    <p class="sub">Pensar a casa · casa ou lar? · cinco filósofos</p>
+  </div>
+</section>
+
+<section class="slide" id="a1-funcoes" data-lesson="Aula 1 · A casa e o lar" data-title="A casa é mais do que paredes">
+  <p class="kicker">Conceito</p>
+  <h2>A casa é mais do que paredes</h2>
+  <div class="hub">
+    <div class="hub-col">
+      <div class="card row" data-step="1"><span class="ic sm"><svg stroke-width="0" viewBox="0 0 512 512" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"><path d="M256 0c4.6 0 9.2 1 13.4 2.9L457.7 82.8c22 9.3 38.4 31 38.3 57.2c-.5 99.2-41.3 280.7-213.6 363.2c-16.7 8-36.1 8-52.8 0C57.3 420.7 16.5 239.2 16 140c-.1-26.2 16.3-47.9 38.3-57.2L242.7 2.9C246.8 1 251.4 0 256 0zm0 66.8l0 378.1C394 378 431.1 230.1 432 141.4L256 66.8s0 0 0 0z"></path></svg></span><div><h3>Abrigo</h3><p>frio, chuva, calor</p></div></div>
+      <div class="card row" data-step="2"><span class="ic sm"><svg stroke-width="0" viewBox="0 0 640 512" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"><path d="M32 32c17.7 0 32 14.3 32 32l0 256 224 0 0-160c0-17.7 14.3-32 32-32l224 0c53 0 96 43 96 96l0 224c0 17.7-14.3 32-32 32s-32-14.3-32-32l0-32-224 0-32 0L64 416l0 32c0 17.7-14.3 32-32 32s-32-14.3-32-32L0 64C0 46.3 14.3 32 32 32zm144 96a80 80 0 1 1 0 160 80 80 0 1 1 0-160z"></path></svg></span><div><h3>Descanso</h3><p>dormir, recuperar</p></div></div>
+      <div class="card row" data-step="3"><span class="ic sm"><svg stroke-width="0" viewBox="0 0 448 512" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"><path d="M416 0C400 0 288 32 288 176l0 112c0 35.3 28.7 64 64 64l32 0 0 128c0 17.7 14.3 32 32 32s32-14.3 32-32l0-128 0-112 0-208c0-17.7-14.3-32-32-32zM64 16C64 7.8 57.9 1 49.7 .1S34.2 4.6 32.4 12.5L2.1 148.8C.7 155.1 0 161.5 0 167.9c0 45.9 35.1 83.6 80 87.7L80 480c0 17.7 14.3 32 32 32s32-14.3 32-32l0-224.4c44.9-4.1 80-41.8 80-87.7c0-6.4-.7-12.8-2.1-19.1L191.6 12.5c-1.8-8-9.3-13.3-17.4-12.4S160 7.8 160 16l0 134.2c0 5.4-4.4 9.8-9.8 9.8c-5.1 0-9.3-3.9-9.8-9L127.9 14.6C127.2 6.3 120.3 0 112 0s-15.2 6.3-15.9 14.6L83.7 151c-.5 5.1-4.7 9-9.8 9c-5.4 0-9.8-4.4-9.8-9.8L64 16zm48.3 152l-.3 0-.3 0 .3-.7 .3 .7z"></path></svg></span><div><h3>Alimentação</h3><p>cozinhar, comer</p></div></div>
+    </div>
+    <div class="hub-center"><span class="ic accent"><svg stroke-width="0" viewBox="0 0 576 512" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"><path d="M575.8 255.5c0 18-15 32.1-32 32.1l-32 0 .7 160.2c0 2.7-.2 5.4-.5 8.1l0 16.2c0 22.1-17.9 40-40 40l-16 0c-1.1 0-2.2 0-3.3-.1c-1.4 .1-2.8 .1-4.2 .1L416 512l-24 0c-22.1 0-40-17.9-40-40l0-24 0-64c0-17.7-14.3-32-32-32l-64 0c-17.7 0-32 14.3-32 32l0 64 0 24c0 22.1-17.9 40-40 40l-24 0-31.9 0c-1.5 0-3-.1-4.5-.2c-1.2 .1-2.4 .2-3.6 .2l-16 0c-22.1 0-40-17.9-40-40l0-112c0-.9 0-1.9 .1-2.8l0-69.7-32 0c-18 0-32-14-32-32.1c0-9 3-17 10-24L266.4 8c7-7 15-8 22-8s15 2 21 7L564.8 231.5c8 7 12 15 11 24z"></path></svg></span><b>a casa</b></div>
+    <div class="hub-col">
+      <div class="card row" data-step="4"><span class="ic sm"><svg stroke-width="0" viewBox="0 0 640 512" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"><path d="M72 88a56 56 0 1 1 112 0A56 56 0 1 1 72 88zM64 245.7C54 256.9 48 271.8 48 288s6 31.1 16 42.3l0-84.7zm144.4-49.3C178.7 222.7 160 261.2 160 304c0 34.3 12 65.8 32 90.5l0 21.5c0 17.7-14.3 32-32 32l-64 0c-17.7 0-32-14.3-32-32l0-26.8C26.2 371.2 0 332.7 0 288c0-61.9 50.1-112 112-112l32 0c24 0 46.2 7.5 64.4 20.3zM448 416l0-21.5c20-24.7 32-56.2 32-90.5c0-42.8-18.7-81.3-48.4-107.7C449.8 183.5 472 176 496 176l32 0c61.9 0 112 50.1 112 112c0 44.7-26.2 83.2-64 101.2l0 26.8c0 17.7-14.3 32-32 32l-64 0c-17.7 0-32-14.3-32-32zm8-328a56 56 0 1 1 112 0A56 56 0 1 1 456 88zM576 245.7l0 84.7c10-11.3 16-26.1 16-42.3s-6-31.1-16-42.3zM320 32a64 64 0 1 1 0 128 64 64 0 1 1 0-128zM240 304c0 16.2 6 31 16 42.3l0-84.7c-10 11.3-16 26.1-16 42.3zm144-42.3l0 84.7c10-11.3 16-26.1 16-42.3s-6-31.1-16-42.3zM448 304c0 44.7-26.2 83.2-64 101.2l0 42.8c0 17.7-14.3 32-32 32l-64 0c-17.7 0-32-14.3-32-32l0-42.8c-37.8-18-64-56.5-64-101.2c0-61.9 50.1-112 112-112l32 0c61.9 0 112 50.1 112 112z"></path></svg></span><div><h3>Convívio</h3><p>família, amigos</p></div></div>
+      <div class="card row" data-step="5"><span class="ic sm"><svg stroke-width="0" viewBox="0 0 448 512" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"><path d="M144 144l0 48 160 0 0-48c0-44.2-35.8-80-80-80s-80 35.8-80 80zM80 192l0-48C80 64.5 144.5 0 224 0s144 64.5 144 144l0 48 16 0c35.3 0 64 28.7 64 64l0 192c0 35.3-28.7 64-64 64L64 512c-35.3 0-64-28.7-64-64L0 256c0-35.3 28.7-64 64-64l16 0z"></path></svg></span><div><h3>Privacidade</h3><p>um espaço só meu</p></div></div>
+      <div class="card peach row" data-step="6"><span class="ic sm"><svg stroke-width="0" viewBox="0 0 640 512" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"><path d="M64 160C64 89.3 121.3 32 192 32l256 0c70.7 0 128 57.3 128 128l0 33.6c-36.5 7.4-64 39.7-64 78.4l0 48-384 0 0-48c0-38.7-27.5-71-64-78.4L64 160zM544 272c0-20.9 13.4-38.7 32-45.3c5-1.8 10.4-2.7 16-2.7c26.5 0 48 21.5 48 48l0 176c0 17.7-14.3 32-32 32l-32 0c-17.7 0-32-14.3-32-32L96 448c0 17.7-14.3 32-32 32l-32 0c-17.7 0-32-14.3-32-32L0 272c0-26.5 21.5-48 48-48c5.6 0 11 1 16 2.7c18.6 6.6 32 24.4 32 45.3l0 48 0 32 32 0 384 0 32 0 0-32 0-48z"></path></svg></span><div><h3>Lazer</h3><p>ler, ouvir música, brincar</p></div></div>
+    </div>
+  </div>
+  <p class="ask" data-step="7">Para que serve uma casa? Quais destas funções te parecem mais importantes?</p>
+</section>
+
+<section class="slide" id="a1-casa-lar" data-lesson="Aula 1 · A casa e o lar" data-title="Casa ou lar?">
+  <p class="kicker">Pensar a casa</p>
+  <h2>Casa ou lar?</h2>
+  <div class="split">
+    <div class="venn">
+      <div class="c c1" data-step="1"></div><div class="c c2" data-step="2"></div>
+      <div class="t" data-step="1" style="left:30px;color:var(--blue)">casa<small>o edifício</small></div>
+      <div class="t" data-step="2" style="left:290px;color:var(--orange);text-align:right">lar<small>a casa vivida</small></div>
+      <div class="t" data-step="3" style="left:168px;top:105px;font-size:16px;color:var(--navy);font-style:italic">a minha<br>casa</div>
+    </div>
+    <div>
+      <div class="card" data-step="1"><p>A palavra <b>«casa»</b> refere-se ao edifício: as paredes, a área, o número de divisões — aquilo que se mede e se desenha numa planta.</p>
+        <p data-step="2">A palavra <b>«lar»</b> refere-se à casa vivida: as pessoas que lá moram, os hábitos do dia a dia, as memórias que ali se guardam.</p>
+        <p data-step="3" style="font-style:italic;color:var(--navy);margin:0">As duas coisas podem coincidir — mas nem sempre. Uma casa pode não ser um lar, e pode haver lar sem casa.</p></div>
+      <button class="flip" style="margin-top:18px;width:100%;min-height:110px"><div class="in" style="min-height:110px"><div class="face front" style="background:var(--navy);color:var(--accent);justify-content:center"><b style="font-size:20px"><span class="inl"><svg stroke-width="0" viewBox="0 0 448 512" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"><path d="M159.3 5.4c7.8-7.3 19.9-7.2 27.7 .1c27.6 25.9 53.5 53.8 77.7 84c11-14.4 23.5-30.1 37-42.9c7.9-7.4 20.1-7.4 28 .1c34.6 33 63.9 76.6 84.5 118c20.3 40.8 33.8 82.5 33.8 111.9C448 404.2 348.2 512 224 512C98.4 512 0 404.1 0 276.5c0-38.4 17.8-85.3 45.4-131.7C73.3 97.7 112.7 48.6 159.3 5.4zM225.7 416c25.3 0 47.7-7 68.8-21c42.1-29.4 53.4-88.2 28.1-134.4c-4.5-9-16-9.6-22.5-2l-25.2 29.3c-6.6 7.6-18.5 7.4-24.7-.5c-16.5-21-46-58.5-62.8-79.8c-6.3-8-18.3-8.1-24.7-.1c-33.8 42.5-50.8 69.3-50.8 99.4C112 375.4 162.6 416 225.7 416z"></path></svg></span> Etimologia: de onde vem «lar»?</b><span class="hint" style="color:var(--orange-light)">Clica para descobrir</span></div><div class="face back" style="background:var(--orange-light);color:var(--navy)">«Lar» vem do latim <i>lar</i> — os deuses protetores da casa, venerados junto à lareira.</div></div></button>
+    </div>
+  </div>
+  <p class="ask" data-step="4">Uma casa pode não ser um lar? E pode haver lar sem casa?</p>
+</section>
+
+<section class="slide" id="a1-filosofos" data-lesson="Aula 1 · A casa e o lar" data-title="Cinco filósofos, cinco olhares">
+  <p class="kicker">Pensar a casa</p>
+  <h2>Cinco filósofos, cinco olhares</h2>
+  <svg class="tl-line" viewBox="0 0 1000 20" preserveAspectRatio="none" aria-hidden="true"><line class="draw" pathLength="1" x1="0" y1="10" x2="1000" y2="10" stroke="#C9D1D8" stroke-width="3"/></svg>
+  <div class="grid timeline">
+    <div data-step="1"><span class="yr">1945</span><div class="card"><span class="ic sm"><svg stroke-width="0" viewBox="0 0 320 512" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"><path d="M160 48a48 48 0 1 1 96 0 48 48 0 1 1 -96 0zM126.5 199.3c-1 .4-1.9 .8-2.9 1.2l-8 3.5c-16.4 7.3-29 21.2-34.7 38.2l-2.6 7.8c-5.6 16.8-23.7 25.8-40.5 20.2s-25.8-23.7-20.2-40.5l2.6-7.8c11.4-34.1 36.6-61.9 69.4-76.5l8-3.5c20.8-9.2 43.3-14 66.1-14c44.6 0 84.8 26.8 101.9 67.9L281 232.7l21.4 10.7c15.8 7.9 22.2 27.1 14.3 42.9s-27.1 22.2-42.9 14.3L247 287.3c-10.3-5.2-18.4-13.8-22.8-24.5l-9.6-23-19.3 65.5 49.5 54c5.4 5.9 9.2 13 11.2 20.8l23 92.1c4.3 17.1-6.1 34.5-23.3 38.8s-34.5-6.1-38.8-23.3l-22-88.1-70.7-77.1c-14.8-16.1-20.3-38.6-14.7-59.7l16.9-63.5zM68.7 398l25-62.4c2.1 3 4.5 5.8 7 8.6l40.7 44.4-14.5 36.2c-2.4 6-6 11.5-10.6 16.1L54.6 502.6c-12.5 12.5-32.8 12.5-45.3 0s-12.5-32.8 0-45.3L68.7 398z"></path></svg></span><h3>o corpo</h3><p class="who">Merleau-Ponty</p><p>o corpo conhece a casa por hábito</p></div></div>
+    <div data-step="2"><span class="yr">1951</span><div class="card"><span class="ic sm"><svg stroke-width="0" viewBox="0 0 576 512" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"><path d="M575.8 255.5c0 18-15 32.1-32 32.1l-32 0 .7 160.2c0 2.7-.2 5.4-.5 8.1l0 16.2c0 22.1-17.9 40-40 40l-16 0c-1.1 0-2.2 0-3.3-.1c-1.4 .1-2.8 .1-4.2 .1L416 512l-24 0c-22.1 0-40-17.9-40-40l0-24 0-64c0-17.7-14.3-32-32-32l-64 0c-17.7 0-32 14.3-32 32l0 64 0 24c0 22.1-17.9 40-40 40l-24 0-31.9 0c-1.5 0-3-.1-4.5-.2c-1.2 .1-2.4 .2-3.6 .2l-16 0c-22.1 0-40-17.9-40-40l0-112c0-.9 0-1.9 .1-2.8l0-69.7-32 0c-18 0-32-14-32-32.1c0-9 3-17 10-24L266.4 8c7-7 15-8 22-8s15 2 21 7L564.8 231.5c8 7 12 15 11 24z"></path></svg></span><h3>habitar</h3><p class="who">Heidegger</p><p>habitamos primeiro, construímos depois</p></div></div>
+    <div data-step="3"><span class="yr">1957</span><div class="card"><span class="ic sm"><svg stroke-width="0" viewBox="0 0 512 512" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"><path d="M116.7 33.8c4.5-6.1 11.7-9.8 19.3-9.8l240 0c7.6 0 14.8 3.6 19.3 9.8l112 152c6.8 9.2 6.1 21.9-1.5 30.4l-232 256c-4.5 5-11 7.9-17.8 7.9s-13.2-2.9-17.8-7.9l-232-256c-7.7-8.5-8.3-21.2-1.5-30.4l112-152zm38.5 39.8c-3.3 2.5-4.2 7-2.1 10.5l57.4 95.6L63.3 192c-4.1 .3-7.3 3.8-7.3 8s3.2 7.6 7.3 8l192 16c.4 0 .9 0 1.3 0l192-16c4.1-.3 7.3-3.8 7.3-8s-3.2-7.6-7.3-8L301.5 179.8l57.4-95.6c2.1-3.5 1.2-8.1-2.1-10.5s-7.9-2-10.7 1L256 172.2 165.9 74.6c-2.8-3-7.4-3.4-10.7-1z"></path></svg></span><h3>sonho e memória</h3><p class="who">Bachelard</p><p>a casa abriga sonhos e infância</p></div></div>
+    <div data-step="4"><span class="yr">1961</span><div class="card"><span class="ic sm"><svg stroke-width="0" viewBox="0 0 512 512" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"><path d="M47.6 300.4L228.3 469.1c7.5 7 17.4 10.9 27.7 10.9s20.2-3.9 27.7-10.9L464.4 300.4c30.4-28.3 47.6-68 47.6-109.5v-5.8c0-69.9-50.5-129.5-119.4-141C347 36.5 300.6 51.4 268 84L256 96 244 84c-32.6-32.6-79-47.5-124.6-39.9C50.5 55.6 0 115.2 0 185.1v5.8c0 41.5 17.2 81.2 47.6 109.5z"></path></svg></span><h3>acolher</h3><p class="who">Levinas</p><p>ter casa para poder receber</p></div></div>
+    <div data-step="5"><span class="yr" style="color:var(--blue)">1997</span><div class="card blue"><span class="ic sm blue"><svg stroke-width="0" viewBox="0 0 512 512" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"><path d="M32 32l448 0c17.7 0 32 14.3 32 32l0 32c0 17.7-14.3 32-32 32L32 128C14.3 128 0 113.7 0 96L0 64C0 46.3 14.3 32 32 32zm0 128l448 0 0 256c0 35.3-28.7 64-64 64L96 480c-35.3 0-64-28.7-64-64l0-256zm128 80c0 8.8 7.2 16 16 16l160 0c8.8 0 16-7.2 16-16s-7.2-16-16-16l-160 0c-8.8 0-16 7.2-16 16z"></path></svg></span><h3>cuidar</h3><p class="who">I. M. Young</p><p>quem mantém a casa viva?</p></div></div>
+  </div>
+  <p class="ask" data-step="6">Cinco palavras para guardar: corpo · habitar · sonho · acolher · cuidar.</p>
+</section>
+
+<section class="slide" id="a1-heidegger" data-lesson="Aula 1 · A casa e o lar" data-title="Heidegger: construímos porque habitamos">
+  <p class="kicker">Heidegger · 1951</p>
+  <h2>Construímos porque habitamos</h2>
+  <div class="split">
+    <div>
+      <p class="label" style="color:var(--muted)">Senso comum</p>
+      <div class="order" data-step="1"><span class="box muted">construir</span><svg viewBox="0 0 70 20"><path class="draw" pathLength="1" d="M2 10 H62 M54 4 L64 10 L54 16" stroke="#8A929A" stroke-width="3" fill="none"/></svg><span class="box muted">habitar</span></div>
+      <p class="label" style="margin-top:26px">Heidegger</p>
+      <div class="order" data-step="2"><span class="box strong">habitar</span><svg viewBox="0 0 70 20"><path class="draw" pathLength="1" d="M2 10 H62 M54 4 L64 10 L54 16" stroke="#A44A16" stroke-width="3" fill="none"/></svg><span class="box soft">construir</span></div>
+    </div>
+    <div class="card" data-step="1">
+      <p>Para o senso comum, primeiro construímos uma casa, depois vamos lá morar. Heidegger inverte a ordem: habitamos primeiro — estar no mundo, tratar dele, fazer dele o nosso lugar — e é esse habitar que nos leva a construir.</p>
+      <p data-step="3" style="font-style:italic;color:var(--navy);margin:0">A prova vem da própria língua: em alemão antigo, o verbo <i>bauen</i> (construir) vinha de <i>buan</i>, que queria dizer habitar.</p>
+    </div>
+  </div>
+  <div class="card green" data-step="4" style="margin-top:22px"><b>Ponte para o DR1:</b> se construir nasce de habitar, então quem habita uma casa deve ter voz no que se constrói. É isso que a competência do nosso módulo pede: participar no processo de planeamento e construção.</div>
+  <p class="ask" data-step="5">O que faz de um alojamento a tua casa?</p>
+  <p class="source">Martin Heidegger, «Bauen Wohnen Denken» («Construir, habitar, pensar»), conferência de 1951.</p>
+</section>
+
+<section class="slide" id="a1-merleau" data-lesson="Aula 1 · A casa e o lar" data-title="Merleau-Ponty: a casa que o corpo conhece">
+  <p class="kicker">Merleau-Ponty · 1945</p>
+  <h2>A casa que o corpo conhece</h2>
+  <div class="grid g2">
+    <div class="card" data-step="1">
+      <p class="label" style="color:var(--muted)">Espaço geométrico</p>
+      <p>O espaço que se mede: metros quadrados, distâncias, ângulos. É o espaço da planta.</p>
+      <svg viewBox="0 0 400 200" class="room" aria-label="Planta de um quarto com medidas">
+        <rect x="40" y="20" width="320" height="140" fill="#fff" stroke="#1E2A33" stroke-width="5"/>
+        <line x1="200" y1="20" x2="200" y2="160" stroke="#1E2A33" stroke-width="3"/>
+        <text x="120" y="98" text-anchor="middle" font-family="Calibri, Carlito, sans-serif" font-size="22" fill="#4A5560">12 m²</text>
+        <line x1="40" y1="185" x2="200" y2="185" stroke="#8A929A" stroke-width="2"/>
+        <text x="120" y="181" text-anchor="middle" font-family="Calibri, Carlito, sans-serif" font-size="16" fill="#8A929A">4,00 m</text>
+      </svg>
+    </div>
+    <div class="card peach" data-step="2">
+      <p class="label">Espaço vivido</p>
+      <p>O espaço que se sente: o corpo conhece a casa por hábito. Às escuras, a mão encontra o interruptor sem pensar; os pés sabem onde há um degrau.</p>
+      <svg viewBox="0 0 400 200" class="room" aria-label="Caminho da cama ao interruptor, às escuras">
+        <rect x="40" y="30" width="110" height="60" rx="8" fill="#F1CDB0" stroke="#A44A16" stroke-width="4"/>
+        <text x="95" y="66" text-anchor="middle" font-family="Calibri, Carlito, sans-serif" font-size="18" fill="#A44A16">cama</text>
+        <path class="draw" pathLength="1" d="M150 60 C230 60 220 150 290 150 L330 150" stroke="#1E2A33" stroke-width="4" stroke-dasharray="1" fill="none"/>
+        <circle cx="345" cy="150" r="14" fill="#1E2A33"/>
+        <text x="345" y="185" text-anchor="middle" font-family="Calibri, Carlito, sans-serif" font-size="16" fill="#4A5560">interruptor</text>
+        <text x="235" y="40" text-anchor="middle" font-family="Calibri, Carlito, sans-serif" font-style="italic" font-size="17" fill="#A44A16">às escuras, sem pensar</text>
+        <text x="40" y="150" font-family="Calibri, Carlito, sans-serif" font-size="15" fill="#4A5560">o degrau que range</text>
+      </svg>
+    </div>
+  </div>
+  <div class="row" style="justify-content:space-between;flex-wrap:wrap">
+    <p class="ask" data-step="3">De olhos fechados: qual é o caminho da cama até ao interruptor?</p>
+    <div class="timer" data-seconds="120" data-step="3"><output>2:00</output><button class="btn">Iniciar</button><button class="btn ghost" data-reset>Repor</button></div>
+  </div>
+  <p class="source">Maurice Merleau-Ponty, <i>Phénoménologie de la perception</i> (<i>Fenomenologia da Perceção</i>), 1945.</p>
+</section>
+
+<section class="slide" id="a1-bachelard" data-lesson="Aula 1 · A casa e o lar" data-title="Bachelard: sonhos e memórias">
+  <p class="kicker">Bachelard · 1957</p>
+  <h2>A casa que guarda sonhos e memórias</h2>
+  <div class="split">
+    <div>
+      <p data-step="1">Para Bachelard, a casa é o nosso canto do mundo, o nosso primeiro universo. A sua função mais importante é abrigar o devaneio: dar-nos um lugar onde podemos sonhar em paz.</p>
+      <p data-step="2">Bachelard lê a casa de baixo para cima: a cave é o lado escuro, dos medos; o rés-do-chão é a vida de todos os dias; o sótão, perto do telhado, é o lado da claridade e das ideias.</p>
+      <p data-step="5">E a casa onde crescemos fica inscrita no corpo: a altura de um degrau, o peso de uma porta. Voltamos a ela em sonho.</p>
+    </div>
+    <svg viewBox="0 0 460 380" class="section" aria-label="Corte de uma casa: sótão, rés-do-chão e cave">
+      <g data-step="4"><path d="M60 120 L230 30 L400 120 Z" fill="#FBE3D2" stroke="#1E2A33" stroke-width="5" stroke-linejoin="round"/>
+        <text x="230" y="100" text-anchor="middle" font-family="Cambria, Caladea, serif" font-weight="700" font-size="24" fill="#A44A16">sótão</text>
+        <text x="230" y="20" text-anchor="middle" font-family="Calibri, Carlito, sans-serif" font-style="italic" font-size="18" fill="#A44A16">claridade, ideias</text></g>
+      <g data-step="2"><rect x="80" y="120" width="300" height="130" fill="#fff" stroke="#1E2A33" stroke-width="5"/>
+        <text x="230" y="190" text-anchor="middle" font-family="Cambria, Caladea, serif" font-weight="700" font-size="24" fill="#1E2A33">rés-do-chão</text>
+        <text x="230" y="218" text-anchor="middle" font-family="Calibri, Carlito, sans-serif" font-style="italic" font-size="17" fill="#4A5560">a vida de todos os dias</text></g>
+      <line x1="20" y1="250" x2="440" y2="250" stroke="#8A929A" stroke-width="3" stroke-dasharray="3 10" stroke-linecap="round"/>
+      <g data-step="3"><rect x="80" y="250" width="300" height="100" fill="#1E2A33" stroke="#1E2A33" stroke-width="5"/>
+        <text x="230" y="300" text-anchor="middle" font-family="Cambria, Caladea, serif" font-weight="700" font-size="24" fill="#fff">cave</text>
+        <text x="230" y="328" text-anchor="middle" font-family="Calibri, Carlito, sans-serif" font-style="italic" font-size="17" fill="#F0A673">escuridão, medos</text></g>
+    </svg>
+  </div>
+  <p class="ask" data-step="6">Que canto da casa da tua infância ainda te lembras?</p>
+  <p class="source">Gaston Bachelard, <i>La Poétique de l'espace</i> (<i>A Poética do Espaço</i>), 1957.</p>
+</section>
+
+<section class="slide" id="a1-levinas" data-lesson="Aula 1 · A casa e o lar" data-title="Levinas: ter casa para acolher">
+  <p class="kicker">Levinas · 1961</p>
+  <h2>Ter casa para poder acolher</h2>
+  <div class="split" style="align-items:center">
+    <svg viewBox="0 0 460 300" aria-label="Eu, em casa, abro a porta ao outro" class="levinas">
+      <g data-step="1"><circle cx="170" cy="150" r="130" fill="#FBE3D2"/><circle cx="170" cy="150" r="78" fill="#A44A16"/>
+        <text x="170" y="196" text-anchor="middle" font-family="Calibri, Carlito, sans-serif" font-weight="700" font-size="17" fill="#fff">eu, em casa</text></g>
+      <g data-step="2"><rect x="292" y="110" width="12" height="80" fill="#1E2A33" class="door"/>
+        <text x="300" y="98" text-anchor="middle" font-family="Calibri, Carlito, sans-serif" font-size="16" fill="#4A5560">a porta</text>
+        <circle cx="395" cy="135" r="26" fill="#2F6E9E"/><path d="M355 205 Q395 150 435 205 Z" fill="#2F6E9E"/>
+        <text x="395" y="235" text-anchor="middle" font-family="Calibri, Carlito, sans-serif" font-weight="700" font-size="17" fill="#2F6E9E">o outro</text></g>
+      <svg x="150" y="110" width="40" height="40" viewBox="0 0 576 512" fill="#FFFFFF"><path d="M575.8 255.5c0 18-15 32.1-32 32.1l-32 0 .7 160.2c0 2.7-.2 5.4-.5 8.1l0 16.2c0 22.1-17.9 40-40 40l-16 0c-1.1 0-2.2 0-3.3-.1c-1.4 .1-2.8 .1-4.2 .1L416 512l-24 0c-22.1 0-40-17.9-40-40l0-24 0-64c0-17.7-14.3-32-32-32l-64 0c-17.7 0-32 14.3-32 32l0 64 0 24c0 22.1-17.9 40-40 40l-24 0-31.9 0c-1.5 0-3-.1-4.5-.2c-1.2 .1-2.4 .2-3.6 .2l-16 0c-22.1 0-40-17.9-40-40l0-112c0-.9 0-1.9 .1-2.8l0-69.7-32 0c-18 0-32-14-32-32.1c0-9 3-17 10-24L266.4 8c7-7 15-8 22-8s15 2 21 7L564.8 231.5c8 7 12 15 11 24z"></path></svg>
+    </svg>
+    <div class="grid" style="gap:14px">
+      <div class="card peach row" data-step="1"><span class="num">1</span><div><h3>Recolhimento</h3><p style="margin:0">A casa dá-nos um interior — um «em casa» — onde nos recolhemos do mundo. Sem esse abrigo, estaríamos sempre expostos, sem descanso.</p></div></div>
+      <div class="card blue row" data-step="2"><span class="num" style="background:var(--blue)">2</span><div><h3>Hospitalidade</h3><p style="margin:0">Só quem tem um «em casa» pode abrir a porta e receber alguém. O sentido da casa não é fechar-se — é poder acolher.</p></div></div>
+    </div>
+  </div>
+  <p class="ask" data-step="3">O que é preciso, numa casa, para receber bem?</p>
+  <p class="source">Emmanuel Levinas, <i>Totalité et Infini</i> (<i>Totalidade e Infinito</i>), 1961, secção «La demeure» («A morada»).</p>
+</section>
+
+<section class="slide" id="a1-young" data-lesson="Aula 1 · A casa e o lar" data-title="Young: quem cuida da casa?">
+  <p class="kicker">Iris Marion Young · 1997</p>
+  <h2>Quem cuida da casa?</h2>
+  <p data-step="1" style="max-width:980px">Heidegger e Bachelard falam da casa como refúgio e construção. Young pergunta: e quem limpa? Quem arruma? Quem repara o que se estraga? Quem guarda as fotografias e os objetos que contam a história da família?</p>
+  <div class="vs">
+    <div class="card" data-step="2"><div class="row"><span class="ic sm"><svg stroke-width="0" viewBox="0 0 576 512" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"><path d="M575.8 255.5c0 18-15 32.1-32 32.1l-32 0 .7 160.2c0 2.7-.2 5.4-.5 8.1l0 16.2c0 22.1-17.9 40-40 40l-16 0c-1.1 0-2.2 0-3.3-.1c-1.4 .1-2.8 .1-4.2 .1L416 512l-24 0c-22.1 0-40-17.9-40-40l0-24 0-64c0-17.7-14.3-32-32-32l-64 0c-17.7 0-32 14.3-32 32l0 64 0 24c0 22.1-17.9 40-40 40l-24 0-31.9 0c-1.5 0-3-.1-4.5-.2c-1.2 .1-2.4 .2-3.6 .2l-16 0c-22.1 0-40-17.9-40-40l0-112c0-.9 0-1.9 .1-2.8l0-69.7-32 0c-18 0-32-14-32-32.1c0-9 3-17 10-24L266.4 8c7-7 15-8 22-8s15 2 21 7L564.8 231.5c8 7 12 15 11 24z"></path></svg></span><div><h3>A casa sonhada</h3><p style="margin:0">refúgio · construção · sonho</p></div></div><p class="who" style="margin:10px 0 0">Heidegger · Bachelard</p></div>
+    <svg viewBox="0 0 70 20" data-step="3"><path class="draw" pathLength="1" d="M2 10 H62 M54 4 L64 10 L54 16" stroke="#A44A16" stroke-width="3" fill="none"/></svg>
+    <div class="card peach" data-step="3"><div class="row"><span class="ic sm"><svg stroke-width="0" viewBox="0 0 512 512" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"><path d="M32 32l448 0c17.7 0 32 14.3 32 32l0 32c0 17.7-14.3 32-32 32L32 128C14.3 128 0 113.7 0 96L0 64C0 46.3 14.3 32 32 32zm0 128l448 0 0 256c0 35.3-28.7 64-64 64L96 480c-35.3 0-64-28.7-64-64l0-256zm128 80c0 8.8 7.2 16 16 16l160 0c8.8 0 16-7.2 16-16s-7.2-16-16-16l-160 0c-8.8 0-16 7.2-16 16z"></path></svg></span><div><h3>A casa mantida</h3><p style="margin:0">limpar · arrumar · reparar · guardar memórias</p></div></div><p class="who" style="margin:10px 0 0">Young: a preservação</p></div>
+  </div>
+  <div class="tasks" data-step="4">
+    <span><span class="ic sm soft"><svg stroke-width="0" viewBox="0 0 576 512" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"><path d="M566.6 54.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0l-192 192-34.7-34.7c-4.2-4.2-10-6.6-16-6.6c-12.5 0-22.6 10.1-22.6 22.6l0 29.1L364.3 320l29.1 0c12.5 0 22.6-10.1 22.6-22.6c0-6-2.4-11.8-6.6-16l-34.7-34.7 192-192zM341.1 353.4L222.6 234.9c-42.7-3.7-85.2 11.7-115.8 42.3l-8 8C76.5 307.5 64 337.7 64 369.2c0 6.8 7.1 11.2 13.2 8.2l51.1-25.5c5-2.5 9.5 4.1 5.4 7.9L7.3 473.4C2.7 477.6 0 483.6 0 489.9C0 502.1 9.9 512 22.1 512l173.3 0c38.8 0 75.9-15.4 103.4-42.8c30.6-30.6 45.9-73.1 42.3-115.8z"></path></svg></span>limpar</span>
+    <span><span class="ic sm soft"><svg stroke-width="0" viewBox="0 0 512 512" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"><path d="M152.1 38.2c9.9 8.9 10.7 24 1.8 33.9l-72 80c-4.4 4.9-10.6 7.8-17.2 7.9s-12.9-2.4-17.6-7L7 113C-2.3 103.6-2.3 88.4 7 79s24.6-9.4 33.9 0l22.1 22.1 55.1-61.2c8.9-9.9 24-10.7 33.9-1.8zm0 160c9.9 8.9 10.7 24 1.8 33.9l-72 80c-4.4 4.9-10.6 7.8-17.2 7.9s-12.9-2.4-17.6-7L7 273c-9.4-9.4-9.4-24.6 0-33.9s24.6-9.4 33.9 0l22.1 22.1 55.1-61.2c8.9-9.9 24-10.7 33.9-1.8zM224 96c0-17.7 14.3-32 32-32l224 0c17.7 0 32 14.3 32 32s-14.3 32-32 32l-224 0c-17.7 0-32-14.3-32-32zm0 160c0-17.7 14.3-32 32-32l224 0c17.7 0 32 14.3 32 32s-14.3 32-32 32l-224 0c-17.7 0-32-14.3-32-32zM160 416c0-17.7 14.3-32 32-32l288 0c17.7 0 32 14.3 32 32s-14.3 32-32 32l-288 0c-17.7 0-32-14.3-32-32zM48 368a48 48 0 1 1 0 96 48 48 0 1 1 0-96z"></path></svg></span>arrumar</span>
+    <span><span class="ic sm soft"><svg stroke-width="0" viewBox="0 0 512 512" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"><path d="M352 320c88.4 0 160-71.6 160-160c0-15.3-2.2-30.1-6.2-44.2c-3.1-10.8-16.4-13.2-24.3-5.3l-76.8 76.8c-3 3-7.1 4.7-11.3 4.7L336 192c-8.8 0-16-7.2-16-16l0-57.4c0-4.2 1.7-8.3 4.7-11.3l76.8-76.8c7.9-7.9 5.4-21.2-5.3-24.3C382.1 2.2 367.3 0 352 0C263.6 0 192 71.6 192 160c0 19.1 3.4 37.5 9.5 54.5L19.9 396.1C7.2 408.8 0 426.1 0 444.1C0 481.6 30.4 512 67.9 512c18 0 35.3-7.2 48-19.9L297.5 310.5c17 6.2 35.4 9.5 54.5 9.5zM80 408a24 24 0 1 1 0 48 24 24 0 1 1 0-48z"></path></svg></span>reparar</span>
+    <span><span class="ic sm soft"><svg stroke-width="0" viewBox="0 0 576 512" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"><path d="M160 32c-35.3 0-64 28.7-64 64l0 224c0 35.3 28.7 64 64 64l352 0c35.3 0 64-28.7 64-64l0-224c0-35.3-28.7-64-64-64L160 32zM396 138.7l96 144c4.9 7.4 5.4 16.8 1.2 24.6S480.9 320 472 320l-144 0-48 0-80 0c-9.2 0-17.6-5.3-21.6-13.6s-2.9-18.2 2.9-25.4l64-80c4.6-5.7 11.4-9 18.7-9s14.2 3.3 18.7 9l17.3 21.6 56-84C360.5 132 368 128 376 128s15.5 4 20 10.7zM192 128a32 32 0 1 1 64 0 32 32 0 1 1 -64 0zM48 120c0-13.3-10.7-24-24-24S0 106.7 0 120L0 344c0 75.1 60.9 136 136 136l320 0c13.3 0 24-10.7 24-24s-10.7-24-24-24l-320 0c-48.6 0-88-39.4-88-88l0-224z"></path></svg></span>guardar memórias</span>
+  </div>
+  <p data-step="5" style="font-style:italic;color:var(--navy)">A esse trabalho — quase sempre feito por mulheres, quase sempre invisível — Young chama preservação. E defende que é tão importante e tão criador como construir.</p>
+  <p class="ask" data-step="6">Quem faz, na tua casa, o trabalho que não se vê?</p>
+  <p class="source">Iris Marion Young, «House and Home: Feminist Variations on a Theme», em <i>Intersecting Voices</i>, 1997.</p>
+</section>
+
+<section class="slide" id="a1-sintese" data-lesson="Aula 1 · A casa e o lar" data-title="Uma casa, cinco olhares">
+  <p class="kicker">Pensar a casa</p>
+  <h2>Uma casa, cinco olhares</h2>
+  <div class="split" style="align-items:center">
+    <div class="card poll">
+      <p class="label">Qual destes olhares descreve melhor a tua casa? Conta os braços no ar</p>
+      <div class="opt"><span class="name">o corpo <small style="font-weight:400;font-size:15px;color:var(--text)">— conhece a casa por hábito</small></span><span class="ctrl"><button data-d="-1" aria-label="menos">−</button><output>0</output><button data-d="1" aria-label="mais">+</button></span><div class="track"><span></span></div></div>
+      <div class="opt"><span class="name">habitar <small style="font-weight:400;font-size:15px;color:var(--text)">— habitamos primeiro</small></span><span class="ctrl"><button data-d="-1" aria-label="menos">−</button><output>0</output><button data-d="1" aria-label="mais">+</button></span><div class="track"><span></span></div></div>
+      <div class="opt"><span class="name">sonho e memória <small style="font-weight:400;font-size:15px;color:var(--text)">— abriga devaneios e infância</small></span><span class="ctrl"><button data-d="-1" aria-label="menos">−</button><output>0</output><button data-d="1" aria-label="mais">+</button></span><div class="track"><span></span></div></div>
+      <div class="opt"><span class="name">acolher <small style="font-weight:400;font-size:15px;color:var(--text)">— para poder receber o outro</small></span><span class="ctrl"><button data-d="-1" aria-label="menos">−</button><output>0</output><button data-d="1" aria-label="mais">+</button></span><div class="track"><span></span></div></div>
+      <div class="opt"><span class="name">cuidar <small style="font-weight:400;font-size:15px;color:var(--text)">— quem mantém a casa viva?</small></span><span class="ctrl"><button data-d="-1" aria-label="menos">−</button><output>0</output><button data-d="1" aria-label="mais">+</button></span><div class="track"><span></span></div></div>
+    </div>
+    <div class="hub-center big-hub"><span class="ic accent"><svg stroke-width="0" viewBox="0 0 576 512" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"><path d="M575.8 255.5c0 18-15 32.1-32 32.1l-32 0 .7 160.2c0 2.7-.2 5.4-.5 8.1l0 16.2c0 22.1-17.9 40-40 40l-16 0c-1.1 0-2.2 0-3.3-.1c-1.4 .1-2.8 .1-4.2 .1L416 512l-24 0c-22.1 0-40-17.9-40-40l0-24 0-64c0-17.7-14.3-32-32-32l-64 0c-17.7 0-32 14.3-32 32l0 64 0 24c0 22.1-17.9 40-40 40l-24 0-31.9 0c-1.5 0-3-.1-4.5-.2c-1.2 .1-2.4 .2-3.6 .2l-16 0c-22.1 0-40-17.9-40-40l0-112c0-.9 0-1.9 .1-2.8l0-69.7-32 0c-18 0-32-14-32-32.1c0-9 3-17 10-24L266.4 8c7-7 15-8 22-8s15 2 21 7L564.8 231.5c8 7 12 15 11 24z"></path></svg></span><b>a minha casa</b></div>
+  </div>
+  <p class="ask">Qual destes olhares descreve melhor a tua casa?</p>
+</section>
+
+<section class="slide" id="a1-quiz" data-lesson="Aula 1 · A casa e o lar" data-title="Verifica: cinco filósofos">
+  <p class="kicker">Verifica o que aprendeste</p>
+  <h2>Quem disse o quê?</h2>
+  <div class="quiz">
+    <div class="q" data-answer="b"><p class="stem">«Habitamos primeiro, construímos depois.» Quem defendeu esta ideia?</p><div class="opts"><button data-opt="a">Bachelard</button><button data-opt="b">Heidegger</button><button data-opt="c">Levinas</button></div><p class="why">Heidegger inverte o senso comum: é o habitar que nos leva a construir.</p></div>
+    <div class="q" data-answer="a"><p class="stem">Encontrar o interruptor às escuras, sem pensar, mostra que o corpo conhece a casa por hábito. De que filósofo é esta ideia?</p><div class="opts"><button data-opt="a">Merleau-Ponty</button><button data-opt="b">Young</button><button data-opt="c">Heidegger</button></div><p class="why">Merleau-Ponty distingue o espaço geométrico (que se mede) do espaço vivido (que o corpo conhece).</p></div>
+    <div class="q" data-answer="c"><p class="stem">Para Bachelard, que parte da casa é o lado escuro, dos medos?</p><div class="opts"><button data-opt="a">O sótão</button><button data-opt="b">O rés-do-chão</button><button data-opt="c">A cave</button></div><p class="why">A cave é o lado escuro; o sótão, o da claridade; o rés-do-chão, a vida de todos os dias.</p></div>
+    <div class="q" data-answer="V"><p class="stem">Verdadeiro ou falso? Para Levinas, só quem tem um «em casa» pode abrir a porta e acolher o outro.</p><div class="opts"><button data-opt="V">Verdadeiro</button><button data-opt="F">Falso</button></div><p class="why">Verdadeiro: primeiro o recolhimento, depois a hospitalidade.</p></div>
+    <div class="q" data-answer="b"><p class="stem">Como chama Young ao trabalho de limpar, arrumar, reparar e guardar memórias?</p><div class="opts"><button data-opt="a">Construção</button><button data-opt="b">Preservação</button><button data-opt="c">Devaneio</button></div><p class="why">Preservação: um trabalho quase sempre invisível, tão importante como construir.</p></div>
+    <div class="q" data-answer="F"><p class="stem">Verdadeiro ou falso? «Casa» e «lar» querem sempre dizer o mesmo.</p><div class="opts"><button data-opt="V">Verdadeiro</button><button data-opt="F">Falso</button></div><p class="why">Falso. Casa é o edifício; lar é a casa vivida. Podem coincidir, mas nem sempre.</p></div>
+    <div class="score"><span>Pontuação: <output>0</output> / 6</span><button class="btn ghost" data-retry>Tentar outra vez</button></div>
+  </div>
+</section>
+
+
+<!-- ================= AULA 2 · ARQUITETURA HOSTIL ================= -->
+
+<section class="slide divider" id="s-abertura" data-lesson="Aula 2 · Arquitetura hostil" data-title="Abertura">
+  <div class="wrap">
+    <p class="kicker">DR1 · Aula 2</p>
+    <h2>Casa, lar e cidade hostil</h2>
+    <p class="sub">Arquitetura hostil · ter lar sem ter casa · escrever um texto de opinião</p>
+  </div>
+</section>
+
+<section class="slide" id="s-recordar" data-lesson="Aula 2 · Arquitetura hostil" data-title="Lembras-te? Casa ou lar?">
+  <p class="kicker">Para começar · 10 minutos</p>
+  <h2>Lembras-te? Casa ou lar?</h2>
+  <div class="split">
+    <div class="venn" data-step="1">
+      <div class="c c1"></div><div class="c c2"></div>
+      <div class="t" style="left:30px;color:var(--blue)">casa<small>o edifício</small></div>
+      <div class="t" style="left:290px;color:var(--orange);text-align:right">lar<small>a casa vivida</small></div>
+    </div>
+    <div>
+      <p class="label">Cinco palavras da aula anterior</p>
+      <div class="wordlist">
+        <div class="card" data-step="2"><span class="ic sm"><svg stroke-width="0" viewBox="0 0 320 512" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"><path d="M160 48a48 48 0 1 1 96 0 48 48 0 1 1 -96 0zM126.5 199.3c-1 .4-1.9 .8-2.9 1.2l-8 3.5c-16.4 7.3-29 21.2-34.7 38.2l-2.6 7.8c-5.6 16.8-23.7 25.8-40.5 20.2s-25.8-23.7-20.2-40.5l2.6-7.8c11.4-34.1 36.6-61.9 69.4-76.5l8-3.5c20.8-9.2 43.3-14 66.1-14c44.6 0 84.8 26.8 101.9 67.9L281 232.7l21.4 10.7c15.8 7.9 22.2 27.1 14.3 42.9s-27.1 22.2-42.9 14.3L247 287.3c-10.3-5.2-18.4-13.8-22.8-24.5l-9.6-23-19.3 65.5 49.5 54c5.4 5.9 9.2 13 11.2 20.8l23 92.1c4.3 17.1-6.1 34.5-23.3 38.8s-34.5-6.1-38.8-23.3l-22-88.1-70.7-77.1c-14.8-16.1-20.3-38.6-14.7-59.7l16.9-63.5zM68.7 398l25-62.4c2.1 3 4.5 5.8 7 8.6l40.7 44.4-14.5 36.2c-2.4 6-6 11.5-10.6 16.1L54.6 502.6c-12.5 12.5-32.8 12.5-45.3 0s-12.5-32.8 0-45.3L68.7 398z"></path></svg></span><strong>o corpo</strong><em>Merleau-Ponty</em></div>
+        <div class="card" data-step="2"><span class="ic sm"><svg stroke-width="0" viewBox="0 0 576 512" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"><path d="M575.8 255.5c0 18-15 32.1-32 32.1l-32 0 .7 160.2c0 2.7-.2 5.4-.5 8.1l0 16.2c0 22.1-17.9 40-40 40l-16 0c-1.1 0-2.2 0-3.3-.1c-1.4 .1-2.8 .1-4.2 .1L416 512l-24 0c-22.1 0-40-17.9-40-40l0-24 0-64c0-17.7-14.3-32-32-32l-64 0c-17.7 0-32 14.3-32 32l0 64 0 24c0 22.1-17.9 40-40 40l-24 0-31.9 0c-1.5 0-3-.1-4.5-.2c-1.2 .1-2.4 .2-3.6 .2l-16 0c-22.1 0-40-17.9-40-40l0-112c0-.9 0-1.9 .1-2.8l0-69.7-32 0c-18 0-32-14-32-32.1c0-9 3-17 10-24L266.4 8c7-7 15-8 22-8s15 2 21 7L564.8 231.5c8 7 12 15 11 24z"></path></svg></span><strong>habitar</strong><em>Heidegger</em></div>
+        <div class="card" data-step="2"><span class="ic sm"><svg stroke-width="0" viewBox="0 0 512 512" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"><path d="M116.7 33.8c4.5-6.1 11.7-9.8 19.3-9.8l240 0c7.6 0 14.8 3.6 19.3 9.8l112 152c6.8 9.2 6.1 21.9-1.5 30.4l-232 256c-4.5 5-11 7.9-17.8 7.9s-13.2-2.9-17.8-7.9l-232-256c-7.7-8.5-8.3-21.2-1.5-30.4l112-152zm38.5 39.8c-3.3 2.5-4.2 7-2.1 10.5l57.4 95.6L63.3 192c-4.1 .3-7.3 3.8-7.3 8s3.2 7.6 7.3 8l192 16c.4 0 .9 0 1.3 0l192-16c4.1-.3 7.3-3.8 7.3-8s-3.2-7.6-7.3-8L301.5 179.8l57.4-95.6c2.1-3.5 1.2-8.1-2.1-10.5s-7.9-2-10.7 1L256 172.2 165.9 74.6c-2.8-3-7.4-3.4-10.7-1z"></path></svg></span><strong>sonho e memória</strong><em>Bachelard</em></div>
+        <div class="card" data-step="2"><span class="ic sm"><svg stroke-width="0" viewBox="0 0 512 512" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"><path d="M47.6 300.4L228.3 469.1c7.5 7 17.4 10.9 27.7 10.9s20.2-3.9 27.7-10.9L464.4 300.4c30.4-28.3 47.6-68 47.6-109.5v-5.8c0-69.9-50.5-129.5-119.4-141C347 36.5 300.6 51.4 268 84L256 96 244 84c-32.6-32.6-79-47.5-124.6-39.9C50.5 55.6 0 115.2 0 185.1v5.8c0 41.5 17.2 81.2 47.6 109.5z"></path></svg></span><strong>acolher</strong><em>Levinas</em></div>
+        <div class="card blue" data-step="3"><span class="ic sm blue"><svg stroke-width="0" viewBox="0 0 512 512" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"><path d="M32 32l448 0c17.7 0 32 14.3 32 32l0 32c0 17.7-14.3 32-32 32L32 128C14.3 128 0 113.7 0 96L0 64C0 46.3 14.3 32 32 32zm0 128l448 0 0 256c0 35.3-28.7 64-64 64L96 480c-35.3 0-64-28.7-64-64l0-256zm128 80c0 8.8 7.2 16 16 16l160 0c8.8 0 16-7.2 16-16s-7.2-16-16-16l-160 0c-8.8 0-16 7.2-16 16z"></path></svg></span><strong>cuidar</strong><em>I. M. Young</em></div>
+      </div>
+    </div>
+  </div>
+  <p class="ask" data-step="4">Onde é que te sentes «em casa», sem estares em casa?</p>
+</section>
+
+<section class="slide" id="s-objetos" data-lesson="Aula 2 · Arquitetura hostil" data-title="Quatro objetos da cidade">
+  <p class="kicker">Olhar antes de saber · 10 minutos</p>
+  <h2>Quatro objetos da cidade</h2>
+  <div class="grid g4 obj">
+    <div class="card ghost" data-step="2"><span class="num">A</span><svg role="img" aria-label="Desenho esquemático" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 520 320"><line x1="20" y1="290" x2="500" y2="290" stroke="#8A929A" stroke-width="4" stroke-dasharray="2 12" stroke-linecap="round"/>
+<rect x="80" y="70" width="360" height="26" rx="4" fill="none" stroke="#1E2A33" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/>
+<rect x="80" y="112" width="360" height="26" rx="4" fill="none" stroke="#1E2A33" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/>
+<line x1="110" y1="138" x2="110" y2="200" fill="none" stroke="#1E2A33" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/><line x1="410" y1="138" x2="410" y2="200" fill="none" stroke="#1E2A33" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/>
+<rect x="70" y="200" width="380" height="24" rx="4" fill="none" stroke="#1E2A33" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/>
+<line x1="105" y1="224" x2="105" y2="290" fill="none" stroke="#1E2A33" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/><line x1="415" y1="224" x2="415" y2="290" fill="none" stroke="#1E2A33" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M72 200 L72 162 Q72 150 84 150 L100 150 L100 200 Z" class="hl" fill="#F1CDB0" stroke="#A44A16" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/><path d="M190 200 L190 162 Q190 150 202 150 L218 150 L218 200 Z" class="hl" fill="#F1CDB0" stroke="#A44A16" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/><path d="M307 200 L307 162 Q307 150 319 150 L335 150 L335 200 Z" class="hl" fill="#F1CDB0" stroke="#A44A16" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/><path d="M420 200 L420 162 Q420 150 432 150 L448 150 L448 200 Z" class="hl" fill="#F1CDB0" stroke="#A44A16" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/></svg><h3>Um banco de jardim</h3><p class="reveal">Os braços a meio impedem que alguém se deite.</p></div>
+    <div class="card ghost" data-step="3"><span class="num">B</span><svg role="img" aria-label="Desenho esquemático" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 520 320"><line x1="20" y1="290" x2="500" y2="290" stroke="#8A929A" stroke-width="4" stroke-dasharray="2 12" stroke-linecap="round"/>
+<line x1="70" y1="40" x2="450" y2="40" fill="none" stroke="#1E2A33" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/><line x1="90" y1="40" x2="90" y2="290" fill="none" stroke="#1E2A33" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/>
+<line x1="430" y1="40" x2="430" y2="290" fill="none" stroke="#1E2A33" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/>
+<rect x="110" y="70" width="300" height="130" rx="4" fill="#DCE8F2" stroke="#1E2A33" stroke-width="4"/>
+<rect x="140" y="85" width="80" height="34" rx="4" fill="#1E2A33"/><text x="180" y="110" font-family="Arial" font-weight="bold" font-size="22" fill="white" text-anchor="middle">BUS</text>
+<path d="M150 205 L370 225 L370 240 L150 220 Z" class="hl" fill="#F1CDB0" stroke="#A44A16" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/>
+<line x1="180" y1="222" x2="180" y2="290" fill="none" stroke="#1E2A33" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/><line x1="340" y1="236" x2="340" y2="290" fill="none" stroke="#1E2A33" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/></svg><h3>Uma paragem de autocarro</h3><p class="reveal">O apoio inclinado deixa encostar, mas não sentar nem deitar.</p></div>
+    <div class="card ghost" data-step="4"><span class="num">C</span><svg role="img" aria-label="Desenho esquemático" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 520 320"><line x1="20" y1="290" x2="500" y2="290" stroke="#8A929A" stroke-width="4" stroke-dasharray="2 12" stroke-linecap="round"/>
+<rect x="60" y="30" width="400" height="200" rx="4" fill="none" stroke="#1E2A33" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/>
+<rect x="100" y="60" width="320" height="140" rx="4" fill="#DCE8F2" stroke="#1E2A33" stroke-width="4"/>
+<rect x="40" y="230" width="440" height="30" rx="3" fill="none" stroke="#1E2A33" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M58 230 L68 205 L78 230" class="hl" fill="#F1CDB0" stroke="#A44A16" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/><path d="M88 230 L98 205 L108 230" class="hl" fill="#F1CDB0" stroke="#A44A16" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/><path d="M118 230 L128 205 L138 230" class="hl" fill="#F1CDB0" stroke="#A44A16" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/><path d="M148 230 L158 205 L168 230" class="hl" fill="#F1CDB0" stroke="#A44A16" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/><path d="M178 230 L188 205 L198 230" class="hl" fill="#F1CDB0" stroke="#A44A16" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/><path d="M208 230 L218 205 L228 230" class="hl" fill="#F1CDB0" stroke="#A44A16" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/><path d="M238 230 L248 205 L258 230" class="hl" fill="#F1CDB0" stroke="#A44A16" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/><path d="M268 230 L278 205 L288 230" class="hl" fill="#F1CDB0" stroke="#A44A16" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/><path d="M298 230 L308 205 L318 230" class="hl" fill="#F1CDB0" stroke="#A44A16" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/><path d="M328 230 L338 205 L348 230" class="hl" fill="#F1CDB0" stroke="#A44A16" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/><path d="M358 230 L368 205 L378 230" class="hl" fill="#F1CDB0" stroke="#A44A16" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/><path d="M388 230 L398 205 L408 230" class="hl" fill="#F1CDB0" stroke="#A44A16" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/><path d="M418 230 L428 205 L438 230" class="hl" fill="#F1CDB0" stroke="#A44A16" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/><path d="M448 230 L458 205 L468 230" class="hl" fill="#F1CDB0" stroke="#A44A16" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/>
+<line x1="60" y1="260" x2="60" y2="290" fill="none" stroke="#1E2A33" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/><line x1="460" y1="260" x2="460" y2="290" fill="none" stroke="#1E2A33" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/></svg><h3>O parapeito de uma montra</h3><p class="reveal">Os picos impedem sentar ou dormir junto à montra.</p></div>
+    <div class="card ghost" data-step="5"><span class="num">D</span><svg role="img" aria-label="Desenho esquemático" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 520 320"><line x1="20" y1="290" x2="500" y2="290" stroke="#8A929A" stroke-width="4" stroke-dasharray="2 12" stroke-linecap="round"/>
+<path d="M20 70 L500 70 L500 100 L20 100 Z" fill="none" stroke="#1E2A33" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M130 100 L130 290 M390 100 L390 290" fill="none" stroke="#1E2A33" stroke-width="18" stroke-linecap="round"/>
+<path d="M150 290 Q155 250 185 250 Q215 248 222 290 Z" class="hl" fill="#F1CDB0" stroke="#A44A16" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M226 290 Q228 240 262 238 Q298 240 300 290 Z" class="hl" fill="#F1CDB0" stroke="#A44A16" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M304 290 Q306 255 335 254 Q365 256 368 290 Z" class="hl" fill="#F1CDB0" stroke="#A44A16" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M40 290 Q45 262 72 262 Q100 264 106 290 Z" class="hl" fill="#F1CDB0" stroke="#A44A16" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M414 290 Q418 258 448 258 Q478 260 482 290 Z" class="hl" fill="#F1CDB0" stroke="#A44A16" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/></svg><h3>Debaixo de um viaduto</h3><p class="reveal">As pedras impedem que alguém se abrigue debaixo do viaduto.</p></div>
+  </div>
+  <div class="row" style="justify-content:space-between;flex-wrap:wrap">
+    <p class="ask">Para que serve a peça a laranja? E quem é que ela quer afastar?</p>
+    <div class="timer" data-seconds="180"><output>3:00</output><button class="btn">Iniciar</button><button class="btn ghost" data-reset>Repor</button></div>
+  </div>
+</section>
+
+<section class="slide" id="s-conceito" data-lesson="Aula 2 · Arquitetura hostil" data-title="Arquitetura hostil">
+  <p class="kicker">Conceito</p>
+  <h2>Arquitetura hostil</h2>
+  <div class="card" data-step="1" style="margin-bottom:28px">
+    <p style="font-size:23px"><b style="color:var(--navy)">Arquitetura hostil:</b> o desenho de objetos e espaços públicos pensado para impedir certos usos (deitar, ficar muito tempo, juntar-se) e, por essa via, afastar certas pessoas.</p>
+    <p style="font-style:italic;color:var(--muted);font-size:17px;margin:0">Também se diz: arquitetura defensiva · design desagradável · design de exclusão</p>
+  </div>
+  <div class="flow">
+    <div class="card" data-step="2"><span class="ic"><svg stroke-width="0" viewBox="0 0 448 512" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"><path d="M248 48l0 208 48 0 0-197.3c23.9 13.8 40 39.7 40 69.3l0 128 48 0 0-128C384 57.3 326.7 0 256 0L192 0C121.3 0 64 57.3 64 128l0 128 48 0 0-128c0-29.6 16.1-55.5 40-69.3L152 256l48 0 0-208 48 0zM48 288c-12.1 0-23.2 6.8-28.6 17.7l-16 32c-5 9.9-4.4 21.7 1.4 31.1S20.9 384 32 384l0 96c0 17.7 14.3 32 32 32s32-14.3 32-32l0-96 256 0 0 96c0 17.7 14.3 32 32 32s32-14.3 32-32l0-96c11.1 0 21.4-5.7 27.2-15.2s6.4-21.2 1.4-31.1l-16-32C423.2 294.8 412.1 288 400 288L48 288z"></path></svg></span><h3>um objeto</h3><em>banco com braços</em></div>
+    <div class="arrow" data-step="3"><svg viewBox="0 0 60 30"><path class="draw" pathLength="1" d="M4 15 H52 M44 7 L54 15 L44 23"/></svg></div>
+    <div class="card peach" data-step="3"><span class="ic"><svg stroke-width="0" viewBox="0 0 512 512" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"><path d="M367.2 412.5L99.5 144.8C77.1 176.1 64 214.5 64 256c0 106 86 192 192 192c41.5 0 79.9-13.1 111.2-35.5zm45.3-45.3C434.9 335.9 448 297.5 448 256c0-106-86-192-192-192c-41.5 0-79.9 13.1-111.2 35.5L412.5 367.2zM0 256a256 256 0 1 1 512 0A256 256 0 1 1 0 256z"></path></svg></span><h3>impede um uso</h3><em>deitar-se</em></div>
+    <div class="arrow" data-step="4"><svg viewBox="0 0 60 30"><path class="draw" pathLength="1" d="M4 15 H52 M44 7 L54 15 L44 23"/></svg></div>
+    <div class="card dark" data-step="4"><span class="ic accent"><svg stroke-width="0" viewBox="0 0 512 512" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"><path d="M271.9 4.2c-9.8-5.6-21.9-5.6-31.8 0l-224 128C6.2 137.9 0 148.5 0 160L0 480c0 17.7 14.3 32 32 32s32-14.3 32-32l0-301.4L256 68.9 448 178.6 448 480c0 17.7 14.3 32 32 32s32-14.3 32-32l0-320c0-11.5-6.2-22.1-16.1-27.8l-224-128zM256 208a40 40 0 1 0 0-80 40 40 0 1 0 0 80zm-8 280l0-88 16 0 0 88c0 13.3 10.7 24 24 24s24-10.7 24-24l0-174.5 26.9 49.9c6.3 11.7 20.8 16 32.5 9.8s16-20.8 9.8-32.5l-37.9-70.3c-15.3-28.5-45.1-46.3-77.5-46.3l-19.5 0c-32.4 0-62.1 17.8-77.5 46.3l-37.9 70.3c-6.3 11.7-1.9 26.2 9.8 32.5s26.2 1.9 32.5-9.8L200 313.5 200 488c0 13.3 10.7 24 24 24s24-10.7 24-24z"></path></svg></span><h3>afasta alguém</h3><em>quem não tem onde dormir</em></div>
+  </div>
+  <p class="ask" data-step="5">O objeto nunca diz «proibido». Diz «aqui não», sem uma única palavra.</p>
+</section>
+
+<section class="slide" id="s-catalogo" data-lesson="Aula 2 · Arquitetura hostil" data-title="Seis formas de dizer «aqui não»">
+  <p class="kicker">Catálogo · clica em cada cartão</p>
+  <h2>Seis formas de dizer «aqui não»</h2>
+  <div class="grid g3">
+    <button class="flip"><div class="in"><div class="face front"><span class="ic"><svg stroke-width="0" viewBox="0 0 448 512" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"><path d="M248 48l0 208 48 0 0-197.3c23.9 13.8 40 39.7 40 69.3l0 128 48 0 0-128C384 57.3 326.7 0 256 0L192 0C121.3 0 64 57.3 64 128l0 128 48 0 0-128c0-29.6 16.1-55.5 40-69.3L152 256l48 0 0-208 48 0zM48 288c-12.1 0-23.2 6.8-28.6 17.7l-16 32c-5 9.9-4.4 21.7 1.4 31.1S20.9 384 32 384l0 96c0 17.7 14.3 32 32 32s32-14.3 32-32l0-96 256 0 0 96c0 17.7 14.3 32 32 32s32-14.3 32-32l0-96c11.1 0 21.4-5.7 27.2-15.2s6.4-21.2 1.4-31.1l-16-32C423.2 294.8 412.1 288 400 288L48 288z"></path></svg></span><h3>Braços a meio do banco</h3><span class="hint">Clica para ver o que impede</span></div><div class="face back">Impedem que alguém se deite.</div></div></button>
+    <button class="flip"><div class="in"><div class="face front"><span class="ic"><svg stroke-width="0" viewBox="0 0 576 512" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"><path d="M288 0C422.4 0 512 35.2 512 80l0 16 0 32c17.7 0 32 14.3 32 32l0 64c0 17.7-14.3 32-32 32l0 160c0 17.7-14.3 32-32 32l0 32c0 17.7-14.3 32-32 32l-32 0c-17.7 0-32-14.3-32-32l0-32-192 0 0 32c0 17.7-14.3 32-32 32l-32 0c-17.7 0-32-14.3-32-32l0-32c-17.7 0-32-14.3-32-32l0-160c-17.7 0-32-14.3-32-32l0-64c0-17.7 14.3-32 32-32c0 0 0 0 0 0l0-32s0 0 0 0l0-16C64 35.2 153.6 0 288 0zM128 160l0 96c0 17.7 14.3 32 32 32l112 0 0-160-112 0c-17.7 0-32 14.3-32 32zM304 288l112 0c17.7 0 32-14.3 32-32l0-96c0-17.7-14.3-32-32-32l-112 0 0 160zM144 400a32 32 0 1 0 0-64 32 32 0 1 0 0 64zm288 0a32 32 0 1 0 0-64 32 32 0 1 0 0 64zM384 80c0-8.8-7.2-16-16-16L208 64c-8.8 0-16 7.2-16 16s7.2 16 16 16l160 0c8.8 0 16-7.2 16-16z"></path></svg></span><h3>Apoios inclinados</h3><span class="hint">Clica para ver o que impede</span></div><div class="face back">Dá para encostar, não para sentar ou dormir.</div></div></button>
+    <button class="flip"><div class="in"><div class="face front"><span class="ic"><svg stroke-width="0" viewBox="0 0 512 512" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"><path d="M256 32c14.2 0 27.3 7.5 34.5 19.8l216 368c7.3 12.4 7.3 27.7 .2 40.1S486.3 480 472 480L40 480c-14.3 0-27.6-7.7-34.7-20.1s-7-27.8 .2-40.1l216-368C228.7 39.5 241.8 32 256 32zm0 128c-13.3 0-24 10.7-24 24l0 112c0 13.3 10.7 24 24 24s24-10.7 24-24l0-112c0-13.3-10.7-24-24-24zm32 224a32 32 0 1 0 -64 0 32 32 0 1 0 64 0z"></path></svg></span><h3>Picos e pinos</h3><span class="hint">Clica para ver o que impede</span></div><div class="face back">Em parapeitos, degraus e entradas de prédios.</div></div></button>
+    <button class="flip"><div class="in"><div class="face front"><span class="ic"><svg stroke-width="0" viewBox="0 0 512 512" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"><path d="M256 32c12.5 0 24.1 6.4 30.8 17L503.4 394.4c5.6 8.9 8.6 19.2 8.6 29.7c0 30.9-25 55.9-55.9 55.9L55.9 480C25 480 0 455 0 424.1c0-10.5 3-20.8 8.6-29.7L225.2 49c6.6-10.6 18.3-17 30.8-17zm65 192L256 120.4 176.9 246.5l18.3 24.4c6.4 8.5 19.2 8.5 25.6 0l25.6-34.1c6-8.1 15.5-12.8 25.6-12.8l49 0z"></path></svg></span><h3>Pedras e floreiras</h3><span class="hint">Clica para ver o que impede</span></div><div class="face back">Ocupam o abrigo debaixo de pontes e viadutos.</div></div></button>
+    <button class="flip"><div class="in"><div class="face front"><span class="ic"><svg stroke-width="0" viewBox="0 0 384 512" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"><path d="M192 512C86 512 0 426 0 320C0 228.8 130.2 57.7 166.6 11.7C172.6 4.2 181.5 0 191.1 0l1.8 0c9.6 0 18.5 4.2 24.5 11.7C253.8 57.7 384 228.8 384 320c0 106-86 192-192 192zM96 336c0-8.8-7.2-16-16-16s-16 7.2-16 16c0 61.9 50.1 112 112 112c8.8 0 16-7.2 16-16s-7.2-16-16-16c-44.2 0-80-35.8-80-80z"></path></svg></span><h3>Aspersores de água</h3><span class="hint">Clica para ver o que impede</span></div><div class="face back">Molham quem fica à porta ou no jardim.</div></div></button>
+    <button class="flip"><div class="in"><div class="face front" style="background:var(--blue-light)"><span class="ic blue"><svg stroke-width="0" viewBox="0 0 640 512" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"><path d="M533.6 32.5C598.5 85.2 640 165.8 640 256s-41.5 170.7-106.4 223.5c-10.3 8.4-25.4 6.8-33.8-3.5s-6.8-25.4 3.5-33.8C557.5 398.2 592 331.2 592 256s-34.5-142.2-88.7-186.3c-10.3-8.4-11.8-23.5-3.5-33.8s23.5-11.8 33.8-3.5zM473.1 107c43.2 35.2 70.9 88.9 70.9 149s-27.7 113.8-70.9 149c-10.3 8.4-25.4 6.8-33.8-3.5s-6.8-25.4 3.5-33.8C475.3 341.3 496 301.1 496 256s-20.7-85.3-53.2-111.8c-10.3-8.4-11.8-23.5-3.5-33.8s23.5-11.8 33.8-3.5zm-60.5 74.5C434.1 199.1 448 225.9 448 256s-13.9 56.9-35.4 74.5c-10.3 8.4-25.4 6.8-33.8-3.5s-6.8-25.4 3.5-33.8C393.1 284.4 400 271 400 256s-6.9-28.4-17.7-37.3c-10.3-8.4-11.8-23.5-3.5-33.8s23.5-11.8 33.8-3.5zM301.1 34.8C312.6 40 320 51.4 320 64l0 384c0 12.6-7.4 24-18.9 29.2s-25 3.1-34.4-5.3L131.8 352 64 352c-35.3 0-64-28.7-64-64l0-64c0-35.3 28.7-64 64-64l67.8 0L266.7 40.1c9.4-8.4 22.9-10.4 34.4-5.3z"></path></svg></span><h3>Som de alta frequência</h3><span class="hint">Clica para ver o que impede</span></div><div class="face back">Só os mais jovens o ouvem: afasta grupos de adolescentes.</div></div></button>
+  </div>
+  <p class="ask">Já viste algum destes na tua terra ou no caminho para a escola?</p>
+  <p class="source">Exemplos reunidos em G. Savičić e S. Savić (orgs.), <i>Unpleasant Design</i>, 2013.</p>
+</section>
+
+<section class="slide" id="s-camden" data-lesson="Aula 2 · Arquitetura hostil" data-title="O banco de Camden">
+  <p class="kicker">Um caso · Londres, 2012</p>
+  <h2>O banco de Camden: tudo o que não se pode fazer</h2>
+  <div class="split">
+    <svg role="img" aria-label="Desenho esquemático" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 640 420">
+<line x1="20" y1="380" x2="620" y2="380" stroke="#8A929A" stroke-width="4" stroke-dasharray="2 12" stroke-linecap="round"/>
+<path d="M80 250 L250 150 L590 190 L420 300 Z" fill="#F6F3EC" stroke="#1E2A33" stroke-width="6" stroke-linejoin="round"/>
+<path d="M250 150 L330 110 L590 150 L590 190 Z" fill="#E8E2D4" stroke="#1E2A33" stroke-width="6" stroke-linejoin="round"/>
+<path d="M80 250 L80 330 L420 380 L420 300 Z" fill="#E8E2D4" stroke="#1E2A33" stroke-width="6" stroke-linejoin="round"/>
+<path d="M420 300 L420 380 L590 260 L590 190 Z" fill="#D9D1BF" stroke="#1E2A33" stroke-width="6" stroke-linejoin="round"/>
+<path d="M150 318 L150 345 L300 368 L300 340 Z" fill="#F1CDB0" stroke="#A44A16" stroke-width="5" stroke-linejoin="round"/>
+<line x1="170" y1="230" x2="480" y2="268" stroke="#8A929A" stroke-width="3" stroke-dasharray="10 8"/>
+<g data-step="1"><circle cx="330" cy="190" r="24" fill="#A44A16"/><text x="330" y="199" text-anchor="middle" font-family="Cambria, Caladea, serif" font-weight="700" font-size="26" fill="#fff">1</text></g><g data-step="2"><circle cx="470" cy="170" r="24" fill="#A44A16"/><text x="470" y="179" text-anchor="middle" font-family="Cambria, Caladea, serif" font-weight="700" font-size="26" fill="#fff">2</text></g><g data-step="3"><circle cx="225" cy="345" r="24" fill="#A44A16"/><text x="225" y="354" text-anchor="middle" font-family="Cambria, Caladea, serif" font-weight="700" font-size="26" fill="#fff">3</text></g><g data-step="4"><circle cx="505" cy="290" r="24" fill="#A44A16"/><text x="505" y="299" text-anchor="middle" font-family="Cambria, Caladea, serif" font-weight="700" font-size="26" fill="#fff">4</text></g></svg>
+    <div class="grid" style="gap:18px">
+      <div class="row" data-step="1"><span class="num">1</span><div><h3>Superfícies inclinadas e irregulares</h3><p>Não dá para dormir nem para andar de skate.</p></div></div>
+      <div class="row" data-step="2"><span class="num">2</span><div><h3>Sem frestas nem buracos</h3><p>Não se escondem droga nem lixo.</p></div></div>
+      <div class="row" data-step="3"><span class="num">3</span><div><h3>Reentrâncias junto ao chão</h3><p>Guarda-se a mala atrás das pernas, longe dos ladrões.</p></div></div>
+      <div class="row" data-step="4"><span class="num">4</span><div><h3>Revestimento especial</h3><p>A tinta dos graffiti não pega.</p></div></div>
+    </div>
+  </div>
+  <p class="ask" data-step="5">Um jornalista chamou-lhe «o anti-objeto perfeito». Concordas?</p>
+  <p class="source">Banco encomendado pela Câmara de Camden à empresa Factory Furniture (2012). Expressão de Frank Swain. <a href="https://en.wikipedia.org/wiki/Camden_bench" target="_blank" rel="noopener">Wikipedia, «Camden bench»</a>. Desenho esquemático.</p>
+</section>
+
+<section class="slide" id="s-intencao" data-lesson="Aula 2 · Arquitetura hostil" data-title="Intenção ou efeito?">
+  <p class="kicker">Intenção ou efeito?</p>
+  <h2>Dois casos, uma pergunta</h2>
+  <div class="grid g2">
+    <div class="card" data-step="1"><p class="label">Londres · 2014</p><h3>Picos à porta de um prédio</h3><p>Picos de metal no chão à entrada de um prédio de apartamentos, num sítio onde dormiam pessoas sem-abrigo. As fotografias circularam na internet e, depois de muitos protestos, os picos foram retirados.</p></div>
+    <div class="card blue" data-step="2"><p class="label">Lisboa · 2020</p><h3>Bancos com picos de Bordalo II</h3><p>Durante a pandemia, apareceram em jardins de Lisboa bancos com picos do artista Bordalo II, pensados para promover o distanciamento social. Foram criticados por lembrarem a arquitetura hostil, e a Câmara demarcou-se da iniciativa.</p></div>
+  </div>
+  <div class="split" style="margin-top:28px;align-items:center" data-step="3">
+    <p class="ask" style="margin:0">Se a intenção era boa, o efeito deixa de contar?</p>
+    <div class="card poll">
+      <p class="label">Votação de braço no ar</p>
+      <div class="opt"><span class="name">Conta mais a intenção</span><span class="ctrl"><button data-d="-1" aria-label="menos">−</button><output>0</output><button data-d="1" aria-label="mais">+</button></span><div class="track"><span></span></div></div>
+      <div class="opt"><span class="name">Conta mais o efeito</span><span class="ctrl"><button data-d="-1" aria-label="menos">−</button><output>0</output><button data-d="1" aria-label="mais">+</button></span><div class="track"><span></span></div></div>
+    </div>
+  </div>
+  <p class="source"><a href="https://en.wikipedia.org/wiki/Hostile_architecture" target="_blank" rel="noopener">Wikipedia, «Hostile architecture»</a>; <a href="https://www.sabado.pt/portugal/detalhe/obra-de-bordalo-ii-nos-bancos-de-lisboa-considerada-hostil-para-os-sem-abrigo" target="_blank" rel="noopener">Sábado, 4 de junho de 2020</a>.</p>
+</section>
+
+<section class="slide" id="s-pesquisa1" data-lesson="Aula 2 · Arquitetura hostil" data-title="Pesquisa: o som que só os jovens ouvem">
+  <p class="kicker">Pesquisa · 5 minutos</p>
+  <h2>O som que só os jovens ouvem</h2>
+  <div class="research" data-url="https://en.wikipedia.org/wiki/Hostile_architecture">
+    <div>
+      <div class="card">
+        <p style="font-family:var(--head);font-size:26px;color:var(--navy);font-weight:700">Como se chama o aparelho de som de alta frequência usado para afastar adolescentes? E porque é que os adultos quase não o ouvem?</p>
+        <p>Pesquisa no telemóvel. Podes começar pela página ao lado.</p>
+      </div>
+      <div class="timer" data-seconds="300"><output>5:00</output><button class="btn">Iniciar</button><button class="btn ghost" data-reset>Repor</button></div>
+      <button class="btn orange" data-answer>Mostrar resposta</button>
+      <div class="answer card dark"><p>Chama-se <b style="color:var(--white)">«Mosquito»</b>. A capacidade de ouvir sons muito agudos diminui com a idade: por isso, quase só os jovens o ouvem.</p><p class="source" style="color:var(--accent)">Fonte: Wikipedia, «Hostile architecture».</p></div>
+    </div>
+    <div class="qr"><div class="code"></div><a target="_blank" rel="noopener"></a></div>
+  </div>
+</section>
+
+<section class="slide" id="s-quiz1" data-lesson="Aula 2 · Arquitetura hostil" data-title="Verifica: arquitetura hostil">
+  <p class="kicker">Verifica o que aprendeste</p>
+  <h2>Cinco perguntas rápidas</h2>
+  <div class="quiz">
+    <div class="q" data-answer="F"><p class="stem">Verdadeiro ou falso? A arquitetura hostil afasta as pessoas com placas que dizem «proibido».</p><div class="opts"><button data-opt="V">Verdadeiro</button><button data-opt="F">Falso</button></div><p class="why">Falso. O objeto nunca diz «proibido»: diz «aqui não», sem uma única palavra.</p></div>
+    <div class="q" data-answer="b"><p class="stem">Para que servem os braços a meio de um banco?</p><div class="opts"><button data-opt="a">Para apoiar os cotovelos</button><button data-opt="b">Para impedir que alguém se deite</button><button data-opt="c">Para separar casais</button></div><p class="why">Impedem que alguém se deite no banco.</p></div>
+    <div class="q" data-answer="c"><p class="stem">Quem é que o som de alta frequência afasta?</p><div class="opts"><button data-opt="a">Os pombos</button><button data-opt="b">Os idosos</button><button data-opt="c">Os adolescentes</button></div><p class="why">Só os mais jovens o ouvem: afasta grupos de adolescentes.</p></div>
+    <div class="q" data-answer="b"><p class="stem">No banco de Camden, para que servem as reentrâncias junto ao chão?</p><div class="opts"><button data-opt="a">Para escoar a água da chuva</button><button data-opt="b">Para guardar a mala longe dos ladrões</button><button data-opt="c">Para impedir o skate</button></div><p class="why">Guarda-se a mala atrás das pernas, longe dos ladrões.</p></div>
+    <div class="q" data-answer="V"><p class="stem">Verdadeiro ou falso? Os picos de Londres, em 2014, foram retirados depois de muitos protestos.</p><div class="opts"><button data-opt="V">Verdadeiro</button><button data-opt="F">Falso</button></div><p class="why">Verdadeiro. As fotografias circularam na internet e os picos foram retirados.</p></div>
+    <div class="score"><span>Pontuação: <output>0</output> / 5</span><button class="btn ghost" data-retry>Tentar outra vez</button></div>
+  </div>
+</section>
+
+<!-- ================= LIÇÃO 2 · PENSAR O LAR ================= -->
+
+<section class="slide" id="s-numeros" data-lesson="Aula 2 · Pensar o lar" data-title="Quantas pessoas sem casa?">
+  <p class="kicker">Os números</p>
+  <h2>Quantas pessoas vivem sem casa em Portugal?</h2>
+  <div class="split">
+    <div>
+      <div class="big" data-count="14476" data-step="1">0</div>
+      <p>pessoas em situação de sem-abrigo, a 31 de dezembro de 2024 (eram 13 128 um ano antes)</p>
+      <div data-step="2" style="margin-top:22px">
+        <p style="margin:0"><b style="font-family:var(--head);color:var(--orange);font-size:22px">sem teto</b> <b style="color:var(--navy)">9 403</b></p>
+        <div class="bar" style="--w:65%;background:var(--orange)"></div>
+        <p style="font-size:15px;font-style:italic;color:var(--muted)">na rua ou noutro espaço público, em abrigo de emergência ou local precário</p>
+      </div>
+      <div data-step="3">
+        <p style="margin:0"><b style="font-family:var(--head);color:var(--blue);font-size:22px">sem casa</b> <b style="color:var(--navy)">5 073</b></p>
+        <div class="bar" style="--w:35%;background:var(--blue)"></div>
+        <p style="font-size:15px;font-style:italic;color:var(--muted)">em alojamento temporário destinado a pessoas sem-abrigo</p>
+      </div>
+    </div>
+    <div class="card dark words">
+      <p class="label">A língua faz distinções</p>
+      <div class="w" data-step="4"><b>teto</b><span>proteção contra a chuva e o frio</span></div>
+      <div class="w" data-step="5"><b>casa</b><span>um sítio que é nosso, onde podemos ficar</span></div>
+      <div class="w lar" data-step="6"><b>lar</b><span>a casa vivida: pessoas, hábitos, memórias</span></div>
+      <p data-step="7" style="font-family:var(--head);font-style:italic;color:var(--white);margin-top:16px">As estatísticas contam tetos e casas. Nenhuma estatística conta lares.</p>
+    </div>
+  </div>
+  <p class="ask" data-step="7">Porque é que o Estado precisa de duas palavras diferentes, «sem teto» e «sem casa»?</p>
+  <p class="source">Inquérito de caracterização das pessoas em situação de sem-abrigo, dados de 31/12/2024 (<a href="https://www.dnoticias.pt/2025/12/18/474382-numero-de-sem-abrigo-voltou-a-aumentar-no-ano-passado-e-chegou-a-14476/" target="_blank" rel="noopener">Lusa, dezembro de 2025</a>).</p>
+</section>
+
+<section class="slide" id="s-waldron" data-lesson="Aula 2 · Pensar o lar" data-title="Waldron: tudo acontece num lugar">
+  <p class="kicker">Jeremy Waldron · 1991</p>
+  <h2>Tudo o que fazemos, fazemo-lo em algum lugar</h2>
+  <div class="waldron">
+    <div class="grid" style="gap:14px" data-step="1">
+      <div class="row"><span class="ic sm"><svg stroke-width="0" viewBox="0 0 640 512" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"><path d="M32 32c17.7 0 32 14.3 32 32l0 256 224 0 0-160c0-17.7 14.3-32 32-32l224 0c53 0 96 43 96 96l0 224c0 17.7-14.3 32-32 32s-32-14.3-32-32l0-32-224 0-32 0L64 416l0 32c0 17.7-14.3 32-32 32s-32-14.3-32-32L0 64C0 46.3 14.3 32 32 32zm144 96a80 80 0 1 1 0 160 80 80 0 1 1 0-160z"></path></svg></span><h3 style="margin:0">dormir</h3></div>
+      <div class="row"><span class="ic sm"><svg stroke-width="0" viewBox="0 0 512 512" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"><path d="M64 131.9C64 112.1 80.1 96 99.9 96c9.5 0 18.6 3.8 25.4 10.5l16.2 16.2c-21 38.9-17.4 87.5 10.9 123L151 247c-9.4 9.4-9.4 24.6 0 33.9s24.6 9.4 33.9 0L345 121c9.4-9.4 9.4-24.6 0-33.9s-24.6-9.4-33.9 0l-1.3 1.3c-35.5-28.3-84.2-31.9-123-10.9L170.5 61.3C151.8 42.5 126.4 32 99.9 32C44.7 32 0 76.7 0 131.9L0 448c0 17.7 14.3 32 32 32s32-14.3 32-32l0-316.1zM256 352a32 32 0 1 0 0-64 32 32 0 1 0 0 64zm64 64a32 32 0 1 0 -64 0 32 32 0 1 0 64 0zm0-128a32 32 0 1 0 0-64 32 32 0 1 0 0 64zm64 64a32 32 0 1 0 -64 0 32 32 0 1 0 64 0zm0-128a32 32 0 1 0 0-64 32 32 0 1 0 0 64zm64 64a32 32 0 1 0 -64 0 32 32 0 1 0 64 0zm32-32a32 32 0 1 0 0-64 32 32 0 1 0 0 64z"></path></svg></span><h3 style="margin:0">lavar-se</h3></div>
+      <div class="row"><span class="ic sm"><svg stroke-width="0" viewBox="0 0 448 512" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"><path d="M416 0C400 0 288 32 288 176l0 112c0 35.3 28.7 64 64 64l32 0 0 128c0 17.7 14.3 32 32 32s32-14.3 32-32l0-128 0-112 0-208c0-17.7-14.3-32-32-32zM64 16C64 7.8 57.9 1 49.7 .1S34.2 4.6 32.4 12.5L2.1 148.8C.7 155.1 0 161.5 0 167.9c0 45.9 35.1 83.6 80 87.7L80 480c0 17.7 14.3 32 32 32s32-14.3 32-32l0-224.4c44.9-4.1 80-41.8 80-87.7c0-6.4-.7-12.8-2.1-19.1L191.6 12.5c-1.8-8-9.3-13.3-17.4-12.4S160 7.8 160 16l0 134.2c0 5.4-4.4 9.8-9.8 9.8c-5.1 0-9.3-3.9-9.8-9L127.9 14.6C127.2 6.3 120.3 0 112 0s-15.2 6.3-15.9 14.6L83.7 151c-.5 5.1-4.7 9-9.8 9c-5.4 0-9.8-4.4-9.8-9.8L64 16zm48.3 152l-.3 0-.3 0 .3-.7 .3 .7z"></path></svg></span><h3 style="margin:0">comer</h3></div>
+      <div class="row"><span class="ic sm"><svg stroke-width="0" viewBox="0 0 640 512" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"><path d="M64 160C64 89.3 121.3 32 192 32l256 0c70.7 0 128 57.3 128 128l0 33.6c-36.5 7.4-64 39.7-64 78.4l0 48-384 0 0-48c0-38.7-27.5-71-64-78.4L64 160zM544 272c0-20.9 13.4-38.7 32-45.3c5-1.8 10.4-2.7 16-2.7c26.5 0 48 21.5 48 48l0 176c0 17.7-14.3 32-32 32l-32 0c-17.7 0-32-14.3-32-32L96 448c0 17.7-14.3 32-32 32l-32 0c-17.7 0-32-14.3-32-32L0 272c0-26.5 21.5-48 48-48c5.6 0 11 1 16 2.7c18.6 6.6 32 24.4 32 45.3l0 48 0 32 32 0 384 0 32 0 0-32 0-48z"></path></svg></span><h3 style="margin:0">descansar</h3></div>
+    </div>
+    <svg viewBox="0 0 60 260" style="width:60px;height:260px;stroke:var(--muted);stroke-width:3;fill:none">
+      <g data-step="2"><path class="draw" pathLength="1" d="M4 130 C30 130 30 50 54 50 M46 43 L55 50 L46 57"/></g>
+      <g data-step="3"><path class="draw" pathLength="1" d="M4 130 C30 130 30 205 54 205 M46 198 L55 205 L46 212"/></g>
+    </svg>
+    <div class="grid" style="gap:22px">
+      <div class="card blue" data-step="2" style="max-width:420px"><p class="label">Quem tem casa</p><p style="margin:0;color:var(--navy)">em casa, no espaço privado, ou no espaço público</p></div>
+      <div style="display:flex;align-items:center;gap:12px;flex-wrap:wrap">
+        <div class="card peach" data-step="3" style="max-width:420px;flex:1"><p class="label">Quem não tem casa</p><p style="margin:0;color:var(--navy)">só no espaço público, que é de todos</p></div>
+        <span data-step="4" style="color:var(--orange);font-size:28px">→</span>
+        <div class="card dark" data-step="4" style="font-style:italic">se o espaço público o impede…</div>
+        <span data-step="5" style="color:var(--orange);font-size:28px">→</span>
+        <b data-step="5" style="font-family:var(--head);color:var(--orange);font-size:30px">em lado nenhum</b>
+      </div>
+    </div>
+  </div>
+  <p data-step="6" style="margin-top:26px;max-width:900px">Para Waldron, quem não tem casa só é livre de dormir ou de se lavar nos espaços que são de todos. Quando as regras proíbem esses atos no espaço público, proíbem-nos, para essa pessoa, em todo o lado.</p>
+  <p class="ask" data-step="7">E se a regra não estiver escrita num papel, mas feita de betão e metal?</p>
+  <p class="source">Jeremy Waldron, «Homelessness and the Issue of Freedom», <i>UCLA Law Review</i>, 39 (1991).</p>
+</section>
+
+<section class="slide" id="s-young" data-lesson="Aula 2 · Pensar o lar" data-title="Young: quatro valores do lar">
+  <p class="kicker">Iris Marion Young · 1997</p>
+  <h2>Quatro coisas que um lar deve dar a todos</h2>
+  <div class="grid g4">
+    <div class="card" data-step="1"><span class="ic"><svg stroke-width="0" viewBox="0 0 512 512" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"><path d="M256 0c4.6 0 9.2 1 13.4 2.9L457.7 82.8c22 9.3 38.4 31 38.3 57.2c-.5 99.2-41.3 280.7-213.6 363.2c-16.7 8-36.1 8-52.8 0C57.3 420.7 16.5 239.2 16 140c-.1-26.2 16.3-47.9 38.3-57.2L242.7 2.9C246.8 1 251.4 0 256 0zm0 66.8l0 378.1C394 378 431.1 230.1 432 141.4L256 66.8s0 0 0 0z"></path></svg></span><h3 style="margin-top:12px">Segurança</h3><p>Um sítio onde podemos estar sem medo de ser expulsos ou agredidos.</p></div>
+    <div class="card blue" data-step="2"><span class="ic blue"><svg stroke-width="0" viewBox="0 0 512 512" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"><path d="M48 256C48 141.1 141.1 48 256 48c63.1 0 119.6 28.1 157.8 72.5c8.6 10.1 23.8 11.2 33.8 2.6s11.2-23.8 2.6-33.8C403.3 34.6 333.7 0 256 0C114.6 0 0 114.6 0 256l0 40c0 13.3 10.7 24 24 24s24-10.7 24-24l0-40zm458.5-52.9c-2.7-13-15.5-21.3-28.4-18.5s-21.3 15.5-18.5 28.4c2.9 13.9 4.5 28.3 4.5 43.1l0 40c0 13.3 10.7 24 24 24s24-10.7 24-24l0-40c0-18.1-1.9-35.8-5.5-52.9zM256 80c-19 0-37.4 3-54.5 8.6c-15.2 5-18.7 23.7-8.3 35.9c7.1 8.3 18.8 10.8 29.4 7.9c10.6-2.9 21.8-4.4 33.4-4.4c70.7 0 128 57.3 128 128l0 24.9c0 25.2-1.5 50.3-4.4 75.3c-1.7 14.6 9.4 27.8 24.2 27.8c11.8 0 21.9-8.6 23.3-20.3c3.3-27.4 5-55 5-82.7l0-24.9c0-97.2-78.8-176-176-176zM150.7 148.7c-9.1-10.6-25.3-11.4-33.9-.4C93.7 178 80 215.4 80 256l0 24.9c0 24.2-2.6 48.4-7.8 71.9C68.8 368.4 80.1 384 96.1 384c10.5 0 19.9-7 22.2-17.3c6.4-28.1 9.7-56.8 9.7-85.8l0-24.9c0-27.2 8.5-52.4 22.9-73.1c7.2-10.4 8-24.6-.2-34.2zM256 160c-53 0-96 43-96 96l0 24.9c0 35.9-4.6 71.5-13.8 106.1c-3.8 14.3 6.7 29 21.5 29c9.5 0 17.9-6.2 20.4-15.4c10.5-39 15.9-79.2 15.9-119.7l0-24.9c0-28.7 23.3-52 52-52s52 23.3 52 52l0 24.9c0 36.3-3.5 72.4-10.4 107.9c-2.7 13.9 7.7 27.2 21.8 27.2c10.2 0 19-7 21-17c7.7-38.8 11.6-78.3 11.6-118.1l0-24.9c0-53-43-96-96-96zm24 96c0-13.3-10.7-24-24-24s-24 10.7-24 24l0 24.9c0 59.9-11 119.3-32.5 175.2l-5.9 15.3c-4.8 12.4 1.4 26.3 13.8 31s26.3-1.4 31-13.8l5.9-15.3C267.9 411.9 280 346.7 280 280.9l0-24.9z"></path></svg></span><h3 style="margin-top:12px">Individuação</h3><p>Um lugar com as nossas coisas e rotinas, que diz quem somos.</p></div>
+    <div class="card" data-step="3"><span class="ic"><svg stroke-width="0" viewBox="0 0 576 512" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"><path d="M96 64c0-35.3 28.7-64 64-64L416 0c35.3 0 64 28.7 64 64l0 384 64 0c17.7 0 32 14.3 32 32s-14.3 32-32 32l-112 0-288 0L32 512c-17.7 0-32-14.3-32-32s14.3-32 32-32l64 0L96 64zM384 288a32 32 0 1 0 0-64 32 32 0 1 0 0 64z"></path></svg></span><h3 style="margin-top:12px">Privacidade</h3><p>Poder decidir quem entra, quem nos vê e o que mostramos.</p></div>
+    <div class="card blue" data-step="4"><span class="ic blue"><svg stroke-width="0" viewBox="0 0 512 512" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"><path d="M32 32l448 0c17.7 0 32 14.3 32 32l0 32c0 17.7-14.3 32-32 32L32 128C14.3 128 0 113.7 0 96L0 64C0 46.3 14.3 32 32 32zm0 128l448 0 0 256c0 35.3-28.7 64-64 64L96 480c-35.3 0-64-28.7-64-64l0-256zm128 80c0 8.8 7.2 16 16 16l160 0c8.8 0 16-7.2 16-16s-7.2-16-16-16l-160 0c-8.8 0-16 7.2-16 16z"></path></svg></span><h3 style="margin-top:12px">Preservação</h3><p>Guardar objetos, memórias e laços ao longo do tempo.</p></div>
+  </div>
+  <p data-step="5" style="margin-top:18px;font-style:italic;color:var(--navy)">Já a conhecemos: é a filósofa do «cuidar». Para Young, estes valores não são um luxo: devem estar ao alcance de todas as pessoas.</p>
+  <div class="split" data-step="6" style="margin-top:12px;align-items:center">
+    <p class="ask" style="margin:0">Qual destes valores pode existir na rua? E qual deles a arquitetura hostil destrói?</p>
+    <div class="card poll">
+      <p class="label">Pode existir na rua? Conta os braços no ar</p>
+      <div class="opt"><span class="name">Segurança</span><span class="ctrl"><button data-d="-1" aria-label="menos">−</button><output>0</output><button data-d="1" aria-label="mais">+</button></span><div class="track"><span></span></div></div>
+      <div class="opt"><span class="name">Individuação</span><span class="ctrl"><button data-d="-1" aria-label="menos">−</button><output>0</output><button data-d="1" aria-label="mais">+</button></span><div class="track"><span></span></div></div>
+      <div class="opt"><span class="name">Privacidade</span><span class="ctrl"><button data-d="-1" aria-label="menos">−</button><output>0</output><button data-d="1" aria-label="mais">+</button></span><div class="track"><span></span></div></div>
+      <div class="opt"><span class="name">Preservação</span><span class="ctrl"><button data-d="-1" aria-label="menos">−</button><output>0</output><button data-d="1" aria-label="mais">+</button></span><div class="track"><span></span></div></div>
+    </div>
+  </div>
+  <p class="source">Iris Marion Young, «House and Home: Feminist Variations on a Theme», em <i>Intersecting Voices</i> (1997).</p>
+</section>
+
+<section class="slide" id="s-lei" data-lesson="Aula 2 · Pensar o lar" data-title="Um direito na Constituição">
+  <p class="kicker">A lei</p>
+  <h2>Um direito escrito na Constituição</h2>
+  <div class="split">
+    <div class="card dark" data-step="1" style="padding:32px">
+      <span style="font-family:var(--head);font-size:64px;line-height:.6;color:var(--accent)">“</span>
+      <blockquote>Todos têm direito, para si e para a sua família, a uma habitação de dimensão adequada, em condições de higiene e conforto e que preserve a intimidade pessoal e a privacidade familiar.</blockquote>
+      <p style="color:var(--accent);font-weight:700;margin-top:18px;font-size:16px">Constituição da República Portuguesa, artigo 65.º, n.º 1</p>
+    </div>
+    <div>
+      <p class="label">Do mais geral para o mais específico</p>
+      <div class="pyr">
+        <div class="p1" data-step="2"><b>Constituição</b><small>os grandes princípios</small></div>
+        <div class="p2" data-step="3"><b>Lei e Decreto-Lei</b><small>ex.: Lei de Bases da Habitação (Lei n.º 83/2019)</small></div>
+        <div class="p3" data-step="4"><b>Portaria</b><small>regulamenta uma lei ou decreto-lei</small></div>
+        <div class="p4" data-step="5"><b>Despacho</b><small>decisão concreta de um membro do Governo</small></div>
+      </div>
+    </div>
+  </div>
+  <p class="ask" data-step="6">Um direito que está escrito, mas não está cumprido para todos, continua a ser um direito?</p>
+</section>
+
+<section class="slide" id="s-pesquisa2" data-lesson="Aula 2 · Pensar o lar" data-title="Pesquisa: um número que cresce">
+  <p class="kicker">Pesquisa · 5 minutos</p>
+  <h2>Um número que cresce</h2>
+  <div class="research" data-url="https://www.dnoticias.pt/2025/12/18/474382-numero-de-sem-abrigo-voltou-a-aumentar-no-ano-passado-e-chegou-a-14476/">
+    <div>
+      <div class="card">
+        <p style="font-family:var(--head);font-size:26px;color:var(--navy);font-weight:700">Em dezembro de 2023 havia 13 128 pessoas em situação de sem-abrigo em Portugal. Em quanto tinha aumentado esse número em relação ao ano anterior, em percentagem?</p>
+        <p>Pesquisa no telemóvel. Podes começar pela notícia ao lado.</p>
+      </div>
+      <div class="timer" data-seconds="300"><output>5:00</output><button class="btn">Iniciar</button><button class="btn ghost" data-reset>Repor</button></div>
+      <button class="btn orange" data-answer>Mostrar resposta</button>
+      <div class="answer card dark"><p>Cerca de <b style="color:var(--white)">23 %</b>. E de 2023 para 2024 aumentou mais 1 348 pessoas, chegando às 14 476.</p><p class="source" style="color:var(--accent)">Fonte: Lusa, via DNoticias, 18 de dezembro de 2025.</p></div>
+    </div>
+    <div class="qr"><div class="code"></div><a target="_blank" rel="noopener"></a></div>
+  </div>
+</section>
+
+<section class="slide" id="s-quiz2" data-lesson="Aula 2 · Pensar o lar" data-title="Verifica: pensar o lar">
+  <p class="kicker">Verifica o que aprendeste</p>
+  <h2>Seis perguntas rápidas</h2>
+  <div class="quiz">
+    <div class="q" data-answer="c"><p class="stem">Quantas pessoas estavam em situação de sem-abrigo em Portugal a 31 de dezembro de 2024?</p><div class="opts"><button data-opt="a">5 073</button><button data-opt="b">9 403</button><button data-opt="c">14 476</button></div><p class="why">14 476: 9 403 sem teto e 5 073 sem casa.</p></div>
+    <div class="q" data-answer="F"><p class="stem">Verdadeiro ou falso? Nas estatísticas oficiais, «sem teto» e «sem casa» querem dizer o mesmo.</p><div class="opts"><button data-opt="V">Verdadeiro</button><button data-opt="F">Falso</button></div><p class="why">Falso. «Sem teto»: na rua, em abrigo de emergência ou local precário. «Sem casa»: em alojamento temporário.</p></div>
+    <div class="q" data-answer="b"><p class="stem">Para Waldron, se o espaço público impede alguém de dormir, onde pode dormir quem não tem casa?</p><div class="opts"><button data-opt="a">Em qualquer sítio privado</button><button data-opt="b">Em lado nenhum</button><button data-opt="c">Num abrigo, sempre</button></div><p class="why">Quem não tem casa só pode fazer esses atos no espaço público. Se este os impede, não tem lugar onde os fazer.</p></div>
+    <div class="q" data-answer="c"><p class="stem">Qual destes NÃO é um dos quatro valores do lar de Iris Marion Young?</p><div class="opts"><button data-opt="a">Segurança</button><button data-opt="b">Privacidade</button><button data-opt="c">Riqueza</button><button data-opt="d">Preservação</button></div><p class="why">Os quatro são segurança, individuação, privacidade e preservação.</p></div>
+    <div class="q" data-answer="V"><p class="stem">Verdadeiro ou falso? O artigo 65.º da Constituição fala de «intimidade pessoal» e «privacidade familiar».</p><div class="opts"><button data-opt="V">Verdadeiro</button><button data-opt="F">Falso</button></div><p class="why">Verdadeiro: a habitação deve preservar a intimidade pessoal e a privacidade familiar.</p></div>
+    <div class="q" data-answer="a"><p class="stem">Qual é o documento mais geral?</p><div class="opts"><button data-opt="a">Constituição</button><button data-opt="b">Portaria</button><button data-opt="c">Despacho</button></div><p class="why">A Constituição tem os grandes princípios; as leis, portarias e despachos vão sendo mais específicos.</p></div>
+    <div class="score"><span>Pontuação: <output>0</output> / 6</span><button class="btn ghost" data-retry>Tentar outra vez</button></div>
+  </div>
+</section>
+
+<!-- ================= LIÇÃO 3 · ESCREVER ================= -->
+
+<section class="slide" id="s-tarefa" data-lesson="Aula 2 · Escrever" data-title="Ter lar sem ter casa?">
+  <p class="kicker">Escrita · 35 minutos</p>
+  <h2>Ter lar sem ter casa?</h2>
+  <div class="card dark" style="padding:28px 32px;margin-bottom:24px">
+    <p style="font-family:var(--head);font-weight:700;color:var(--white);font-size:28px;margin:0">Pode uma pessoa sem-abrigo ter um lar, apesar de não ter casa? E como é que a arquitetura hostil pode destruir essa noção de lar?</p>
+  </div>
+  <div class="grid g3">
+    <div class="card" data-step="1"><div class="row"><span class="num">1</span><h3 style="margin:0">Introdução</h3></div><p style="margin-top:12px">Responde à primeira pergunta com uma frase clara: é a tua tese.</p></div>
+    <div class="card" data-step="2"><div class="row"><span class="num">2</span><h3 style="margin:0">Desenvolvimento</h3></div><p style="margin-top:12px">Dois parágrafos: (1) porque é que pode, ou não, haver lar sem casa; (2) o que a arquitetura hostil faz a esse lar. Um exemplo em cada um.</p></div>
+    <div class="card" data-step="3"><div class="row"><span class="num">3</span><h3 style="margin:0">Conclusão</h3></div><p style="margin-top:12px">Retoma a tese por outras palavras e deixa uma proposta ou uma pergunta.</p></div>
+  </div>
+  <p class="ask" data-step="4">Texto de opinião · individual · entre 200 e 300 palavras</p>
+</section>
+
+<section class="slide" id="s-pesquisa3" data-lesson="Aula 2 · Escrever" data-title="Pesquisa: um exemplo português">
+  <p class="kicker">Pesquisa · 5 minutos · opcional</p>
+  <h2>Um exemplo para o teu texto</h2>
+  <div class="research" data-url="https://www.sabado.pt/portugal/detalhe/obra-de-bordalo-ii-nos-bancos-de-lisboa-considerada-hostil-para-os-sem-abrigo">
+    <div>
+      <div class="card">
+        <p style="font-family:var(--head);font-size:26px;color:var(--navy);font-weight:700">Procura uma notícia portuguesa sobre arquitetura hostil ou sobre pessoas em situação de sem-abrigo. Anota: onde, quando e o que aconteceu.</p>
+        <p>Vais poder usá-la como exemplo num dos teus argumentos.</p>
+      </div>
+      <div class="timer" data-seconds="300"><output>5:00</output><button class="btn">Iniciar</button><button class="btn ghost" data-reset>Repor</button></div>
+      <button class="btn orange" data-answer>Mostrar um exemplo</button>
+      <div class="answer card dark"><p>Lisboa, junho de 2020: bancos com picos do artista Bordalo II, pensados para o distanciamento social, foram criticados por lembrarem a arquitetura hostil.</p><p class="source" style="color:var(--accent)">Fonte: Sábado, 4 de junho de 2020.</p></div>
+    </div>
+    <div class="qr"><div class="code"></div><a target="_blank" rel="noopener"></a></div>
+  </div>
+</section>
+
+<section class="slide" id="s-ferramentas" data-lesson="Aula 2 · Escrever" data-title="Palavras para argumentar">
+  <p class="kicker">Caixa de ferramentas · deixa projetado durante a escrita</p>
+  <h2>Palavras para argumentar</h2>
+  <div class="split" style="grid-template-columns:1.4fr 1fr">
+    <div>
+      <div class="conn"><b>Para dar a opinião</b><span>Na minha opinião · Considero que · Defendo que</span></div>
+      <div class="conn"><b>Para acrescentar</b><span>Além disso · Por outro lado · Também</span></div>
+      <div class="conn"><b>Para dar um exemplo</b><span>Por exemplo · É o caso de · Veja-se</span></div>
+      <div class="conn"><b>Para contrapor</b><span>No entanto · Contudo · Ainda assim</span></div>
+      <div class="conn"><b>Para concluir</b><span>Em suma · Por isso · Assim</span></div>
+    </div>
+    <div class="card blue">
+      <p class="label">Vocabulário da aula</p>
+      <div class="chips"><span class="chip">casa</span><span class="chip">lar</span><span class="chip">sem teto</span><span class="chip">sem casa</span><span class="chip">espaço público</span><span class="chip">arquitetura hostil</span><span class="chip">dignidade</span><span class="chip">pertença</span><span class="chip">segurança</span><span class="chip">privacidade</span></div>
+    </div>
+  </div>
+  <div class="row" style="justify-content:space-between;flex-wrap:wrap;margin-top:12px">
+    <p class="ask">Usa pelo menos três conectores e três palavras do vocabulário.</p>
+    <div class="timer" data-seconds="1800"><output>30:00</output><button class="btn">Iniciar</button><button class="btn ghost" data-reset>Repor</button></div>
+  </div>
+</section>
+
+<section class="slide" id="s-rever" data-lesson="Aula 2 · Escrever" data-title="Relê o teu texto">
+  <p class="kicker">Antes de entregar · partilha 10 minutos</p>
+  <h2>Relê o teu texto</h2>
+  <div class="split">
+    <div>
+      <button class="check" aria-pressed="false"><span class="box"><svg stroke-width="0" viewBox="0 0 448 512" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"><path d="M438.6 105.4c12.5 12.5 12.5 32.8 0 45.3l-256 256c-12.5 12.5-32.8 12.5-45.3 0l-128-128c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0L160 338.7 393.4 105.4c12.5-12.5 32.8-12.5 45.3 0z"></path></svg></span>A minha tese responde à pergunta?</button>
+      <button class="check" aria-pressed="false"><span class="box"><svg stroke-width="0" viewBox="0 0 448 512" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"><path d="M438.6 105.4c12.5 12.5 12.5 32.8 0 45.3l-256 256c-12.5 12.5-32.8 12.5-45.3 0l-128-128c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0L160 338.7 393.4 105.4c12.5-12.5 32.8-12.5 45.3 0z"></path></svg></span>Tenho dois argumentos, cada um com um exemplo?</button>
+      <button class="check" aria-pressed="false"><span class="box"><svg stroke-width="0" viewBox="0 0 448 512" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"><path d="M438.6 105.4c12.5 12.5 12.5 32.8 0 45.3l-256 256c-12.5 12.5-32.8 12.5-45.3 0l-128-128c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0L160 338.7 393.4 105.4c12.5-12.5 32.8-12.5 45.3 0z"></path></svg></span>Usei conceitos da aula (lar, Waldron, Young…)?</button>
+      <button class="check" aria-pressed="false"><span class="box"><svg stroke-width="0" viewBox="0 0 448 512" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"><path d="M438.6 105.4c12.5 12.5 12.5 32.8 0 45.3l-256 256c-12.5 12.5-32.8 12.5-45.3 0l-128-128c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0L160 338.7 393.4 105.4c12.5-12.5 32.8-12.5 45.3 0z"></path></svg></span>Os parágrafos estão ligados por conectores?</button>
+      <button class="check" aria-pressed="false"><span class="box"><svg stroke-width="0" viewBox="0 0 448 512" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"><path d="M438.6 105.4c12.5 12.5 12.5 32.8 0 45.3l-256 256c-12.5 12.5-32.8 12.5-45.3 0l-128-128c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0L160 338.7 393.4 105.4c12.5-12.5 32.8-12.5 45.3 0z"></path></svg></span>Revi a ortografia e a pontuação?</button>
+      <button class="check" aria-pressed="false"><span class="box"><svg stroke-width="0" viewBox="0 0 448 512" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"><path d="M438.6 105.4c12.5 12.5 12.5 32.8 0 45.3l-256 256c-12.5 12.5-32.8 12.5-45.3 0l-128-128c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0L160 338.7 393.4 105.4c12.5-12.5 32.8-12.5 45.3 0z"></path></svg></span>Tenho entre 200 e 300 palavras?</button>
+    </div>
+    <div class="card">
+      <div class="row"><span class="ic"><svg stroke-width="0" viewBox="0 0 640 512" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"><path d="M208 352c114.9 0 208-78.8 208-176S322.9 0 208 0S0 78.8 0 176c0 38.6 14.7 74.3 39.6 103.4c-3.5 9.4-8.7 17.7-14.2 24.7c-4.8 6.2-9.7 11-13.3 14.3c-1.8 1.6-3.3 2.9-4.3 3.7c-.5 .4-.9 .7-1.1 .8l-.2 .2s0 0 0 0s0 0 0 0C1 327.2-1.4 334.4 .8 340.9S9.1 352 16 352c21.8 0 43.8-5.6 62.1-12.5c9.2-3.5 17.8-7.4 25.2-11.4C134.1 343.3 169.8 352 208 352zM448 176c0 112.3-99.1 196.9-216.5 207C255.8 457.4 336.4 512 432 512c38.2 0 73.9-8.7 104.7-23.9c7.5 4 16 7.9 25.2 11.4c18.3 6.9 40.3 12.5 62.1 12.5c6.9 0 13.1-4.5 15.2-11.1c2.1-6.6-.2-13.8-5.8-17.9c0 0 0 0 0 0s0 0 0 0l-.2-.2c-.2-.2-.6-.4-1.1-.8c-1-.8-2.5-2-4.3-3.7c-3.6-3.3-8.5-8.1-13.3-14.3c-5.5-7-10.7-15.4-14.2-24.7c24.9-29 39.6-64.7 39.6-103.4c0-92.8-84.9-168.9-192.6-175.5c.4 5.1 .6 10.3 .6 15.5z"></path></svg></span><h3 style="margin:0">Partilha</h3></div>
+      <p style="margin-top:16px">Dois ou três voluntários leem o seu texto.</p>
+      <p style="color:var(--navy);font-weight:700;margin-bottom:4px">Quem ouve identifica:</p>
+      <ul style="margin:0;padding-left:22px"><li>qual é a tese?</li><li>qual foi o argumento mais forte?</li></ul>
+    </div>
+  </div>
+  <p class="ask">Quem quiser lê em voz alta. Ninguém é obrigado a falar de si.</p>
+</section>
+
+</main>
+
+<div class="nav" role="toolbar" aria-label="Navegação">
+  <button class="prev" aria-label="Anterior">←</button>
+  <span class="count" aria-live="polite"></span>
+  <button class="next" aria-label="Seguinte">→</button>
+  <button class="notes-btn" aria-label="Notas do formador (N)">Notas</button>
+</div>
+<aside class="notes" aria-label="Notas do formador"><h2>Notas do formador</h2><div class="body"></div></aside>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+<script src="notes.js"></script>
+<script src="app.js"></script>
+</body>
+</html>
