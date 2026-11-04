@@ -44,4 +44,12 @@ window.CATALOGO = [
       { titulo: 'Culturas de urbanismo e mobilidade', descricao: 'Programa da unidade · DR1: a casa e o lar · arquitetura hostil.', pasta: 'clc6/' },
     ],
   },
+  {
+    disciplina: 'Cidadania e Profissionalidade',
+    nivel: 'CP 4 · Formação de adultos',
+    publico: 'adultos',
+    temas: [
+      { titulo: 'Processos identitários', descricao: 'O nome e o reconhecimento · o navio de Teseu · Phineas Gage e o outro · identidade pessoal e social.', pasta: 'cp4/' },
+    ],
+  },
 ];
