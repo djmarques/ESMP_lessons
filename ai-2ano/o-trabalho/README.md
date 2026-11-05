@@ -13,6 +13,8 @@ Site interativo do tema-problema 6.1, para projetar na sala e para os alunos est
 9. O mercado de trabalho hoje (desemprego e como se mede)
 10. Currículo e entrevista (construtor de currículo e treino em trios)
 
+Cada lição tem um ou dois **jogos** de escolha múltipla (10 jogos, 78 perguntas): uma pergunta de cada vez, 20 segundos por pergunta, pontos com bónus de rapidez e som de acerto e de erro. Teclas 1 a 4 escolhem a resposta; Enter passa à seguinte; o botão do altifalante liga e desliga o som. As perguntas de escolha múltipla do fim das lições ficaram como **Revisão**, para os alunos estudarem em casa.
+
 Os quadros estão em `assets/` (domínio público, Wikimedia Commons).
 
 É HTML, CSS e JavaScript simples: não precisa de instalação nem de compilação. Funciona aberto diretamente no navegador (duplo clique em `index.html`) e no GitHub Pages.
@@ -57,7 +59,7 @@ Copia um `<section class="slide">` parecido, cola-o onde o queres e muda:
 - `data-step="n"` faz o elemento aparecer no passo n. Sem `data-step`, aparece logo.
 - Para as notas do professor, acrescenta em `notes.js` uma linha `"s-novo": "texto das notas",`.
 
-Peças disponíveis: `card` (variantes `blue`, `peach`, `dark`), `grid g2` / `g3` / `g4`, cartões que viram (`flip`), votação de braço no ar (`poll`), questionários (`quiz`), temporizador (`timer` com `data-seconds`), pesquisa com código QR (`research`) e simulações com barras deslizantes (`sim`).
+Peças disponíveis: `card` (variantes `blue`, `peach`, `dark`), `grid g2` / `g3` / `g4`, cartões que viram (`flip`), votação de braço no ar (`poll`), questionários (`quiz`), jogos com tempo e som (`game`), temporizador (`timer` com `data-seconds`), pesquisa com código QR (`research`) e simulações com barras deslizantes (`sim`).
 
 ## Atualizar os números
 
