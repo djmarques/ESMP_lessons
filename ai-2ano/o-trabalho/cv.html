@@ -1,0 +1,124 @@
+<!doctype html>
+<html lang="pt-PT">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Construtor de currículo · O trabalho</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Caladea:ital,wght@0,400;0,700;1,400&family=Carlito:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+<style>
+/* =====================================================================
+   cv.html: construtor de currículo para os alunos.
+   The form fills a one-page A4 preview live; «Imprimir / guardar PDF»
+   prints only the preview. Nothing is sent anywhere: a draft is kept
+   only in this browser (localStorage), and can be erased.
+   ===================================================================== */
+:root { --navy:#1E2A33; --orange:#A44A16; --orange-light:#FBE3D2; --cream:#F6F3EC; --text:#4A5560; --muted:#6F7880; --line:#C9D1D8; --blue:#2F6E9E;
+  --head: Cambria, Caladea, Georgia, serif; --body: Calibri, Carlito, "Segoe UI", sans-serif; }
+* { box-sizing: border-box; }
+body { margin: 0; font-family: var(--body); color: var(--text); background: var(--cream); font-size: 16px; }
+header.top { background: var(--navy); color: #fff; padding: 14px 22px; display: flex; gap: 16px; align-items: center; flex-wrap: wrap; }
+header.top a { color: var(--orange-light); text-decoration: none; font-size: 14px; }
+header.top h1 { font-family: var(--head); font-size: 22px; margin: 0; flex: 1; }
+button { font: inherit; cursor: pointer; border-radius: 8px; padding: 8px 14px; border: 0; }
+.btn { background: var(--orange); color: #fff; } .btn.ghost { background: transparent; color: #fff; border: 1px solid rgba(255,255,255,.4); }
+main { display: grid; grid-template-columns: minmax(320px, 440px) 1fr; gap: 22px; padding: 22px; align-items: start; }
+form { background: #fff; border-radius: 10px; padding: 18px; display: grid; gap: 10px; }
+fieldset { border: 0; padding: 0; margin: 0 0 8px; display: grid; gap: 8px; }
+legend { font-family: var(--head); font-weight: 700; color: var(--navy); font-size: 18px; margin-bottom: 4px; }
+label { display: grid; gap: 3px; font-size: 13px; font-weight: 700; color: var(--navy); }
+input, textarea { font: inherit; border: 1px solid var(--line); border-radius: 6px; padding: 7px 9px; width: 100%; }
+textarea { min-height: 60px; resize: vertical; }
+.two { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+.tip { font-size: 13px; color: var(--muted); margin: 0; }
+.block { border-left: 3px solid var(--orange-light); padding-left: 10px; display: grid; gap: 6px; }
+:focus-visible { outline: 3px solid var(--blue); outline-offset: 2px; }
+/* A4 preview */
+.paper { background: #fff; width: 210mm; min-height: 297mm; padding: 16mm 16mm; box-shadow: 0 10px 30px rgba(0,0,0,.12); margin: 0 auto; color: #222; }
+.paper h2 { font-family: var(--head); font-size: 28pt; color: var(--navy); margin: 0; }
+.paper .role { color: var(--orange); font-weight: 700; font-size: 13pt; margin-top: 2px; }
+.paper .contacts { display: flex; flex-wrap: wrap; gap: 4px 16px; font-size: 10pt; color: var(--text); margin: 8px 0 12px; padding-bottom: 10px; border-bottom: 2px solid var(--orange); }
+.paper h3 { font-size: 10pt; letter-spacing: .1em; text-transform: uppercase; color: var(--orange); margin: 14px 0 6px; }
+.paper p, .paper li { font-size: 10.5pt; line-height: 1.4; margin: 0 0 4px; }
+.paper .item { display: grid; grid-template-columns: 34mm 1fr; gap: 8px; margin-bottom: 8px; }
+.paper .item .when { color: var(--muted); font-size: 10pt; }
+.paper .item b { color: var(--navy); }
+.paper .empty { color: #bbb; font-style: italic; }
+@media (max-width: 1000px) { main { grid-template-columns: 1fr; } .paper { width: 100%; min-height: 0; padding: 8mm; } }
+@media print {
+  @page { size: A4; margin: 0; }
+  body { background: #fff; } header.top, form { display: none; } main { display: block; padding: 0; }
+  .paper { box-shadow: none; width: auto; min-height: 0; }
+  .paper .empty { display: none; }
+}
+</style>
+</head>
+<body>
+<header class="top">
+  <a href="index.html#s-cv-fazer">← Voltar à aula</a>
+  <h1>Construtor de currículo</h1>
+  <button class="btn" id="print">Imprimir / guardar PDF</button>
+  <button class="btn ghost" id="clear">Apagar tudo</button>
+</header>
+<main>
+<form id="f" autocomplete="off">
+  <p class="tip">Escreve à esquerda; o currículo aparece à direita. Nada é enviado: fica só neste computador. Para guardar, usa «Imprimir / guardar PDF» e escolhe «Guardar como PDF».</p>
+  <fieldset><legend>Dados pessoais</legend>
+    <label>Nome<input name="nome" placeholder="ex.: Rita Almeida"></label>
+    <label>O que procuras (uma linha)<input name="titulo" placeholder="ex.: Técnica de instalações elétricas"></label>
+    <div class="two"><label>Email<input name="email" type="email"></label><label>Telemóvel<input name="tel"></label></div>
+    <label>Localidade<input name="local" placeholder="ex.: Lisboa"></label>
+  </fieldset>
+  <fieldset><legend>Perfil</legend>
+    <label>Duas ou três frases sobre ti<textarea name="perfil" placeholder="ex.: Finalista do curso profissional de … Gosto de … Procuro …"></textarea></label>
+  </fieldset>
+  <fieldset><legend>Experiência</legend>
+    <p class="tip">Estágios, trabalhos de verão, voluntariado, projetos da escola.</p>
+    <div class="block" data-group="exp"><div class="two"><label>Função<input name="exp1_t"></label><label>Datas<input name="exp1_d" placeholder="ex.: jun.–set. 2026"></label></div><label>Onde<input name="exp1_o"></label><label>O que fiz<textarea name="exp1_x"></textarea></label></div>
+    <div class="block" data-group="exp"><div class="two"><label>Função<input name="exp2_t"></label><label>Datas<input name="exp2_d"></label></div><label>Onde<input name="exp2_o"></label><label>O que fiz<textarea name="exp2_x"></textarea></label></div>
+  </fieldset>
+  <fieldset><legend>Educação e formação</legend>
+    <div class="block"><div class="two"><label>Curso<input name="edu1_t" placeholder="ex.: Curso Profissional de …"></label><label>Datas<input name="edu1_d" placeholder="ex.: 2025–2028"></label></div><label>Escola<input name="edu1_o"></label></div>
+    <div class="block"><div class="two"><label>Formação ou certificado<input name="edu2_t"></label><label>Data<input name="edu2_d"></label></div><label>Entidade<input name="edu2_o"></label></div>
+  </fieldset>
+  <fieldset><legend>Competências</legend>
+    <label>Línguas<input name="linguas" placeholder="ex.: Português (materna), Inglês (B1)"></label>
+    <label>Digitais<input name="digitais" placeholder="ex.: Word, Excel, Premiere, AutoCAD"></label>
+    <label>Técnicas<input name="tecnicas"></label>
+    <label>Sociais e outras<input name="sociais" placeholder="ex.: trabalho em equipa, carta de condução B"></label>
+  </fieldset>
+</form>
+<article class="paper" id="cv" aria-live="polite"></article>
+</main>
+<script>
+/* Live preview: every input re-renders the page from the form values. */
+(function () {
+  const f = document.getElementById('f'), cv = document.getElementById('cv'), KEY = 'cv-o-trabalho';
+  const esc = s => String(s || '').replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+  const val = n => (f.elements[n] ? f.elements[n].value.trim() : '');
+  /** One dated entry (experience or education); empty entries are skipped. */
+  const item = (p, ph) => { const t = val(p + '_t'), d = val(p + '_d'), o = val(p + '_o'), x = val(p + '_x');
+    if (!t && !o && !x) return ph ? `<p class="empty">${ph}</p>` : '';
+    return `<div class="item"><span class="when">${esc(d)}</span><div><b>${esc(t)}</b>${o ? ' · ' + esc(o) : ''}${x ? `<p>${esc(x).replace(/\n/g, '<br>')}</p>` : ''}</div></div>`; };
+  function render() {
+    const contacts = ['email', 'tel', 'local'].map(val).filter(Boolean).map(esc).join('</span><span>');
+    const comp = [['Línguas', 'linguas'], ['Digitais', 'digitais'], ['Técnicas', 'tecnicas'], ['Sociais e outras', 'sociais']].filter(([, n]) => val(n)).map(([l, n]) => `<p><b>${l}:</b> ${esc(val(n))}</p>`).join('');
+    cv.innerHTML = `<h2>${esc(val('nome')) || '<span class="empty">O teu nome</span>'}</h2>
+      <div class="role">${esc(val('titulo'))}</div>
+      <div class="contacts"><span>${contacts || '<span class="empty">email · telemóvel · localidade</span>'}</span></div>
+      <h3>Perfil</h3>${val('perfil') ? `<p>${esc(val('perfil'))}</p>` : '<p class="empty">Duas ou três frases sobre ti.</p>'}
+      <h3>Experiência</h3>${item('exp1', 'Estágios, trabalhos de verão, voluntariado…')}${item('exp2')}
+      <h3>Educação e formação</h3>${item('edu1', 'O teu curso e a escola.')}${item('edu2')}
+      <h3>Competências</h3>${comp || '<p class="empty">Línguas, digitais, técnicas, sociais.</p>'}`;
+    try { localStorage.setItem(KEY, JSON.stringify(Object.fromEntries(new FormData(f)))); } catch (e) { /* storage unavailable: fine */ }
+  }
+  try { const d = JSON.parse(localStorage.getItem(KEY) || '{}'); Object.entries(d).forEach(([k, v]) => { if (f.elements[k]) f.elements[k].value = v; }); } catch (e) { /* no draft */ }
+  f.addEventListener('input', render);
+  document.getElementById('print').addEventListener('click', () => window.print());
+  document.getElementById('clear').addEventListener('click', () => { f.reset(); try { localStorage.removeItem(KEY); } catch (e) {} render(); });
+  render();
+})();
+</script>
+</body>
+</html>

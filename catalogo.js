@@ -25,7 +25,7 @@ window.CATALOGO = [
     nivel: '2.º ano · 11.º · Ensino profissional',
     publico: 'profissional',
     temas: [
-      { titulo: 'O trabalho', descricao: 'Tema-problema 6.1.' },
+      { titulo: 'O trabalho', descricao: 'Tema-problema 6.1: o que é trabalhar, do ócio ao dever, direito do trabalho, teatro, história, Taylor e Ford, Marx, desemprego, currículo e entrevista.', pasta: 'ai-2ano/o-trabalho/' },
     ],
   },
   {
