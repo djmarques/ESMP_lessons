@@ -33,7 +33,7 @@ window.CATALOGO = [
     nivel: 'Ensino profissional',
     publico: 'profissional',
     temas: [
-      { titulo: 'Processos cognitivos, emocionais e motivacionais', descricao: 'Módulo 4.' },
+      { titulo: 'Fatores e processos de aprendizagem', descricao: 'Módulo 4: o que é aprender, fatores, habituação, Pavlov, Skinner, Köhler, Tolman, Bandura, estilos de aprendizagem e insucesso escolar.', pasta: 'psicologia/m4-aprendizagem/' },
     ],
   },
   {
