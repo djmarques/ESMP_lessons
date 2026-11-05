@@ -224,7 +224,7 @@
       if (choice && !ok) choice.classList.add('wrong');
       q.querySelectorAll('.gopts button').forEach(b => { b.disabled = true; });
       q.classList.add('done');
-      const verdict = q.querySelector('.verdict');
+      const verdict = q.querySelector('.gverdict');
       if (ok) { right++; streak++; const gain = 100 + Math.round(50 * left / total); points += gain; verdict.textContent = 'Certo! +' + gain; sfx.right(); }
       else { streak = 0; verdict.textContent = choice ? 'Errado.' : 'Acabou o tempo!'; sfx.wrong(); }
       game.classList.toggle('was-right', !!ok); game.classList.toggle('was-wrong', !ok);

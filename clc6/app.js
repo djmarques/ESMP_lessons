@@ -6,7 +6,7 @@
    added by writing HTML only. Sections:
      1. Slide registry and sidebar
      2. Navigation (slides + step builds) and address fragments
-     3. Components: counters, flip cards, polls, quizzes, timers,
+     3. Components: counters, flip cards, polls, quizzes, games, timers,
         research tasks (QR codes), checklists
      4. Teacher notes panel
      5. Input: keyboard, buttons, swipe
@@ -172,6 +172,108 @@
     update();
   });
 
+  /** Games: timed multiple choice, one question at a time, like a quiz show.
+      Each .gq holds its answer in data-answer. Points: 100 for a right answer
+      plus up to 50 for speed. Sounds are synthesised with the Web Audio API
+      (no sound files); the speaker button mutes them for the whole site. */
+  let audio = null, muted = false;
+  try { muted = localStorage.getItem('jogo-som') === 'off'; } catch (e) { /* storage unavailable */ }
+  function tone(freq, start, dur, type, vol, slideTo) {
+    if (muted) return;
+    try {
+      audio = audio || new (window.AudioContext || window.webkitAudioContext)();
+      const t = audio.currentTime + start, o = audio.createOscillator(), g = audio.createGain();
+      o.type = type || 'sine'; o.frequency.setValueAtTime(freq, t);
+      if (slideTo) o.frequency.exponentialRampToValueAtTime(slideTo, t + dur);
+      g.gain.setValueAtTime(0.0001, t); g.gain.exponentialRampToValueAtTime(vol || 0.2, t + 0.02);
+      g.gain.exponentialRampToValueAtTime(0.0001, t + dur);
+      o.connect(g).connect(audio.destination); o.start(t); o.stop(t + dur + 0.05);
+    } catch (e) { /* no audio: the game still works */ }
+  }
+  const sfx = {
+    right: () => { tone(659, 0, 0.12, 'triangle', 0.25); tone(988, 0.11, 0.25, 'triangle', 0.25); },
+    wrong: () => { tone(220, 0, 0.35, 'sawtooth', 0.12, 110); },
+    tick: () => tone(1200, 0, 0.05, 'square', 0.05),
+    start: () => [523, 659, 784].forEach((f, i) => tone(f, i * 0.09, 0.14, 'triangle', 0.2)),
+    end: () => [523, 659, 784, 1047].forEach((f, i) => tone(f, i * 0.13, i === 3 ? 0.5 : 0.16, 'triangle', 0.22))
+  };
+  document.querySelectorAll('.game').forEach(game => {
+    const qs = Array.from(game.querySelectorAll('.gq'));
+    const total = Number(game.dataset.seconds || 20);
+    const $ = sel => game.querySelector(sel);
+    const bar = $('.gtimer span'), clock = $('.gtimer output'), nextBtn = $('.gnext');
+    const slide = game.closest('.slide');
+    let i = -1, left = total, id = null, points = 0, streak = 0, right = 0, answered = false;
+    const paintHead = () => {
+      $('.gcount b').textContent = Math.max(1, i + 1);
+      $('.gscore b').textContent = points;
+      $('.gstreak').textContent = streak >= 2 ? streak + ' seguidas!' : '';
+    };
+    const paintClock = () => {
+      clock.textContent = left;
+      bar.style.width = (left / total * 100) + '%';
+      game.classList.toggle('hurry', left <= 5 && !answered);
+    };
+    const stop = () => { clearInterval(id); id = null; };
+    function reveal(choice) {
+      if (answered) return;
+      answered = true; stop();
+      const q = qs[i], ok = choice && choice.dataset.opt === q.dataset.answer;
+      q.querySelector('[data-opt="' + q.dataset.answer + '"]').classList.add('right');
+      if (choice && !ok) choice.classList.add('wrong');
+      q.querySelectorAll('.gopts button').forEach(b => { b.disabled = true; });
+      q.classList.add('done');
+      const verdict = q.querySelector('.gverdict');
+      if (ok) { right++; streak++; const gain = 100 + Math.round(50 * left / total); points += gain; verdict.textContent = 'Certo! +' + gain; sfx.right(); }
+      else { streak = 0; verdict.textContent = choice ? 'Errado.' : 'Acabou o tempo!'; sfx.wrong(); }
+      game.classList.toggle('was-right', !!ok); game.classList.toggle('was-wrong', !ok);
+      game.classList.remove('hurry');
+      paintHead();
+      nextBtn.hidden = false;
+      nextBtn.textContent = i === qs.length - 1 ? 'Ver resultado' : 'Seguinte →';
+    }
+    function ask(n) {
+      qs.forEach((q, k) => { q.hidden = k !== n; });
+      i = n; left = total; answered = false;
+      game.classList.remove('was-right', 'was-wrong');
+      nextBtn.hidden = true;
+      paintHead(); paintClock(); stop();
+      id = setInterval(() => {
+        if (!slide.classList.contains('current')) return;      // paused while the slide is not shown
+        left = Math.max(0, left - 1); paintClock();
+        if (left > 0 && left <= 5) sfx.tick();
+        if (!left) reveal(null);
+      }, 1000);
+    }
+    function finish() {
+      stop(); qs.forEach(q => { q.hidden = true; });
+      game.classList.remove('playing', 'was-right', 'was-wrong'); game.classList.add('over');
+      nextBtn.hidden = true;
+      $('.gfinal').innerHTML = '<b>' + right + ' / ' + qs.length + '</b> certas · <b>' + points + '</b> pontos';
+      $('.gend').hidden = false; sfx.end();
+    }
+    function begin() {
+      points = 0; streak = 0; right = 0;
+      qs.forEach(q => {
+        q.classList.remove('done');
+        q.querySelectorAll('.gopts button').forEach(b => { b.disabled = false; b.classList.remove('right', 'wrong'); });
+      });
+      $('.gstart').hidden = true; $('.gend').hidden = true;
+      game.classList.remove('over'); game.classList.add('playing');
+      sfx.start(); ask(0);
+    }
+    $('.gbegin').addEventListener('click', begin);
+    $('.gagain').addEventListener('click', begin);
+    nextBtn.addEventListener('click', () => (i < qs.length - 1 ? ask(i + 1) : finish()));
+    qs.forEach(q => q.querySelectorAll('.gopts button').forEach(b => b.addEventListener('click', () => reveal(b))));
+    game._choose = k => { const b = qs[i] && qs[i].querySelectorAll('.gopts button')[k]; if (b && !answered) reveal(b); };
+    game._next = () => { if (!nextBtn.hidden) nextBtn.click(); };
+    const snd = $('.gsound');
+    const paintSound = () => { document.querySelectorAll('.gsound').forEach(x => { x.setAttribute('aria-pressed', String(!muted)); x.classList.toggle('off', muted); }); };
+    snd.addEventListener('click', () => { muted = !muted; try { localStorage.setItem('jogo-som', muted ? 'off' : 'on'); } catch (e) {} paintSound(); });
+    paintSound(); paintHead(); paintClock();
+  });
+
   /** Timers: countdown from data-seconds. The last fifth turns orange and
       the display blinks at zero, so the room sees time running out. */
   document.querySelectorAll('.timer').forEach(timer => {
@@ -226,6 +328,10 @@
     // never hijack keys while a button or field has focus inside a component
     if (e.target.closest('input, textarea') || e.altKey || e.ctrlKey || e.metaKey) return;
     const k = e.key;
+    // in a running game: keys 1–4 choose an option, Enter goes to the next question
+    const g = slides[index] && slides[index].querySelector('.game.playing');
+    if (g && /^[1-4]$/.test(k)) { e.preventDefault(); g._choose(Number(k) - 1); return; }
+    if (g && k === 'Enter' && !e.target.closest('button')) { e.preventDefault(); g._next(); return; }
     if (k === 'ArrowRight' || k === 'PageDown' || (k === ' ' && !e.target.closest('button'))) { e.preventDefault(); next(); }
     else if (k === 'ArrowLeft' || k === 'PageUp') { e.preventDefault(); prev(); }
     else if (k === 'Home') show(0);

@@ -654,7 +654,7 @@ a.big-link:hover { box-shadow: 0 6px 20px rgba(164, 74, 22, .2); }
 @keyframes gshake { 25% { transform: translateX(-6px); } 75% { transform: translateX(6px); } }
 .gfb { display: none; margin: 14px 0 0; font-size: 18px; }
 .gq.done .gfb { display: block; animation: enter .3s var(--ease); }
-.game.was-right .verdict { color: #2E8B57; } .game.was-wrong .verdict { color: var(--orange); }
+.game.was-right .gverdict { color: #2E8B57; } .game.was-wrong .gverdict { color: var(--orange); }
 .game.was-right { box-shadow: 0 0 0 4px rgba(46,139,87,.35); } .game.was-wrong { box-shadow: 0 0 0 4px rgba(164,74,22,.3); }
 .gnext { display: block; margin: 14px 0 0 auto; }
 .gnext[hidden] { display: none; }

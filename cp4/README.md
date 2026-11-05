@@ -58,6 +58,12 @@ Copia um `<section class="slide">` parecido, cola-o onde o queres e muda:
 
 Peças disponíveis: `card` (com variantes `blue`, `peach`, `dark`, `green`), `grid g2` / `g3` / `g4` (colunas), `split` (duas colunas), `num` (número num círculo), `ic` (ícone num círculo), `big` com `data-count="14476"` (número que conta até ao valor).
 
+## Jogos
+
+Cada aula tem um jogo de escolha múltipla com 8 perguntas: uma de cada vez, 20 segundos por pergunta, pontos com bónus de rapidez e som de acerto e de erro. A turma responde de braço no ar (ou com os dedos, 1 a 4) e o formador clica na resposta mais votada, ou usa as teclas 1 a 4; Enter passa à seguinte. O botão do altifalante liga e desliga o som. As perguntas de escolha múltipla que já existiam ficaram como «Revisão», para estudar em casa.
+
+Para mudar uma pergunta, procura o texto no `index.html`: cada pergunta é um `<div class="gq" data-answer="b">`, e `data-answer` diz qual dos botões (`a`, `b`, `c`, `d`) é o certo.
+
 ## Acrescentar um questionário
 
 ```html

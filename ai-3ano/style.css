@@ -1,0 +1,596 @@
+/* ==========================================================================
+   Cidadania europeia: appearance of the lesson site.
+
+   Design intent: editorial minimalism (Nature / Science web pages, newspaper
+   explainer graphics) in the palette and typefaces of the original deck.
+   Sections, in order:
+     1. Tokens (colours, type)          6. Reveal and animation mechanics
+     2. Page frame (sidebar, stage)     7. Diagrams, one block per kind
+     3. Slide frame and slide kinds     8. Quiz, research task, sorting
+     4. Typography                      9. Teacher notes, small screens,
+     5. Layout helpers and cards           reduced motion
+   ========================================================================== */
+
+/* ---------- 1. Tokens: the deck's own palette and typefaces ---------- */
+:root {
+  --navy: #1E2A33;
+  --orange: #A44A16;      /* burnt orange: accents, emphasis, "new" */
+  --apricot: #F0A673;
+  --peach: #FBE3D2;
+  --sand: #DDD5C6;        /* lines and neutral fills */
+  --cream: #F6F3EC;       /* card background */
+  --blue: #2F6E9E;
+  --sky: #DCE8F2;
+  --slate: #4A5560;       /* secondary text */
+  --grey: #8A929A;        /* sources and captions */
+  --paper: #FFFFFF;
+  /* Cambria and Calibri as in the deck; Caladea and Carlito have the same letter widths. */
+  --serif: Cambria, Caladea, Georgia, serif;
+  --sans: Calibri, Carlito, "Segoe UI", Arial, sans-serif;
+  --ease: cubic-bezier(.2, .7, .2, 1);
+}
+
+/* Type scales with the viewport (width or height, whichever is tighter),
+   so a projected slide and a laptop screen look alike. */
+html { font-size: clamp(14px, min(1vw, 1.85vh) + 4px, 26px); }
+body {
+  margin: 0; height: 100dvh; overflow: hidden;
+  display: grid; grid-template-columns: 17rem 1fr;
+  background: var(--paper); color: var(--navy);
+  font: 1rem/1.45 var(--sans);
+}
+button { font: inherit; color: inherit; cursor: pointer; }
+:focus-visible { outline: 3px solid var(--blue); outline-offset: 2px; }
+.sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); }
+
+/* ---------- 2. Page frame: sidebar, stage, progress line, controls ---------- */
+#nav { background: var(--cream); border-right: 1px solid var(--sand); overflow-y: auto; padding: 1.4rem 1rem 2rem; }
+.brand { margin: 0 0 1.4rem; font-size: .85rem; color: var(--slate); }
+.brand b { display: block; font: 700 1.35rem/1.2 var(--serif); color: var(--navy); }
+.toc-group { margin: 1.1rem 0 .3rem; font: 700 .95rem var(--serif); }
+#toc ol { list-style: none; margin: 0; padding: 0; }
+#toc a { display: block; padding: .2rem .5rem; border-radius: 3px; font-size: .85rem; color: var(--slate); text-decoration: none; }
+#toc a:hover { background: var(--sand); }
+#toc a[aria-current] { background: var(--navy); color: var(--paper); }
+
+#stage { position: relative; display: grid; grid-template-rows: 3px 1fr auto; min-width: 0; overflow: hidden; }
+#progress { width: var(--p, 0%); background: var(--orange); transition: width .4s var(--ease); }
+#controls { grid-row: 3; display: flex; align-items: center; justify-content: flex-end; gap: .5rem; padding: .5rem 1rem; border-top: 1px solid var(--sand); }
+#controls button { width: 2.4rem; height: 2.4rem; border: 1px solid var(--sand); border-radius: 50%; background: var(--paper); }
+#controls button:hover, #controls [aria-pressed="true"] { background: var(--navy); color: var(--paper); }
+#where { margin-right: auto; font-size: .85rem; color: var(--slate); font-variant-numeric: tabular-nums; }
+/* The menu button flips the sidebar from its default: hidden on wide screens
+   (more room on the projector), shown as a drawer on small screens. */
+body.nav-toggled { grid-template-columns: 1fr; }
+body.nav-toggled #nav { display: none; }
+
+/* ---------- 3. Slide frame and the three slide kinds ---------- */
+.lesson { display: contents; }
+.slide {
+  display: none; grid-row: 2; min-height: 0; overflow-y: auto;
+  flex-direction: column; justify-content: center; gap: .9rem;
+  padding: clamp(1.2rem, 3.5vw, 3rem) clamp(1.2rem, 5vw, 4.5rem);
+}
+/* One entrance motion per slide change; everything else answers the presenter. */
+.slide.current { display: flex; animation: enter .45s var(--ease); }
+@keyframes enter { from { opacity: 0; transform: translateY(.6rem); } }
+.slide > * { width: 100%; max-width: 76rem; margin-inline: auto; }
+
+.title-slide { flex-direction: row; align-items: center; gap: 3rem; background: var(--navy); color: var(--paper); }
+.title-slide > * { width: auto; margin: 0; }
+.title-slide .kicker { color: var(--apricot); }
+.title-slide h2, .divider h2 { color: var(--paper); }
+.byline { margin-top: 3rem; font-size: .85rem; color: var(--sand); }
+.divider { background: var(--orange); color: var(--paper); }
+.divider .kicker { color: var(--peach); }
+
+/* ---------- 4. Typography ---------- */
+h2 { margin: 0; font: 700 2.2rem/1.15 var(--serif); }
+.display { font-size: 3.4rem; }
+p, ul, ol, dl, blockquote, figure { margin: 0; }
+.lead { font-size: 1.25rem; line-height: 1.4; }
+.h3 { margin-bottom: .25rem; font: 700 1.12rem/1.25 var(--serif); }
+.h3 i { color: var(--orange); margin-right: .2rem; }
+.kicker, .label { font-size: .75rem; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; color: var(--orange); }
+.label { color: var(--slate); margin-bottom: .3rem; }
+.take { font: italic 1.25rem/1.35 var(--serif); color: var(--orange); }
+.small, small, .note { font-size: .88rem; color: var(--slate); }
+small { display: block; font-weight: 400; }
+.src { margin-top: auto; padding-top: .6rem; font-size: .72rem; color: var(--grey); }
+blockquote { font: italic 1.3rem/1.4 var(--serif); }
+blockquote .label { font-style: normal; }
+cite { display: block; margin-top: .4rem; font: .85rem var(--sans); color: var(--slate); }
+.big-quote { font-size: 2rem; max-width: 42ch; }
+.big-quote::before { content: "“"; display: block; height: .6em; font-size: 4rem; line-height: 1; color: var(--orange); }
+.big { display: block; font: 700 2.6rem/1.05 var(--serif); color: var(--orange); }
+/* Colour helpers come after .big so they can recolour a big number. */
+.o { color: var(--orange); }
+.b { color: var(--blue); }
+.navy-text { color: var(--navy); }
+figcaption { margin-top: .4rem; font-size: .8rem; color: var(--slate); }
+/* Historical photographs: kept to a share of the screen height, credit under the caption. */
+.photo img { width: auto; max-width: 100%; max-height: 42vh; border-radius: 2px; }
+.small-photo img { max-height: 24vh; }
+.credit { display: block; font-size: .7rem; color: var(--grey); }
+img { display: block; max-width: 100%; height: auto; }
+
+/* ---------- 5. Layout helpers, cards and lists ---------- */
+.cols { display: grid; grid-template-columns: repeat(var(--n, 2), minmax(0, 1fr)); gap: 1rem 1.6rem; align-items: start; }
+.wide-left { grid-template-columns: 3fr 2fr; }
+.wide-right { grid-template-columns: 2fr 3fr; align-items: end; }
+.card { padding: .9rem 1.05rem; border-radius: 4px; background: var(--cream); }
+.card > * + * { margin-top: .25rem; }
+.sky { background: var(--sky); }
+.peach { background: var(--peach); }
+.sand { background: var(--sand); }
+.navy { background: var(--navy); color: var(--paper); }
+.navy .h3 i, .navy .small { color: var(--apricot); }
+.card ul { padding-left: 1.1rem; }
+.figures > p + p { margin-top: 1rem; }
+
+/* Numbered sequences (only where the order matters). */
+.steps-list { list-style: none; padding: 0; counter-reset: n; }
+.steps-list li { counter-increment: n; display: grid; grid-template-columns: 1.9rem 1fr; gap: .6rem; margin: .45rem 0; align-items: baseline; }
+.steps-list li::before { content: counter(n); width: 1.6rem; height: 1.6rem; border-radius: 50%; background: var(--orange); color: var(--paper); font-weight: 700; text-align: center; line-height: 1.6rem; }
+.big-list li { font-size: 1.2rem; }
+
+.facts { list-style: none; padding: 0; }
+.facts li { margin: .3rem 0; }
+.facts b { margin-right: .35rem; }
+.facts.icons i { width: 1.4rem; color: var(--orange); }
+.crosses { list-style: none; padding: 0; }
+.crosses li::before { content: "✕  "; color: var(--orange); font-weight: 700; }
+.chip, .chips li { display: inline-block; margin: .2rem; padding: .4rem .9rem; border: 1px solid var(--sand); border-radius: 999px; background: var(--paper); }
+.chips { padding: 0; margin: .3rem 0 1rem; }
+.sources { padding-left: 1.2rem; columns: 2 24rem; column-gap: 2.5rem; }
+.sources li { margin-bottom: .5rem; break-inside: avoid; }
+
+/* Timelines in rows of dated dots ("tl") and in stacked date rows ("dates"). */
+.tl { margin-top: 1.4rem; display: grid; grid-auto-flow: column; grid-auto-columns: minmax(0, 1fr); gap: 1rem; padding: 0; list-style: none; border-top: 2px solid var(--sand); }
+.tl li { position: relative; padding-top: .9rem; font-size: .92rem; }
+.tl li::before { content: ""; position: absolute; top: -7px; left: 0; width: 12px; height: 12px; border-radius: 50%; background: var(--orange); }
+.tl time { display: block; font-weight: 700; color: var(--orange); }
+.tl b { display: block; font-family: var(--serif); }
+.tl.icons i { display: block; margin-bottom: .2rem; font-size: 1.2rem; color: var(--navy); }
+.dates { list-style: none; padding: 0; counter-reset: n; }
+.dates li { display: grid; grid-template-columns: 4.5rem 1fr; gap: 1rem; align-items: baseline; margin-bottom: .35rem; padding: .55rem .9rem; border-radius: 4px; background: var(--cream); font-size: 1.05rem; }
+.dates time { font: 700 1.2rem var(--serif); color: var(--orange); }
+.dates .pt time { color: var(--navy); }
+.ideas li { counter-increment: n; font-size: 1.2rem; }
+.ideas li::before { content: counter(n); font: 700 1.6rem var(--serif); color: var(--orange); }
+
+/* ---------- 6. Reveal and animation mechanics (driven by app.js) ----------
+   app.js adds "on" to every [data-step] whose number has been reached.
+   [data-keep] elements stay visible; their "on" class only changes state.  */
+[data-step] { transition: opacity .5s var(--ease), transform .5s var(--ease); }
+[data-step]:not(.on):not([data-keep]) { opacity: 0; transform: translateY(.5rem); pointer-events: none; }
+
+/* .stack: children share one grid cell; only the latest revealed child shows. */
+.stack { display: grid; }
+.stack > * { grid-area: 1 / 1; transition: opacity .5s var(--ease); }
+.stack > :has(~ .on) { opacity: 0; visibility: hidden; }
+
+/* Self-drawing strokes and growing bars play when their slide is current,
+   and wait if they sit inside a step that has not been reached yet. */
+.draw { fill: none; stroke-dasharray: 1; stroke-dashoffset: 1; transition: stroke-dashoffset 1.4s var(--ease) .2s; }
+.current .draw { stroke-dashoffset: 0; }
+.current [data-step]:not(.on) .draw, .current .draw[data-step]:not(.on) { stroke-dashoffset: 1; }
+.grow { transform: scaleX(0); transform-origin: left; transition: transform 1s var(--ease) .2s; }
+.current .grow { transform: none; }
+.current [data-step]:not(.on) .grow { transform: scaleX(0); }
+
+/* ---------- 7. Diagrams ---------- */
+
+/* Title slide: the twelve stars pop in one after another (--i = position on the circle). */
+.stars { width: min(22rem, 40vw); flex: none; }
+.stars use { fill: var(--apricot); transform-box: fill-box; transform-origin: center; }
+.current .stars use { animation: pop .5s var(--ease) calc(var(--i) * 90ms + .3s) both; }
+@keyframes pop { from { opacity: 0; transform: scale(0); } }
+.star-count { margin: 0; text-align: center; font: 700 2.4rem/44px var(--serif); color: var(--paper); }
+
+/* Scale between international organisation and federal state (definição). */
+.scale { position: relative; padding-top: 1.6rem; }
+.scale svg, .axis svg { position: absolute; left: 0; width: 100%; height: 10px; overflow: visible; }
+.scale svg { top: .2rem; }
+.scale line, .axis line { stroke: var(--sand); stroke-width: 3; }
+.scale-points { display: flex; justify-content: space-between; gap: 1rem; font-size: .85rem; color: var(--slate); }
+.scale-points b { display: block; font-size: 1rem; color: var(--navy); }
+.scale-points .mid { text-align: center; }
+/* A dot on the line above each point; the Union's dot is larger and orange. */
+.scale-points p::before { content: ""; display: block; width: 12px; height: 12px; margin: -1.55rem 0 .7rem; border-radius: 50%; background: var(--slate); }
+.scale-points .mid::before { width: 18px; height: 18px; margin: -1.75rem auto .6rem; background: var(--orange); }
+.scale-points p:last-child::before { margin-left: auto; }
+.scale-points .mid b { color: var(--orange); }
+.scale-points p:last-child { text-align: right; }
+
+/* A day with the Union: icons sit on a time axis drawn behind them. */
+.day { display: grid; grid-template-columns: repeat(7, minmax(0, 1fr)); gap: .8rem; padding: 0; list-style: none; position: relative; }
+.day::before { content: ""; position: absolute; top: 1.4rem; left: 0; right: 0; height: 2px; background: var(--sand); transform: scaleX(0); transform-origin: left; transition: transform 1.2s var(--ease); }
+.current .day::before { transform: none; }
+.day li { position: relative; text-align: center; font-size: .88rem; color: var(--slate); }
+.day i { display: grid; place-items: center; width: 2.8rem; height: 2.8rem; margin: 0 auto .4rem; border: 2px solid var(--orange); border-radius: 50%; background: var(--paper); color: var(--orange); font-size: 1.1rem; }
+.day time { display: block; font-weight: 700; color: var(--orange); }
+.day b { display: block; color: var(--navy); font-size: .95rem; }
+
+/* Process flows: cards joined by arrows. */
+.flow { display: grid; grid-template-columns: repeat(auto-fit, minmax(9rem, 1fr)); gap: 1.4rem; padding: 0; list-style: none; }
+.flow li { position: relative; font-size: .9rem; }
+.flow li i { display: block; margin-bottom: .3rem; font-size: 1.3rem; color: var(--orange); }
+.flow b { display: block; font-family: var(--serif); font-size: 1rem; }
+.flow li:not(:last-child)::after { content: "→"; position: absolute; right: -1.15rem; top: 40%; color: var(--grey); }
+.ce img { width: 11rem; }
+
+/* Warranty bars on a 0–3 year axis. */
+.bars-axis { display: flex; justify-content: space-between; margin-left: 9rem; font-size: .8rem; color: var(--grey); border-bottom: 1px solid var(--sand); }
+.bar-row { display: grid; grid-template-columns: 9rem 1fr; align-items: center; margin-top: .5rem; }
+.bar { display: block; width: var(--w); padding: .45rem .8rem; background: var(--orange); color: var(--paper); font-size: .9rem; white-space: nowrap; overflow: hidden; }
+.bar.blue { background: var(--blue); }
+
+/* Cookies: the cookie travels along a lane (site → browser, then back). */
+.trip { display: grid; grid-template-columns: auto 1fr auto; gap: 1rem; align-items: center; margin-bottom: 1rem; text-align: center; }
+.end { font-size: .85rem; color: var(--slate); }
+.end i { display: block; font-size: 2rem; color: var(--navy); }
+.lane { position: relative; margin: 1.4rem 0; padding-top: .6rem; border-top: 2px dashed var(--sand); font-size: .85rem; }
+.lane i { position: absolute; top: -.85rem; left: 0; color: var(--orange); font-size: 1.3rem; }
+.lane.back i { left: calc(100% - 1.3rem); }
+.current .lane.on i { animation: travel 1.4s var(--ease) forwards; }
+.current .lane.back.on i { animation-direction: reverse; }
+@keyframes travel { from { left: 0; } to { left: calc(100% - 1.3rem); } }
+.banner { padding: 1.1rem; border: 1px solid var(--sand); border-radius: 8px; box-shadow: 0 6px 24px rgba(30, 42, 51, .12); font-size: .9rem; }
+.btn, .answer summary { display: block; width: 100%; margin: .4rem 0; padding: .5rem; border: 1px solid var(--navy); border-radius: 4px; background: var(--paper); text-align: center; list-style: none; }
+.btn.dark { background: var(--navy); color: var(--paper); }
+.banner label { display: flex; gap: .5rem; margin: .3rem 0; }
+
+/* Federation built from the constitution upwards. */
+.federation { display: flex; flex-direction: column; gap: .6rem; }
+.fed-states { display: grid; grid-template-columns: repeat(4, 1fr); gap: .4rem; text-align: center; }
+.fed-states span { padding: .5rem; border-radius: 4px; background: var(--sky); }
+.fed-citizen { text-align: center; font-weight: 700; }
+
+/* Comparison table: the middle (Union) column waits for the step. */
+.compare { width: 100%; border-collapse: collapse; font-size: .95rem; }
+.compare th, .compare td { padding: .45rem .6rem; border-bottom: 1px solid var(--sand); text-align: left; vertical-align: top; }
+.compare thead th { font: 700 1rem var(--serif); }
+.compare tbody th { color: var(--slate); }
+.compare :is(td, th):nth-child(3) { background: var(--peach); transition: opacity .6s var(--ease); }
+.compare:not(.on) :is(td, th):nth-child(3) { opacity: 0; }
+
+/* Referendum: one split bar with a tick at 50%. */
+.split-bar { position: relative; display: flex; height: 2.6rem; font-weight: 700; }
+.split-bar > span { display: flex; align-items: center; padding: 0 .8rem; }
+.split-bar > span:first-child { width: var(--w); background: var(--orange); color: var(--paper); }
+.split-bar > span:last-child { flex: 1; justify-content: flex-end; background: var(--sand); }
+.split-bar::after { content: ""; position: absolute; left: 50%; top: -5px; bottom: -5px; width: 2px; background: var(--navy); }
+.split-mid { text-align: center; font-size: .8rem; color: var(--slate); }
+
+/* Dated axis with marks above (default) or below (.low) the line. */
+.axis { position: relative; height: 5rem; }
+.axis svg { top: calc(50% - 5px); }
+.axis-mark { position: absolute; top: calc(50% - 2.3rem); transform: translateX(-50%); padding-bottom: 1.1rem; font-size: .85rem; font-weight: 700; white-space: nowrap; }
+.axis-mark::after { content: ""; position: absolute; left: calc(50% - 6px); bottom: -6px; width: 12px; height: 12px; border-radius: 50%; background: var(--navy); }
+.axis-mark.low { top: calc(50% - 6px); padding: 1.1rem 0 0; }
+.axis-mark.low::after { top: 0; bottom: auto; }
+.axis-mark.war { color: var(--orange); }
+.axis-mark.war::after { background: var(--orange); }
+
+/* 100 people as a dot grid; the three highlighted dots are the war dead. */
+.people { width: min(16rem, 100%); margin: .6rem 0; fill: var(--sand); }
+.people g { fill: var(--orange); }
+
+/* Holocaust staircase: each stage stands higher than the last (--h = stage number). */
+.stairs { display: flex; align-items: flex-end; gap: .4rem; padding: 0; list-style: none; }
+.stairs li { flex: 1; min-height: calc(var(--h) * 3rem + 5rem); padding: .7rem; border-radius: 4px 4px 0 0; background: var(--sand); font-size: .88rem; }
+.stairs li:last-child { background: var(--navy); color: var(--paper); }
+.stairs b { display: block; font: 700 1.1rem var(--serif); }
+.stairs time { display: block; margin-bottom: .3rem; font-weight: 700; color: var(--orange); }
+.stairs li:last-child time { color: var(--apricot); }
+
+/* UN vs EU: separate circles; the EU circles slide into an overlap. */
+.circles { width: 100%; max-width: 18rem; margin: .5rem 0; }
+.circles circle { fill: var(--sky); fill-opacity: .8; stroke: var(--blue); stroke-width: 2; mix-blend-mode: multiply; transition: transform 1.2s var(--ease) .5s; }
+.on .merge-circles circle:first-child { transform: translateX(50px); }
+.on .merge-circles circle:last-child { transform: translateX(-50px); }
+.rows { display: grid; grid-template-columns: 7rem 1fr; gap: .35rem .8rem; font-size: .95rem; }
+.rows dt { font-weight: 700; color: var(--slate); }
+.rows dd { margin: 0; }
+
+/* Schuman's idea (morph): the border fades and both industries meet under one authority. */
+.pool { position: relative; height: 14rem; }
+.pool::before { content: ""; position: absolute; left: 25%; right: 25%; top: 3.2rem; bottom: 0; border-radius: 8px; background: var(--peach); opacity: 0; transition: opacity .8s var(--ease) .4s; }
+.plant { position: absolute; bottom: 1.5rem; width: 8rem; text-align: center; font-weight: 700; transition: left 1.2s var(--ease), right 1.2s var(--ease); }
+.plant i { display: block; font-size: 3rem; color: var(--orange); }
+.plant.fr { left: 10%; }
+.plant.de { right: 10%; }
+.border { position: absolute; left: 50%; top: 3.2rem; bottom: 0; padding-left: .5rem; border-left: 2px dashed var(--grey); font-size: .8rem; color: var(--grey); transition: opacity .6s; }
+.authority { position: absolute; left: 50%; top: 0; transform: translate(-50%, -.6rem); padding: .5rem 1rem; border-radius: 4px; background: var(--navy); color: var(--paper); font-weight: 700; opacity: 0; transition: opacity .6s var(--ease) .8s, transform .6s var(--ease) .8s; }
+.pool.on::before { opacity: 1; }
+.pool.on .fr { left: calc(50% - 9rem); }
+.pool.on .de { right: calc(50% - 9rem); }
+.pool.on .border { opacity: 0; }
+.pool.on .authority { opacity: 1; transform: translate(-50%, 0); }
+
+/* Twenty-seven dots revealed left to right; the six founders are darker. */
+.dots { position: relative; height: 1.6rem; margin: 1rem 0 .5rem; clip-path: inset(0 100% 0 0); transition: clip-path 2.4s steps(27) .3s;
+  background: radial-gradient(circle, var(--apricot) 0 45%, transparent 48%) 0 0 / calc(100% / 27) 100% repeat-x; }
+.dots::before { content: ""; position: absolute; inset: 0 auto 0 0; width: calc(600% / 27);
+  background: radial-gradient(circle, var(--orange) 0 45%, transparent 48%) 0 0 / calc(100% / 6) 100% repeat-x; }
+.current .dots { clip-path: inset(0); }
+
+/* The tower: blocks drop in from above and stack from the bottom. */
+.tower { display: flex; flex-direction: column-reverse; gap: .3rem; padding: 0; list-style: none; }
+.tower li { display: flex; justify-content: space-between; gap: 1rem; padding: .5rem .9rem; border-radius: 3px; background: var(--sky); }
+.tower li:first-child { background: var(--blue); color: var(--paper); }
+.tower time { font-weight: 700; color: var(--orange); }
+.tower li:first-child time { color: var(--peach); }
+.tower [data-step]:not(.on) { transform: translateY(-1.2rem); }
+.small-tower { max-width: 16rem; font-size: .9rem; }
+
+/* Enlargement map and its legend (colours match the map images). */
+.map img { width: 100%; max-height: 62vh; object-fit: contain; object-position: left top; transition: opacity .7s var(--ease); }
+.legend { display: flex; flex-wrap: wrap; gap: .3rem 1rem; padding: 0; list-style: none; font-size: .85rem; color: var(--slate); }
+.legend li::before { content: ""; display: inline-block; width: .9rem; height: .9rem; margin-right: .35rem; vertical-align: -.1rem; background: var(--key); }
+.k-new { --key: var(--orange); }
+.k-old { --key: var(--apricot); }
+.k-pt { --key: var(--navy); }
+
+/* Stair chart of member states. */
+.chart { width: 100%; overflow: visible; }
+.chart .grid line { stroke: var(--sand); }
+.chart text { font: 17px var(--sans); fill: var(--grey); text-anchor: middle; }
+.chart .ticks text:nth-child(-n+4) { text-anchor: end; }
+.chart polyline { stroke: var(--orange); stroke-width: 4; stroke-linejoin: round; }
+.chart circle { fill: var(--navy); }
+.chart .tag { fill: var(--navy); font-weight: 700; text-anchor: end; }
+
+/* What makes a state: a triangle of the three classic elements. */
+.triangle { width: 100%; max-width: 26rem; overflow: visible; }
+.triangle polygon { stroke: var(--sand); stroke-width: 3; }
+.triangle circle { fill: var(--paper); stroke: var(--orange); stroke-width: 3; }
+.triangle text { font: 700 18px var(--sans); fill: var(--navy); text-anchor: middle; }
+.triangle .fa { font: 900 24px "Font Awesome 6 Free"; fill: var(--orange); }
+.triangle .mid-label { font: 700 30px var(--serif); }
+
+/* Objective ↔ subjective conception: the knob slides on the step. */
+.slider { position: relative; height: 1.6rem; background: linear-gradient(var(--sand), var(--sand)) center / 100% 2px no-repeat; }
+.knob { position: absolute; top: .15rem; left: 12%; width: 1.3rem; height: 1.3rem; border-radius: 50%; background: var(--orange); transition: left 1.2s var(--ease); }
+.slider.on .knob { left: 86%; }
+
+/* State and nation (morph): two circles slide into an overlap. */
+.venn { width: 100%; max-width: 32rem; overflow: visible; }
+.venn g { transition: transform 1.2s var(--ease); }
+.venn circle { fill-opacity: .85; mix-blend-mode: multiply; }
+.venn .left circle { fill: var(--sky); }
+.venn .right circle { fill: var(--peach); }
+.venn text { font: 700 22px var(--serif); fill: var(--navy); text-anchor: middle; transition: transform 1.2s var(--ease), opacity .4s; }
+.venn .sub { font: 15px var(--sans); fill: var(--slate); }
+.venn .both { font-size: 17px; fill: var(--orange); opacity: 0; transition: opacity .6s .9s; }
+.venn.on .left { transform: translateX(60px); }
+.venn.on .right { transform: translateX(-60px); }
+.venn.on .sub { opacity: 0; }
+/* Once merged, the names move out of the overlap so "Estado-nação" can sit in it. */
+.venn.on .left text { transform: translateX(-40px); }
+.venn.on .right text { transform: translateX(40px); }
+.venn.on .both { opacity: 1; }
+
+/* Pressures on the nation-state from above, below and the side. */
+.pressure { display: grid; grid-template-columns: 1fr 1fr; grid-template-areas: "top top" "core side" "bottom bottom"; gap: .8rem; align-items: center; text-align: center; font-size: .95rem; }
+.from-top { grid-area: top; }
+.from-side { grid-area: side; text-align: left; }
+.from-bottom { grid-area: bottom; }
+.from-top::after { content: "↓"; display: block; font-size: 1.6rem; color: var(--orange); }
+.from-bottom::before { content: "↑"; display: block; font-size: 1.6rem; color: var(--orange); }
+.from-side::before { content: "← "; font-size: 1.4rem; color: var(--orange); }
+.core { grid-area: core; justify-self: center; display: grid; place-items: center; width: 9rem; height: 9rem; border-radius: 50%; background: var(--navy); color: var(--paper); font: 700 1.2rem var(--serif); }
+
+/* Unitary, federal, confederal (morph): the "UE?" marker slides along the scale. */
+.spectrum { position: relative; padding-top: 2.6rem; }
+.marker { position: absolute; top: 0; left: 0; transform: translateX(-50%); padding: .25rem .7rem; border-radius: 4px; background: var(--orange); color: var(--paper); font-weight: 700; transition: left 1.4s var(--ease); }
+.spectrum:not(.on) .marker { left: 2rem; }
+.spectrum.on .marker { left: 66.6%; }
+.ends { display: flex; justify-content: space-between; margin-bottom: .5rem; padding-top: .3rem; border-top: 2px solid var(--sand); font-size: .8rem; color: var(--slate); }
+
+/* Types of federalism: three contrasts, each a pair of small diagrams. */
+.pairs { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem 2rem; }
+.pairs > div { display: grid; grid-template-columns: 4.5rem 1fr; column-gap: 1rem; align-items: center; padding: .8rem; border-radius: 4px; background: var(--cream); }
+.pairs svg { grid-row: span 2; width: 4.5rem; }
+.pairs b { font: 700 1.1rem var(--serif); }
+.pairs rect, .pairs path:not(.arrow) { fill: var(--sky); stroke: var(--blue); stroke-width: 1.5; }
+.pairs .alt { fill: var(--peach); stroke: var(--orange); }
+.pairs .arrow { fill: none; stroke: var(--navy); stroke-width: 3; stroke-linecap: round; stroke-linejoin: round; }
+
+/* Accordions (treaties, institutions): one <details> open at a time via a shared name. */
+.accordion { display: grid; gap: .35rem; max-width: 56rem; }
+.accordion details { border-radius: 4px; background: var(--cream); }
+.accordion summary { display: flex; gap: .8rem; align-items: baseline; padding: .55rem .9rem; cursor: pointer; font: 700 1.05rem var(--serif); list-style: none; }
+.accordion summary::after { content: "+"; margin-left: auto; color: var(--orange); }
+.accordion details[open] { background: var(--sky); }
+.accordion details[open] summary::after { content: "−"; }
+.accordion summary time, .accordion summary i { color: var(--orange); }
+.accordion details > :not(summary) { margin: 0 .9rem .7rem; }
+.accordion ul { padding-left: 1.2rem; }
+
+/* Monnet: areas as squares (side = --s); each square sits on a common baseline. */
+.area-row { display: flex; align-items: flex-end; gap: .6rem; flex-wrap: wrap; }
+.area-row p { font-size: .8rem; color: var(--slate); }
+.area-row b { display: block; color: var(--navy); }
+.sq { display: block; width: var(--s); height: var(--s); margin-bottom: .3rem; background: var(--sky); border: 1px solid var(--blue); }
+.sq.o-fill { background: var(--orange); border-color: var(--orange); }
+
+/* Who each institution speaks for. */
+.voices { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 1rem; }
+.voice { margin-top: .6rem !important; padding-top: .5rem; border-top: 1px solid currentColor; font: italic 1rem var(--serif); }
+
+/* Rights of EU citizens: icon tiles. */
+.rights { display: grid; grid-template-columns: repeat(auto-fit, minmax(14rem, 1fr)); gap: .5rem; padding: 0; list-style: none; }
+.rights li { display: flex; gap: .7rem; align-items: center; padding: .55rem .8rem; border-radius: 4px; background: var(--cream); }
+.rights i { width: 1.4rem; text-align: center; color: var(--orange); font-size: 1.1rem; }
+
+/* Charter of Fundamental Rights: the six titles in a ring of circles around the name. */
+.charter { display: grid; grid-template-columns: repeat(3, 1fr); grid-template-rows: auto auto auto; gap: .8rem; text-align: center; }
+.charter ol { display: contents; list-style: none; }
+.charter li { display: grid; place-items: center; aspect-ratio: 1; max-width: 8rem; margin: 0 auto; width: 100%; border-radius: 50%; background: var(--sky); font: 700 1rem var(--serif); }
+.charter li b { display: block; color: var(--blue); }
+.charter li:nth-child(n+4) { grid-row: 3; }
+.charter-name { grid-column: 1 / -1; grid-row: 2; padding: .6rem; border-radius: 4px; background: var(--navy); color: var(--paper); font: 700 1.1rem var(--serif); }
+.charter-name span { display: block; font: .85rem var(--sans); color: var(--apricot); }
+
+/* Right → duty pairs: the duty appears beside each right. */
+.pairs-rd p { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: .5rem; }
+.pairs-rd span { padding: .55rem .8rem; border-radius: 4px; background: var(--sky); }
+.pairs-rd b { padding: .55rem .8rem; border-radius: 4px; background: var(--peach); font-weight: 400; }
+
+/* Nine challenges arranged around the Union. */
+.ring { display: grid; grid-template-columns: 1fr 9rem 1fr; gap: .8rem 1.4rem; align-items: center; }
+.ring ul { display: contents; list-style: none; }
+.ring li { font-size: .9rem; color: var(--slate); }
+.ring li b { display: block; font-family: var(--serif); color: var(--navy); }
+.ring li:nth-child(odd) { grid-column: 1; text-align: right; }
+.ring li:nth-child(even) { grid-column: 3; }
+.ring-core { grid-column: 2; grid-row: 1 / span 5; display: grid; place-items: center; aspect-ratio: 1; border-radius: 50%; background: var(--navy); color: var(--paper); font: 700 1.1rem var(--serif); text-align: center; }
+
+/* Climate regions and the list of other EU bodies. */
+.regions { display: grid; grid-template-columns: repeat(auto-fit, minmax(15rem, 1fr)); gap: .6rem; }
+.regions p:not(.h3) { font-size: .92rem; }
+.organs { columns: 2 20rem; column-gap: 2rem; }
+.organs li { break-inside: avoid; }
+
+/* ---------- 8. Quiz, research task, sorting activity ---------- */
+.quiz { display: grid; grid-template-columns: repeat(auto-fit, minmax(21rem, 1fr)); gap: .7rem; }
+.q { padding: .6rem .85rem; border-radius: 4px; background: var(--cream); }
+.q > p:first-child { font-weight: 700; margin-bottom: .35rem; }
+.opts { display: flex; flex-wrap: wrap; gap: .4rem; }
+.opts button { padding: .25rem .7rem; border: 1px solid var(--navy); border-radius: 4px; background: var(--paper); text-align: left; }
+.opts button:hover:not(:disabled) { background: var(--sky); }
+.opts button:disabled { cursor: default; }
+.opts .right { background: var(--blue); border-color: var(--blue); color: var(--paper); }
+.opts .wrong { background: var(--peach); border-color: var(--orange); text-decoration: line-through; }
+.why { margin-top: .45rem; font-size: .9rem; font-style: italic; }
+.q:not(.done) .why { display: none; }
+.quiz-foot { grid-column: 1 / -1; display: flex; align-items: center; gap: 1rem; }
+.quiz-foot .btn { width: auto; padding: .35rem 1rem; }
+.score { font: 700 1.3rem var(--serif); color: var(--orange); }
+
+.task { display: grid; grid-template-columns: 1fr 13rem; gap: 1rem 2rem; align-items: start; }
+.task-tools { padding: 1rem; border-radius: 4px; background: var(--cream); text-align: center; }
+.task-tools svg { width: 100%; height: auto; }
+.task-tools a { display: block; margin: .3rem 0 .8rem; font-size: .75rem; color: var(--blue); word-break: break-all; }
+.timer { font: 700 2.2rem var(--serif); font-variant-numeric: tabular-nums; }
+.timer.late { color: var(--orange); }
+.timer.over { animation: blink 1s steps(2) 3; color: var(--orange); }
+@keyframes blink { 50% { opacity: .2; } }
+.task-tools .btn { display: inline-block; width: auto; padding: .35rem .8rem; margin: .2rem; }
+.answer { grid-column: 1 / -1; }
+.answer summary { display: inline-block; width: auto; padding: .45rem 1rem; cursor: pointer; }
+.answer[open] { padding: 1rem; border-radius: 4px; background: var(--sky); }
+.answer[open] summary { margin-bottom: .6rem; }
+.answer ul, .answer ol { padding-left: 1.2rem; }
+.answer li + li { margin-top: .35rem; }
+
+.sort { display: grid; grid-template-columns: repeat(var(--n, 3), minmax(0, 1fr)); gap: 1rem; }
+.bin { min-height: 9rem; padding: .8rem; border-radius: 4px; background: var(--cream); }
+.bin:first-child { background: var(--peach); }
+.bin:nth-child(2) { background: var(--sky); }
+.tray { grid-column: 1 / -1; text-align: center; }
+/* touch-action: none lets a finger drag the chip instead of scrolling the page. */
+.chip { border-color: var(--navy); font-size: 1rem; touch-action: none; cursor: grab; animation: pop .3s var(--ease); }
+.chip:hover { background: var(--navy); color: var(--paper); }
+.chip.dragging { position: relative; z-index: 5; cursor: grabbing; background: var(--navy); color: var(--paper); box-shadow: 0 8px 20px rgba(30, 42, 51, .25); }
+.bin.over { outline: 3px dashed var(--orange); outline-offset: -3px; }
+.sort-buttons { display: flex; justify-content: center; gap: .6rem; }
+.sort-buttons .btn { width: auto; margin: 0; padding: .35rem 1rem; }
+/* After "Verificar": blue for a chip in the right column, orange for a wrong one. */
+.chip.right { background: var(--blue); border-color: var(--blue); color: var(--paper); }
+.chip.wrong { background: var(--peach); border-color: var(--orange); }
+.chip.right::after { content: " ✓"; }
+.chip.wrong::after { content: " ✕"; color: var(--orange); }
+
+/* ---------- 9. Teacher notes, small screens, reduced motion ---------- */
+#notes { position: fixed; top: 0; right: 0; bottom: calc(3.4rem + 1px);   /* stops above the controls bar */ z-index: 3; width: min(30rem, 92vw); overflow-y: auto; padding: 1.2rem 1.4rem; background: var(--paper); border-left: 1px solid var(--sand); box-shadow: -8px 0 30px rgba(30, 42, 51, .15); font-size: .92rem; }
+#notes h2 { font-size: 1.2rem; margin-bottom: .6rem; }
+#notes p { margin-bottom: .7rem; }
+
+@media (max-width: 900px) {
+  body { grid-template-columns: 1fr; }
+  #nav { position: fixed; inset: 0 auto 0 0; z-index: 4; width: min(18rem, 85vw); transform: translateX(-100%); transition: transform .3s var(--ease); }
+  body.nav-toggled #nav { display: block; transform: none; box-shadow: 8px 0 30px rgba(30, 42, 51, .2); }
+  .slide { justify-content: flex-start; }
+  .cols, .wide-left, .wide-right, .task, .pairs, .voices, .pairs-rd p { grid-template-columns: 1fr; }
+  /* Sorting stays two columns wide on phones so the columns and the chips fit on one screen. */
+  .sort { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .bin { min-height: 5rem; }
+  .ring { grid-template-columns: 1fr; }
+  .ring li:nth-child(n) { grid-column: 1; text-align: left; }
+  .ring-core { grid-row: auto; width: 8rem; justify-self: center; }
+  .day { grid-template-columns: repeat(auto-fit, minmax(7rem, 1fr)); }
+  .day::before { display: none; }
+  .tl { grid-auto-flow: row; border-top: 0; border-left: 2px solid var(--sand); padding-left: 1rem; }
+  .tl li { padding-top: 0; }
+  .tl li::before { top: .3rem; left: calc(-1rem - 7px); }
+  .title-slide { flex-direction: column-reverse; justify-content: center; }
+  .display { font-size: 2.4rem; }
+  h2 { font-size: 1.7rem; }
+  .compare { font-size: .8rem; }
+  .stairs { flex-direction: column; align-items: stretch; }
+  .stairs li { min-height: 0; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation-duration: .01ms !important; animation-delay: 0s !important; transition-duration: .01ms !important; transition-delay: 0s !important; }
+}
+
+/* ---------- Jogo: escolha múltipla com tempo (motor partilhado com os outros sites) ---------- */
+.game { --line: var(--sand); --muted: var(--slate); --white: var(--paper); --head: var(--serif); --body: var(--sans); --green: #5E7A3A; --orange-light: var(--peach); }
+.game [hidden] { display: none !important; }
+.game { position: relative; background: var(--cream); border-radius: 0.875rem; padding: 1.125rem 1.375rem 1.375rem; }
+.ghead { display: flex; align-items: center; gap: 1rem; font-size: 1rem; color: var(--muted); }
+.ghead b { color: var(--navy); font-size: 1.25rem; }
+.gstreak { flex: 1; text-align: center; font-weight: 700; color: var(--orange); }
+.gsound { background: none; border: 1px solid var(--line); border-radius: 0.5rem; padding: 0.375rem 0.5rem; cursor: pointer; color: var(--navy); line-height: 0; }
+.gsound svg { width: 1.25rem; height: 1.25rem; fill: currentColor; }
+.gsound svg:last-child, .gsound.off svg:first-child { display: none; }
+.gsound.off svg:last-child { display: inline; }
+.game:not(.playing) .ghead .gcount, .game:not(.playing) .gtimer { visibility: hidden; }
+.gtimer { display: flex; align-items: center; gap: 0.75rem; margin: 0.625rem 0 1rem; }
+.gtimer .track { position: relative; flex: 1; height: 0.875rem; background: var(--white, #fff); border-radius: 0.438rem; overflow: hidden; }
+.gtimer span { position: absolute; left: 0; top: 0; bottom: 0; background: var(--blue); border-radius: 0.438rem; transition: width 1s linear, background .3s; }
+.gtimer output { min-width: 2ch; text-align: right; font-family: var(--head); font-weight: 700; font-size: 1.5rem; color: var(--navy); }
+.game.hurry .gtimer span { background: var(--orange); }
+.game.hurry .gtimer output { color: var(--orange); animation: gpulse .5s ease-in-out infinite alternate; }
+@keyframes gpulse { to { transform: scale(1.25); } }
+.gstart, .gend { text-align: center; display: grid; justify-items: center; gap: 0.5rem; padding: 0.625rem 0 0.375rem; }
+.gstart h3, .gend h3 { font-family: var(--head); font-size: 1.875rem; color: var(--navy); margin: 4px 0 0; }
+.gstart p, .gend p { margin: 0; }
+.gfinal { font-size: 1.5rem; }
+.gfinal b { color: var(--orange); }
+.gq .stem { font-family: var(--head); font-weight: 700; font-size: 1.875rem; color: var(--navy); margin: 0 0 1rem; line-height: 1.25; }
+.gopts { display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem; }
+.gopts button { position: relative; display: flex; align-items: center; gap: 0.875rem; min-height: 5.25rem; padding: 0.75rem 2.75rem 0.75rem 1.125rem; border: 0; border-radius: 0.625rem; color: #fff; font: inherit; font-size: 1.313rem; font-weight: 700; text-align: left; cursor: pointer; transition: transform .15s, opacity .3s, filter .3s; }
+.gopts button:hover:not(:disabled) { transform: translateY(-2px); filter: brightness(1.08); }
+.gopts .t0 { background: #A44A16; } .gopts .t1 { background: #2F6E9E; } .gopts .t2 { background: #5E7A3A; } .gopts .t3 { background: #1E2A33; }
+.gopts .sh { font-size: 1.375rem; opacity: .85; }
+.gopts kbd { position: absolute; right: 0.625rem; top: 0.5rem; font: 700 0.813rem var(--body); color: #fff; background: rgba(255,255,255,.18); opacity: .85; border: 1px solid rgba(255,255,255,.5); border-radius: 4px; padding: 0 0.375rem; box-shadow: none; }
+.gq.done .gopts button { opacity: .35; cursor: default; }
+.gq.done .gopts button.right { opacity: 1; outline: 4px solid #2E8B57; outline-offset: 2px; }
+.gq.done .gopts button.right::after { content: '✓'; position: absolute; right: 0.75rem; bottom: 0.5rem; font-size: 1.625rem; }
+.gq.done .gopts button.wrong { opacity: .9; animation: gshake .4s; }
+.gq.done .gopts button.wrong::after { content: '✗'; position: absolute; right: 0.75rem; bottom: 0.5rem; font-size: 1.625rem; }
+@keyframes gshake { 25% { transform: translateX(-0.375rem); } 75% { transform: translateX(0.375rem); } }
+.gfb { display: none; margin: 0.875rem 0 0; font-size: 1.125rem; }
+.gq.done .gfb { display: block; animation: enter .3s var(--ease); }
+.game.was-right .gverdict { color: #2E8B57; } .game.was-wrong .gverdict { color: var(--orange); }
+.game.was-right { box-shadow: 0 0 0 4px rgba(46,139,87,.35); } .game.was-wrong { box-shadow: 0 0 0 4px rgba(164,74,22,.3); }
+.gnext { display: block; margin: 0.875rem 0 0 auto; }
+.gnext[hidden] { display: none; }
+@media (max-width: 47.5rem) {
+  .gopts { grid-template-columns: 1fr; } .gq .stem { font-size: 1.313rem; } .gopts button { min-height: 3.5rem; font-size: 1.063rem; }
+  .gopts kbd { display: none; }
+}
+@media (prefers-reduced-motion: reduce) { .game.hurry .gtimer output, .gq.done .gopts button.wrong { animation: none; } }
+
+.game .ic { display: inline-grid; place-items: center; width: 4.5rem; height: 4.5rem; border-radius: 50%; background: var(--orange); color: var(--paper); }
+.game .ic svg { width: 2.1rem; height: 2.1rem; fill: currentColor; }
+.game .btn { display: inline-block; width: auto; margin: .3rem 0; padding: .45rem 1.1rem; border-radius: 6px; }
+.game .btn.orange { background: var(--orange); border-color: var(--orange); color: var(--paper); }
+.game .btn.ghost { background: var(--paper); color: var(--navy); }
+.game .gnext { display: block; margin-left: auto; background: var(--navy); color: var(--paper); }
+.game .sm { font-size: .8rem; color: var(--slate); }

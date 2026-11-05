@@ -409,3 +409,52 @@ ul.qs { margin: 0; padding-left: 22px; } ul.qs li { margin-bottom: 12px; }
   details.more p { padding-left: 22px; }
   .river > div b { font-size: 12px; }
 }
+
+/* ---------- Jogo: escolha múltipla com tempo ------------------------ */
+.game [hidden] { display: none !important; }
+.game { position: relative; background: var(--cream); border-radius: 14px; padding: 18px 22px 22px; }
+.ghead { display: flex; align-items: center; gap: 16px; font-size: 16px; color: var(--muted); }
+.ghead b { color: var(--navy); font-size: 20px; }
+.gstreak { flex: 1; text-align: center; font-weight: 700; color: var(--orange); }
+.gsound { background: none; border: 1px solid var(--line); border-radius: 8px; padding: 6px 8px; cursor: pointer; color: var(--navy); line-height: 0; }
+.gsound svg { width: 20px; height: 20px; fill: currentColor; }
+.gsound svg:last-child, .gsound.off svg:first-child { display: none; }
+.gsound.off svg:last-child { display: inline; }
+.game:not(.playing) .ghead .gcount, .game:not(.playing) .gtimer { visibility: hidden; }
+.gtimer { display: flex; align-items: center; gap: 12px; margin: 10px 0 16px; }
+.gtimer .track { position: relative; flex: 1; height: 14px; background: var(--white, #fff); border-radius: 7px; overflow: hidden; }
+.gtimer span { position: absolute; left: 0; top: 0; bottom: 0; background: var(--blue); border-radius: 7px; transition: width 1s linear, background .3s; }
+.gtimer output { min-width: 2ch; text-align: right; font-family: var(--head); font-weight: 700; font-size: 24px; color: var(--navy); }
+.game.hurry .gtimer span { background: var(--orange); }
+.game.hurry .gtimer output { color: var(--orange); animation: gpulse .5s ease-in-out infinite alternate; }
+@keyframes gpulse { to { transform: scale(1.25); } }
+.gstart, .gend { text-align: center; display: grid; justify-items: center; gap: 8px; padding: 10px 0 6px; }
+.gstart h3, .gend h3 { font-family: var(--head); font-size: 30px; color: var(--navy); margin: 4px 0 0; }
+.gstart p, .gend p { margin: 0; }
+.gfinal { font-size: 24px; }
+.gfinal b { color: var(--orange); }
+.gq .stem { font-family: var(--head); font-weight: 700; font-size: 30px; color: var(--navy); margin: 0 0 16px; line-height: 1.25; }
+.gopts { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.gopts button { position: relative; display: flex; align-items: center; gap: 14px; min-height: 84px; padding: 12px 44px 12px 18px; border: 0; border-radius: 10px; color: #fff; font: inherit; font-size: 21px; font-weight: 700; text-align: left; cursor: pointer; transition: transform .15s, opacity .3s, filter .3s; }
+.gopts button:hover:not(:disabled) { transform: translateY(-2px); filter: brightness(1.08); }
+.gopts .t0 { background: #A44A16; } .gopts .t1 { background: #2F6E9E; } .gopts .t2 { background: #5E7A3A; } .gopts .t3 { background: #1E2A33; }
+.gopts .sh { font-size: 22px; opacity: .85; }
+.gopts kbd { position: absolute; right: 10px; top: 8px; font: 700 13px var(--body); color: #fff; background: rgba(255,255,255,.18); opacity: .85; border: 1px solid rgba(255,255,255,.5); border-radius: 4px; padding: 0 6px; box-shadow: none; }
+.gq.done .gopts button { opacity: .35; cursor: default; }
+.gq.done .gopts button.right { opacity: 1; outline: 4px solid #2E8B57; outline-offset: 2px; }
+.gq.done .gopts button.right::after { content: '✓'; position: absolute; right: 12px; bottom: 8px; font-size: 26px; }
+.gq.done .gopts button.wrong { opacity: .9; animation: gshake .4s; }
+.gq.done .gopts button.wrong::after { content: '✗'; position: absolute; right: 12px; bottom: 8px; font-size: 26px; }
+@keyframes gshake { 25% { transform: translateX(-6px); } 75% { transform: translateX(6px); } }
+.gfb { display: none; margin: 14px 0 0; font-size: 18px; }
+.gq.done .gfb { display: block; animation: enter .3s var(--ease); }
+.game.was-right .gverdict { color: #2E8B57; } .game.was-wrong .gverdict { color: var(--orange); }
+.game.was-right { box-shadow: 0 0 0 4px rgba(46,139,87,.35); } .game.was-wrong { box-shadow: 0 0 0 4px rgba(164,74,22,.3); }
+.gnext { display: block; margin: 14px 0 0 auto; }
+.gnext[hidden] { display: none; }
+@media (max-width: 760px) {
+  .gopts { grid-template-columns: 1fr; } .gq .stem { font-size: 21px; } .gopts button { min-height: 56px; font-size: 17px; }
+  .gopts kbd { display: none; }
+}
+@media (prefers-reduced-motion: reduce) { .game.hurry .gtimer output, .gq.done .gopts button.wrong { animation: none; } }
+.gstart .ic, .gend .ic { width: 72px; height: 72px; } .gstart .ic svg, .gend .ic svg { width: 34px; height: 34px; }
