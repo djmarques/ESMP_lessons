@@ -109,3 +109,9 @@ Historical photographs (all from Wikimedia Commons; the credit is printed under 
 
 The CC BY-SA photos may be reused with the credit and the same licence; keep the captions if you copy them.
 Fonts: Caladea and Carlito (Google Fonts), used where Cambria and Calibri are not installed.
+
+## Jogos
+
+Cada aula tem um jogo de escolha múltipla com 8 perguntas, antes do questionário (na aula 5, depois da pesquisa): uma pergunta de cada vez, 20 segundos por pergunta, pontos com bónus de rapidez e som de acerto e de erro. A turma responde de braço no ar (ou com os dedos, 1 a 4) e o professor clica na resposta mais votada, ou usa as teclas 1 a 4; Enter passa à seguinte. O botão do altifalante liga e desliga o som. Os questionários que já existiam ficaram como «Revisão», para estudar em casa.
+
+Para mudar uma pergunta, procura o texto no `index.html`: cada pergunta é um `<div class="gq" data-answer="b">`, e `data-answer` diz qual dos botões (`a`, `b`, `c`, `d`) é o certo. A nota do professor dos jogos está no fim de `notes.js` (`window.NOTES.jogo`); se voltares a gerar esse ficheiro com `tools/extract_notes.py`, acrescenta-a de novo.

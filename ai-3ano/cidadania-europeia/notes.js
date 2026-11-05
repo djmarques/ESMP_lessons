@@ -252,3 +252,5 @@ window.NOTES = {
 "Todas as datas dos tratados e dos alargamentos foram confirmadas nas fichas temáticas e nas páginas históricas do Parlamento Europeu; os números do euro no Banco Central Europeu; o PRR na Representação da Comissão Europeia em Portugal. Situações que mudam e convém confirmar antes de cada aula: candidatos à adesão, datas do DiscoverEU, número de países do euro e de Schengen."
 ]
 };
+/* Jogos: nota partilhada pelos slides de jogo (data-src="jogo"). Se voltares a gerar este ficheiro com tools/extract_notes.py, volta a acrescentar estas linhas. */
+window.NOTES.jogo = ["Jogo para a turma: projetar, ler a pergunta em voz alta e pedir respostas de braço no ar (ou com os dedos, 1 a 4) antes de clicar. O professor clica na resposta mais votada, ou usa as teclas 1 a 4; Enter passa à seguinte. O botão do altifalante liga e desliga o som. Depois de cada resposta, aproveitar a explicação para uma pergunta de seguimento. O questionário que se segue fica para revisão em casa."];
