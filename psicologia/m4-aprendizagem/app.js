@@ -328,46 +328,82 @@
     show(0, 'Experimenta: começa só com a campainha.');
   });
 
-  /** Operant conditioning in a Skinner box: the rat presses the lever now and
-      then; the chosen consequence makes pressing more or less likely. */
+  /** Operant conditioning in a Skinner box. The rat (an SVG drawing) wanders,
+      walks to the lever, rears up and presses it; then the chosen consequence
+      happens: food drops into the tray (with a sound), a loud noise stops, a
+      shock, or food is taken away. Pressing becomes more or less likely. */
   document.querySelectorAll('.skinner').forEach(sim => {
-    let p = 0.12, id = null, presses = 0, ticks = 0, hist = [];
+    let p = 0.12, id = null, presses = 0, hist = [], busy = false, mode = 'rp';
     const $ = s => sim.querySelector(s);
     const modeBtns = sim.querySelectorAll('[data-mode]');
-    let mode = 'rp';
-    const msgs = { rp: 'Cada vez que carrega, cai comida (acrescenta algo agradável).', rn: 'O som alto só para quando carrega (retira algo desagradável).', pp: 'Cada vez que carrega, apanha um choque (acrescenta algo desagradável).', pn: 'Cada vez que carrega, a comida que tinha é retirada (retira algo agradável).' };
+    const msgs = { rp: 'Cada vez que carrega, cai comida no comedouro (acrescenta algo agradável).', rn: 'O som alto só para quando carrega na alavanca (retira algo desagradável).', pp: 'Cada vez que carrega, apanha um choque (acrescenta algo desagradável).', pn: 'Cada vez que carrega, a comida que estava no comedouro é retirada (retira algo agradável).' };
+    const at = (x, rot = 0) => { sim.style.setProperty('--rx', x); sim.style.setProperty('--rot', rot + 'deg'); };
+    const idleX = () => 320 - p * 190;
+    const wait = ms => new Promise(r => setTimeout(r, ms));
+    const sfx2 = {
+      click: () => tone(320, 0, 0.05, 'square', 0.06),
+      food: () => { tone(1500, 0, 0.08, 'sine', 0.25); tone(2100, 0.07, 0.14, 'sine', 0.2); tone(1700, 0.2, 0.08, 'triangle', 0.08); },
+      crunch: () => { for (let k = 0; k < 3; k++) tone(260 + k * 40, k * 0.12, 0.05, 'square', 0.04); },
+      shock: () => tone(95, 0, 0.35, 'sawtooth', 0.09),
+      take: () => tone(520, 0, 0.35, 'triangle', 0.12, 260),
+      buzz: () => tone(150, 0, 0.12, 'sawtooth', 0.025)
+    };
     const paint = () => {
-      sim.style.setProperty('--p', p.toFixed(3));
       $('.s-p').textContent = Math.round(p * 100) + ' %';
       $('.s-n').textContent = presses;
-      const pts = hist.map((v, i) => `${(i / 59) * 300},${70 - v * 66}`).join(' ');
-      $('.s-line').setAttribute('points', pts);
+      $('.s-line').setAttribute('points', hist.map((v, i) => `${(i / 59) * 300},${70 - v * 66}`).join(' '));
     };
-    const tick = () => {
-      if (!onSlide(sim)) return;
-      ticks++;
-      if (Math.random() < p) {
-        presses++; sim.classList.remove('press'); void sim.offsetWidth; sim.classList.add('press', 'cons-' + mode);
-        setTimeout(() => sim.classList.remove('cons-' + mode), 500);
-        if (mode === 'rp') { p += (0.92 - p) * 0.18; tone(660, 0, 0.12, 'triangle', 0.15); }
-        else if (mode === 'rn') { p += (0.92 - p) * 0.18; }
-        else if (mode === 'pp') { p = Math.max(0.02, p * 0.7); tone(180, 0, 0.25, 'sawtooth', 0.08); }
-        else { p = Math.max(0.02, p * 0.72); }
+    const setMode = m => {
+      mode = m; modeBtns.forEach(x => x.setAttribute('aria-pressed', String(x.dataset.mode === m)));
+      $('.s-msg').textContent = msgs[m];
+      sim.classList.toggle('noise', m === 'rn');
+      sim.classList.toggle('stocked', m === 'pn');
+    };
+    async function press() {
+      busy = true;
+      at(88, 0); sim.classList.add('walk'); await wait(650); sim.classList.remove('walk');
+      at(88, 45); await wait(300);                                         // rears up
+      sim.classList.add('ldown', 'lit'); sfx2.click(); presses++;
+      await wait(250);
+      if (mode === 'rp') {
+        sim.classList.add('drop'); await wait(550); sfx2.food();           // food lands in the tray
+        at(88, 0); sim.classList.remove('ldown'); await wait(250);
+        at(209, 0); await wait(500); sim.classList.add('eat'); sfx2.crunch(); await wait(900);
+        sim.classList.remove('eat', 'drop');
+        p += (0.92 - p) * 0.18;
+      } else if (mode === 'rn') {
+        sim.classList.remove('noise'); await wait(300); at(88, 0); sim.classList.remove('ldown'); await wait(1300);
+        p += (0.92 - p) * 0.18;
+        if (mode === 'rn') sim.classList.add('noise');
+      } else if (mode === 'pp') {
+        sim.classList.add('shock'); sfx2.shock(); at(88, -10); await wait(200); at(250, 0); sim.classList.remove('ldown'); await wait(700);
+        sim.classList.remove('shock');
+        p = Math.max(0.02, p * 0.7);
+      } else {
+        sim.classList.add('takeaway'); sfx2.take(); at(88, 0); sim.classList.remove('ldown'); await wait(900);
+        sim.classList.remove('takeaway');
+        p = Math.max(0.02, p * 0.72);
       }
+      sim.classList.remove('ldown', 'lit');
+      at(idleX(), 0); await wait(500);
+      busy = false;
+    }
+    const tick = () => {
+      if (!onSlide(sim) || busy) return;
+      if (mode === 'rn' && sim.classList.contains('noise')) sfx2.buzz();
+      if (Math.random() < p) press().then(paint);
+      else at(Math.max(130, Math.min(320, idleX() + (Math.random() * 40 - 20))), 0);
       hist.push(p); if (hist.length > 60) hist.shift();
-      sim.classList.toggle('noise', mode === 'rn' && !sim.classList.contains('press'));
       paint();
     };
-    modeBtns.forEach(b => b.addEventListener('click', () => {
-      mode = b.dataset.mode; modeBtns.forEach(x => x.setAttribute('aria-pressed', String(x === b)));
-      $('.s-msg').textContent = msgs[mode];
-    }));
+    modeBtns.forEach(b => b.addEventListener('click', () => setMode(b.dataset.mode)));
     $('[data-act=run]').addEventListener('click', e => {
       if (id) { clearInterval(id); id = null; e.target.textContent = 'Continuar'; return; }
-      id = setInterval(tick, 450); e.target.textContent = 'Pausar';
+      id = setInterval(tick, 750); e.target.textContent = 'Pausar';
     });
-    $('[data-act=reset]').addEventListener('click', () => { p = 0.12; presses = 0; hist = []; paint(); });
-    modeBtns[0].click(); paint();
+    $('[data-act=one]').addEventListener('click', () => { if (!busy) press().then(paint); });
+    $('[data-act=reset]').addEventListener('click', () => { p = 0.12; presses = 0; hist = []; at(idleX(), 0); paint(); });
+    setMode('rp'); at(idleX(), 0); paint();
   });
 
   /** Motivation and performance (inverted U): the slider moves a dot along

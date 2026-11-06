@@ -836,30 +836,41 @@ a.big-link:hover { box-shadow: 0 6px 20px rgba(164, 74, 22, .2); }
 .fork .f-up, .fork .f-down { border-radius: 10px; padding: 10px 14px; display: flex; gap: 14px; align-items: center; }
 .fork .f-up { background: #DCE8F2; } .fork .f-down { background: var(--orange-light); }
 
-/* Skinner box simulation */
-.skinner { display: grid; grid-template-columns: 330px 1fr; gap: 24px; align-items: start; --p: .12; }
-.skinner .box { position: relative; height: 230px; border: 4px solid var(--navy); border-radius: 12px; background: #fff; overflow: hidden; }
-.skinner .lever { position: absolute; left: 0; top: 96px; width: 60px; height: 10px; background: var(--navy); border-radius: 0 5px 5px 0; transform-origin: left center; transition: transform .15s; }
-.skinner.press .lever { animation: leverdown .4s; }
-@keyframes leverdown { 40% { transform: rotate(18deg); } }
-.skinner .tray { position: absolute; left: 6px; bottom: 30px; color: transparent; }
-.skinner .tray svg { width: 28px; height: 28px; }
-.skinner.cons-rp .tray { color: #B07A2E; animation: pop .4s; }
-.skinner .speaker { position: absolute; right: 10px; top: 10px; color: var(--line); }
-.skinner .speaker svg { width: 30px; height: 30px; }
-.skinner.noise .speaker { color: var(--orange); animation: gpulse .3s infinite alternate; }
-.skinner .zap { position: absolute; left: 140px; bottom: 40px; color: transparent; } .skinner .zap svg { width: 36px; height: 36px; }
-.skinner.cons-pp .zap { color: #E0B000; }
-.skinner .rat { position: absolute; bottom: 18px; color: #8A929A; left: calc(240px - var(--p) * 190px); transition: left .5s var(--ease); }
-.skinner .rat svg { width: 64px; height: 64px; transform: scaleX(-1); }
-.skinner .grid-floor { position: absolute; left: 0; right: 0; bottom: 0; height: 14px; background: repeating-linear-gradient(90deg, var(--line) 0 3px, transparent 3px 12px); }
+/* Skinner box simulation: an SVG box; the rat moves with --rx and rears with --rot */
+.skinner { display: grid; grid-template-columns: 340px 1fr; gap: 24px; align-items: start; --rx: 297; --rot: 0deg; }
+.sbox { width: 100%; display: block; }
+.sbox .ratpos { transform: translate(calc(var(--rx) * 1px), 226px); transition: transform .6s var(--ease); }
+.sbox .ratbody { transform: rotate(var(--rot)); transform-origin: 0 0; transition: transform .3s var(--ease); }
+.skinner.walk .ratbody { animation: scurry .16s linear infinite; }
+@keyframes scurry { 50% { transform: rotate(var(--rot)) translateY(-2px); } }
+.skinner.eat .head { animation: nibble .22s ease-in-out infinite; transform-box: fill-box; transform-origin: right center; }
+@keyframes nibble { 50% { transform: rotate(-10deg) translateY(2px); } }
+.sbox .lever { transform-origin: 10px 182px; transition: transform .15s; }
+.skinner.ldown .lever { transform: rotate(14deg); }
+.sbox .light { transition: fill .2s; } .skinner.lit .light { fill: #F0A673; }
+.sbox .pellet { opacity: 0; }
+.skinner.drop .pellet { animation: pelletdrop .55s cubic-bezier(.5,0,1,1) forwards; }
+@keyframes pelletdrop { 0% { opacity: 1; transform: none; } 85% { opacity: 1; transform: translateY(196px); } 92% { transform: translateY(188px); } 100% { opacity: 1; transform: translateY(196px); } }
+.skinner.eat .pellet { animation: none; opacity: 1; transform: translateY(196px) scale(.6); transform-box: fill-box; transform-origin: center; }
+.sbox .traypellet { opacity: 0; transition: opacity .3s, transform .9s var(--ease); }
+.skinner.stocked .traypellet { opacity: 1; }
+.skinner.takeaway .traypellet { opacity: 0; transform: translateY(-120px); }
+.sbox .waves { opacity: 0; } .skinner.noise .waves { opacity: 1; animation: flash .25s infinite alternate; }
+.sbox .sparks { opacity: 0; } .skinner.shock .sparks { animation: flash .12s 4 alternate; }
+@keyframes flash { from { opacity: 0; } to { opacity: 1; } }
 .skinner .modes { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
 .skinner .modes button { text-align: left; border: 1px solid var(--line); background: var(--cream); border-radius: 10px; padding: 8px 12px; cursor: pointer; display: grid; color: var(--navy); }
 .skinner .modes button b { font: 700 16px var(--head); } .skinner .modes button small { font-size: 13px; color: var(--text); }
 .skinner .modes button[aria-pressed="true"] { background: var(--navy); color: #fff; border-color: var(--navy); }
 .skinner .modes button[aria-pressed="true"] small { color: var(--orange-light); }
-.skinner .row { flex-wrap: wrap; margin: 6px 0; }
+.skinner .row { flex-wrap: wrap; margin: 6px 0; gap: 10px; }
 .spark { width: 100%; height: 80px; background: var(--cream); border-radius: 8px; display: block; }
+@media (prefers-reduced-motion: reduce) { .sbox .ratpos, .sbox .ratbody { transition: none; } }
+
+/* Context paragraph under each title, for the teacher and for students at home */
+.lede { font-size: 20px; line-height: 1.5; color: var(--text); max-width: 980px; margin: -20px 0 22px; border-left: 4px solid var(--orange-light); padding-left: 14px; }
+.divider .lede { color: var(--orange-light); border-color: rgba(255,255,255,.4); }
+@media (max-width: 760px) { .lede { font-size: 17px; margin-top: -10px; } }
 
 /* Reinforcement or punishment: two questions */
 .matrix2 { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }

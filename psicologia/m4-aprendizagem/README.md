@@ -18,6 +18,10 @@ Fontes: o manual (páginas no PowerPoint do professor), a sebenta da escola (Mó
 
 É HTML, CSS e JavaScript simples: não precisa de instalação. Funciona aberto no navegador e no GitHub Pages.
 
+## Texto de apoio
+
+Cada slide tem, por baixo do título, um parágrafo curto de contexto (a classe `lede`), útil na aula e para quem estuda em casa. As notas do professor (tecla `N`) começam por um guião, «COMO CONDUZIR»: objetivo, o que dizer, o que perguntar e o que mostra cada clique. Os textos estão no ficheiro `leads.js` do gerador; no site, ficam diretamente no `index.html` e no `notes.js`.
+
 ## Ficheiros
 
 | Ficheiro | O que tem |
@@ -40,7 +44,7 @@ Fontes: o manual (páginas no PowerPoint do professor), a sebenta da escola (Mó
 
 - **Habituação** (`.habit`): cada toque da sirene mostra um susto menor.
 - **Cão de Pavlov** (`.pavlov`): campainha, comida, ou as duas; a associação cresce com os pares e enfraquece só com a campainha (extinção).
-- **Caixa de Skinner** (`.skinner`): escolhe reforço ou punição, positivo ou negativo, e vê a probabilidade de o rato carregar na alavanca a subir ou a descer. É ilustrativa: não usa dados reais.
+- **Caixa de Skinner** (`.skinner`): um rato desenhado vai à alavanca, põe-se de pé e pressiona-a. Com reforço positivo, a comida cai pelo tubo até ao comedouro (com som) e o rato come; com reforço negativo, o som alto para; com punição positiva, apanha um choque; com punição negativa, a comida do comedouro é retirada. «Iniciar» deixa-o correr sozinho; «Uma vez» mostra um só ensaio. É ilustrativa: não usa dados reais.
 - **Motivação** (`.yd`): a curva em U invertido.
 - **Reforço ou punição?** (`.matrix2`): duas perguntas, uma resposta.
 - **Questionário de preferências** (`.kolb`): seis perguntas, feito para a aula; não é o inventário de Kolb nem um diagnóstico. As respostas não saem do navegador.
