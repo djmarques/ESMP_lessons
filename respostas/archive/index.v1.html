@@ -1,0 +1,43 @@
+<!doctype html>
+<html lang="pt-PT">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Responder no telemóvel</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Caladea:ital,wght@0,400;0,700;1,400&family=Carlito:wght@400;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="aluno.css">
+</head>
+<body>
+<!--
+  respostas/index.html — página do aluno no telemóvel, partilhada por todas as
+  disciplinas. Abre-se pelo código QR dos slides «No telemóvel»:
+    respostas/?f=ai-2ano/o-trabalho&a=labor
+  f = pasta do site da aula (onde está atividades.js); a = chave da atividade.
+  O endereço de envio está em config.js. Ver LEIA-ME.md.
+-->
+<main id="app">
+  <header class="top"><p class="kicker" id="disciplina">…</p><h1 id="titulo">…</h1><div class="passos" id="passos" aria-hidden="true"></div></header>
+
+  <section id="ecra-nome" class="ecra">
+    <label for="nome">O teu nome</label>
+    <input id="nome" autocomplete="name" maxlength="80" placeholder="Nome e apelido">
+    <p class="sm">O nome e as respostas são enviados ao professor. Só ele os vê.</p>
+    <button class="btn orange" id="comecar">Começar</button>
+    <p class="aviso" id="aviso-config" hidden>Atenção: o envio ainda não está configurado. Podes responder, e no fim mostras o ecrã ao professor.</p>
+  </section>
+
+  <section id="ecra-passo" class="ecra" hidden></section>
+
+  <section id="ecra-fim" class="ecra" hidden>
+    <h2 id="fim-titulo">Enviado!</h2>
+    <p id="fim-texto"></p>
+    <button class="btn" id="reenviar" hidden>Tentar enviar outra vez</button>
+    <div id="resumo" class="resumo"></div>
+  </section>
+</main>
+<script src="config.js"></script>
+<script src="aluno.js"></script>
+</body>
+</html>

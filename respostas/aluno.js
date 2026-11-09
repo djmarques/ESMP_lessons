@@ -8,11 +8,10 @@
         classificar  um item de cada vez, escolher a categoria (certo/errado)
         opiniao      escolher uma opção, sem resposta certa
         escrita      caixas de texto
-   3. Envia tudo, em JSON, para o Google Apps Script de config.js, que
-      regista na folha de cálculo e manda um email ao professor.
-   O envio usa mode 'no-cors' (o Apps Script não aceita o pedido prévio
-   CORS): a página não lê a resposta e considera enviado quando o pedido
-   sai sem erro de rede. Uma cópia fica no telemóvel para reenviar.
+   3. Envia tudo, em JSON (Content-Type text/plain, sem pedido prévio CORS),
+      para o Google Apps Script de config.js, que regista na folha de cálculo
+      e responde {ok:true}. Só com essa resposta aparece «Respostas recebidas»;
+      senão tenta mais vezes. Uma cópia fica no telemóvel até ser confirmada.
    ===================================================================== */
 (function () {
   'use strict';
@@ -24,6 +23,19 @@
   const ecra = $('ecra-passo');
   const show = id => document.querySelectorAll('.ecra').forEach(s => { s.hidden = s.id !== id; });
   const esc = s => String(s).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+
+  // Leitores de QR e apps (Facebook, Instagram…) abrem a página num navegador interno onde,
+  // em alguns Android, o teclado não aparece nas caixas de texto. Mostrar como abrir no Chrome.
+  (function navegadorInterno() {
+    const ua = navigator.userAgent;
+    if (!/; wv\)|FBAN|FBAV|Instagram|Line\/|MiuiBrowser|GSA\//.test(ua)) return;
+    const box = $('aviso-wv'); if (!box) return;
+    if (/Android/.test(ua)) {
+      const alvo = location.host + location.pathname + location.search;
+      $('abrir-chrome').href = 'intent://' + alvo + '#Intent;scheme=https;package=com.android.chrome;S.browser_fallback_url=' + encodeURIComponent(location.href) + ';end';
+    } else $('abrir-chrome').hidden = true;
+    box.hidden = false;
+  })();
 
   function falha(msg) { $('titulo').textContent = msg; $('ecra-nome').innerHTML = '<p>Volta a ler o código QR do slide.</p>'; }
 
@@ -199,16 +211,66 @@
     try { localStorage.setItem('esmp-ultimo-' + pasta + '-' + chave, JSON.stringify(payload)); } catch (e) {}
     enviar();
   }
-  $('reenviar').addEventListener('click', enviar);
-  function enviar() {
+  $('reenviar').addEventListener('click', () => enviar());
+
+  /* O envio lê a resposta do Apps Script ({ok:true}). Só depois diz «Respostas recebidas».
+     Se falhar, tenta mais 4 vezes, com esperas crescentes e um pouco aleatórias (para que
+     20 telemóveis que acabam o mesmo jogo não batam à porta todos no mesmo segundo).
+     Enquanto não chega a confirmação, a resposta fica guardada no telemóvel e é reenviada
+     da próxima vez que o aluno abrir uma atividade. */
+  const PEND = 'esmp-pendentes';
+  const pendentes = () => { try { return JSON.parse(localStorage.getItem(PEND) || '[]'); } catch (e) { return []; } };
+  const guardarPend = l => { try { localStorage.setItem(PEND, JSON.stringify(l.slice(-20))); } catch (e) {} };
+  const idDe = p => p.nome + '|' + p.chave + '|' + p.data;
+  const tirarPend = p => guardarPend(pendentes().filter(x => idDe(x) !== idDe(p)));
+  const esperar = ms => new Promise(r => setTimeout(r, ms));
+
+  async function post(p) {
+    const ctl = window.AbortController ? new AbortController() : null;
+    const t = ctl && setTimeout(() => ctl.abort(), 30000);   // sem resposta em 30 s: tenta outra vez
+    let r;
+    try { r = await fetch(url, { method: 'POST', headers: { 'Content-Type': 'text/plain;charset=utf-8' }, body: JSON.stringify(p), redirect: 'follow', signal: ctl && ctl.signal }); }
+    finally { clearTimeout(t); }
+    let j = null; try { j = await r.json(); } catch (e) { /* resposta que não é JSON = erro do lado do Google */ }
+    if (!j || !j.ok) throw new Error(j && j.erro || 'sem confirmação');
+  }
+
+  let aEnviar = false;
+  window.addEventListener('beforeunload', e => { if (aEnviar) { e.preventDefault(); e.returnValue = ''; } });
+
+  async function enviar() {
     show('ecra-fim');
     $('resumo').textContent = resumo(payload);
-    if (!url) { $('fim-titulo').textContent = 'Mostra este ecrã ao professor'; $('fim-texto').textContent = 'O envio automático ainda não está configurado.'; return; }
-    $('fim-titulo').textContent = 'A enviar…'; $('fim-texto').textContent = ''; $('reenviar').hidden = true;
-    fetch(url, { method: 'POST', mode: 'no-cors', headers: { 'Content-Type': 'text/plain;charset=utf-8' }, body: JSON.stringify(payload) })
-      .then(() => { $('fim-titulo').textContent = 'Enviado!'; $('fim-texto').textContent = 'Obrigado, ' + payload.nome.split(' ')[0] + '. O professor recebeu as tuas respostas.'; })
-      .catch(() => { $('fim-titulo').textContent = 'Não foi possível enviar'; $('fim-texto').textContent = 'Verifica a ligação à internet e tenta outra vez. As tuas respostas estão guardadas.'; $('reenviar').hidden = false; });
+    if (!url) { estado('aviso', 'Mostra este ecrã ao professor', 'O envio automático ainda não está configurado.'); return; }
+    guardarPend(pendentes().filter(x => idDe(x) !== idDe(payload)).concat([payload]));
+    aEnviar = true; $('reenviar').hidden = true;
+    const esperas = [0, 2000, 4000, 8000, 12000];
+    for (let k = 0; k < esperas.length; k++) {
+      estado('envio', k ? 'A tentar outra vez… (' + (k + 1) + '/' + esperas.length + ')' : 'A enviar as tuas respostas…', 'Não feches esta página nem saias do navegador até aparecer o sinal verde.');
+      await esperar(esperas[k] + (k ? Math.random() * 2000 : Math.random() * 800));
+      try {
+        await post(payload);
+        aEnviar = false; tirarPend(payload);
+        estado('ok', 'Respostas recebidas', 'Obrigado, ' + payload.nome.split(' ')[0] + '. O professor já tem as tuas respostas. Podes fechar esta página.');
+        return;
+      } catch (e) { /* tenta outra vez */ }
+    }
+    aEnviar = false;
+    estado('erro', 'Ainda não foi enviado', 'Verifica a ligação à internet (dados móveis ou Wi-Fi) e carrega no botão. As tuas respostas estão guardadas neste telemóvel.');
+    $('reenviar').hidden = false;
   }
+  function estado(tipo, titulo, texto) {
+    const f = $('ecra-fim'); f.dataset.estado = tipo;
+    $('fim-titulo').textContent = titulo; $('fim-texto').textContent = texto;
+  }
+  // respostas que ficaram por enviar de uma vez anterior: reenviar em silêncio
+  if (url) setTimeout(async () => {
+    for (const p of pendentes()) {
+      if (payload && idDe(p) === idDe(payload)) continue;
+      try { await post(p); tirarPend(p); } catch (e) { break; }
+    }
+  }, 1500);
+
   function resumo(p) {
     let t = p.nome + ' · ' + new Date(p.data).toLocaleString('pt-PT') + '\n';
     if (p.total) t += p.certas + ' / ' + p.total + ' certas · ' + p.pontos + ' pontos\n';

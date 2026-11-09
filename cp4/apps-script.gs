@@ -3,8 +3,8 @@
  * ---------------------------------------------------------------------
  * Recebe as respostas que os alunos enviam do telemóvel (respostas/ e
  * cp4/aluno.html), escreve-as numa folha de cálculo do Google (um separador
- * por disciplina e atividade) e envia um email ao professor com o nome,
- * a data e as respostas.
+ * por disciplina e atividade) e responde {ok:true} ao telemóvel, que só
+ * então mostra «Respostas recebidas». O email por envio está desligado.
  *
  * Como instalar: ver respostas/LEIA-ME.md. Para atualizar: colar este código
  * por cima do anterior → Implementar → Gerir implementações → lápis →
@@ -20,8 +20,9 @@ const ENVIAR_EMAIL = false;
 
 /** Chamado pelo telemóvel do formando quando carrega em «Enviar». */
 function doPost(e) {
-  const lock = LockService.getScriptLock();
-  lock.waitLock(20000);                       // dois envios ao mesmo tempo não se atropelam
+  // Sem trancar o script inteiro: appendRow já é seguro com vários envios ao mesmo tempo.
+  // (Antes, 20 telemóveis a enviar no fim do mesmo jogo ficavam em fila; os últimos
+  // esperavam mais de 20 s, o pedido falhava e o telemóvel dizia «Enviado!» na mesma.)
   try {
     const d = JSON.parse(e.postData.contents);
     const nome = limpar(d.nome, 80) || '(sem nome)';
@@ -39,7 +40,7 @@ function doPost(e) {
       .concat(escrita.map(x => limpar(x.resposta, 3000)));
     folha.appendRow(linha.map(seguro));
 
-    // 2. Email
+    // 2. Email (desligado por defeito)
     if (ENVIAR_EMAIL && MailApp.getRemainingDailyQuota() > 0) {
       const data = Utilities.formatDate(agora, 'Europe/Lisbon', 'dd/MM/yyyy HH:mm');
       let corpo = nome + '\n' + disciplina + ' · ' + atividade + ' · ' + data + '\n\n';
@@ -57,9 +58,7 @@ function doPost(e) {
     }
     return resposta({ ok: true });
   } catch (err) {
-    return resposta({ ok: false, erro: String(err) });
-  } finally {
-    lock.releaseLock();
+    return resposta({ ok: false, erro: String(err) });   // o telemóvel lê isto e tenta outra vez
   }
 }
 
@@ -80,25 +79,33 @@ function testar() {
 }
 
 /* ---- auxiliares ---- */
+let _ss = null;
 function planilha() {
+  if (_ss) return _ss;
   const props = PropertiesService.getScriptProperties();
   const id = props.getProperty('FOLHA_ID');
   if (id) {
     try {
       const ss = SpreadsheetApp.openById(id);
       if (ss.getName() !== NOME_FOLHA) ss.rename(NOME_FOLHA);   // acompanha uma mudança de NOME_FOLHA
-      return ss;
+      return (_ss = ss);
     } catch (e) { /* foi apagada: cria outra */ }
   }
   const ss = SpreadsheetApp.create(NOME_FOLHA);
   props.setProperty('FOLHA_ID', ss.getId());
-  return ss;
+  return (_ss = ss);
 }
 function separador(atividade, jogo, escrita) {
   const ss = planilha();
   const nome = atividade.replace(/[\[\]\*\?\/\\:]/g, ' ').slice(0, 90);
   let sh = ss.getSheetByName(nome);
-  if (!sh) {
+  if (sh) return sh;
+  // Só a criação do separador precisa de tranca: dois telemóveis podiam tentar criá-lo ao mesmo tempo.
+  const lock = LockService.getScriptLock();
+  lock.waitLock(25000);
+  try {
+    sh = ss.getSheetByName(nome);           // outro envio pode tê-lo criado enquanto esperávamos
+    if (sh) return sh;
     sh = ss.insertSheet(nome);
     const cab = ['Data', 'Nome', 'Pontos', 'Certas']
       .concat(jogo.map((j, k) => (k + 1) + ': ' + limpar(j.pergunta, 100)))
@@ -108,8 +115,11 @@ function separador(atividade, jogo, escrita) {
     sh.getRange(1, 1, 1, cab.length).setFontWeight('bold');
     const vazia = ss.getSheetByName('Sheet1') || ss.getSheetByName('Folha1') || ss.getSheetByName('Página1');
     if (vazia && ss.getSheets().length > 1) ss.deleteSheet(vazia);
+    SpreadsheetApp.flush();
+    return sh;
+  } finally {
+    lock.releaseLock();
   }
-  return sh;
 }
 function limpar(s, max) { return String(s == null ? '' : s).slice(0, max); }
 /** Impede que um texto começado por = + - @ seja lido como fórmula na folha. */

@@ -2,59 +2,14 @@
 <html lang="pt-PT">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="viewport" content="width=device-width, initial-scale=1">
 <title>CP 4 · Responder no telemóvel</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Caladea:ital,wght@0,400;0,700;1,400&family=Carlito:wght@400;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="aluno.css">
+<!-- Os códigos QR do CP 4 apontam para aluno.html?a=…; a página do aluno passou a ser
+     a partilhada por todas as disciplinas (../respostas/). Versão antiga em archive/. -->
+<script>
+  var a = (new URLSearchParams(location.search).get('a') || '').replace(/[^a-z0-9-]/g, '');
+  location.replace('../respostas/?f=cp4&a=' + a);
+</script>
 </head>
-<body>
-<!--
-  aluno.html — página do formando, para o telemóvel. Abre-se pelo código QR
-  dos slides «No telemóvel» (aluno.html?a=navio, ?a=gage, …).
-  O conteúdo vem de atividades.js; o endereço de envio vem de config.js.
--->
-<main id="app">
-  <header class="top"><p class="kicker">Cidadania e Profissionalidade · CP 4</p><h1 id="titulo">…</h1></header>
-
-  <!-- 1. Entrada -->
-  <section id="ecra-nome" class="ecra">
-    <label for="nome">O teu nome</label>
-    <input id="nome" autocomplete="name" maxlength="80" placeholder="Nome e apelido">
-    <p class="sm">O nome e as respostas são enviados ao formador. Só ele os vê.</p>
-    <button class="btn orange" id="comecar">Começar</button>
-    <p class="aviso" id="aviso-config" hidden>Atenção: o envio ainda não está configurado. Podes responder, e no fim mostras o ecrã ao formador.</p>
-  </section>
-
-  <!-- 2. Jogo -->
-  <section id="ecra-jogo" class="ecra" hidden>
-    <div class="ghead"><span>Pergunta <b id="g-n">1</b> / <b id="g-total">8</b></span><span>Pontos <b id="g-pontos">0</b></span><button class="som" id="som" aria-label="Som ligado ou desligado">🔊</button></div>
-    <div class="gtimer"><div class="track"><span id="g-barra"></span></div><output id="g-tempo">20</output></div>
-    <p class="stem" id="g-pergunta"></p>
-    <div class="opts" id="g-opcoes"></div>
-    <p class="fb" id="g-fb"></p>
-    <button class="btn" id="g-seguinte" hidden>Seguinte →</button>
-  </section>
-
-  <!-- 3. Perguntas escritas -->
-  <section id="ecra-escrita" class="ecra" hidden>
-    <p class="resultado" id="resultado"></p>
-    <h2>Agora, por palavras tuas</h2>
-    <form id="form-escrita"></form>
-    <button class="btn orange" id="enviar">Enviar ao formador</button>
-  </section>
-
-  <!-- 4. Fim -->
-  <section id="ecra-fim" class="ecra" hidden>
-    <h2 id="fim-titulo">Enviado!</h2>
-    <p id="fim-texto"></p>
-    <button class="btn" id="reenviar" hidden>Tentar enviar outra vez</button>
-    <div id="resumo" class="resumo"></div>
-  </section>
-</main>
-<script src="config.js"></script>
-<script src="atividades.js"></script>
-<script src="aluno.js"></script>
-</body>
+<body><p><a href="../respostas/">Abrir a atividade</a></p></body>
 </html>

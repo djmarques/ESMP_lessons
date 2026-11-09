@@ -42,3 +42,18 @@ output { font-weight:700; font-size:20px; min-width:28px; text-align:right; }
 .contador { font-size:15px; color:#5B6670; margin:0 0 6px; }
 .resultado { background:var(--navy); color:#fff; border-radius:12px; padding:12px 14px; font-family:var(--head); font-size:20px; }
 .resumo { margin-top:18px; background:#fff; border:1px solid var(--line); border-radius:12px; padding:12px 14px; font-size:15px; white-space:pre-wrap; }
+
+/* ---- ecrã final: a enviar (roda), recebido (visto verde), erro ---- */
+#aviso-wv { margin-bottom:14px; } #aviso-wv .btn { margin:10px 0 6px; text-align:center; text-decoration:none; background:var(--blue); }
+#ecra-fim { text-align:center; }
+#ecra-fim .resumo { text-align:left; }
+.sinal { width:96px; height:96px; margin:18px auto 6px; position:relative; }
+.sinal > span { position:absolute; inset:0; display:none; align-items:center; justify-content:center; border-radius:50%; font-size:56px; font-weight:700; color:#fff; }
+.sinal .roda { display:block; border:9px solid var(--blue-light); border-top-color:var(--blue); animation:gira .9s linear infinite; }
+[data-estado="ok"] .sinal .roda, [data-estado="erro"] .sinal .roda, [data-estado="aviso"] .sinal .roda { display:none; }
+[data-estado="ok"] .sinal .visto { display:flex; background:var(--green); animation:salta .4s ease-out; }
+[data-estado="erro"] .sinal .cruz, [data-estado="aviso"] .sinal .cruz { display:flex; background:var(--orange); }
+[data-estado="ok"] #fim-titulo { color:var(--green); }
+[data-estado="envio"] #fim-texto { font-weight:700; background:var(--orange-light); border-radius:10px; padding:10px 12px; }
+@keyframes gira { to { transform:rotate(360deg); } }
+@keyframes salta { 0% { transform:scale(.3); } 70% { transform:scale(1.12); } 100% { transform:scale(1); } }

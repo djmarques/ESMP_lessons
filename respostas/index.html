@@ -20,6 +20,12 @@
 <main id="app">
   <header class="top"><p class="kicker" id="disciplina">…</p><h1 id="titulo">…</h1><div class="passos" id="passos" aria-hidden="true"></div></header>
 
+  <div id="aviso-wv" class="aviso" hidden>
+    <b>Estás num navegador interno</b> (o do leitor de QR ou de outra app). Se, ao tocar numa caixa de texto, o teclado não aparecer, abre a página no Chrome:
+    <a id="abrir-chrome" class="btn" href="#">Abrir no Chrome</a>
+    <span class="sm">Ou toca nos três pontos ⋮ e escolhe «Abrir no Chrome» / «Abrir no navegador».</span>
+  </div>
+
   <section id="ecra-nome" class="ecra">
     <label for="nome">O teu nome</label>
     <input id="nome" autocomplete="name" maxlength="80" placeholder="Nome e apelido">
@@ -31,7 +37,8 @@
   <section id="ecra-passo" class="ecra" hidden></section>
 
   <section id="ecra-fim" class="ecra" hidden>
-    <h2 id="fim-titulo">Enviado!</h2>
+    <div class="sinal" aria-hidden="true"><span class="roda"></span><span class="visto">✓</span><span class="cruz">!</span></div>
+    <h2 id="fim-titulo" aria-live="polite">A enviar…</h2>
     <p id="fim-texto"></p>
     <button class="btn" id="reenviar" hidden>Tentar enviar outra vez</button>
     <div id="resumo" class="resumo"></div>

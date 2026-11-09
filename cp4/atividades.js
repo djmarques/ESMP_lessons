@@ -3,6 +3,7 @@
    gerador; para as mudar à mão, edita a lista "escrita" de cada atividade. */
 window.ATIVIDADES = {
  "nome": {
+  "disciplina": "CP 4",
   "titulo": "O nome e o reconhecimento",
   "jogo": [
    {
@@ -92,6 +93,7 @@ window.ATIVIDADES = {
   ]
  },
  "navio": {
+  "disciplina": "CP 4",
   "titulo": "O navio de Teseu",
   "jogo": [
    {
@@ -181,6 +183,7 @@ window.ATIVIDADES = {
   ]
  },
  "gage": {
+  "disciplina": "CP 4",
   "titulo": "Gage, Ricoeur e Levinas",
   "jogo": [
    {
@@ -271,6 +274,7 @@ window.ATIVIDADES = {
   ]
  },
  "identidade": {
+  "disciplina": "CP 4",
   "titulo": "Identidade pessoal e social",
   "jogo": [
    {
@@ -358,6 +362,7 @@ window.ATIVIDADES = {
   ]
  },
  "organizacoes": {
+  "disciplina": "CP 4",
   "titulo": "Quem manda aqui? Organizações",
   "jogo": [
    {
