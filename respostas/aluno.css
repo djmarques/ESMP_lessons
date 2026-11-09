@@ -57,3 +57,7 @@ output { font-weight:700; font-size:20px; min-width:28px; text-align:right; }
 [data-estado="envio"] #fim-texto { font-weight:700; background:var(--orange-light); border-radius:10px; padding:10px 12px; }
 @keyframes gira { to { transform:rotate(360deg); } }
 @keyframes salta { 0% { transform:scale(.3); } 70% { transform:scale(1.12); } 100% { transform:scale(1); } }
+
+.sem-teclado { display:block; margin:6px 0 0 auto; font:inherit; font-size:14px; color:var(--blue); background:none; border:0; padding:6px 0; text-decoration:underline; }
+.sem-teclado:disabled { color:var(--green); text-decoration:none; }
+input.linha { margin-top:2px; }

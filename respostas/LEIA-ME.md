@@ -40,3 +40,4 @@ O endereço `/exec` mantém-se, por isso não é preciso mudar o `config.js`.
 - O Apps Script deixou de pôr os envios em fila (a fila fazia perder respostas quando a turma inteira acabava o mesmo jogo ao mesmo tempo). Para atualizar: colar `apps-script.gs` por cima → Implementar → Gerir implementações → lápis → Versão: Nova versão → Implementar.
 - Se a página for aberta no navegador interno de um leitor de QR ou de outra app, aparece um aviso com o botão «Abrir no Chrome» (nalguns Android, o teclado não aparece nesses navegadores).
 - Raramente, se a ligação cair depois de a folha gravar mas antes de chegar a confirmação, a mesma resposta pode aparecer duas vezes na folha.
+- Caixas de texto: nalguns Android aparecia o cursor mas não o teclado (o campo do nome funcionava). Cada caixa tem agora, por baixo, «O teclado não aparece? Toca aqui.», que a troca por um campo de uma linha igual ao do nome; e tocar numa caixa que já tem o cursor reabre o teclado.

@@ -103,6 +103,36 @@
   }
   function intro(p) { if (p.intro) ecra.insertAdjacentHTML('beforeend', '<p class="intro">' + esc(p.intro) + '</p>'); }
 
+  /* ---- caixas de texto ----
+     Nalguns Android, as caixas de texto criadas a meio da atividade ficavam com o cursor
+     mas sem teclado (o campo do nome, que já vem na página, funcionava). Três defesas:
+     1. atributos explícitos de teclado (inputmode, autocapitalize…);
+     2. ao tocar, a caixa perde e volta a ganhar o foco dentro do próprio toque, o que
+        obriga o Android a abrir o teclado mesmo que a caixa já tivesse o cursor;
+     3. por baixo de cada caixa, «O teclado não aparece?» troca a caixa por um campo
+        de uma linha, igual ao do nome. */
+  function caixa(id, max) {
+    return '<textarea id="' + id + '" maxlength="' + max + '" inputmode="text" autocapitalize="sentences" autocomplete="off" autocorrect="on" spellcheck="true" rows="4"></textarea>' +
+      '<button type="button" class="sem-teclado" data-para="' + id + '">O teclado não aparece? Toca aqui.</button>';
+  }
+  ecra.addEventListener('touchend', e => {
+    const t = e.target;
+    if (t.tagName !== 'TEXTAREA' && !(t.tagName === 'INPUT' && t.classList.contains('linha'))) return;
+    if (document.activeElement !== t) return;          // primeiro toque: o navegador trata do foco
+    t.blur(); t.focus();                                // toque numa caixa que já tem o cursor: tirar e
+                                                        // devolver o foco, no próprio toque, reabre o teclado
+  }, { passive: true });
+  ecra.addEventListener('click', e => {
+    const b = e.target.closest('.sem-teclado'); if (!b) return;
+    const ta = $(b.dataset.para); if (!ta || ta.tagName !== 'TEXTAREA') return;
+    const inp = document.createElement('input');
+    inp.type = 'text'; inp.id = ta.id; inp.maxLength = ta.maxLength; inp.className = 'linha';
+    inp.autocomplete = 'off'; inp.value = ta.value; inp.placeholder = 'Escreve aqui';
+    ta.replaceWith(inp);
+    b.textContent = 'Agora toca no campo acima e escreve.'; b.disabled = true;
+    inp.focus();                      // dentro do toque: o Android abre o teclado
+  });
+
   /* jogo: escolha múltipla com tempo */
   function jogo(p, next) {
     const TOTAL = p.segundos || 20, qs = p.perguntas;
@@ -177,7 +207,7 @@
   function opiniao(p, next) {
     ecra.innerHTML = '<h2>A tua opinião</h2>';
     intro(p);
-    ecra.insertAdjacentHTML('beforeend', '<p class="stem">' + esc(p.p) + '</p><div class="opts neutro"></div><label for="porque">' + esc(p.porque || 'Porquê? (opcional)') + '</label><textarea id="porque" maxlength="1500"></textarea><button class="btn seg" disabled>Continuar</button>');
+    ecra.insertAdjacentHTML('beforeend', '<p class="stem">' + esc(p.p) + '</p><div class="opts neutro"></div><label for="porque">' + esc(p.porque || 'Porquê? (opcional)') + '</label>' + caixa('porque', 1500) + '<button class="btn seg" disabled>Continuar</button>');
     let escolha = null;
     const box = ecra.querySelector('.opts');
     p.o.forEach(t => { const b = document.createElement('button'); b.textContent = t; b.onclick = () => { escolha = t; box.querySelectorAll('button').forEach(x => x.classList.toggle('escolhido', x === b)); ecra.querySelector('.seg').disabled = false; }; box.appendChild(b); });
@@ -192,7 +222,7 @@
   function escrita(p, next) {
     ecra.innerHTML = (registo.total ? '<p class="resultado">' + registo.certas + ' / ' + registo.total + ' certas · ' + registo.pontos + ' pontos</p>' : '') + '<h2>' + esc(p.titulo || 'Agora, por palavras tuas') + '</h2>';
     intro(p);
-    p.perguntas.forEach((q, k) => ecra.insertAdjacentHTML('beforeend', '<label for="e' + k + '">' + (k + 1) + '. ' + esc(q) + '</label><textarea id="e' + k + '" maxlength="3000"></textarea>'));
+    p.perguntas.forEach((q, k) => ecra.insertAdjacentHTML('beforeend', '<label for="e' + k + '">' + (k + 1) + '. ' + esc(q) + '</label>' + caixa('e' + k, 3000)));
     ecra.insertAdjacentHTML('beforeend', '<button class="btn seg">Continuar</button>');
     ecra.querySelector('.seg').addEventListener('click', () => {
       p.perguntas.forEach((q, k) => registo.escrita.push({ pergunta: q, resposta: $('e' + k).value.trim() }));
