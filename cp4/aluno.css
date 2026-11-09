@@ -1,0 +1,37 @@
+/* aluno.css — página do formando no telemóvel. Mesmas cores do site da aula. */
+:root { --navy:#1E2A33; --orange:#A44A16; --orange-light:#FBE3D2; --blue:#2F6E9E; --blue-light:#DCE8F2;
+  --green:#2E6B4F; --green-light:#DDEFE5; --cream:#FAF6F0; --line:#E2DED7; --head:'Caladea',Cambria,Georgia,serif; --body:'Carlito',Calibri,Arial,sans-serif; }
+* { box-sizing:border-box; }
+[hidden] { display:none !important; }   /* .btn sets display:block, which would otherwise win over hidden */
+body { margin:0; background:var(--cream); color:var(--navy); font-family:var(--body); font-size:18px; line-height:1.4; }
+#app { max-width:560px; margin:0 auto; padding:18px 16px calc(28px + env(safe-area-inset-bottom)); }
+.kicker { font-size:12px; font-weight:700; letter-spacing:.1em; text-transform:uppercase; color:var(--orange); margin:0 0 4px; }
+h1 { font-family:var(--head); font-size:28px; margin:0 0 18px; line-height:1.15; }
+h2 { font-family:var(--head); font-size:24px; margin:8px 0 12px; }
+label { display:block; font-weight:700; margin:14px 0 6px; }
+input, textarea { width:100%; font:inherit; padding:12px 14px; border:2px solid var(--line); border-radius:10px; background:#fff; color:var(--navy); }
+input:focus, textarea:focus { outline:none; border-color:var(--blue); }
+textarea { min-height:110px; resize:vertical; }
+.sm { font-size:14px; color:#5B6670; }
+.btn { display:block; width:100%; margin-top:18px; padding:15px; font:inherit; font-weight:700; border:0; border-radius:12px; background:var(--navy); color:#fff; }
+.btn.orange { background:var(--orange); }
+.btn:disabled { opacity:.5; }
+.aviso { background:var(--orange-light); border-radius:10px; padding:10px 12px; font-size:15px; }
+.ghead { display:flex; justify-content:space-between; align-items:center; font-size:15px; }
+.som { border:0; background:none; font-size:22px; }
+.gtimer { display:flex; gap:10px; align-items:center; margin:10px 0 14px; }
+.track { flex:1; height:10px; background:var(--line); border-radius:99px; overflow:hidden; }
+.track span { display:block; height:100%; width:100%; background:var(--blue); transition:width .9s linear; }
+.hurry .track span { background:var(--orange); }
+output { font-weight:700; font-size:20px; min-width:28px; text-align:right; }
+.stem { font-family:var(--head); font-size:23px; font-weight:700; margin:0 0 14px; }
+.opts { display:grid; gap:10px; }
+.opts button { font:inherit; text-align:left; padding:14px 16px; border-radius:12px; border:0; color:#fff; min-height:56px; }
+.opts .t0 { background:#2F6E9E; } .opts .t1 { background:#A44A16; } .opts .t2 { background:#2E6B4F; }
+.opts button.wrong { opacity:.45; text-decoration:line-through; }
+.opts button.right { outline:4px solid #F0A673; }
+.opts button:disabled:not(.right):not(.wrong) { opacity:.45; }
+.fb { min-height:2.8em; margin:14px 0 0; }
+.fb b.ok { color:var(--green); } .fb b.no { color:var(--orange); }
+.resultado { background:var(--navy); color:#fff; border-radius:12px; padding:12px 14px; font-family:var(--head); font-size:20px; }
+.resumo { margin-top:18px; background:#fff; border:1px solid var(--line); border-radius:12px; padding:12px 14px; font-size:15px; white-space:pre-wrap; }

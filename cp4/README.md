@@ -1,6 +1,10 @@
 # CP 4 · Processos identitários
 
-Site interativo da unidade Cidadania e Profissionalidade 4 (formação de adultos), para projetar na sala. Tem o programa e quatro blocos: o nome e o reconhecimento, o navio de Teseu, Phineas Gage e o outro, identidade pessoal e social.
+Site interativo da unidade Cidadania e Profissionalidade 4 (formação de adultos), para projetar na sala. Tem o programa e cinco blocos: o nome e o reconhecimento, o navio de Teseu, Phineas Gage e o outro, identidade pessoal e social, e organizações verticais e horizontais (contexto profissional).
+
+Os blocos 2 a 5 estão orientados para a prática e para o mundo do trabalho: cada exercício tem uma etiqueta que diz como se faz (folha em branco, computador ou telemóvel, em pares, em grupos), e cada bloco fecha com um slide «Para que serve?». As versões anteriores estão em `archive/`.
+
+A seguir a cada jogo há um slide «No telemóvel»: os formandos jogam no seu telemóvel e as respostas chegam-te por email. Ver `LEIA-ME-telemovel.md`.
 
 As ilustrações estão em `assets/`.
 
@@ -14,6 +18,7 @@ As ilustrações estão em `assets/`.
 | `style.css` | Aspeto (cores e tipos de letra da apresentação original) |
 | `app.js` | Comportamento: navegação, passos, questionários, temporizadores, códigos QR |
 | `notes.js` | Notas do formador, uma por slide |
+| `aluno.html` e afins | Página do formando no telemóvel (ver `LEIA-ME-telemovel.md`) |
 
 ## Publicar no GitHub Pages
 

@@ -458,3 +458,19 @@ ul.qs { margin: 0; padding-left: 22px; } ul.qs li { margin-bottom: 12px; }
 }
 @media (prefers-reduced-motion: reduce) { .game.hurry .gtimer output, .gq.done .gopts button.wrong { animation: none; } }
 .gstart .ic, .gend .ic { width: 72px; height: 72px; } .gstart .ic svg, .gend .ic svg { width: 34px; height: 34px; }
+
+/* ---------- Activity badges (blocos 2–5): how the exercise is done ---- */
+.modes { display: flex; flex-wrap: wrap; gap: 8px; margin: -14px 0 6px; }
+.mode { font-size: 13px; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; border-radius: 999px; padding: 5px 14px; background: var(--blue-light); color: var(--blue); }
+.mode::before { margin-right: 6px; }
+.mode.m-folha { background: var(--orange-light); color: var(--orange); }
+.mode.m-folha::before { content: "✎"; }
+.mode.m-pc::before { content: "⌨"; }
+.mode.m-pares::before, .mode.m-grupo::before { content: "⚇"; }
+.mode.m-grupo { background: var(--green-light); color: var(--green); }
+.slide svg { max-width: 100%; height: auto; }
+
+/* QR code for the student phone page (slides «No telemóvel») */
+.phone-qr { background: var(--white); border: 1px solid var(--line); border-radius: 10px; padding: 20px; text-align: center; }
+.phone-qr canvas, .phone-qr img { width: 280px !important; height: 280px !important; margin: 0 auto; display: block; }
+.phone-qr a { display: block; margin-top: 12px; font-size: 15px; color: var(--blue); word-break: break-all; }
