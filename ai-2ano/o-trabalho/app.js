@@ -343,6 +343,19 @@
     update();
   });
 
+  /** Phone QR codes (slides «No telemóvel»): a QR code for the shared student
+      page (../../respostas/?f=…&a=…), resolved against the address the site
+      is served from. Opened as a local file there is no web address to
+      encode, so a hint is shown instead. */
+  document.querySelectorAll('.phone-qr').forEach(box => {
+    const url = new URL(box.dataset.path, location.href).href;
+    const link = box.querySelector('a');
+    link.href = url;
+    if (!/^https?:/.test(url)) { link.textContent = 'O código QR aparece quando o site estiver publicado (GitHub Pages).'; return; }
+    link.textContent = url.replace(/^https?:\/\/(www\.)?/, '');
+    if (window.QRCode) new QRCode(box.querySelector('.code'), { text: url, width: 400, height: 400, colorDark: '#1E2A33', colorLight: '#FFFFFF' });
+  });
+
   /** Checklists: each item toggles its own aria-pressed state. */
   document.querySelectorAll('.check').forEach(c => c.addEventListener('click', () => {
     c.setAttribute('aria-pressed', String(c.getAttribute('aria-pressed') !== 'true'));

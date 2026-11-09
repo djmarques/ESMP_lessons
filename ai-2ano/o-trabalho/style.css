@@ -663,3 +663,23 @@ a.big-link:hover { box-shadow: 0 6px 20px rgba(164, 74, 22, .2); }
   .gopts kbd { display: none; }
 }
 @media (prefers-reduced-motion: reduce) { .game.hurry .gtimer output, .gq.done .gopts button.wrong { animation: none; } }
+
+/* ---------- Activity badges: how an exercise is done ----------------- */
+.modes { display: flex; flex-wrap: wrap; gap: 8px; margin: -14px 0 6px; }
+.mode { font-size: 13px; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; border-radius: 999px; padding: 5px 14px; background: var(--blue-light); color: var(--blue); }
+.mode::before { margin-right: 6px; }
+.mode.m-folha { background: var(--orange-light); color: var(--orange); }
+.mode.m-folha::before { content: "✎"; }
+.mode.m-pc::before { content: "⌨"; }
+.mode.m-pares::before, .mode.m-grupo::before { content: "⚇"; }
+
+/* QR code for the student phone page (slides «No telemóvel») */
+.phone-qr { background: #fff; border: 1px solid var(--line); border-radius: 10px; padding: 20px; text-align: center; }
+.phone-qr canvas, .phone-qr img { width: 280px !important; height: 280px !important; margin: 0 auto; display: block; }
+.phone-qr a { display: block; margin-top: 12px; font-size: 15px; color: var(--blue); word-break: break-all; }
+
+/* two-column quiz, for classification exercises with six items */
+.quiz.quiz2col { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.quiz.quiz2col .q { margin: 0; }
+.quiz.quiz2col .score { grid-column: 1 / -1; }
+@media (max-width: 900px) { .quiz.quiz2col { grid-template-columns: 1fr; } }
