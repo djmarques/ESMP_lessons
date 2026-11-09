@@ -418,3 +418,41 @@ blockquote { margin: 0; font-family: var(--head); font-style: italic; font-size:
 }
 @media (prefers-reduced-motion: reduce) { .game.hurry .gtimer output, .gq.done .gopts button.wrong { animation: none; } }
 .gstart .ic, .gend .ic { width: 72px; height: 72px; } .gstart .ic svg, .gend .ic svg { width: 34px; height: 34px; }
+
+/* ---------- Activity badges: how an exercise is done ----------------- */
+.modes { display: flex; flex-wrap: wrap; gap: 8px; margin: -14px 0 6px; }
+.mode { font-size: 13px; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; border-radius: 999px; padding: 5px 14px; background: var(--blue-light); color: var(--blue); }
+.mode::before { margin-right: 6px; }
+.mode.m-folha { background: var(--orange-light); color: var(--orange); }
+.mode.m-folha::before { content: "✎"; }
+.mode.m-pc::before { content: "⌨"; }
+.mode.m-pares::before, .mode.m-grupo::before { content: "⚇"; }
+
+/* two-column quiz, for classification exercises with six items */
+.quiz.quiz2col { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.quiz.quiz2col .q { margin: 0; }
+.quiz.quiz2col .score { grid-column: 1 / -1; }
+@media (max-width: 900px) { .quiz.quiz2col { grid-template-columns: 1fr; } }
+
+/* «Responder no telemóvel»: button on activity slides and the big QR overlay */
+.phone-btn { float: right; margin: 0 0 12px 18px; font: inherit; font-size: 15px; font-weight: 700; cursor: pointer; border: 0; border-radius: 999px; padding: 9px 18px; background: var(--orange); color: #fff; }
+.phone-btn::before { content: "▣ "; }
+.phone-modal { position: fixed; inset: 0; z-index: 50; background: rgba(30,42,51,.82); display: grid; place-items: center; }
+.phone-modal[hidden] { display: none; }
+.phone-modal .box { background: #fff; border-radius: 16px; padding: 28px 36px; text-align: center; max-width: 92vw; }
+.phone-modal .code canvas, .phone-modal .code img { width: min(520px, 70vh) !important; height: min(520px, 70vh) !important; margin: 10px auto; display: block; }
+.phone-modal a { display: block; color: var(--blue); font-size: 16px; word-break: break-all; }
+.phone-modal .btn { margin-top: 12px; }
+.mode.m-tel::before { content: "▣"; }
+
+/* author initials in a circle (aula 4) */
+.center { text-align: center; }
+.center .ic { margin: 0 auto 8px; }
+.avatar { width: 120px; height: 120px; border-radius: 50%; background: var(--navy); color: #fff; display: inline-grid; place-items: center; font-family: var(--head); font-weight: 700; font-size: 44px; margin-bottom: 8px; }
+.center .timer { justify-content: center; }
+.card .big { font-size: 56px; }
+
+/* five columns (aulas 5–7) and a small label pill */
+.g5 { grid-template-columns: repeat(5, 1fr); }
+@media (max-width: 1100px) { .g5 { grid-template-columns: repeat(3, 1fr); } }
+.pill2 { display: inline-block; font-size: 13px; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; border-radius: 999px; padding: 3px 12px; background: var(--navy); color: #fff; }

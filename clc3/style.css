@@ -1,0 +1,464 @@
+/* =====================================================================
+   style.css — Aula CLC 6 · DR1 · Aula 2 «Casa, lar e cidade hostil»
+   ---------------------------------------------------------------------
+   Visual system copied from the original deck: navy, burnt orange and
+   cream; Cambria for headings and Calibri for body text, with the
+   metric-compatible web fonts Caladea and Carlito as fallbacks so that
+   line breaks match the slides on machines without Office fonts.
+   Layout: fixed sidebar on the left, one slide visible at a time.
+   ===================================================================== */
+
+/* ---------- 1. Design tokens ---------------------------------------- */
+:root {
+  --navy: #1E2A33;
+  --orange: #A44A16;
+  --orange-light: #FBE3D2;
+  --peach: #F1CDB0;
+  --accent: #F0A673;
+  --cream: #F6F3EC;
+  --text: #4A5560;
+  --muted: #6F7880;          /* darker than the deck's #8A929A for projector contrast */
+  --line: #C9D1D8;
+  --blue: #2F6E9E;
+  --blue-light: #DCE8F2;
+  --green: #556B3C;
+  --green-light: #E9EEE2;
+  --white: #FFFFFF;
+  --head: Cambria, Caladea, Georgia, serif;
+  --body: Calibri, Carlito, "Segoe UI", sans-serif;
+  --sidebar: 280px;
+  --ease: cubic-bezier(.2, .7, .2, 1);
+}
+
+* { box-sizing: border-box; }
+html, body { margin: 0; height: 100%; }
+body {
+  font-family: var(--body);
+  color: var(--text);
+  background: var(--white);
+  font-size: 20px;
+  line-height: 1.4;
+  overflow: hidden;            /* the stage scrolls, never the page */
+}
+button { font: inherit; cursor: pointer; }
+:focus-visible { outline: 3px solid var(--blue); outline-offset: 3px; }
+
+/* ---------- 2. Sidebar ---------------------------------------------- */
+.sidebar {
+  position: fixed; inset: 0 auto 0 0; width: var(--sidebar);
+  background: var(--cream); border-right: 1px solid var(--line);
+  display: flex; flex-direction: column; z-index: 20;
+  transition: transform .3s var(--ease);
+}
+.sidebar header { padding: 24px 22px 14px; }
+.home-link { display: inline-block; font-size: 14px; color: var(--blue); text-decoration: none; margin-bottom: 14px; }
+.home-link:hover { text-decoration: underline; }
+.sidebar .kicker { margin: 0; }
+.sidebar h1 { font-family: var(--head); font-size: 22px; color: var(--navy); margin: 6px 0 12px; line-height: 1.2; }
+.progress { height: 4px; background: var(--line); border-radius: 2px; overflow: hidden; }
+.progress span { display: block; height: 100%; width: 0; background: var(--orange); transition: width .3s var(--ease); }
+.toc { flex: 1; overflow-y: auto; padding: 4px 12px 24px; }
+.toc h2 { font-size: 12px; letter-spacing: .1em; text-transform: uppercase; color: var(--orange); margin: 18px 10px 6px; }
+.toc a {
+  display: flex; gap: 10px; align-items: baseline; padding: 6px 10px; border-radius: 6px;
+  color: var(--text); text-decoration: none; font-size: 16px; line-height: 1.25;
+}
+.toc a .n { font-size: 12px; color: var(--muted); min-width: 18px; }
+.toc a:hover { background: var(--white); }
+.toc a[aria-current="true"] { background: var(--navy); color: var(--white); }
+.toc a[aria-current="true"] .n { color: var(--accent); }
+.sidebar footer { padding: 12px 22px 18px; font-size: 13px; color: var(--muted); border-top: 1px solid var(--line); }
+kbd { font-family: var(--body); background: var(--white); border: 1px solid var(--line); border-radius: 4px; padding: 0 5px; }
+
+.menu-btn {
+  display: none; position: fixed; top: 12px; left: 12px; z-index: 30;
+  background: var(--navy); color: var(--white); border: 0; border-radius: 8px; padding: 8px 12px;
+}
+
+/* ---------- 3. Stage and slides ------------------------------------- */
+.stage {
+  position: fixed; inset: 0 0 0 var(--sidebar);
+  overflow-y: auto; padding: 56px 72px 96px;
+}
+.slide { display: none; max-width: 1180px; margin: 0 auto; }
+.slide.current { display: block; animation: enter .4s var(--ease); }
+@keyframes enter { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
+
+.kicker { font-size: 14px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; color: var(--orange); margin: 0 0 6px; }
+.slide h2 { font-family: var(--head); font-size: 44px; line-height: 1.15; color: var(--navy); margin: 0 0 32px; }
+.ask { font-family: var(--head); font-style: italic; color: var(--orange); font-size: 24px; margin: 32px 0 0; }
+.source { font-size: 14px; font-style: italic; color: var(--muted); margin-top: 18px; }
+.source a { color: inherit; }
+h3 { font-family: var(--head); color: var(--navy); font-size: 24px; margin: 0 0 6px; line-height: 1.2; }
+p { margin: 0 0 10px; }
+
+/* Divider slides fill the stage with burnt orange, like the deck */
+.slide.divider { max-width: none; }
+.stage.on-divider { background: var(--orange); }
+.divider .wrap { min-height: 70vh; display: flex; flex-direction: column; justify-content: center; max-width: 1180px; margin: 0 auto; }
+.divider .kicker { color: var(--orange-light); letter-spacing: .2em; }
+.divider h2 { color: var(--white); font-size: 64px; margin-bottom: 14px; }
+.divider .sub { color: var(--orange-light); font-size: 24px; }
+
+/* ---------- 4. Reusable layout pieces ------------------------------- */
+.grid { display: grid; gap: 22px; }
+.g2 { grid-template-columns: repeat(2, 1fr); }
+.g3 { grid-template-columns: repeat(3, 1fr); }
+.g4 { grid-template-columns: repeat(4, 1fr); }
+.split { display: grid; grid-template-columns: 1fr 1fr; gap: 40px; align-items: start; }
+.card { background: var(--cream); border-radius: 10px; padding: 22px 24px; }
+.card.blue { background: var(--blue-light); }
+.card.peach { background: var(--orange-light); }
+.card.dark { background: var(--navy); color: var(--orange-light); }
+.card.dark h3 { color: var(--white); }
+.card.green { background: var(--green-light); color: var(--green); }
+.label { font-size: 13px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; color: var(--orange); margin-bottom: 8px; }
+.card.blue .label { color: var(--blue); }
+.card.dark .label { color: var(--accent); }
+
+/* Icon in a filled circle — the deck's visual motif */
+.ic { width: 56px; height: 56px; border-radius: 50%; background: var(--orange); display: inline-grid; place-items: center; flex: none; }
+.ic svg { width: 26px; height: 26px; fill: var(--white); }
+.ic.blue { background: var(--blue); }
+.ic.accent { background: var(--accent); }
+.ic.soft { background: var(--orange-light); }
+.ic.soft svg { fill: var(--orange); }
+.ic.sm { width: 42px; height: 42px; } .ic.sm svg { width: 20px; height: 20px; }
+.row { display: flex; gap: 16px; align-items: center; }
+.num {
+  width: 44px; height: 44px; border-radius: 50%; background: var(--orange); color: var(--white);
+  font-family: var(--head); font-weight: 700; font-size: 22px; display: inline-grid; place-items: center; flex: none;
+}
+
+/* ---------- 5. Step reveal ------------------------------------------ */
+/* Elements with data-step stay hidden until the presenter reaches them. */
+[data-step] { opacity: 0; transform: translateY(10px); transition: opacity .45s var(--ease), transform .45s var(--ease); }
+[data-step].on { opacity: 1; transform: none; }
+/* "ghost" steps stay visible but faded, for reveal-the-answer patterns */
+[data-step].ghost { opacity: 1; transform: none; }
+[data-step].ghost:not(.on) .reveal { opacity: 0; }
+.reveal { transition: opacity .45s var(--ease); }
+
+/* ---------- 6. Animated diagrams ------------------------------------ */
+/* Lines draw themselves: pathLength="1" normalises every path length. */
+.draw { stroke-dasharray: 1; stroke-dashoffset: 1; transition: stroke-dashoffset .9s var(--ease); }
+.on .draw, .draw.on { stroke-dashoffset: 0; }
+/* Horizontal bars grow to the width given in --w */
+.bar { height: 16px; width: 0; border-radius: 3px; transition: width 1.2s var(--ease); }
+.on .bar, .bar.on { width: var(--w); }
+/* Orange parts of illustrations pulse once when their answer is revealed */
+.hl { transition: transform .5s var(--ease); transform-box: fill-box; transform-origin: center; }
+.on .hl { animation: pulse 1s var(--ease) 1; }
+@keyframes pulse { 50% { transform: scale(1.12); } }
+
+/* ---------- 7. Slide-specific compositions (CSS only) --------------- */
+/* Venn diagram (casa / lar) */
+.venn { position: relative; height: 260px; max-width: 400px; }
+.venn .c { position: absolute; top: 0; width: 240px; height: 240px; border-radius: 50%; mix-blend-mode: multiply; }
+.venn .c1 { left: 0; background: var(--blue-light); }
+.venn .c2 { left: 160px; background: var(--peach); }
+.venn .t { position: absolute; top: 92px; font-family: var(--head); font-weight: 700; font-size: 28px; }
+.venn .t small { display: block; font-family: var(--body); font-weight: 400; font-style: italic; font-size: 16px; }
+.wordlist { display: grid; gap: 10px; }
+.wordlist .card { padding: 10px 14px; display: flex; align-items: center; gap: 14px; }
+.wordlist strong { font-family: var(--head); font-size: 22px; color: var(--navy); flex: 1; }
+.wordlist em { color: var(--text); font-size: 16px; }
+
+/* Observation cards with illustrations */
+.obj .card { padding: 16px; display: flex; flex-direction: column; gap: 10px; }
+.obj svg { width: 100%; height: auto; }
+.obj h3 { font-size: 20px; }
+.obj .reveal { font-size: 17px; color: var(--orange); font-weight: 700; }
+
+/* Concept flow */
+.flow { display: grid; grid-template-columns: 1fr 60px 1fr 60px 1fr; align-items: stretch; }
+.flow .card { display: flex; flex-direction: column; gap: 14px; }
+.flow .card em { font-size: 19px; }
+.flow .arrow { align-self: center; }
+.flow .arrow svg { width: 100%; height: 30px; stroke: var(--orange); stroke-width: 3; fill: none; }
+
+/* Big number */
+.big { font-family: var(--head); font-weight: 700; color: var(--orange); font-size: 104px; line-height: 1; }
+.words .w { display: grid; grid-template-columns: 110px 1fr; align-items: baseline; padding: 12px 0; border-bottom: 1px solid rgba(255,255,255,.12); }
+.words .w b { font-family: var(--head); font-size: 32px; color: var(--white); }
+.words .w.lar b { color: var(--accent); }
+
+/* Legal pyramid */
+.pyr { display: grid; gap: 10px; justify-items: center; }
+.pyr div { border-radius: 8px; text-align: center; padding: 10px 12px; background: var(--orange-light); }
+.pyr b { display: block; font-family: var(--head); font-size: 20px; color: var(--navy); }
+.pyr small { font-size: 14px; }
+.pyr .p1 { width: 100%; background: var(--orange); } .pyr .p1 b, .pyr .p1 small { color: var(--white); }
+.pyr .p2 { width: 88%; background: var(--peach); } .pyr .p3 { width: 76%; } .pyr .p4 { width: 64%; }
+
+/* Quote */
+blockquote { margin: 0; font-family: var(--head); font-style: italic; font-size: 26px; color: var(--white); line-height: 1.4; }
+
+/* Vocabulary chips and connector table */
+.chips { display: flex; flex-wrap: wrap; gap: 10px; }
+.chip { background: var(--white); border: 1px solid var(--line); border-radius: 999px; padding: 6px 16px; color: var(--navy); }
+.conn { display: grid; grid-template-columns: 220px 1fr; border-radius: 8px; padding: 12px 18px; }
+.conn:nth-child(odd) { background: var(--cream); }
+.conn b { color: var(--orange); font-size: 17px; }
+.conn span { font-family: var(--head); color: var(--navy); }
+
+/* ---------- 8. Interactive components ------------------------------- */
+/* 8a. Flip cards: click to reveal the back */
+.flip { perspective: 900px; cursor: pointer; border: 0; padding: 0; background: none; text-align: left; min-height: 170px; }
+.flip .in { position: relative; width: 100%; height: 100%; min-height: 170px; transition: transform .6s var(--ease); transform-style: preserve-3d; }
+.flip.open .in { transform: rotateY(180deg); }
+.flip .face { position: absolute; inset: 0; backface-visibility: hidden; border-radius: 10px; padding: 20px 22px; display: flex; flex-direction: column; gap: 12px; }
+.flip .front { background: var(--cream); }
+.flip .back { background: var(--navy); color: var(--orange-light); transform: rotateY(180deg); justify-content: center; font-size: 19px; }
+.flip .hint { font-size: 13px; color: var(--muted); margin-top: auto; }
+
+/* 8b. Poll: the teacher counts hands with + and − */
+.poll { display: grid; gap: 14px; }
+.poll .opt { display: grid; grid-template-columns: 1fr auto; gap: 8px 16px; align-items: center; }
+.poll .opt .name { font-family: var(--head); font-weight: 700; color: var(--navy); font-size: 20px; }
+.poll .ctrl { display: flex; align-items: center; gap: 8px; }
+.poll .ctrl button { width: 36px; height: 36px; border-radius: 50%; border: 1px solid var(--line); background: var(--white); color: var(--navy); font-size: 20px; line-height: 1; }
+.poll .ctrl output { min-width: 28px; text-align: center; font-weight: 700; font-size: 22px; color: var(--navy); }
+.poll .track { grid-column: 1 / -1; height: 12px; background: var(--white); border-radius: 6px; overflow: hidden; }
+.poll .track span { display: block; height: 100%; width: 0; background: var(--orange); transition: width .4s var(--ease); }
+.poll .opt:nth-child(even) .track span { background: var(--blue); }
+
+/* 8c. Quiz */
+.quiz { display: grid; gap: 18px; }
+.q { background: var(--cream); border-radius: 10px; padding: 18px 22px; }
+.q p.stem { font-family: var(--head); font-weight: 700; color: var(--navy); font-size: 21px; margin-bottom: 12px; }
+.q .opts { display: flex; flex-wrap: wrap; gap: 10px; }
+.q .opts button { background: var(--white); border: 1px solid var(--line); border-radius: 8px; padding: 8px 16px; color: var(--navy); }
+.q .opts button:hover:not(:disabled) { border-color: var(--navy); }
+.q .opts button.right { background: var(--green-light); border-color: var(--green); color: var(--green); font-weight: 700; }
+.q .opts button.wrong { background: var(--orange-light); border-color: var(--orange); color: var(--orange); text-decoration: line-through; }
+.q .opts button:disabled { cursor: default; }
+.q .why { display: none; margin-top: 10px; font-size: 17px; }
+.q.done .why { display: block; }
+.quiz .score { display: flex; align-items: center; gap: 18px; font-family: var(--head); font-size: 22px; color: var(--navy); }
+.btn { background: var(--navy); color: var(--white); border: 0; border-radius: 8px; padding: 10px 18px; }
+.btn.ghost { background: var(--white); color: var(--navy); border: 1px solid var(--navy); }
+.btn.orange { background: var(--orange); }
+
+/* 8d. Research task and countdown timer */
+.research { display: grid; grid-template-columns: 1fr 260px; gap: 32px; align-items: start; }
+.research .qr { background: var(--white); border: 1px solid var(--line); border-radius: 10px; padding: 16px; text-align: center; }
+.research .qr canvas, .research .qr img { width: 200px !important; height: 200px !important; margin: 0 auto; display: block; }
+.research .qr a { display: block; margin-top: 10px; font-size: 14px; color: var(--blue); word-break: break-all; }
+.timer { display: flex; align-items: center; gap: 16px; margin: 18px 0; }
+.timer output { font-family: var(--head); font-weight: 700; font-size: 48px; color: var(--navy); font-variant-numeric: tabular-nums; min-width: 150px; }
+.timer.ending output { color: var(--orange); }
+.timer.over output { color: var(--orange); animation: blink 1s steps(2) infinite; }
+@keyframes blink { 50% { opacity: .3; } }
+.answer { display: none; margin-top: 12px; }
+.answer.open { display: block; animation: enter .4s var(--ease); }
+
+/* 8e. Clickable checklist */
+.check { display: flex; gap: 14px; align-items: center; background: none; border: 0; padding: 8px 0; text-align: left; color: var(--navy); font-family: var(--head); font-size: 22px; width: 100%; }
+.check .box { width: 34px; height: 34px; border-radius: 50%; border: 2px solid var(--peach); display: grid; place-items: center; flex: none; transition: background .2s; }
+.check .box svg { width: 16px; height: 16px; fill: var(--white); opacity: 0; }
+.check[aria-pressed="true"] .box { background: var(--orange); border-color: var(--orange); }
+.check[aria-pressed="true"] .box svg { opacity: 1; }
+
+/* ---------- 9. Navigation bar and teacher notes --------------------- */
+.nav {
+  position: fixed; right: 24px; bottom: 20px; z-index: 15; display: flex; gap: 8px; align-items: center;
+  background: rgba(255,255,255,.92); border: 1px solid var(--line); border-radius: 999px; padding: 6px 8px;
+}
+.nav button { width: 40px; height: 40px; border-radius: 50%; border: 0; background: var(--navy); color: var(--white); font-size: 18px; }
+.nav button.notes-btn { width: auto; padding: 0 14px; border-radius: 999px; background: var(--white); color: var(--navy); border: 1px solid var(--line); font-size: 15px; }
+.nav .count { font-size: 14px; color: var(--muted); padding: 0 6px; min-width: 56px; text-align: center; }
+.notes {
+  position: fixed; right: 0; top: 0; bottom: 0; width: min(440px, 92vw); z-index: 25;
+  background: var(--navy); color: var(--orange-light); padding: 28px; overflow-y: auto;
+  transform: translateX(100%); transition: transform .3s var(--ease); font-size: 17px; white-space: pre-line;
+}
+.notes.open { transform: none; }
+.notes h2 { color: var(--accent); font-size: 13px; letter-spacing: .1em; text-transform: uppercase; margin: 0 0 14px; }
+
+/* ---------- 10. Responsive and accessibility ------------------------ */
+@media (max-width: 1100px) {
+  .g4 { grid-template-columns: repeat(2, 1fr); }
+  .stage { padding: 48px 40px 96px; }
+}
+@media (max-width: 860px) {
+  .sidebar { transform: translateX(-100%); }
+  body.menu-open .sidebar { transform: none; }
+  .menu-btn { display: block; }
+  .stage { inset: 0; padding: 64px 18px 110px; }
+  .slide h2 { font-size: 32px; margin-bottom: 22px; }
+  .divider h2 { font-size: 42px; }
+  .g2, .g3, .g4, .split, .research { grid-template-columns: 1fr; }
+  .flow { grid-template-columns: 1fr; }
+  .flow .arrow { transform: rotate(90deg); height: 40px; width: 40px; justify-self: center; }
+  .big { font-size: 72px; }
+  .venn { transform: scale(.85); transform-origin: left top; height: 225px; }
+  .conn { grid-template-columns: 1fr; }
+  body { font-size: 18px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation: none !important; transition: none !important; }
+  .draw { stroke-dashoffset: 0; }
+}
+
+/* ---------- 12. Programa compositions ------------------------------- */
+.ng { background: var(--navy); color: var(--orange-light); border-radius: 12px; padding: 18px 26px; text-align: center; max-width: 560px; margin: 0 auto; }
+.ng b { display: block; font-family: var(--head); font-size: 32px; color: var(--white); }
+.ng span { font-size: 16px; }
+.ng-lines { display: block; width: 100%; height: 50px; }
+.drs .card { display: flex; flex-direction: column; gap: 4px; }
+.drs h3 { font-size: 20px; margin-top: 10px; }
+.ctx { font-size: 13px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: var(--orange); margin: 6px 0 0; }
+.sm { font-size: 16px; margin: 0; }
+.scales { display: grid; grid-template-columns: 440px 1fr; gap: 36px; align-items: center; }
+.rings { width: 100%; height: auto; }
+.ring { transform-box: fill-box; transform-origin: center; transform: scale(.4); transition: transform .9s var(--ease); }
+.on .ring { transform: scale(1); }
+.scales .card { padding: 14px 18px; }
+.scales h3 { font-size: 20px; margin: 2px 0; }
+@media (max-width: 860px) { .scales { grid-template-columns: 1fr; } .rings { max-width: 340px; justify-self: center; } }
+
+/* ---------- 11. Aula 1 compositions --------------------------------- */
+/* Hub: six functions around «a casa» */
+.hub { display: grid; grid-template-columns: 1fr 200px 1fr; gap: 24px; align-items: center; }
+.hub-col { display: grid; gap: 14px; }
+.hub-col .card { padding: 14px 18px; }
+.hub-col h3 { font-size: 21px; margin: 0; }
+.hub-col p { margin: 0; font-size: 16px; }
+.hub-center { justify-self: center; display: flex; flex-direction: column; align-items: center; gap: 10px; background: var(--navy); color: var(--white); border-radius: 12px; padding: 22px 26px; }
+.hub-center b { font-family: var(--head); font-size: 22px; }
+.big-hub { padding: 40px 48px; } .big-hub b { font-size: 28px; }
+/* Timeline of the five philosophers */
+.tl-line { width: 100%; height: 20px; display: block; margin-bottom: -6px; }
+.timeline { grid-template-columns: repeat(5, 1fr); gap: 16px; }
+.timeline .yr { display: block; font-family: var(--head); font-weight: 700; color: var(--orange); font-size: 22px; margin-bottom: 8px; }
+.timeline .card { display: flex; flex-direction: column; gap: 6px; min-height: 230px; background: var(--orange-light); }
+.timeline .card.blue { background: var(--blue-light); }
+.timeline h3 { font-size: 20px; margin-top: 6px; }
+.timeline p { font-size: 16px; margin: 0; }
+.who { font-size: 14px !important; font-weight: 700; color: var(--muted); text-transform: uppercase; letter-spacing: .06em; }
+/* Heidegger: order of construir / habitar */
+.order { display: flex; align-items: center; gap: 10px; }
+.order > svg { width: 70px; height: 20px; }
+.order .box { border-radius: 8px; padding: 14px 22px; font-family: var(--head); font-weight: 700; font-size: 22px; }
+.box.muted { background: var(--cream); color: var(--muted); }
+.box.strong { background: var(--orange); color: var(--white); }
+.box.soft { background: var(--orange-light); color: var(--navy); }
+/* Drawings */
+.room { width: 100%; height: auto; margin-top: 8px; }
+.section { width: 100%; max-width: 460px; height: auto; justify-self: center; }
+.levinas { width: 100%; max-width: 460px; height: auto; }
+.door { transform-box: fill-box; transform-origin: top; transition: transform .8s var(--ease) .3s; }
+.on .door { transform: skewY(-35deg) scaleX(.5); }
+/* Young: two cards with an arrow, then four tasks */
+.vs { display: grid; grid-template-columns: 1fr 70px 1fr; align-items: center; gap: 10px; margin: 18px 0; }
+.vs > svg { width: 70px; height: 20px; }
+.tasks { display: flex; gap: 28px; flex-wrap: wrap; margin-bottom: 14px; }
+.tasks > span { display: flex; align-items: center; gap: 10px; font-weight: 700; color: var(--navy); }
+@media (max-width: 860px) {
+  .hub, .vs { grid-template-columns: 1fr; }
+  .hub-center { order: -1; }
+  .vs > svg { transform: rotate(90deg); justify-self: center; }
+  .timeline { grid-template-columns: 1fr; }
+  .timeline .card { min-height: 0; }
+}
+
+/* ---------- 13. Small fixes ----------------------------------------- */
+/* An icon set inline in running text takes the size and colour of the text */
+.inl svg { width: 1em; height: 1em; fill: currentColor; vertical-align: -2px; }
+/* Waldron diagram: actions | arrows | paths */
+.waldron { display: grid; grid-template-columns: 190px 60px 1fr; gap: 0 10px; align-items: center; }
+@media (max-width: 860px) { .waldron { grid-template-columns: 1fr; gap: 18px; } .waldron > svg { display: none; } }
+
+/* ---------- Jogo: escolha múltipla com tempo ------------------------ */
+.game [hidden] { display: none !important; }
+.game { position: relative; background: var(--cream); border-radius: 14px; padding: 18px 22px 22px; }
+.ghead { display: flex; align-items: center; gap: 16px; font-size: 16px; color: var(--muted); }
+.ghead b { color: var(--navy); font-size: 20px; }
+.gstreak { flex: 1; text-align: center; font-weight: 700; color: var(--orange); }
+.gsound { background: none; border: 1px solid var(--line); border-radius: 8px; padding: 6px 8px; cursor: pointer; color: var(--navy); line-height: 0; }
+.gsound svg { width: 20px; height: 20px; fill: currentColor; }
+.gsound svg:last-child, .gsound.off svg:first-child { display: none; }
+.gsound.off svg:last-child { display: inline; }
+.game:not(.playing) .ghead .gcount, .game:not(.playing) .gtimer { visibility: hidden; }
+.gtimer { display: flex; align-items: center; gap: 12px; margin: 10px 0 16px; }
+.gtimer .track { position: relative; flex: 1; height: 14px; background: var(--white, #fff); border-radius: 7px; overflow: hidden; }
+.gtimer span { position: absolute; left: 0; top: 0; bottom: 0; background: var(--blue); border-radius: 7px; transition: width 1s linear, background .3s; }
+.gtimer output { min-width: 2ch; text-align: right; font-family: var(--head); font-weight: 700; font-size: 24px; color: var(--navy); }
+.game.hurry .gtimer span { background: var(--orange); }
+.game.hurry .gtimer output { color: var(--orange); animation: gpulse .5s ease-in-out infinite alternate; }
+@keyframes gpulse { to { transform: scale(1.25); } }
+.gstart, .gend { text-align: center; display: grid; justify-items: center; gap: 8px; padding: 10px 0 6px; }
+.gstart h3, .gend h3 { font-family: var(--head); font-size: 30px; color: var(--navy); margin: 4px 0 0; }
+.gstart p, .gend p { margin: 0; }
+.gfinal { font-size: 24px; }
+.gfinal b { color: var(--orange); }
+.gq .stem { font-family: var(--head); font-weight: 700; font-size: 30px; color: var(--navy); margin: 0 0 16px; line-height: 1.25; }
+.gopts { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.gopts button { position: relative; display: flex; align-items: center; gap: 14px; min-height: 84px; padding: 12px 44px 12px 18px; border: 0; border-radius: 10px; color: #fff; font: inherit; font-size: 21px; font-weight: 700; text-align: left; cursor: pointer; transition: transform .15s, opacity .3s, filter .3s; }
+.gopts button:hover:not(:disabled) { transform: translateY(-2px); filter: brightness(1.08); }
+.gopts .t0 { background: #A44A16; } .gopts .t1 { background: #2F6E9E; } .gopts .t2 { background: #5E7A3A; } .gopts .t3 { background: #1E2A33; }
+.gopts .sh { font-size: 22px; opacity: .85; }
+.gopts kbd { position: absolute; right: 10px; top: 8px; font: 700 13px var(--body); color: #fff; background: rgba(255,255,255,.18); opacity: .85; border: 1px solid rgba(255,255,255,.5); border-radius: 4px; padding: 0 6px; box-shadow: none; }
+.gq.done .gopts button { opacity: .35; cursor: default; }
+.gq.done .gopts button.right { opacity: 1; outline: 4px solid #2E8B57; outline-offset: 2px; }
+.gq.done .gopts button.right::after { content: '✓'; position: absolute; right: 12px; bottom: 8px; font-size: 26px; }
+.gq.done .gopts button.wrong { opacity: .9; animation: gshake .4s; }
+.gq.done .gopts button.wrong::after { content: '✗'; position: absolute; right: 12px; bottom: 8px; font-size: 26px; }
+@keyframes gshake { 25% { transform: translateX(-6px); } 75% { transform: translateX(6px); } }
+.gfb { display: none; margin: 14px 0 0; font-size: 18px; }
+.gq.done .gfb { display: block; animation: enter .3s var(--ease); }
+.game.was-right .gverdict { color: #2E8B57; } .game.was-wrong .gverdict { color: var(--orange); }
+.game.was-right { box-shadow: 0 0 0 4px rgba(46,139,87,.35); } .game.was-wrong { box-shadow: 0 0 0 4px rgba(164,74,22,.3); }
+.gnext { display: block; margin: 14px 0 0 auto; }
+.gnext[hidden] { display: none; }
+@media (max-width: 760px) {
+  .gopts { grid-template-columns: 1fr; } .gq .stem { font-size: 21px; } .gopts button { min-height: 56px; font-size: 17px; }
+  .gopts kbd { display: none; }
+}
+@media (prefers-reduced-motion: reduce) { .game.hurry .gtimer output, .gq.done .gopts button.wrong { animation: none; } }
+.gstart .ic, .gend .ic { width: 72px; height: 72px; } .gstart .ic svg, .gend .ic svg { width: 34px; height: 34px; }
+
+/* ---------- Activity badges: how an exercise is done ----------------- */
+.modes { display: flex; flex-wrap: wrap; gap: 8px; margin: -14px 0 6px; }
+.mode { font-size: 13px; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; border-radius: 999px; padding: 5px 14px; background: var(--blue-light); color: var(--blue); }
+.mode::before { margin-right: 6px; }
+.mode.m-folha { background: var(--orange-light); color: var(--orange); }
+.mode.m-folha::before { content: "✎"; }
+.mode.m-pc::before { content: "⌨"; }
+.mode.m-pares::before, .mode.m-grupo::before { content: "⚇"; }
+
+/* two-column quiz, for classification exercises with six items */
+.quiz.quiz2col { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.quiz.quiz2col .q { margin: 0; }
+.quiz.quiz2col .score { grid-column: 1 / -1; }
+@media (max-width: 900px) { .quiz.quiz2col { grid-template-columns: 1fr; } }
+
+/* «Responder no telemóvel»: button on activity slides and the big QR overlay */
+.phone-btn { float: right; margin: 0 0 12px 18px; font: inherit; font-size: 15px; font-weight: 700; cursor: pointer; border: 0; border-radius: 999px; padding: 9px 18px; background: var(--orange); color: #fff; }
+.phone-btn::before { content: "▣ "; }
+.phone-modal { position: fixed; inset: 0; z-index: 50; background: rgba(30,42,51,.82); display: grid; place-items: center; }
+.phone-modal[hidden] { display: none; }
+.phone-modal .box { background: #fff; border-radius: 16px; padding: 28px 36px; text-align: center; max-width: 92vw; }
+.phone-modal .code canvas, .phone-modal .code img { width: min(520px, 70vh) !important; height: min(520px, 70vh) !important; margin: 10px auto; display: block; }
+.phone-modal a { display: block; color: var(--blue); font-size: 16px; word-break: break-all; }
+.phone-modal .btn { margin-top: 12px; }
+.mode.m-tel::before { content: "▣"; }
+
+/* author initials in a circle (aula 4) */
+.center { text-align: center; }
+.center .ic { margin: 0 auto 8px; }
+.avatar { width: 120px; height: 120px; border-radius: 50%; background: var(--navy); color: #fff; display: inline-grid; place-items: center; font-family: var(--head); font-weight: 700; font-size: 44px; margin-bottom: 8px; }
+.center .timer { justify-content: center; }
+.card .big { font-size: 56px; }
+
+/* five columns (aulas 5–7) and a small label pill */
+.g5 { grid-template-columns: repeat(5, 1fr); }
+@media (max-width: 1100px) { .g5 { grid-template-columns: repeat(3, 1fr); } }
+.pill2 { display: inline-block; font-size: 13px; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; border-radius: 999px; padding: 3px 12px; background: var(--navy); color: #fff; }
+
+/* CLC 3 · ligação direta para a atividade no próprio aparelho (trabalho autónomo) */
+.act-btn { display: inline-block; margin: 6px 0; font-size: 17px; font-weight: 700; text-decoration: none; border-radius: 999px; padding: 11px 22px; background: var(--orange); color: #fff; box-shadow: 0 2px 6px rgba(0,0,0,.15); }
+.act-btn:hover, .act-btn:focus-visible { filter: brightness(1.08); outline: 3px solid rgba(0,0,0,.15); }
+.row { display: flex; gap: 12px; align-items: flex-start; }
+@media (max-width: 700px) { .act-btn { display: block; text-align: center; } }

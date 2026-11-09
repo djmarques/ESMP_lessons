@@ -315,6 +315,28 @@
     btn.dataset.label = btn.textContent;
   });
 
+  /** «Responder no telemóvel» buttons: open an overlay with a big QR code for
+      the activity on the shared student page (data-path, relative to this
+      site). Click anywhere or press Esc to close. */
+  const phoneModal = document.createElement('div');
+  phoneModal.className = 'phone-modal'; phoneModal.hidden = true;
+  phoneModal.innerHTML = '<div class="box"><p class="kicker">Responder no telemóvel</p><div class="code"></div><a target="_blank" rel="noopener"></a><p class="sm">Lê o código com a câmara · escreve o teu nome · responde · Enviar</p><button class="btn ghost">Fechar</button></div>';
+  document.body.appendChild(phoneModal);
+  phoneModal.addEventListener('click', e => { if (e.target === phoneModal || e.target.matches('button')) phoneModal.hidden = true; });
+  document.addEventListener('keydown', e => { if (e.key === 'Escape') phoneModal.hidden = true; });
+  document.querySelectorAll('.phone-btn').forEach(btn => btn.addEventListener('click', e => {
+    e.stopPropagation();
+    const url = new URL(btn.dataset.path, location.href).href;
+    const code = phoneModal.querySelector('.code'), link = phoneModal.querySelector('a');
+    code.innerHTML = ''; link.href = url;
+    if (!/^https?:/.test(url)) link.textContent = 'O código QR aparece quando o site estiver publicado (GitHub Pages).';
+    else {
+      link.textContent = url.replace(/^https?:\/\/(www\.)?/, '');
+      if (window.QRCode) new QRCode(code, { text: url, width: 520, height: 520, colorDark: '#1E2A33', colorLight: '#FFFFFF' });
+    }
+    phoneModal.hidden = false;
+  }));
+
   /** Checklists: each item toggles its own aria-pressed state. */
   document.querySelectorAll('.check').forEach(c => c.addEventListener('click', () => {
     c.setAttribute('aria-pressed', String(c.getAttribute('aria-pressed') !== 'true'));

@@ -3,8 +3,9 @@
 Site interativo das aulas de Cultura, Língua e Comunicação 6 (formação de adultos), para projetar na sala. Por agora tem:
 
 - o **programa** (núcleo gerador, os quatro DR e o percurso da casa ao mundo, avaliação);
-- **DR1 · Aula 1**: a casa e o lar (cinco filósofos);
-- **DR1 · Aula 2**: arquitetura hostil, ter lar sem ter casa, texto de opinião.
+- **DR1 · A casa**: aula 1 (a casa e o lar, cinco filósofos), aula 2 (arquitetura hostil, ter lar sem ter casa, texto de opinião), aula 3 (o que faz uma casa boa: critérios de qualidade, crise da habitação, anúncio), aula 4 (o Ramalhete de *Os Maias*), aula 5 (a casa dos avós: arquitetura tradicional e sistemas construtivos), aula 6 (obras em casa: documentos e comunicação), aula 7 (reclamar e requerer) e aula 8 (apresentações do DR1, com avaliação entre pares).
+
+Os slides com o botão **Responder no telemóvel** mostram um código QR: os formandos respondem no telemóvel e as respostas ficam na folha de cálculo «Avaliação contínua» (ver `../respostas/LEIA-ME.md`). As atividades estão em `atividades.js`. As versões anteriores dos ficheiros estão em `archive/`.
 
 É HTML, CSS e JavaScript simples: não precisa de instalação nem de compilação. Funciona aberto diretamente no navegador (duplo clique em `index.html`) e no GitHub Pages.
 

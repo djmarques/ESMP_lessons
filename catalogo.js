@@ -45,6 +45,14 @@ window.CATALOGO = [
     ],
   },
   {
+    disciplina: 'Cultura, Língua e Comunicação',
+    nivel: 'CLC 3 · Formação de adultos · trabalho autónomo',
+    publico: 'adultos',
+    temas: [
+      { titulo: 'Saúde: língua e comunicação', descricao: 'Guiões autónomos · DR1: qualidade de vida, hábitos, lazer, resumo, terapêuticas alternativas.', pasta: 'clc3/' },
+    ],
+  },
+  {
     disciplina: 'Cidadania e Profissionalidade',
     nivel: 'CP 4 · Formação de adultos',
     publico: 'adultos',
