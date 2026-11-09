@@ -13,10 +13,10 @@
 
 // Para onde vão os emails. Vazio = o email da conta Google que instalou o script.
 const EMAIL_FORMADOR = '';
-// Nome da folha de cálculo criada automaticamente no Google Drive.
-const NOME_FOLHA = 'CP 4 · respostas dos formandos';
+// Nome da folha de cálculo no Google Drive (se a folha já existir com outro nome, é renomeada).
+const NOME_FOLHA = 'Avaliação contínua';
 // Pôr false para deixar de receber um email por cada envio (as respostas continuam a ir para a folha).
-const ENVIAR_EMAIL = true;
+const ENVIAR_EMAIL = false;
 
 /** Chamado pelo telemóvel do formando quando carrega em «Enviar». */
 function doPost(e) {
@@ -65,7 +65,7 @@ function doPost(e) {
 
 /** Abrir o endereço /exec no navegador mostra esta mensagem: serve para confirmar que está a funcionar. */
 function doGet() {
-  return ContentService.createTextOutput('O recetor de respostas do CP 4 está a funcionar.');
+  return ContentService.createTextOutput('O recetor de respostas das aulas está a funcionar.');
 }
 
 /** Executar uma vez no editor (botão «Executar») para autorizar e testar: cria a folha e manda um email de teste. */
@@ -83,7 +83,13 @@ function testar() {
 function planilha() {
   const props = PropertiesService.getScriptProperties();
   const id = props.getProperty('FOLHA_ID');
-  if (id) { try { return SpreadsheetApp.openById(id); } catch (e) { /* foi apagada: cria outra */ } }
+  if (id) {
+    try {
+      const ss = SpreadsheetApp.openById(id);
+      if (ss.getName() !== NOME_FOLHA) ss.rename(NOME_FOLHA);   // acompanha uma mudança de NOME_FOLHA
+      return ss;
+    } catch (e) { /* foi apagada: cria outra */ }
+  }
   const ss = SpreadsheetApp.create(NOME_FOLHA);
   props.setProperty('FOLHA_ID', ss.getId());
   return ss;
