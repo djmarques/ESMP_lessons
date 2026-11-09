@@ -468,7 +468,6 @@ ul.qs { margin: 0; padding-left: 22px; } ul.qs li { margin-bottom: 12px; }
 .mode.m-pc::before { content: "⌨"; }
 .mode.m-pares::before, .mode.m-grupo::before { content: "⚇"; }
 .mode.m-grupo { background: var(--green-light); color: var(--green); }
-.slide svg { max-width: 100%; height: auto; }
 
 /* QR code for the student phone page (slides «No telemóvel») */
 .phone-qr { background: var(--white); border: 1px solid var(--line); border-radius: 10px; padding: 20px; text-align: center; }
