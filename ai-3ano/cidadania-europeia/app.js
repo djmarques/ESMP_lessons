@@ -230,6 +230,7 @@ function initQuiz(quiz) {
     choice.classList.add("picked", choice.hasAttribute("data-ok") ? "right" : "wrong");
     q.querySelector("[data-ok]").classList.add("right");
     q.querySelectorAll(".opts button").forEach((b) => (b.disabled = true));
+    choice.hasAttribute("data-ok") ? sfx.right() : sfx.wrong();   // same sounds as the games (sfx is defined further down)
     updateScore();
   });
 

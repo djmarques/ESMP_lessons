@@ -160,6 +160,7 @@
       q.querySelectorAll('.opts button').forEach(x => { x.disabled = true; });
       q.classList.add('done');
       q.classList.toggle('correct', right);
+      right ? sfx.right() : sfx.wrong();   // same sounds as the games (sfx is defined further down)
       update();
     })));
     quiz.querySelector('[data-retry]').addEventListener('click', () => {

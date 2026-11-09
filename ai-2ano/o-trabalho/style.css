@@ -683,3 +683,14 @@ a.big-link:hover { box-shadow: 0 6px 20px rgba(164, 74, 22, .2); }
 .quiz.quiz2col .q { margin: 0; }
 .quiz.quiz2col .score { grid-column: 1 / -1; }
 @media (max-width: 900px) { .quiz.quiz2col { grid-template-columns: 1fr; } }
+
+/* «Responder no telemóvel»: button on activity slides and the big QR overlay */
+.phone-btn { float: right; margin: 0 0 12px 18px; font: inherit; font-size: 15px; font-weight: 700; cursor: pointer; border: 0; border-radius: 999px; padding: 9px 18px; background: var(--orange); color: #fff; }
+.phone-btn::before { content: "▣ "; }
+.phone-modal { position: fixed; inset: 0; z-index: 50; background: rgba(30,42,51,.82); display: grid; place-items: center; }
+.phone-modal[hidden] { display: none; }
+.phone-modal .box { background: #fff; border-radius: 16px; padding: 28px 36px; text-align: center; max-width: 92vw; }
+.phone-modal .code canvas, .phone-modal .code img { width: min(520px, 70vh) !important; height: min(520px, 70vh) !important; margin: 10px auto; display: block; }
+.phone-modal a { display: block; color: var(--blue); font-size: 16px; word-break: break-all; }
+.phone-modal .btn { margin-top: 12px; }
+.mode.m-tel::before { content: "▣"; }
