@@ -694,3 +694,141 @@ a.big-link:hover { box-shadow: 0 6px 20px rgba(164, 74, 22, .2); }
 .phone-modal a { display: block; color: var(--blue); font-size: 16px; word-break: break-all; }
 .phone-modal .btn { margin-top: 12px; }
 .mode.m-tel::before { content: "▣"; }
+
+
+/* ---------- 17. Cenas animadas (história e organização do trabalho) ---
+   One SVG «stage» per slide (.palco > svg.cena-svg, viewBox 1000 × 300).
+   The worker is always the orange figure with a white dot on the chest;
+   whoever gives the orders is the navy figure. app.js adds the classes
+   ge1…geN to the slide («step is at least k»); the per-scene rules at the
+   end of this file use them to move, fade or swap things at each click. */
+.slide.cena h2 { font-size: 38px; margin-bottom: 12px; }
+.stage:has(.slide.cena.current) { padding-top: 34px; }
+.palco { background: var(--white); border: 1px solid var(--line); border-radius: 12px; overflow: hidden; }
+.cena-svg { display: block; width: 100%; height: auto; }
+.cena-svg text { font-family: var(--body); }
+.cena-svg text.headf { font-family: var(--head); }
+.cena-svg .mv { transition: transform 1.5s var(--ease); }
+.cena-svg .fd, .cena-svg .fc, .cena-svg .berry, .cena-svg [data-step] > rect, .cena-svg [data-step] > text { transition: opacity .7s var(--ease); }
+.cena-svg .fc.f1, .cena-svg .fc.f2 { opacity: 0; }
+.cena-svg [data-step] { transition: opacity .6s var(--ease), transform .6s var(--ease); }
+
+/* small loops that keep a scene alive while the teacher talks */
+.slide.current .bob { animation: bob 2.6s ease-in-out infinite; }
+@keyframes bob { 50% { transform: translateY(-1.6px); } }
+.slide.current .rock { animation: rock 3.4s ease-in-out infinite; transform-box: fill-box; transform-origin: 50% 100%; }
+@keyframes rock { 0%, 100% { transform: rotate(-2.5deg); } 50% { transform: rotate(2.5deg); } }
+.slide.current .spin { animation: spin 5s linear infinite; }
+.slide.current .spin.slow { animation-duration: 11s; }
+.slide.current .spin.fast { animation-duration: 1.6s; }
+@keyframes spin { to { transform: rotate(360deg); } }
+.slide.current .fish { animation: fish 2.8s ease-in-out infinite; }
+@keyframes fish { 0%, 60%, 100% { transform: translateY(0); } 30% { transform: translateY(-16px); } }
+.slide.current .smoke { animation: smoke 2.4s linear infinite; opacity: 0; }
+@keyframes smoke { 0% { transform: translate(0, 0) scale(.6); opacity: .9; } 100% { transform: translate(16px, -46px) scale(1.7); opacity: 0; } }
+.slide.current .belt { animation: belt 1.1s linear infinite; }
+@keyframes belt { to { stroke-dashoffset: -28; } }
+.slide.current .pulse { animation: pulse 1.6s ease-in-out infinite; transform-box: fill-box; transform-origin: center; }
+@keyframes pulse { 50% { transform: scale(1.18); } }
+.slide.current .tick { animation: tick 2s steps(8) infinite; transform-box: fill-box; transform-origin: 50% 100%; }
+@keyframes tick { to { transform: rotate(360deg); } }
+.slide.current .hammer { animation: hammer .9s ease-in-out infinite; transform-box: fill-box; transform-origin: 0% 100%; }
+@keyframes hammer { 50% { transform: rotate(-38deg); } }
+.slide.current .wifi { animation: wifi 1.8s ease-out infinite; opacity: 0; }
+@keyframes wifi { 0% { opacity: 0; } 30% { opacity: 1; } 100% { opacity: 0; } }
+
+/* era strip above the title: where are we in time? */
+.friso { display: flex; gap: 6px; flex-wrap: wrap; margin: 0 0 8px; }
+.friso span { font-size: 13px; font-weight: 700; letter-spacing: .04em; text-transform: uppercase; color: var(--muted); background: var(--cream); border-radius: 999px; padding: 3px 12px; }
+.friso span.now { background: var(--orange); color: #fff; }
+
+/* compact definitions under a scene */
+.ddef.mini { margin: 8px 0 0; gap: 10px; }
+.ddef.mini .term { font-size: 19px; padding: 6px 14px; border-radius: 8px; }
+.ddef.mini .term small { font-size: 12px; }
+.ddef.mini .eq { font-size: 24px; }
+.ddef.mini .part { font-size: 16.5px; padding: 5px 10px; max-width: none; }
+.ddef.mini .op { font-size: 20px; }
+.mini-cards { gap: 10px; margin-top: 8px; }
+.mini-cards .card { padding: 8px 14px; font-size: 16.5px; line-height: 1.3; }
+.mini-cards .card b { display: block; font-family: var(--head); color: var(--navy); font-size: 19px; }
+
+/* the worker's «ficha»: the same questions in every era */
+.ficha { display: grid; grid-template-columns: minmax(120px, auto) repeat(4, 1fr); background: var(--navy); color: #fff; border-radius: 10px; overflow: hidden; margin-top: 10px; }
+.ficha.n3 { grid-template-columns: minmax(120px, auto) repeat(3, 1fr); }
+.ficha .who { background: var(--orange); font-family: var(--head); font-weight: 700; font-size: 18px; padding: 8px 14px; display: grid; place-items: center; text-align: center; line-height: 1.1; max-width: 190px; }
+.ficha > div { padding: 7px 14px 8px; border-left: 1px solid rgba(255, 255, 255, .16); }
+.ficha small { display: block; color: var(--accent); font-size: 12px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; }
+.ficha b { font-size: 17px; line-height: 1.2; display: block; }
+.slide.cena .ask { margin-top: 12px; font-size: 22px; }
+.slide.cena .source { margin-top: 8px; font-size: 13px; }
+.elenco .card { gap: 20px; }
+.elenco-svg { width: 96px; flex: none; }
+table.fichas td, table.fichas th { font-size: 17px; padding: 7px 12px; }
+table.fichas tr.tu td, table.fichas tr.tu th { background: var(--orange-light); font-weight: 700; color: var(--navy); }
+.paint.vida { grid-template-columns: 1fr 1.25fr; } .paint.vida img { max-height: 46vh; }
+.facts { display: grid; gap: 10px; }
+.facts .card p { margin: 0; font-size: 18px; line-height: 1.3; }
+.facts .card { display: flex; gap: 16px; align-items: center; padding: 10px 18px; }
+.facts .card .bign { font-size: 40px; min-width: 140px; text-align: center; line-height: 1; }
+.tele-t { width: 100%; border-collapse: separate; border-spacing: 6px; }
+.tele-t th { background: var(--navy); color: #fff; padding: 6px 12px; font-size: 16px; }
+.tele-t td { background: var(--cream); padding: 8px 14px; font-size: 16.5px; vertical-align: top; border-radius: 6px; }
+.tele-t td.g { background: var(--green-light); } .tele-t td.r { background: var(--orange-light); }
+.tele-t ul { margin: 0; padding-left: 18px; }
+@media (max-width: 860px) { .ficha, .ficha.n3 { grid-template-columns: 1fr 1fr; } .ficha .who { grid-column: 1 / -1; max-width: none; } }
+@media (prefers-reduced-motion: reduce) { .cena-svg .mv, .cena-svg .grow { transition: none !important; } }
+
+/* per-scene states (generated) */
+#s-h-recolecao.ge1 .b1{opacity:0} #s-h-recolecao.ge2 #rec-grp{transform:translateX(500px)} #s-h-recolecao.ge2 [data-step="1"]>rect, #s-h-recolecao.ge2 [data-step="1"]>text{opacity:0}
+.cena-svg .grow{transform:scaleY(0);transform-box:fill-box;transform-origin:50% 100%;transition:transform 1.6s var(--ease)} #s-h-sedentario.ge2 .grow{transform:none} #s-h-sedentario.ge4 [data-step="1"]>rect,#s-h-sedentario.ge4 [data-step="1"]>text{opacity:0}
+#s-h-escravo.ge1 #esc-pre{opacity:0} #s-h-escravo.ge1 #esc-jars{transform:translateX(75px)} #s-h-escravo.ge3 #esc-w .f0{opacity:0} #s-h-escravo.ge3 #esc-w .f1{opacity:1}
+#s-h-servilismo.ge5 #srv-c1{opacity:0} #s-h-servilismo.ge5 #srv-w .f0{opacity:0} #s-h-servilismo.ge5 #srv-w .f1{opacity:1}
+#s-h-dominio .zone{transition:stroke .5s,stroke-width .5s} #s-h-dominio.ge1 #dom-gle{stroke:#556B3C;stroke-width:3} #s-h-dominio.ge2 #dom-res{stroke:#A44A16;stroke-width:3} #s-h-dominio.ge3 #dom-w{transform:translateX(-310px)} #s-h-dominio.ge4 #dom-w{transform:none}
+#s-h-exodo.ge3 #exo-g{transform:translateX(345px)} #s-h-exodo.ge3 .cena-svg [data-step="1"]{opacity:0}
+#s-h-corporacao.ge2 #cor-w{transform:translate(160px,-45px)}
+#s-h-burguesia.ge2 #bur-ship{transform:translateX(620px)} #s-h-burguesia.ge3 #bur-ship{transform:none}
+#s-h-triangular.ge1 #tri-ship{transform:translate(50px,130px)} #s-h-triangular.ge2 #tri-ship{transform:translate(-350px,76px)} #s-h-triangular.ge3 #tri-ship{transform:none}
+#s-h-manufatura.ge2 .cena-svg [data-step="1"]{opacity:0}
+#s-h-revolucao.ge1 #rev-b{opacity:0} #s-h-revolucao #rev-fam{transform:translateX(-220px)} #s-h-revolucao.ge2 #rev-fam{transform:none}
+#s-h-sindicato #sin-beam{transform:rotate(-8deg)} #s-h-sindicato #sin-l{transform:translateY(27px)} #s-h-sindicato #sin-r{transform:translateY(-27px)} #s-h-sindicato.ge2 #sin-beam,#s-h-sindicato.ge2 #sin-l,#s-h-sindicato.ge2 #sin-r{transform:none} #s-h-sindicato.ge2 #sin-w .f0{opacity:0} #s-h-sindicato.ge2 #sin-w .f1{opacity:1}
+#s-o-taylor.ge1 #tay-th{transform:translate(-365px,14px)} #s-o-taylor.ge4 #tay-w .f0{opacity:0} #s-o-taylor.ge4 #tay-w .f1{opacity:1}
+.slide.current .line-move{animation:linemove 4.2s linear infinite} @keyframes linemove{to{transform:translateX(-220px)}}
+#s-o-toyota.ge1 #toy-card{transform:translate(-500px,40px)} #s-o-toyota #toy-box{transform:none} #s-o-toyota.ge2 #toy-box{transform:translateX(520px)}
+#s-o-automacao.ge2 #aut-o{opacity:0} #s-o-automacao.ge2 #aut-w{transform:translateX(150px)} #s-o-automacao.ge3 #aut-w{transform:translateX(330px)} #s-o-automacao.ge3 #aut-wf .f0{opacity:0} #s-o-automacao.ge3 #aut-wf .f1{opacity:1}
+#s-o-upwork.ge2 .coinrun{transform:translate(-460px,60px)}
+
+/* ---------- 18. Emprego, desemprego, formação e currículo com IA ---- */
+.conseq ul, .conseq-slide ul { margin: 4px 0 0; padding-left: 20px; }
+.conseq li, .conseq-slide li { font-size: 18px; line-height: 1.35; margin-bottom: 5px; }
+.mbars { margin-top: 18px; display: grid; gap: 8px; }
+.mbars .label { margin: 0; }
+.mb { display: grid; grid-template-columns: 150px 1fr 60px; gap: 12px; align-items: center; }
+.mb i { display: block; height: 22px; border-radius: 4px; background: var(--orange); width: 0; transition: width 1.4s var(--ease) .3s; }
+.mb i.blue { background: var(--blue); }
+.mbars.on .mb i { width: calc(var(--w) * 2.4); }
+.mb b { font-family: var(--head); color: var(--navy); font-size: 22px; }
+.card.green .label { color: var(--green); } .mini-cards .card.green { color: var(--text); }
+.prompt { display: grid; gap: 8px; background: var(--navy); border-radius: 12px; padding: 16px 18px; }
+.pp-row { display: grid; grid-template-columns: 110px 1fr; gap: 14px; align-items: start; }
+.pp-k { background: var(--orange); color: #fff; font-weight: 700; font-size: 14px; letter-spacing: .06em; text-transform: uppercase; border-radius: 6px; padding: 4px 10px; text-align: center; }
+.pp-t { color: #fff; font-size: 18px; line-height: 1.35; }
+a.btn { text-decoration: none; display: inline-block; } a.btn.orange { color: #fff; }
+/* per-scene states (generated) */
+#s-e-setores.ge2 #set1{transform:translate(860px,0px);transition-delay:0.12s}
+#s-e-setores.ge2 #set2{transform:translate(580px,58px);transition-delay:0.24s}
+#s-e-setores.ge2 #set3{transform:translate(580px,58px);transition-delay:0.36s}
+#s-e-setores.ge2 #set4{transform:translate(580px,58px);transition-delay:0.48s}
+#s-e-setores.ge2 #set5{transform:translate(580px,58px);transition-delay:0.60s}
+#s-e-setores.ge2 #set6{transform:translate(580px,58px);transition-delay:0.00s}
+#s-e-setores.ge2 #set12{transform:translate(330px,58px);transition-delay:0.00s}
+#s-e-setores.ge2 #set13{transform:translate(330px,58px);transition-delay:0.12s}
+#s-e-setores.ge2 .p74{opacity:0}
+#s-e-precario.ge1 #pre-w{transform:translateX(60px)} #s-e-precario.ge2 #pre-w{transform:translateX(220px)} #s-e-precario.ge3 #pre-w{transform:translateX(380px)} #s-e-precario.ge4 #pre-w{transform:translateX(660px)}
+#s-e-desempregado.ge1 #des-f{opacity:.25} #s-e-desempregado.ge1 #des-b{opacity:0} #s-e-desempregado.ge1 #des-w{transform:translateX(330px)} #s-e-desempregado.ge1 #des-wf .f0{opacity:0} #s-e-desempregado.ge1 #des-wf .f1{opacity:1}
+#s-e-taxa-cena.ge1 #tx-in{opacity:.45} #s-e-taxa-cena.ge5 .tx-a{opacity:0} #s-e-taxa-cena.ge5 #tx-q{transform:translateX(-492px);opacity:.45}
+#s-e-longa.ge1 #j0{opacity:.3} #s-e-longa.ge2 #j1,#s-e-longa.ge2 #j2{opacity:.3} #s-e-longa.ge3 #j3,#s-e-longa.ge3 #j4,#s-e-longa.ge3 #j5{opacity:.3} #s-e-longa.ge1 #jah-w .f0{opacity:0} #s-e-longa.ge1 #jah-w .f1{opacity:1} #s-e-longa.ge3 #jah-w .f1{opacity:0} #s-e-longa.ge3 #jah-w .f2{opacity:1}
+#s-e-politicas.ge1 #pol-w{transform:translateY(-36px)} #s-e-politicas.ge4 #pol-w{transform:translate(170px,-130px)} #s-e-politicas.ge1 #pol-wf .f0{opacity:0} #s-e-politicas.ge1 #pol-wf .f1{opacity:1} #s-e-politicas.ge4 #pol-wf .f1{opacity:0} #s-e-politicas.ge4 #pol-wf .f2{opacity:1}
+.cena-svg rect.grow{transform:scaleY(0);transform-box:fill-box;transform-origin:50% 100%;transition:transform 1.4s var(--ease)} #s-j-jovens.ge1 rect.grow{transform:none} #s-j-jovens.ge3 #jov-w .f0{opacity:0} #s-j-jovens.ge3 #jov-w .f1{opacity:1} #s-j-jovens.ge5 #jov-w .f1{opacity:0} #s-j-jovens.ge5 #jov-w .f2{opacity:1} #s-j-jovens.ge5 #jov-a{opacity:.2}
+#s-j-idadismo.ge1 #ida-y .f0{opacity:0} #s-j-idadismo.ge1 #ida-y .f1{opacity:1} #s-j-idadismo.ge2 #ida-o .f0{opacity:0} #s-j-idadismo.ge2 #ida-o .f1{opacity:1}
+#s-j-formacao.ge1 #for-w{transform:translateX(110px)} #s-j-formacao.ge2 #for-w{transform:translateX(325px)} #s-j-formacao.ge3 #for-w{transform:translateX(860px);transition-duration:3s}

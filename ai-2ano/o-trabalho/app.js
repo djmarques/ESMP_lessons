@@ -27,8 +27,9 @@
 
   /** Highest data-step value inside a slide (0 if the slide has no builds). */
   function maxStep(slide) {
+    // data-steps on the slide adds steps that only move things (animated scenes)
     return Array.from(slide.querySelectorAll('[data-step]'))
-      .reduce((m, el) => Math.max(m, Number(el.dataset.step)), 0);
+      .reduce((m, el) => Math.max(m, Number(el.dataset.step)), Number(slide.dataset.steps || 0));
   }
 
   /** Build the sidebar: one heading per data-lesson, one link per slide. */
@@ -56,6 +57,9 @@
       counters that have just become visible. */
   function setStep(slide, n) {
     stepOf.set(slide, n);
+    // animated scenes: class ge1…geN = «step is at least k», so CSS can move
+    // or transform things at a given step (see «Cenas animadas» in style.css)
+    for (let k = 1, m = maxStep(slide); k <= m; k++) slide.classList.toggle('ge' + k, n >= k);
     slide.querySelectorAll('[data-step]').forEach(el => {
       const on = Number(el.dataset.step) <= n;
       if (on && !el.classList.contains('on') && el.dataset.count) runCounter(el);
@@ -377,6 +381,16 @@
       if (window.QRCode) new QRCode(code, { text: url, width: 520, height: 520, colorDark: '#1E2A33', colorLight: '#FFFFFF' });
     }
     phoneModal.hidden = false;
+  }));
+
+  /** Copy buttons: data-copy holds a selector; the text of every match is
+      joined (one per line) and copied, e.g. the AI prompt on «Como pedir». */
+  document.querySelectorAll('[data-copy]').forEach(btn => btn.addEventListener('click', e => {
+    e.stopPropagation();
+    const text = Array.from(document.querySelectorAll(btn.dataset.copy)).map(el => el.textContent.trim()).join('\n');
+    const done = () => { const t = btn.textContent; btn.textContent = 'Copiado!'; setTimeout(() => { btn.textContent = t; }, 1600); };
+    if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(text).then(done, () => {});
+    else { const ta = document.createElement('textarea'); ta.value = text; document.body.appendChild(ta); ta.select(); try { document.execCommand('copy'); done(); } catch (err) {} ta.remove(); }
   }));
 
   /** Checklists: each item toggles its own aria-pressed state. */

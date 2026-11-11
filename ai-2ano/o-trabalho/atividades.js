@@ -438,5 +438,749 @@ window.ATIVIDADES = {
     ]
    }
   ]
+ },
+ "abolicao": {
+  "disciplina": "AI 11.º",
+  "titulo": "Pela abolição",
+  "passos": [
+   {
+    "tipo": "opiniao",
+    "p": "Ainda hoje há pessoas vítimas de tráfico humano e de trabalho forçado. Já tinhas ouvido falar disso?",
+    "o": [
+     "Sim",
+     "Não",
+     "Não tenho a certeza"
+    ],
+    "porque": "Onde ouviste, ou o que imaginas que seja?"
+   },
+   {
+    "tipo": "escrita",
+    "titulo": "Na pele de uma pessoa escravizada",
+    "perguntas": [
+     "Imagina-te na pele de uma pessoa escravizada. Escreve três argumentos a favor da abolição da escravatura.",
+     "Volta às quatro perguntas da ficha (quem manda, o que te prende, o que recebes, podes ir-te embora). Qual das respostas te parece mais injusta? Porquê?"
+    ]
+   }
+  ]
+ },
+ "quemfala": {
+  "disciplina": "AI 11.º",
+  "titulo": "Quem está a falar?",
+  "passos": [
+   {
+    "tipo": "classificar",
+    "titulo": "Quem está a falar?",
+    "intro": "Lê cada frase e escolhe quem a diz.",
+    "categorias": [
+     "Recoletor",
+     "Escravo",
+     "Servo",
+     "Aprendiz"
+    ],
+    "itens": [
+     {
+      "t": "«Hoje comemos o que apanhámos. Amanhã mudamos de sítio.»",
+      "c": 0,
+      "f": "Recoletor: vive do que a Natureza dá e é nómada."
+     },
+     {
+      "t": "«Fui feito prisioneiro na guerra. Agora pertenço a um dono.»",
+      "c": 1,
+      "f": "Escravo: os prisioneiros de guerra eram transformados em escravos."
+     },
+     {
+      "t": "«Não posso sair desta terra sem o senhor deixar.»",
+      "c": 2,
+      "f": "Servo: está preso à gleba."
+     },
+     {
+      "t": "«Paguei para entrar na oficina. Dão-me comida e cama.»",
+      "c": 3,
+      "f": "Aprendiz: paga para aprender o ofício."
+     },
+     {
+      "t": "«Trabalho de graça nas terras do senhor. Chama-se corveia.»",
+      "c": 2,
+      "f": "Servo: a corveia é trabalho gratuito na reserva."
+     },
+     {
+      "t": "«Não tenho quaisquer direitos, nem sou cidadão.»",
+      "c": 1,
+      "f": "Escravo: sem direitos e sem cidadania."
+     }
+    ]
+   },
+   {
+    "tipo": "escrita",
+    "perguntas": [
+     "No teu estágio (formação em contexto de trabalho), quem é o «mestre»? Em que degrau da escada estás tu: aprendiz, companheiro ou mestre? Explica."
+    ]
+   }
+  ]
+ },
+ "oficina": {
+  "disciplina": "AI 11.º",
+  "titulo": "Oficina, manufatura ou fábrica?",
+  "passos": [
+   {
+    "tipo": "classificar",
+    "titulo": "Oficina, manufatura ou fábrica?",
+    "intro": "Situações de hoje, nos vossos cursos. A que se parece cada uma?",
+    "categorias": [
+     "Oficina",
+     "Manufatura",
+     "Fábrica"
+    ],
+    "itens": [
+     {
+      "t": "Um eletricista por conta própria faz sozinho toda a instalação de uma casa.",
+      "c": 0,
+      "f": "Oficina: uma pessoa domina o trabalho do princípio ao fim."
+     },
+     {
+      "t": "Trinta pessoas montam quadros elétricos à mão; cada uma faz só uma parte.",
+      "c": 1,
+      "f": "Manufatura: à mão, com o trabalho dividido e um patrão."
+     },
+     {
+      "t": "Uma linha de máquinas produz quilómetros de cabo elétrico por dia.",
+      "c": 2,
+      "f": "Fábrica: quem produz é a máquina."
+     },
+     {
+      "t": "Uma criadora filma, edita e publica o seu próprio vídeo.",
+      "c": 0,
+      "f": "Oficina: faz o produto inteiro, com as suas ferramentas."
+     },
+     {
+      "t": "Num estúdio, um escreve, outro filma, outro edita e outro trata do som.",
+      "c": 1,
+      "f": "Manufatura: feito por pessoas, mas cada uma só faz uma parte."
+     },
+     {
+      "t": "Um programa gera sozinho milhares de anúncios por hora.",
+      "c": 2,
+      "f": "Fábrica: a produção passou para a máquina."
+     }
+    ]
+   },
+   {
+    "tipo": "opiniao",
+    "p": "Onde preferias trabalhar?",
+    "o": [
+     "Oficina",
+     "Manufatura",
+     "Fábrica"
+    ],
+    "porque": "Porquê? O que se ganha e o que se perde?"
+   }
+  ]
+ },
+ "fichas": {
+  "disciplina": "AI 11.º",
+  "titulo": "Dez mil anos numa tabela",
+  "passos": [
+   {
+    "tipo": "opiniao",
+    "p": "Em que época preferias ser trabalhador?",
+    "o": [
+     "Recoletor",
+     "Servo",
+     "Companheiro numa oficina",
+     "Operário numa fábrica"
+    ],
+    "porque": "Porquê? Usa pelo menos uma das quatro perguntas da ficha."
+   },
+   {
+    "tipo": "escrita",
+    "perguntas": [
+     "Preenche a tua própria ficha, a pensar no teu estágio ou no teu primeiro emprego: quem manda, o que te prende, o que recebes, podes ir-te embora?"
+    ]
+   }
+  ]
+ },
+ "modelos-ie": {
+  "disciplina": "AI 11.º",
+  "titulo": "Taylor, Ford ou Toyota? · Instalações Elétricas",
+  "passos": [
+   {
+    "tipo": "classificar",
+    "titulo": "Taylor, Ford ou Toyota?",
+    "intro": "Situações de trabalho na tua área. Que modelo de organização é?",
+    "categorias": [
+     "Taylorismo",
+     "Fordismo",
+     "Toyotismo"
+    ],
+    "itens": [
+     {
+      "t": "Um supervisor cronometra quanto tempo demoras a cravar cada terminal e pagam-te por peça.",
+      "c": 0,
+      "f": "Taylorismo: tempos cronometrados e pagamento à peça."
+     },
+     {
+      "t": "O quadro elétrico passa num tapete e tu só apertas sempre os mesmos quatro parafusos.",
+      "c": 1,
+      "f": "Fordismo: a linha de montagem traz o trabalho até ti."
+     },
+     {
+      "t": "A empresa só encomenda o cabo depois de o cliente confirmar a obra.",
+      "c": 2,
+      "f": "Toyotismo: produzir o necessário, no momento necessário."
+     },
+     {
+      "t": "O engenheiro planeia tudo no gabinete; tu só executas o que está na folha.",
+      "c": 0,
+      "f": "Taylorismo: quem pensa é o gabinete."
+     },
+     {
+      "t": "Uma fábrica faz milhares de tomadas iguais por dia, para vender barato a toda a gente.",
+      "c": 1,
+      "f": "Fordismo: produção em massa de bens padronizados."
+     },
+     {
+      "t": "Na tua equipa todos sabem fazer instalação, domótica e manutenção, e decidem juntos.",
+      "c": 2,
+      "f": "Toyotismo: trabalhadores multifuncionais, em equipa."
+     }
+    ]
+   },
+   {
+    "tipo": "opiniao",
+    "p": "Em qual dos três modelos preferias trabalhar?",
+    "o": [
+     "Taylorismo",
+     "Fordismo",
+     "Toyotismo"
+    ],
+    "porque": "Porquê?"
+   }
+  ]
+ },
+ "modelos-mm": {
+  "disciplina": "AI 11.º",
+  "titulo": "Taylor, Ford ou Toyota? · Multimédia",
+  "passos": [
+   {
+    "tipo": "classificar",
+    "titulo": "Taylor, Ford ou Toyota?",
+    "intro": "Situações de trabalho na tua área. Que modelo de organização é?",
+    "categorias": [
+     "Taylorismo",
+     "Fordismo",
+     "Toyotismo"
+    ],
+    "itens": [
+     {
+      "t": "Uma agência mede quantas legendas fazes por hora e paga-te por cada uma.",
+      "c": 0,
+      "f": "Taylorismo: tempos controlados e pagamento à peça."
+     },
+     {
+      "t": "Um estúdio faz centenas de vídeos iguais: um só corta, outro só põe o som, outro só exporta.",
+      "c": 1,
+      "f": "Fordismo: produção em série, cada um numa tarefa repetitiva."
+     },
+     {
+      "t": "Só se começa o vídeo depois de o cliente o encomendar, e é feito à medida dele.",
+      "c": 2,
+      "f": "Toyotismo: produz-se o que é pedido, personalizado."
+     },
+     {
+      "t": "O diretor decide tudo; os editores seguem o guião plano a plano, sem propor nada.",
+      "c": 0,
+      "f": "Taylorismo: uns pensam, outros executam."
+     },
+     {
+      "t": "O mesmo anúncio padronizado, produzido em massa para milhões de pessoas.",
+      "c": 1,
+      "f": "Fordismo: produto uniforme, consumo em massa."
+     },
+     {
+      "t": "Na equipa todos sabem filmar, editar e fazer grafismo, e qualquer um pode travar uma entrega com erros.",
+      "c": 2,
+      "f": "Toyotismo: equipa multifuncional que controla a qualidade."
+     }
+    ]
+   },
+   {
+    "tipo": "opiniao",
+    "p": "Em qual dos três modelos preferias trabalhar?",
+    "o": [
+     "Taylorismo",
+     "Fordismo",
+     "Toyotismo"
+    ],
+    "porque": "Porquê?"
+   }
+  ]
+ },
+ "impacto": {
+  "disciplina": "AI 11.º",
+  "titulo": "A tecnologia e o trabalho",
+  "passos": [
+   {
+    "tipo": "opiniao",
+    "p": "A tecnologia no mundo do trabalho, para ti, é sobretudo…",
+    "o": [
+     "uma oportunidade",
+     "uma ameaça",
+     "as duas coisas"
+    ],
+    "porque": "Dá um exemplo da tua área (Instalações Elétricas ou Multimédia)."
+   },
+   {
+    "tipo": "escrita",
+    "perguntas": [
+     "Escolhe um impacto, positivo ou negativo, da revolução tecnológica no mundo do trabalho e comenta-o em três ou quatro linhas."
+    ]
+   }
+  ]
+ },
+ "teletrabalho": {
+  "disciplina": "AI 11.º",
+  "titulo": "Dá para fazer em teletrabalho?",
+  "passos": [
+   {
+    "tipo": "classificar",
+    "titulo": "Dá para fazer em teletrabalho?",
+    "intro": "Tarefas das vossas duas áreas.",
+    "categorias": [
+     "Sim",
+     "Não"
+    ],
+    "itens": [
+     {
+      "t": "Instalar o quadro elétrico de um prédio.",
+      "c": 1,
+      "f": "Tem de ser feito no local."
+     },
+     {
+      "t": "Editar um vídeo para um cliente.",
+      "c": 0,
+      "f": "Basta o computador, o software e a internet."
+     },
+     {
+      "t": "Desenhar no computador o esquema elétrico de uma casa.",
+      "c": 0,
+      "f": "É trabalho de projeto: faz-se em qualquer lugar."
+     },
+     {
+      "t": "Filmar um casamento.",
+      "c": 1,
+      "f": "É preciso estar lá."
+     },
+     {
+      "t": "Fazer o orçamento de uma instalação e enviá-lo por correio eletrónico.",
+      "c": 0,
+      "f": "Trabalho de escritório: pode ser à distância."
+     },
+     {
+      "t": "Reparar a avaria de um elevador.",
+      "c": 1,
+      "f": "Exige presença e ferramentas no local."
+     }
+    ]
+   },
+   {
+    "tipo": "opiniao",
+    "p": "Gostavas de trabalhar em teletrabalho?",
+    "o": [
+     "Sim",
+     "Não",
+     "Só alguns dias"
+    ],
+    "porque": "Diz uma vantagem e um inconveniente para ti."
+   }
+  ]
+ },
+ "upwork": {
+  "disciplina": "AI 11.º",
+  "titulo": "Trabalhar numa plataforma",
+  "passos": [
+   {
+    "tipo": "opiniao",
+    "p": "Trabalhavas como freelancer numa plataforma?",
+    "o": [
+     "Sim",
+     "Não",
+     "Só como complemento"
+    ],
+    "porque": "Porquê?"
+   },
+   {
+    "tipo": "escrita",
+    "titulo": "Vantagens e desvantagens",
+    "perguntas": [
+     "Uma vantagem e uma desvantagem deste modelo para quem presta o serviço (o freelancer).",
+     "Uma vantagem e uma desvantagem para quem contrata.",
+     "Que direitos e que proteção social achas que este tipo de trabalho garante? (Pensa em férias, doença e desemprego.)"
+    ]
+   }
+  ]
+ },
+ "setores": {
+  "disciplina": "AI 11.º",
+  "titulo": "Em que setor trabalha?",
+  "passos": [
+   {
+    "tipo": "classificar",
+    "titulo": "Em que setor trabalha?",
+    "intro": "Escolhe o setor de atividade de cada pessoa.",
+    "categorias": [
+     "Primário",
+     "Secundário",
+     "Terciário"
+    ],
+    "itens": [
+     {
+      "t": "Um pescador de Sesimbra.",
+      "c": 0,
+      "f": "Primário: tira diretamente da Natureza."
+     },
+     {
+      "t": "Uma operária numa fábrica de cabos elétricos.",
+      "c": 1,
+      "f": "Secundário: indústria transformadora."
+     },
+     {
+      "t": "Um eletricista que faz a instalação elétrica de um prédio em construção.",
+      "c": 1,
+      "f": "Secundário: a construção faz parte deste setor."
+     },
+     {
+      "t": "O vendedor de uma loja de material elétrico.",
+      "c": 2,
+      "f": "Terciário: comércio."
+     },
+     {
+      "t": "Uma editora de vídeo numa agência de publicidade.",
+      "c": 2,
+      "f": "Terciário: presta um serviço."
+     },
+     {
+      "t": "Um agricultor que produz azeite.",
+      "c": 0,
+      "f": "Primário: agricultura."
+     }
+    ]
+   },
+   {
+    "tipo": "escrita",
+    "perguntas": [
+     "Em que setor de atividade vais trabalhar quando acabares o curso? Dá um exemplo de uma empresa ou de um trabalho concreto."
+    ]
+   }
+  ]
+ },
+ "conta": {
+  "disciplina": "AI 11.º",
+  "titulo": "Empregado, desempregado ou inativo?",
+  "passos": [
+   {
+    "tipo": "classificar",
+    "titulo": "Empregado, desempregado ou inativo?",
+    "intro": "Para a estatística oficial, como conta cada pessoa?",
+    "categorias": [
+     "Empregado",
+     "Desempregado",
+     "Inativo"
+    ],
+    "itens": [
+     {
+      "t": "A Ana ficou sem emprego há três meses, envia currículos todas as semanas e pode começar amanhã.",
+      "c": 1,
+      "f": "Desempregada: cumpre as três condições."
+     },
+     {
+      "t": "O Rui tem 17 anos, estuda e não anda à procura de trabalho.",
+      "c": 2,
+      "f": "Inativo: não procura trabalho."
+     },
+     {
+      "t": "A Marta está reformada.",
+      "c": 2,
+      "f": "Inativa: não trabalha nem procura trabalho."
+     },
+     {
+      "t": "O Tiago só conseguiu cinco horas pagas esta semana, a montar um palco.",
+      "c": 0,
+      "f": "Empregado: para a estatística, basta uma hora de trabalho pago na semana."
+     },
+     {
+      "t": "A Joana procurou durante dois anos, desanimou e deixou de procurar.",
+      "c": 2,
+      "f": "Inativa: sem procura ativa, deixa de contar como desempregada."
+     },
+     {
+      "t": "O Paulo acabou o curso de Instalações Elétricas, está inscrito no centro de emprego e vai a entrevistas.",
+      "c": 1,
+      "f": "Desempregado: sem trabalho, disponível e à procura."
+     }
+    ]
+   }
+  ]
+ },
+ "consequencias": {
+  "disciplina": "AI 11.º",
+  "titulo": "As consequências do desemprego",
+  "passos": [
+   {
+    "tipo": "opiniao",
+    "p": "Qual das consequências do desemprego de longa duração te parece mais grave?",
+    "o": [
+     "As psicológicas",
+     "As económicas",
+     "As sociais"
+    ],
+    "porque": "Porquê?"
+   },
+   {
+    "tipo": "escrita",
+    "perguntas": [
+     "Além do salário, o que achas que perdias se ficasses um ano sem trabalho nem escola? Escreve duas coisas."
+    ]
+   }
+  ]
+ },
+ "medidas": {
+  "disciplina": "AI 11.º",
+  "titulo": "Como combater o desemprego?",
+  "passos": [
+   {
+    "tipo": "opiniao",
+    "p": "Qual destas medidas ajudaria mais os jovens?",
+    "o": [
+     "Subsídio de desemprego",
+     "Formação e qualificação",
+     "Apoio para criar o próprio emprego"
+    ],
+    "porque": "Porquê?"
+   },
+   {
+    "tipo": "escrita",
+    "perguntas": [
+     "Se fosses ministro ou ministra do Trabalho, que medida tomavas para reduzir a taxa de desemprego? Explica como funcionaria."
+    ]
+   }
+  ]
+ },
+ "jovens": {
+  "disciplina": "AI 11.º",
+  "titulo": "O meu primeiro emprego",
+  "passos": [
+   {
+    "tipo": "opiniao",
+    "p": "O que achas que mais dificulta o primeiro emprego?",
+    "o": [
+     "Falta de experiência",
+     "Contratos a prazo",
+     "Poucas ofertas na minha área",
+     "Acharem que somos novos demais"
+    ],
+    "porque": "Porquê?"
+   },
+   {
+    "tipo": "escrita",
+    "perguntas": [
+     "Escreve três coisas que fizeste, ou vais fazer, no estágio e que podes pôr no currículo como experiência."
+    ]
+   }
+  ]
+ },
+ "anuncios": {
+  "disciplina": "AI 11.º",
+  "titulo": "Este anúncio pode dizer isto?",
+  "passos": [
+   {
+    "tipo": "classificar",
+    "titulo": "Este anúncio de emprego pode dizer isto?",
+    "intro": "Lê cada anúncio de emprego e decide.",
+    "categorias": [
+     "Pode",
+     "Não pode"
+    ],
+    "itens": [
+     {
+      "t": "«Procura-se eletricista até aos 30 anos.»",
+      "c": 1,
+      "f": "Não pode: exclui pela idade."
+     },
+     {
+      "t": "«Procura-se eletricista com carta de condução.»",
+      "c": 0,
+      "f": "Pode: é um requisito do próprio trabalho."
+     },
+     {
+      "t": "«Editor de vídeo jovem e dinâmico, para equipa jovem.»",
+      "c": 1,
+      "f": "Não pode: pedir «jovem» é discriminar pela idade."
+     },
+     {
+      "t": "«Editor de vídeo com portefólio e domínio de software de edição.»",
+      "c": 0,
+      "f": "Pode: pede competências, não uma idade."
+     },
+     {
+      "t": "«Não aceitamos candidatos com mais de 50 anos.»",
+      "c": 1,
+      "f": "Não pode: discriminação direta pela idade."
+     },
+     {
+      "t": "«Técnico com curso profissional de nível 4.»",
+      "c": 0,
+      "f": "Pode: pede uma qualificação."
+     }
+    ]
+   },
+   {
+    "tipo": "opiniao",
+    "p": "Já sentiste que te trataram de forma diferente por causa da tua idade?",
+    "o": [
+     "Sim, muitas vezes",
+     "Algumas vezes",
+     "Nunca"
+    ],
+    "porque": "Conta uma situação, se quiseres."
+   }
+  ]
+ },
+ "formacao": {
+  "disciplina": "AI 11.º",
+  "titulo": "Educação, formação inicial ou formação contínua?",
+  "passos": [
+   {
+    "tipo": "classificar",
+    "titulo": "Educação, formação inicial ou formação contínua?",
+    "intro": "Classifica cada situação.",
+    "categorias": [
+     "Educação",
+     "Formação inicial",
+     "Formação contínua"
+    ],
+    "itens": [
+     {
+      "t": "Uma aula de Área de Integração sobre Hannah Arendt.",
+      "c": 0,
+      "f": "Educação: ajuda a pensar, não treina uma tarefa."
+     },
+     {
+      "t": "O teu estágio numa empresa, no fim do curso.",
+      "c": 1,
+      "f": "Formação inicial: prepara-te para a profissão antes de entrares nela."
+     },
+     {
+      "t": "Um eletricista de 45 anos aprende a instalar carregadores de carros elétricos.",
+      "c": 2,
+      "f": "Formação contínua: atualiza-se durante a vida de trabalho."
+     },
+     {
+      "t": "Aprender a ler e a escrever.",
+      "c": 0,
+      "f": "Educação: base para tudo o resto."
+     },
+     {
+      "t": "O módulo técnico do teu curso em que aprendes a montar um quadro elétrico ou a editar vídeo.",
+      "c": 1,
+      "f": "Formação inicial: saber fazer."
+     },
+     {
+      "t": "Uma designer faz um curso de 25 horas sobre um novo programa, pago pela empresa.",
+      "c": 2,
+      "f": "Formação contínua: acompanhar uma nova tecnologia."
+     }
+    ]
+   },
+   {
+    "tipo": "escrita",
+    "perguntas": [
+     "Pensa na tua profissão daqui a dez anos. Que coisa nova achas que vais ter de aprender?"
+    ]
+   }
+  ]
+ },
+ "ods8": {
+  "disciplina": "AI 11.º",
+  "titulo": "Trabalho digno: as minhas três metas",
+  "passos": [
+   {
+    "tipo": "escrita",
+    "titulo": "Objetivo de Desenvolvimento Sustentável n.º 8",
+    "perguntas": [
+     "Das seis metas do ecrã, escreve as três que consideras mais importantes.",
+     "Escolhe uma delas e explica porquê, com um exemplo."
+    ]
+   }
+  ]
+ },
+ "cv-ia": {
+  "disciplina": "AI 11.º",
+  "titulo": "Bom uso ou mau uso?",
+  "passos": [
+   {
+    "tipo": "classificar",
+    "titulo": "Bom uso ou mau uso do assistente?",
+    "intro": "Decide: é um bom ou um mau uso de um assistente de inteligência artificial?",
+    "categorias": [
+     "Bom uso",
+     "Mau uso"
+    ],
+    "itens": [
+     {
+      "t": "Pedir que encontre os erros de português do teu currículo.",
+      "c": 0,
+      "f": "Bom uso: tu escreveste, o assistente revê."
+     },
+     {
+      "t": "Pedir que acrescente um estágio numa empresa conhecida, que nunca fizeste.",
+      "c": 1,
+      "f": "Mau uso: é mentir, e descobre-se na entrevista."
+     },
+     {
+      "t": "Colar o teu currículo com morada, telemóvel e número de identificação.",
+      "c": 1,
+      "f": "Mau uso: os dados pessoais ficam de fora."
+     },
+     {
+      "t": "Pedir que faça de recrutador e te faça perguntas para treinares.",
+      "c": 0,
+      "f": "Bom uso: treino sem risco."
+     },
+     {
+      "t": "Copiar a resposta e enviar para a empresa sem ler.",
+      "c": 1,
+      "f": "Mau uso: pode ter erros e coisas inventadas."
+     },
+     {
+      "t": "Colar um anúncio e perguntar que competências tuas deves destacar.",
+      "c": 0,
+      "f": "Bom uso: adaptar o currículo a cada oferta."
+     }
+    ]
+   }
+  ]
+ },
+ "cv-ia-saida": {
+  "disciplina": "AI 11.º",
+  "titulo": "O assistente e o meu currículo",
+  "passos": [
+   {
+    "tipo": "escrita",
+    "perguntas": [
+     "Que sugestão do assistente aceitaste? Porquê?",
+     "Que sugestão recusaste, ou tiveste de corrigir? Porquê?"
+    ]
+   },
+   {
+    "tipo": "opiniao",
+    "p": "O assistente ajudou-te a melhorar o currículo?",
+    "o": [
+     "Muito",
+     "Um pouco",
+     "Não ajudou"
+    ],
+    "porque": "O que fez a diferença?"
+   }
+  ]
  }
 };
