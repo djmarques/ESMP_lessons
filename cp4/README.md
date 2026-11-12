@@ -1,6 +1,6 @@
 # CP 4 · Processos identitários
 
-Site interativo da unidade Cidadania e Profissionalidade 4 (formação de adultos), para projetar na sala. Tem o programa e cinco blocos: o nome e o reconhecimento, o navio de Teseu, Phineas Gage e o outro, identidade pessoal e social, e organizações verticais e horizontais (contexto profissional).
+Site interativo da unidade Cidadania e Profissionalidade 4 (formação de adultos), para projetar na sala. Tem o programa e seis blocos: o nome e o reconhecimento, o navio de Teseu, Phineas Gage e o outro, identidade pessoal e social, como tratar o outro (DR1: empatia, Kant e Mill, igualdade e equidade, intolerância, com cenas animadas) e organizações verticais e horizontais (contexto profissional).
 
 Os blocos 2 a 5 estão orientados para a prática e para o mundo do trabalho: cada exercício tem uma etiqueta que diz como se faz (folha em branco, computador ou telemóvel, em pares, em grupos), e cada bloco fecha com um slide «Para que serve?». As versões anteriores estão em `archive/`.
 
@@ -108,3 +108,7 @@ O código QR é gerado a partir de `data-url` (precisa de internet; sem ela, fic
 - **Linhas que abrem** (`<details class="more">`): um título que se abre com um clique para mostrar o texto (usado no programa).
 
 Os exemplos completos estão em `index.html`.
+
+## Cenas animadas (bloco «DR1 · Como tratar o outro»)
+
+Os slides com a classe `cena` têm um desenho SVG em que «eu» sou a figura laranja e «o outro» é a figura azul. `data-step` faz aparecer elementos; para mover coisas num clique, o `app.js` acrescenta ao slide as classes `ge1`, `ge2`… e as regras de cada cena estão no fim do `style.css`. `data-steps` no `<section>` indica quantos cliques tem a cena.

@@ -450,5 +450,96 @@ window.ATIVIDADES = {
    "No dilema do talho, o que farias? Porquê?",
    "Onde achas que trabalhas melhor: numa organização mais vertical ou mais horizontal? Porquê?"
   ]
+ },
+ "conduta": {
+  "disciplina": "CP 4",
+  "titulo": "Como tratar o outro",
+  "jogo": [
+   {
+    "p": "Perceber e sentir o que o outro está a sentir é…",
+    "o": [
+     "empatia",
+     "solidariedade",
+     "equidade"
+    ],
+    "c": 0,
+    "f": "Empatia: pôr-me no lugar do outro."
+   },
+   {
+    "p": "Qual destes passos se vê de fora?",
+    "o": [
+     "a empatia",
+     "a compaixão",
+     "a solidariedade"
+    ],
+    "c": 2,
+    "f": "Solidariedade é agir com o outro."
+   },
+   {
+    "p": "Para Kant, o que torna uma ação boa é…",
+    "o": [
+     "o resultado",
+     "a regra que sigo: o dever",
+     "a opinião da maioria"
+    ],
+    "c": 1,
+    "f": "Conta a regra, não o resultado."
+   },
+   {
+    "p": "«E se todos fizessem o mesmo?» é um teste de…",
+    "o": [
+     "Kant",
+     "Mill",
+     "Bentham"
+    ],
+    "c": 0,
+    "f": "Se a regra não pode valer para todos, não é aceitável."
+   },
+   {
+    "p": "Para o utilitarismo, a ação certa é a que…",
+    "o": [
+     "segue a tradição",
+     "traz mais bem-estar ao maior número",
+     "custa menos dinheiro"
+    ],
+    "c": 1,
+    "f": "Contam as consequências para todos."
+   },
+   {
+    "p": "Uma rampa ao lado de uma escada é um exemplo de…",
+    "o": [
+     "privilégio",
+     "equidade",
+     "tolerância"
+    ],
+    "c": 1,
+    "f": "Dar a cada um o que precisa para chegar ao mesmo sítio."
+   },
+   {
+    "p": "O direito à saúde é um direito…",
+    "o": [
+     "civil",
+     "social",
+     "comercial"
+    ],
+    "c": 1,
+    "f": "O Estado tem de o garantir."
+   },
+   {
+    "p": "Recusar formação a alguém por ter 58 anos é…",
+    "o": [
+     "xenofobia",
+     "idadismo",
+     "equidade"
+    ],
+    "c": 1,
+    "f": "Discriminação pela idade."
+   }
+  ],
+  "escrita": [
+   "No caso do Amadou, o que fazias? Explica usando uma das ferramentas do bloco (sentir, querer e agir; Kant; Mill; equidade).",
+   "Dá um exemplo de equidade no teu local de trabalho (ou num sítio onde trabalhaste).",
+   "Que «tijolo» de intolerância já viste? O que se podia ter feito?"
+  ]
  }
 };

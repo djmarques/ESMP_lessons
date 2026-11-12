@@ -28,7 +28,7 @@
   /** Highest data-step value inside a slide (0 if the slide has no builds). */
   function maxStep(slide) {
     return Array.from(slide.querySelectorAll('[data-step]'))
-      .reduce((m, el) => Math.max(m, Number(el.dataset.step)), 0);
+      .reduce((m, el) => Math.max(m, Number(el.dataset.step)), Number(slide.dataset.steps || 0));   // data-steps: steps that only move things
   }
 
   /** Build the sidebar: one heading per data-lesson, one link per slide. */
@@ -56,6 +56,8 @@
       counters that have just become visible. */
   function setStep(slide, n) {
     stepOf.set(slide, n);
+    // animated scenes: class ge1…geN = «step is at least k» (see «Cenas animadas» in style.css)
+    for (let k = 1, m = maxStep(slide); k <= m; k++) slide.classList.toggle('ge' + k, n >= k);
     slide.querySelectorAll('[data-step]').forEach(el => {
       const on = Number(el.dataset.step) <= n;
       if (on && !el.classList.contains('on') && el.dataset.count) runCounter(el);

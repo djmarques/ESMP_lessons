@@ -473,3 +473,112 @@ ul.qs { margin: 0; padding-left: 22px; } ul.qs li { margin-bottom: 12px; }
 .phone-qr { background: var(--white); border: 1px solid var(--line); border-radius: 10px; padding: 20px; text-align: center; }
 .phone-qr canvas, .phone-qr img { width: 280px !important; height: 280px !important; margin: 0 auto; display: block; }
 .phone-qr a { display: block; margin-top: 12px; font-size: 15px; color: var(--blue); word-break: break-all; }
+
+/* definitions in diagram form (same component as the other lesson sites) */
+.ddef { display: flex; align-items: center; gap: 14px; flex-wrap: wrap; margin: 16px 0; }
+.ddef .term { background: var(--navy); color: #fff; font-family: var(--head); font-weight: 700; font-size: 24px; padding: 10px 18px; border-radius: 10px; display: grid; line-height: 1.15; }
+.ddef .term small { font-family: var(--body); font-weight: 400; font-size: 14px; color: var(--orange-light); }
+.ddef .eq { font-family: var(--head); font-size: 34px; color: var(--orange); font-weight: 700; }
+.ddef .parts { display: flex; align-items: center; gap: 10px 8px; flex-wrap: wrap; flex: 1; }
+.ddef .pi { display: inline-flex; align-items: center; gap: 8px; }
+.ddef .part { background: var(--cream); border: 1px solid var(--line); border-radius: 8px; padding: 8px 12px; font-size: 18px; font-weight: 700; color: var(--navy); line-height: 1.25; max-width: 320px; }
+.ddef .op { font-family: var(--head); font-size: 26px; font-weight: 700; color: var(--orange); }
+.slide.current .ddef.on .pi, .slide.current .ddef:not([data-step]) .pi { animation: ddin .5s var(--ease) both; animation-delay: calc(var(--i) * .35s + .1s); }
+@keyframes ddin { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
+.quiz.quiz2col { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; } .quiz.quiz2col .q { margin: 0; } .quiz.quiz2col .score { grid-column: 1 / -1; }
+@media (max-width: 900px) { .quiz.quiz2col { grid-template-columns: 1fr; } }
+
+/* ---------- 17. Cenas animadas (história e organização do trabalho) ---
+   One SVG «stage» per slide (.palco > svg.cena-svg, viewBox 1000 × 300).
+   The worker is always the orange figure with a white dot on the chest;
+   whoever gives the orders is the navy figure. app.js adds the classes
+   ge1…geN to the slide («step is at least k»); the per-scene rules at the
+   end of this file use them to move, fade or swap things at each click. */
+.slide.cena h2 { font-size: 38px; margin-bottom: 12px; }
+.stage:has(.slide.cena.current) { padding-top: 34px; }
+.palco { background: var(--white); border: 1px solid var(--line); border-radius: 12px; overflow: hidden; }
+.cena-svg { display: block; width: 100%; height: auto; }
+.cena-svg text { font-family: var(--body); }
+.cena-svg text.headf { font-family: var(--head); }
+.cena-svg .mv { transition: transform 1.5s var(--ease); }
+.cena-svg .fd, .cena-svg .fc, .cena-svg .berry, .cena-svg [data-step] > rect, .cena-svg [data-step] > text { transition: opacity .7s var(--ease); }
+.cena-svg .fc.f1, .cena-svg .fc.f2 { opacity: 0; }
+.cena-svg [data-step] { transition: opacity .6s var(--ease), transform .6s var(--ease); }
+
+/* small loops that keep a scene alive while the teacher talks */
+.slide.current .bob { animation: bob 2.6s ease-in-out infinite; }
+@keyframes bob { 50% { transform: translateY(-1.6px); } }
+.slide.current .rock { animation: rock 3.4s ease-in-out infinite; transform-box: fill-box; transform-origin: 50% 100%; }
+@keyframes rock { 0%, 100% { transform: rotate(-2.5deg); } 50% { transform: rotate(2.5deg); } }
+.slide.current .spin { animation: spin 5s linear infinite; }
+.slide.current .spin.slow { animation-duration: 11s; }
+.slide.current .spin.fast { animation-duration: 1.6s; }
+@keyframes spin { to { transform: rotate(360deg); } }
+.slide.current .fish { animation: fish 2.8s ease-in-out infinite; }
+@keyframes fish { 0%, 60%, 100% { transform: translateY(0); } 30% { transform: translateY(-16px); } }
+.slide.current .smoke { animation: smoke 2.4s linear infinite; opacity: 0; }
+@keyframes smoke { 0% { transform: translate(0, 0) scale(.6); opacity: .9; } 100% { transform: translate(16px, -46px) scale(1.7); opacity: 0; } }
+.slide.current .belt { animation: belt 1.1s linear infinite; }
+@keyframes belt { to { stroke-dashoffset: -28; } }
+.slide.current .pulse { animation: pulse 1.6s ease-in-out infinite; transform-box: fill-box; transform-origin: center; }
+@keyframes pulse { 50% { transform: scale(1.18); } }
+.slide.current .tick { animation: tick 2s steps(8) infinite; transform-box: fill-box; transform-origin: 50% 100%; }
+@keyframes tick { to { transform: rotate(360deg); } }
+.slide.current .hammer { animation: hammer .9s ease-in-out infinite; transform-box: fill-box; transform-origin: 0% 100%; }
+@keyframes hammer { 50% { transform: rotate(-38deg); } }
+.slide.current .wifi { animation: wifi 1.8s ease-out infinite; opacity: 0; }
+@keyframes wifi { 0% { opacity: 0; } 30% { opacity: 1; } 100% { opacity: 0; } }
+
+/* era strip above the title: where are we in time? */
+.friso { display: flex; gap: 6px; flex-wrap: wrap; margin: 0 0 8px; }
+.friso span { font-size: 13px; font-weight: 700; letter-spacing: .04em; text-transform: uppercase; color: var(--muted); background: var(--cream); border-radius: 999px; padding: 3px 12px; }
+.friso span.now { background: var(--orange); color: #fff; }
+
+/* compact definitions under a scene */
+.ddef.mini { margin: 8px 0 0; gap: 10px; }
+.ddef.mini .term { font-size: 19px; padding: 6px 14px; border-radius: 8px; }
+.ddef.mini .term small { font-size: 12px; }
+.ddef.mini .eq { font-size: 24px; }
+.ddef.mini .part { font-size: 16.5px; padding: 5px 10px; max-width: none; }
+.ddef.mini .op { font-size: 20px; }
+.mini-cards { gap: 10px; margin-top: 8px; }
+.mini-cards .card { padding: 8px 14px; font-size: 16.5px; line-height: 1.3; }
+.mini-cards .card b { display: block; font-family: var(--head); color: var(--navy); font-size: 19px; }
+
+/* the worker's «ficha»: the same questions in every era */
+.ficha { display: grid; grid-template-columns: minmax(120px, auto) repeat(4, 1fr); background: var(--navy); color: #fff; border-radius: 10px; overflow: hidden; margin-top: 10px; }
+.ficha.n3 { grid-template-columns: minmax(120px, auto) repeat(3, 1fr); }
+.ficha .who { background: var(--orange); font-family: var(--head); font-weight: 700; font-size: 18px; padding: 8px 14px; display: grid; place-items: center; text-align: center; line-height: 1.1; max-width: 190px; }
+.ficha > div { padding: 7px 14px 8px; border-left: 1px solid rgba(255, 255, 255, .16); }
+.ficha small { display: block; color: var(--accent); font-size: 12px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; }
+.ficha b { font-size: 17px; line-height: 1.2; display: block; }
+.slide.cena .ask { margin-top: 12px; font-size: 22px; }
+.slide.cena .source { margin-top: 8px; font-size: 13px; }
+.elenco .card { gap: 20px; }
+.elenco-svg { width: 96px; flex: none; }
+table.fichas td, table.fichas th { font-size: 17px; padding: 7px 12px; }
+table.fichas tr.tu td, table.fichas tr.tu th { background: var(--orange-light); font-weight: 700; color: var(--navy); }
+.paint.vida { grid-template-columns: 1fr 1.25fr; } .paint.vida img { max-height: 46vh; }
+.facts { display: grid; gap: 10px; }
+.facts .card p { margin: 0; font-size: 18px; line-height: 1.3; }
+.facts .card { display: flex; gap: 16px; align-items: center; padding: 10px 18px; }
+.facts .card .bign { font-size: 40px; min-width: 140px; text-align: center; line-height: 1; }
+.tele-t { width: 100%; border-collapse: separate; border-spacing: 6px; }
+.tele-t th { background: var(--navy); color: #fff; padding: 6px 12px; font-size: 16px; }
+.tele-t td { background: var(--cream); padding: 8px 14px; font-size: 16.5px; vertical-align: top; border-radius: 6px; }
+.tele-t td.g { background: var(--green-light); } .tele-t td.r { background: var(--orange-light); }
+.tele-t ul { margin: 0; padding-left: 18px; }
+@media (max-width: 860px) { .ficha, .ficha.n3 { grid-template-columns: 1fr 1fr; } .ficha .who { grid-column: 1 / -1; max-width: none; } }
+@media (prefers-reduced-motion: reduce) { .cena-svg .mv, .cena-svg .grow { transition: none !important; } }
+.mini-cards .card.green { color: var(--text); }
+/* per-scene states (generated) */
+#s-d1-empatia.ge3 #emp-e{transform:translateX(310px)} #s-d1-empatia.ge3 #emp-b,#s-d1-empatia.ge3 #emp-h{opacity:0} #s-d1-empatia.ge3 #emp-u .f0,#s-d1-empatia.ge3 #emp-ef .f0{opacity:0} #s-d1-empatia.ge3 #emp-u .f1,#s-d1-empatia.ge3 #emp-ef .f1{opacity:1}
+#s-d1-kant.ge1 #kan-a{opacity:0} #s-d1-kant .liar{opacity:0} #s-d1-kant.ge2 .liar{opacity:1} .nobob .bob{animation:none !important}
+#s-d1-equidade.ge1 #eq-e{transform:translate(-230px,-80px)} #s-d1-equidade.ge2 #eq-u{transform:translate(340px,-80px)} #s-d1-equidade.ge1 #eq-uf .f0{opacity:0} #s-d1-equidade.ge1 #eq-uf .f1{opacity:1} #s-d1-equidade.ge2 #eq-uf .f1{opacity:0} #s-d1-equidade.ge2 #eq-uf .f2{opacity:1}
+#s-d1-diversidade.ge2 #div0{transform:translate(190px,0)} #s-d1-diversidade.ge3 #div0{transform:translate(300px,-5px)}
+#s-d1-diversidade.ge2 #div1{transform:translate(100px,0)} #s-d1-diversidade.ge3 #div1{transform:translate(155px,-50px)}
+#s-d1-diversidade.ge2 #div2{transform:translate(0px,0)} #s-d1-diversidade.ge3 #div2{transform:translate(0px,-5px)}
+#s-d1-diversidade.ge2 #div3{transform:translate(-100px,0)} #s-d1-diversidade.ge3 #div3{transform:translate(-155px,-50px)}
+#s-d1-diversidade.ge2 #div4{transform:translate(-190px,0)} #s-d1-diversidade.ge3 #div4{transform:translate(-300px,-5px)}
+#s-d1-diversidade.ge2 .dv1,#s-d1-diversidade.ge3 .dv2{opacity:0}
+#s-d1-muro.ge8 #mu-w{opacity:.12} #s-d1-muro.ge8 #mu-e{transform:translateX(330px)} #s-d1-muro.ge8 #mu-u{transform:translateX(-330px)} #s-d1-muro.ge8 #mu-uf .f0{opacity:0} #s-d1-muro.ge8 #mu-uf .f1{opacity:1}
