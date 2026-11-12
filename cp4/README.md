@@ -1,8 +1,8 @@
 # CP 4 · Processos identitários
 
-Site interativo da unidade Cidadania e Profissionalidade 4 (formação de adultos), para projetar na sala. Tem o programa e seis blocos: o nome e o reconhecimento, o navio de Teseu, Phineas Gage e o outro, identidade pessoal e social, como tratar o outro (DR1: empatia, Kant e Mill, igualdade e equidade, intolerância, com cenas animadas) e organizações verticais e horizontais (contexto profissional).
+Site interativo da unidade Cidadania e Profissionalidade 4 (formação de adultos), para projetar na sala. Tem o programa e os blocos de dois Domínios de Referência (DR). DR1 · Da identidade à alteridade: 1. o nome e o reconhecimento; 2. o navio de Teseu; 3. Phineas Gage e o outro; 4. identidade pessoal e social; 5. como tratar o outro (empatia, igualdade e equidade, diversidade, intolerância). DR2 · Deontologia na construção da cultura organizacional: 1. ética do dever e das consequências (Kant e Mill); 2. organizações verticais e horizontais.
 
-Os blocos 2 a 5 estão orientados para a prática e para o mundo do trabalho: cada exercício tem uma etiqueta que diz como se faz (folha em branco, computador ou telemóvel, em pares, em grupos), e cada bloco fecha com um slide «Para que serve?». As versões anteriores estão em `archive/`.
+Os blocos DR1.2 a DR2.2 estão orientados para a prática e para o mundo do trabalho: cada exercício tem uma etiqueta que diz como se faz (folha em branco, computador ou telemóvel, em pares, em grupos), e cada bloco fecha com um slide «Para que serve?». As versões anteriores estão em `archive/`.
 
 A seguir a cada jogo há um slide «No telemóvel»: os formandos jogam no seu telemóvel e as respostas chegam-te por email. Ver `LEIA-ME-telemovel.md`.
 
@@ -109,6 +109,6 @@ O código QR é gerado a partir de `data-url` (precisa de internet; sem ela, fic
 
 Os exemplos completos estão em `index.html`.
 
-## Cenas animadas (bloco «DR1 · Como tratar o outro»)
+## Cenas animadas (blocos DR1.5 e DR2.1, e a «Teoria do corpo»)
 
 Os slides com a classe `cena` têm um desenho SVG em que «eu» sou a figura laranja e «o outro» é a figura azul. `data-step` faz aparecer elementos; para mover coisas num clique, o `app.js` acrescenta ao slide as classes `ge1`, `ge2`… e as regras de cada cena estão no fim do `style.css`. `data-steps` no `<section>` indica quantos cliques tem a cena.
