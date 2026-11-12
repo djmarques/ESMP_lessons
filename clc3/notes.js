@@ -22,5 +22,22 @@ window.NOTES = {
  "s6-lei": "Lei 71/2013 (regula a Lei 45/2003): acupuntura, fitoterapia, homeopatia, medicina tradicional chinesa, naturopatia, osteopatia, quiropráxia. Cédula profissional emitida pela ACSS.",
  "s6-provas": "NHMRC 2015: «no good-quality, well-designed studies» que mostrem eficácia da homeopatia em qualquer condição. Respeito por quem usa; foco nas provas e na segurança.",
  "s6-pesquisa": "Atenção a «evidência»: em português significa sobretudo «certeza manifesta»; o sentido de «prova científica» vem do inglês evidence. Bom ponto para discutir o dicionário.",
- "s7-auto": "Fim do DR1. A seguir: DR2 · Saúde e segurança no trabalho."
+ "s7-auto": "Fim do DR1. A seguir: DR2 · Saúde e segurança no trabalho.",
+ "p-abertura": "Novo percurso para quem já terminou as sessões do DR1: cada formando constrói, com pesquisa autónoma, uma apresentação em PowerPoint que cobre o programa todo (o portefólio). No fim de cada DR mostra o ponto da situação ao formador; no fim da unidade apresenta uma visão geral (cerca de 15 minutos) aos colegas.",
+ "p-oque": "Explicar a lógica: o site dá a base teórica; o PowerPoint é do formando (pesquisa autónoma); a apresentação final é uma seleção.",
+ "p-contextos": "Os quatro domínios de referência (DR) vão do mais próximo (eu, casa) ao mais amplo (sociedade, mundo). Clique a clique, os círculos crescem.",
+ "p-matriz": "Síntese do referencial de CLC 3 (Catálogo Nacional de Qualificações) distribuída pelos quatro DR, como na planificação.",
+ "p-estrutura": "Pode servir também para CP 2. Insistir nas fontes e na proibição de copiar parágrafos (também de assistentes de inteligência artificial).",
+ "p-pesquisar": "Retoma a sessão 4 (informar ou convencer). O registo de pesquisa fica na folha «Avaliação contínua» e serve para acompanhar o trabalho.",
+ "p-plano": "A lista pode ser assinalada no ecrã (clicar). O «ponto da situação» é uma atividade curta: DR, slides feitos, dificuldades.",
+ "p-final": "Avaliação: o portefólio completo (PowerPoint) e a apresentação oral. Os critérios coincidem com os das apresentações de CLC 6.",
+ "d2-risco": "A proteção individual é a última linha, não a primeira. Pedir ao formando exemplos da própria profissão para o PowerPoint.",
+ "d2-sinais": "Sinalização de segurança e saúde no trabalho: Decreto-Lei n.º 141/95 e portaria que o regulamenta. Pedir ao formando que fotografe (com autorização) um sinal do seu local de trabalho para o PowerPoint.",
+ "d2-comunicar": "Conteúdos de Língua (circulares, comunicados, comunicação rápida) e Comunicação (perfil das empresas antes e depois da HST).",
+ "d3-estado": "Conteúdo de Cultura: «O Estado de Providência e o Sistema Nacional de Saúde».",
+ "d3-prevencao": "Conteúdos: conceito de saúde pública e papel das instituições; saúde como cultura de prevenção.",
+ "d3-informar": "Retoma a pirâmide das normas de CLC 6 (aula 18) e a sessão 4 (informar ou convencer).",
+ "d4-numeros": "Atualizar quando o INE divulgar novas tábuas de mortalidade. As tábuas provisórias de 2024–2026 estão previstas para o fim de novembro de 2026.",
+ "d4-envelhecer": "Conteúdos: esperança de vida e modo de vida; desafios de uma macro-sociedade envelhecida. Sugerir ao formando entrevistar uma pessoa idosa (relato) para o PowerPoint.",
+ "d4-redes": "Lei n.º 30/2000 (descriminalização do consumo de drogas, em vigor desde 2001). Doenças do aparelho circulatório: principal causa de morte em Portugal (INE)."
 };

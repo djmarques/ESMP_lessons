@@ -1,0 +1,26 @@
+/* notes.js — notas do formador, uma por slide (tecla N). */
+window.NOTES = {
+ "i-unidade": "Site de trabalho autónomo para os formandos de CLC 3, que trabalham na mesma sala enquanto decorre CLC 6. Cada sessão abre com um guião.",
+ "i-como": "Mostra este slide na primeira sessão autónoma e confirma que todos conseguem abrir uma atividade no telemóvel.",
+ "i-programa": "Distribuição dos conteúdos do programa pelos quatro domínios de referência (DR).",
+ "s1-feito": "Ponte com a atividade já feita (texto de opinião sobre a falta de casa e a saúde).",
+ "s2-guiao": "Programa: Perspetivas culturais da Qualidade de Vida; o Desenvolvimento como elemento proporcionador da Qualidade de Vida (Cultura).",
+ "s2-conceito": "Definição da OMS (WHOQOL Group, 1995).",
+ "s2-roda": "Exercício pessoal; ninguém é obrigado a justificar notas. Serve de base à reflexão final.",
+ "s2-idh": "Portugal: 40.º em 193 no relatório de 2025 (subiu do 42.º); Islândia em 1.º. Dados confirmados em notícias da Lusa de 6 de maio de 2025.",
+ "s2-pesquisa": "Brasil: 84.º no relatório de 2025 (Lusa e imprensa brasileira, 6 de maio de 2025). Valoriza a indicação da fonte.",
+ "s3-guiao": "Programa: Hábitos quotidianos e domésticos que promovem a qualidade de vida (Cultura). Fontes oficiais (OMS, DGS); nada de dietas ou números individuais.",
+ "s3-pilares": "Recomendações confirmadas: OMS 2020 (150–300 min moderada ou 75–150 vigorosa; força 2 dias); sono 7+ horas para adultos (AASM/SRS).",
+ "s3-casa": "Ligação a CLC 6 (casas frias e húmidas). SNS 24: 808 24 24 24; emergência: 112.",
+ "s3-smart": "SMART: Specific, Measurable, Achievable, Relevant, Time-bound. Objetivos pequenos e seguros; nada de dietas restritivas ou metas de peso.",
+ "s4-guiao": "Programa: Gestão consciente dos tempos de lazer (Cultura); texto panfletário vs texto informativo; intencionalidade comunicativa (Língua e Comunicação).",
+ "s4-lazer": "Sem números de tempo de ecrã individuais; a pergunta é qualitativa.",
+ "s4-textos": "Os dois folhetos são originais. A marca FitJá é inventada.",
+ "s5-guiao": "Programa: técnicas de resumo (Língua e Comunicação). O texto é original (≈ 250 palavras) e retoma a sessão 3.",
+ "s5-texto": "Texto original. Essenciais: 1, 2/3 (funções), 4, 5, 7, 8 (resumida). Acessórias: 6, 9, 10, 11 em parte.",
+ "s6-guiao": "Programa: Práticas terapêuticas tradicionais e «alternativas» (Cultura); dicionário e simpósio como suportes de pesquisa (Língua e Comunicação). Atenção a formandos que usem estas terapias: respeito, sem ridicularizar; o foco é a avaliação de provas e a segurança.",
+ "s6-lei": "Lei 71/2013 (regula a Lei 45/2003): acupuntura, fitoterapia, homeopatia, medicina tradicional chinesa, naturopatia, osteopatia, quiropráxia. Cédula profissional emitida pela ACSS.",
+ "s6-provas": "NHMRC 2015: «no good-quality, well-designed studies» que mostrem eficácia da homeopatia em qualquer condição. Respeito por quem usa; foco nas provas e na segurança.",
+ "s6-pesquisa": "Atenção a «evidência»: em português significa sobretudo «certeza manifesta»; o sentido de «prova científica» vem do inglês evidence. Bom ponto para discutir o dicionário.",
+ "s7-auto": "Fim do DR1. A seguir: DR2 · Saúde e segurança no trabalho."
+};

@@ -462,3 +462,23 @@ blockquote { margin: 0; font-family: var(--head); font-style: italic; font-size:
 .act-btn:hover, .act-btn:focus-visible { filter: brightness(1.08); outline: 3px solid rgba(0,0,0,.15); }
 .row { display: flex; gap: 12px; align-items: flex-start; }
 @media (max-width: 700px) { .act-btn { display: block; text-align: center; } }
+
+/* ---------- Key-concept definitions as diagrams (portfolio slides) --- */
+.ddef { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; margin: 12px 0; }
+.ddef .term { background: var(--navy); color: #fff; font-family: var(--head); font-weight: 700; font-size: 22px; padding: 8px 16px; border-radius: 10px; }
+.ddef .eq { font-family: var(--head); font-size: 30px; color: var(--orange); font-weight: 700; }
+.ddef .parts { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; flex: 1 1 300px; }
+.ddef .pi { display: inline-flex; align-items: center; gap: 8px; }
+.ddef .part { background: var(--cream); border: 1px solid var(--line); border-radius: 8px; padding: 6px 12px; font-size: 17px; font-weight: 700; color: var(--navy); line-height: 1.25; }
+.ddef .op { font-family: var(--head); font-size: 22px; font-weight: 700; color: var(--orange); }
+.ddef.mini .term { font-size: 18px; padding: 5px 12px; } .ddef.mini .part { font-size: 15.5px; padding: 4px 10px; }
+.slide.current .ddef.on .pi, .slide.current .ddef:not([data-step]) .pi { animation: ddin .5s var(--ease) both; animation-delay: calc(var(--i) * .3s + .1s); }
+@keyframes ddin { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
+@media (prefers-reduced-motion: reduce) { .ddef .pi { animation: none !important; } }
+table.cmp { width: 100%; border-collapse: collapse; font-size: 17px; }
+table.cmp th, table.cmp td { padding: 8px 10px; border-bottom: 1px solid var(--line); text-align: left; vertical-align: top; }
+table.cmp thead th { font-size: 13px; text-transform: uppercase; letter-spacing: .06em; color: var(--orange); border-bottom: 2px solid var(--line); }
+table.cmp tbody th { color: var(--navy); width: 22%; }
+tr[data-step] { transform: none; }
+.ctxgrid { display: grid; grid-template-columns: minmax(260px, 420px) 1fr; gap: 28px; align-items: center; }
+@media (max-width: 860px) { .ctxgrid { grid-template-columns: 1fr; } }

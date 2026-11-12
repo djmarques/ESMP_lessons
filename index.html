@@ -38,6 +38,7 @@ main { padding: 48px 24px 72px; }
 .temas { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 18px; }
 .tema { display: flex; flex-direction: column; gap: 8px; background: var(--cream); border-radius: 10px; padding: 22px 24px; text-decoration: none; color: inherit; border: 2px solid transparent; transition: border-color .2s, transform .2s; }
 a.tema:hover { border-color: var(--orange); transform: translateY(-2px); }
+.tema .un { font-size: 13px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: var(--orange); }
 .tema h3 { font-family: var(--head); color: var(--navy); font-size: 22px; margin: 0; line-height: 1.2; }
 .tema p { margin: 0; font-size: 16px; }
 .tema .go { margin-top: auto; padding-top: 10px; font-weight: 700; color: var(--orange); font-size: 15px; }
@@ -79,6 +80,7 @@ footer { border-top: 1px solid var(--line); padding: 20px 24px; font-size: 14px;
     d.temas.forEach(t => {
       const card = el(t.pasta ? 'a' : 'div', 'tema' + (t.pasta ? '' : ' soon'));
       if (t.pasta) card.href = t.pasta + 'index.html';   // explicit file: also works when opened locally
+      if (t.unidade) card.append(el('span', 'un', t.unidade));
       card.append(el('h3', null, t.titulo), el('p', null, t.descricao || ''), el('span', 'go', t.pasta ? 'Abrir →' : 'Em preparação'));
       grid.append(card);
     });

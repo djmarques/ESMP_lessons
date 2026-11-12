@@ -1,0 +1,96 @@
+<!doctype html>
+<html lang="pt-PT">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Aulas · Daniel Marques</title>
+<meta name="description" content="Materiais interativos das aulas: Área de Integração, Psicologia e Cultura, Língua e Comunicação.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Caladea:ital,wght@0,400;0,700;1,400&family=Carlito:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+<style>
+/* =====================================================================
+   Página inicial — mesmas cores e tipos de letra dos sites das aulas.
+   The cards are built from catalogo.js by the script at the end, so the
+   page itself never needs editing when a theme is added.
+   ===================================================================== */
+:root {
+  --navy: #1E2A33; --orange: #A44A16; --orange-light: #FBE3D2; --accent: #F0A673;
+  --cream: #F6F3EC; --text: #4A5560; --muted: #6F7880; --line: #C9D1D8; --blue: #2F6E9E; --blue-light: #DCE8F2;
+  --head: Cambria, Caladea, Georgia, serif; --body: Calibri, Carlito, "Segoe UI", sans-serif;
+}
+* { box-sizing: border-box; }
+body { margin: 0; font-family: var(--body); color: var(--text); background: #fff; font-size: 18px; line-height: 1.45; }
+:focus-visible { outline: 3px solid var(--blue); outline-offset: 3px; }
+.hero { background: var(--navy); color: var(--orange-light); padding: 64px 24px 56px; }
+.wrap { max-width: 1120px; margin: 0 auto; }
+.kicker { font-size: 13px; font-weight: 700; letter-spacing: .14em; text-transform: uppercase; color: var(--accent); margin: 0 0 10px; }
+h1 { font-family: var(--head); color: #fff; font-size: clamp(36px, 6vw, 60px); line-height: 1.1; margin: 0 0 14px; }
+.hero p.lead { font-size: 20px; max-width: 640px; margin: 0; }
+.filters { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 28px; }
+.filters button { font: inherit; font-size: 16px; cursor: pointer; border-radius: 999px; padding: 8px 18px; border: 1px solid rgba(255,255,255,.35); background: transparent; color: #fff; }
+.filters button[aria-pressed="true"] { background: var(--orange); border-color: var(--orange); }
+main { padding: 48px 24px 72px; }
+.disc { margin-bottom: 48px; }
+.disc header { display: flex; align-items: baseline; gap: 16px; flex-wrap: wrap; border-bottom: 1px solid var(--line); padding-bottom: 10px; margin-bottom: 20px; }
+.disc h2 { font-family: var(--head); color: var(--navy); font-size: 30px; margin: 0; }
+.disc .nivel { color: var(--orange); font-weight: 700; font-size: 14px; letter-spacing: .08em; text-transform: uppercase; }
+.temas { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 18px; }
+.tema { display: flex; flex-direction: column; gap: 8px; background: var(--cream); border-radius: 10px; padding: 22px 24px; text-decoration: none; color: inherit; border: 2px solid transparent; transition: border-color .2s, transform .2s; }
+a.tema:hover { border-color: var(--orange); transform: translateY(-2px); }
+.tema h3 { font-family: var(--head); color: var(--navy); font-size: 22px; margin: 0; line-height: 1.2; }
+.tema p { margin: 0; font-size: 16px; }
+.tema .go { margin-top: auto; padding-top: 10px; font-weight: 700; color: var(--orange); font-size: 15px; }
+.tema.soon { background: #fff; border: 1px dashed var(--line); }
+.tema.soon h3 { color: var(--muted); }
+.tema.soon .go { color: var(--muted); font-weight: 400; font-style: italic; }
+footer { border-top: 1px solid var(--line); padding: 20px 24px; font-size: 14px; color: var(--muted); }
+@media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
+</style>
+</head>
+<body>
+<section class="hero">
+  <div class="wrap">
+    <p class="kicker">Escola Secundária Marquês de Pombal · 2026/2027</p>
+    <h1>Aulas</h1>
+    <p class="lead">Materiais interativos para projetar na sala e rever em casa. Escolhe a disciplina e o tema.</p>
+    <div class="filters" role="group" aria-label="Filtrar por público">
+      <button aria-pressed="true" data-f="todos">Todas</button>
+      <button aria-pressed="false" data-f="profissional">Ensino profissional</button>
+      <button aria-pressed="false" data-f="adultos">Formação de adultos</button>
+    </div>
+  </div>
+</section>
+<main><div class="wrap" id="lista"></div></main>
+<footer><div class="wrap">Daniel Marques · Grupo 410 (Filosofia)</div></footer>
+
+<script src="catalogo.js"></script>
+<script>
+/* Build one section per discipline and one card per theme from CATALOGO.
+   Themes without a folder are shown as "em preparação" and are not links. */
+(function () {
+  const lista = document.getElementById('lista');
+  const el = (tag, cls, text) => { const e = document.createElement(tag); if (cls) e.className = cls; if (text) e.textContent = text; return e; };
+
+  window.CATALOGO.forEach(d => {
+    const sec = el('section', 'disc'); sec.dataset.publico = d.publico;
+    const head = el('header'); head.append(el('h2', null, d.disciplina), el('span', 'nivel', d.nivel)); sec.append(head);
+    const grid = el('div', 'temas');
+    d.temas.forEach(t => {
+      const card = el(t.pasta ? 'a' : 'div', 'tema' + (t.pasta ? '' : ' soon'));
+      if (t.pasta) card.href = t.pasta + 'index.html';   // explicit file: also works when opened locally
+      card.append(el('h3', null, t.titulo), el('p', null, t.descricao || ''), el('span', 'go', t.pasta ? 'Abrir →' : 'Em preparação'));
+      grid.append(card);
+    });
+    sec.append(grid); lista.append(sec);
+  });
+
+  // Filter buttons: show only the sections for the chosen audience
+  document.querySelectorAll('.filters button').forEach(b => b.addEventListener('click', () => {
+    document.querySelectorAll('.filters button').forEach(x => x.setAttribute('aria-pressed', String(x === b)));
+    document.querySelectorAll('.disc').forEach(s => { s.hidden = b.dataset.f !== 'todos' && s.dataset.publico !== b.dataset.f; });
+  }));
+})();
+</script>
+</body>
+</html>

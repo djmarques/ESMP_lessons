@@ -864,5 +864,274 @@ window.ATIVIDADES = {
     ]
    }
   ]
- }
+ },
+ "registo": {
+ "disciplina": "CLC 3",
+ "titulo": "Registo de pesquisa",
+ "passos": [
+  {
+   "tipo": "escrita",
+   "titulo": "Uma fonte",
+   "perguntas": [
+    "DR e tema da pesquisa.",
+    "Título e site (ou livro) da fonte, com a data.",
+    "Três ideias principais que tiraste dessa fonte, por palavras tuas.",
+    "Porque confias (ou não) nesta fonte?"
+   ]
+  }
+ ]
+},
+ "situacao": {
+ "disciplina": "CLC 3",
+ "titulo": "Ponto da situação do portefólio",
+ "passos": [
+  {
+   "tipo": "opiniao",
+   "p": "Em que DR estás a trabalhar?",
+   "o": [
+    "DR1 · Qualidade de vida",
+    "DR2 · Segurança e saúde no trabalho",
+    "DR3 · Saúde pública",
+    "DR4 · Esperança de vida"
+   ]
+  },
+  {
+   "tipo": "escrita",
+   "perguntas": [
+    "Que slides já fizeste neste DR? (títulos)",
+    "Que dificuldade tiveste?",
+    "O que vais fazer a seguir?"
+   ]
+  }
+ ]
+},
+ "guiaofinal": {
+ "disciplina": "CLC 3",
+ "titulo": "Guião da apresentação final",
+ "passos": [
+  {
+   "tipo": "escrita",
+   "titulo": "O meu guião (15 minutos)",
+   "perguntas": [
+    "Como te vais apresentar (1 minuto)?",
+    "O melhor slide de cada DR (escreve os quatro títulos).",
+    "A descoberta mais importante que queres que a turma leve.",
+    "Duas perguntas que os colegas te podem fazer, e as tuas respostas."
+   ]
+  }
+ ]
+},
+ "jogo-d2": {
+ "disciplina": "CLC 3",
+ "titulo": "Teste rápido: segurança e saúde no trabalho",
+ "passos": [
+  {
+   "tipo": "jogo",
+   "perguntas": [
+    {
+     "p": "Uma escada é um…",
+     "o": [
+      "perigo",
+      "risco",
+      "acidente"
+     ],
+     "c": 0,
+     "f": "O risco é a probabilidade de cair dela."
+    },
+    {
+     "p": "Qual é a medida de prevenção mais eficaz?",
+     "o": [
+      "dar luvas",
+      "eliminar o perigo",
+      "pôr um cartaz"
+     ],
+     "c": 1,
+     "f": "A proteção individual é a última linha."
+    },
+    {
+     "p": "Um sinal azul indica…",
+     "o": [
+      "proibição",
+      "obrigação",
+      "saída de emergência"
+     ],
+     "c": 1,
+     "f": "Ex.: uso obrigatório de capacete."
+    },
+    {
+     "p": "Um sinal verde indica…",
+     "o": [
+      "salvamento ou emergência",
+      "perigo",
+      "proibição"
+     ],
+     "c": 0,
+     "f": "Saídas, primeiros socorros."
+    },
+    {
+     "p": "Quem fiscaliza as condições de trabalho em Portugal?",
+     "o": [
+      "a ACT",
+      "o Infarmed",
+      "a DGS"
+     ],
+     "c": 0,
+     "f": "Autoridade para as Condições do Trabalho."
+    },
+    {
+     "p": "Para dar uma regra a todos os trabalhadores, usa-se uma…",
+     "o": [
+      "circular",
+      "receita",
+      "fatura"
+     ],
+     "c": 0,
+     "f": "Com número, data e assunto."
+    }
+   ]
+  }
+ ]
+},
+ "jogo-d3": {
+ "disciplina": "CLC 3",
+ "titulo": "Teste rápido: saúde pública",
+ "passos": [
+  {
+   "tipo": "jogo",
+   "perguntas": [
+    {
+     "p": "Em que ano foi criado o Serviço Nacional de Saúde?",
+     "o": [
+      "1974",
+      "1979",
+      "1986"
+     ],
+     "c": 1,
+     "f": "Lei n.º 56/79, de 15 de setembro."
+    },
+    {
+     "p": "Que artigo da Constituição garante o direito à proteção da saúde?",
+     "o": [
+      "13.º",
+      "64.º",
+      "65.º"
+     ],
+     "c": 1,
+     "f": "O 65.º é a habitação."
+    },
+    {
+     "p": "Uma vacina é prevenção…",
+     "o": [
+      "primária",
+      "secundária",
+      "terciária"
+     ],
+     "c": 0,
+     "f": "Evita que a doença apareça."
+    },
+    {
+     "p": "Um rastreio é prevenção…",
+     "o": [
+      "primária",
+      "secundária",
+      "terciária"
+     ],
+     "c": 1,
+     "f": "Deteta a doença cedo."
+    },
+    {
+     "p": "O folheto dentro da caixa de um medicamento é…",
+     "o": [
+      "publicidade",
+      "informação técnica",
+      "um comunicado"
+     ],
+     "c": 1,
+     "f": "Aprovado pelo Infarmed."
+    },
+    {
+     "p": "O número do SNS 24 é…",
+     "o": [
+      "112",
+      "808 24 24 24",
+      "144"
+     ],
+     "c": 1,
+     "f": "Para emergências: 112."
+    }
+   ]
+  }
+ ]
+},
+ "jogo-d4": {
+ "disciplina": "CLC 3",
+ "titulo": "Teste rápido: esperança de vida",
+ "passos": [
+  {
+   "tipo": "jogo",
+   "perguntas": [
+    {
+     "p": "Qual é a esperança de vida à nascença em Portugal (2023–2025)?",
+     "o": [
+      "cerca de 72 anos",
+      "cerca de 82 anos",
+      "cerca de 92 anos"
+     ],
+     "c": 1,
+     "f": "81,85 anos (INE)."
+    },
+    {
+     "p": "Em 2025, quantos idosos havia por cada 100 jovens?",
+     "o": [
+      "cerca de 90",
+      "cerca de 190",
+      "cerca de 390"
+     ],
+     "c": 1,
+     "f": "188,8 (INE)."
+    },
+    {
+     "p": "Qual é a primeira causa de morte em Portugal?",
+     "o": [
+      "doenças cardiovasculares",
+      "acidentes de viação",
+      "gripe"
+     ],
+     "c": 0,
+     "f": "Doenças do aparelho circulatório."
+    },
+    {
+     "p": "O raquitismo está ligado à falta de…",
+     "o": [
+      "vitamina D e cálcio",
+      "açúcar",
+      "ferro"
+     ],
+     "c": 0,
+     "f": "Sol e alimentação."
+    },
+    {
+     "p": "Em Portugal, desde 2001, o consumo de drogas é tratado sobretudo como…",
+     "o": [
+      "crime",
+      "problema de saúde",
+      "assunto privado sem regras"
+     ],
+     "c": 1,
+     "f": "Lei n.º 30/2000."
+    },
+    {
+     "p": "A idade da reforma depende sobretudo…",
+     "o": [
+      "da esperança de vida aos 65 anos",
+      "do salário mínimo",
+      "do número de filhos"
+     ],
+     "c": 0,
+     "f": "Em 2027: 66 anos e 11 meses."
+    }
+   ]
+  }
+ ]
+}
 };

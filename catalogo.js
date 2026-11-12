@@ -2,6 +2,7 @@
    catalogo.js — lista de disciplinas e temas mostrados na página inicial.
    ---------------------------------------------------------------------
    Para acrescentar um tema: copia uma linha de `temas` e muda os campos.
+     unidade    (opcional) a unidade, mostrada por cima do título (ex.: 'CLC 3')
      titulo     nome do tema, como aparece no cartão
      descricao  uma frase curta
      pasta      caminho da pasta do site do tema, a partir da raiz do
@@ -38,26 +39,20 @@ window.CATALOGO = [
   },
   {
     disciplina: 'Cultura, Língua e Comunicação',
-    nivel: 'CLC 6 · Formação de adultos',
+    nivel: 'Formação de adultos',
     publico: 'adultos',
     temas: [
-      { titulo: 'Culturas de urbanismo e mobilidade', descricao: 'Programa · DR1 a casa · DR2 o bairro e o trabalho · DR3 as instituições · DR4 as mobilidades. Com Geografia A (renda locativa, movimentos pendulares, rede urbana, migrações) e simulações interativas.', pasta: 'clc6/' },
-    ],
-  },
-  {
-    disciplina: 'Cultura, Língua e Comunicação',
-    nivel: 'CLC 3 · Formação de adultos · trabalho autónomo',
-    publico: 'adultos',
-    temas: [
-      { titulo: 'Saúde: língua e comunicação', descricao: 'Guiões autónomos · DR1: qualidade de vida, hábitos, lazer, resumo, terapêuticas alternativas.', pasta: 'clc3/' },
+      { unidade: 'CLC 6', titulo: 'Culturas de urbanismo e mobilidade', descricao: 'Programa · DR1 a casa · DR2 o bairro e o trabalho · DR3 as instituições · DR4 as mobilidades. Com Geografia A (renda locativa, movimentos pendulares, rede urbana, migrações) e simulações interativas.', pasta: 'clc6/' },
+      { unidade: 'CLC 3 · trabalho autónomo', titulo: 'Saúde: língua e comunicação', descricao: 'Portefólio em PowerPoint · DR1 qualidade de vida · DR2 segurança e saúde no trabalho · DR3 saúde pública · DR4 esperança de vida.', pasta: 'clc3/' },
     ],
   },
   {
     disciplina: 'Cidadania e Profissionalidade',
-    nivel: 'CP 4 · Formação de adultos',
+    nivel: 'Formação de adultos',
     publico: 'adultos',
     temas: [
-      { titulo: 'Processos identitários', descricao: 'O nome e o reconhecimento · o navio de Teseu · Phineas Gage e o outro · identidade pessoal e social.', pasta: 'cp4/' },
+      { unidade: 'CP 4', titulo: 'Processos identitários', descricao: 'O nome e o reconhecimento · o navio de Teseu · Phineas Gage e o outro · identidade pessoal e social.', pasta: 'cp4/' },
+      { unidade: 'CP 2 · trabalho autónomo', titulo: 'Processos sociais de mudança', descricao: 'Portefólio em PowerPoint · DR1 aprendizagem ao longo da vida · DR2 novos processos de trabalho · DR3 movimentos associativos · DR4 instâncias supranacionais.', pasta: 'cp2/' },
     ],
   },
 ];
