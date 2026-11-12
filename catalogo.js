@@ -41,7 +41,7 @@ window.CATALOGO = [
     nivel: 'CLC 6 · Formação de adultos',
     publico: 'adultos',
     temas: [
-      { titulo: 'Culturas de urbanismo e mobilidade', descricao: 'Programa da unidade · DR1: a casa e o lar · arquitetura hostil.', pasta: 'clc6/' },
+      { titulo: 'Culturas de urbanismo e mobilidade', descricao: 'Programa · DR1 a casa · DR2 o bairro e o trabalho · DR3 as instituições · DR4 as mobilidades. Com Geografia A (renda locativa, movimentos pendulares, rede urbana, migrações) e simulações interativas.', pasta: 'clc6/' },
     ],
   },
   {

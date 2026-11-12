@@ -56,6 +56,9 @@
       counters that have just become visible. */
   function setStep(slide, n) {
     stepOf.set(slide, n);
+    // animated scenes and widgets: class ge1…geN = «step is at least k», so CSS
+    // and widgets.js can move or change things at a given step
+    for (let k = 1, m = maxStep(slide); k <= m; k++) slide.classList.toggle('ge' + k, n >= k);
     slide.querySelectorAll('[data-step]').forEach(el => {
       const on = Number(el.dataset.step) <= n;
       if (on && !el.classList.contains('on') && el.dataset.count) runCounter(el);
