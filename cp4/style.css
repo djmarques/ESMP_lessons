@@ -582,3 +582,32 @@ table.fichas tr.tu td, table.fichas tr.tu th { background: var(--orange-light); 
 #s-d1-diversidade.ge2 #div4{transform:translate(-190px,0)} #s-d1-diversidade.ge3 #div4{transform:translate(-300px,-5px)}
 #s-d1-diversidade.ge2 .dv1,#s-d1-diversidade.ge3 .dv2{opacity:0}
 #s-d1-muro.ge8 #mu-w{opacity:.12} #s-d1-muro.ge8 #mu-e{transform:translateX(330px)} #s-d1-muro.ge8 #mu-u{transform:translateX(-330px)} #s-d1-muro.ge8 #mu-uf .f0{opacity:0} #s-d1-muro.ge8 #mu-uf .f1{opacity:1}
+
+/* ---------- «Teoria do corpo»: dots that are swapped as time passes, at two levels (app.js, .corpo-sim) */
+.corpo-sim { display: grid; grid-template-columns: minmax(220px, 320px) 1fr; gap: 36px; align-items: center; }
+.corpo-svg { width: 100%; height: auto; max-height: 48vh; display: block; }
+.corpo-svg circle { transition: fill .25s; }
+.corpo-svg .shape { fill: none; stroke: var(--line); stroke-width: 2.5; stroke-linecap: round; }
+.corpo-svg text { font-family: var(--body); font-size: 13px; fill: var(--muted); }
+.corpo-level { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; margin-bottom: 8px; }
+.corpo-level > span { font-size: 13px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; color: var(--orange); margin-right: 4px; }
+.corpo-level label { border: 1px solid var(--line); border-radius: 999px; padding: 5px 14px; font-size: 16px; color: var(--navy); cursor: pointer; background: var(--white); }
+.corpo-level label:has(input:checked) { background: var(--navy); color: #fff; border-color: var(--navy); }
+.corpo-level input { position: absolute; opacity: 0; pointer-events: none; }
+.corpo-level label:has(input:focus-visible) { outline: 3px solid var(--blue); outline-offset: 2px; }
+.corpo-clock { font-family: var(--head); font-weight: 700; font-size: 32px; color: var(--orange); margin: 0 0 8px; min-height: 40px; }
+.corpo-row { display: grid; grid-template-columns: 250px 1fr 190px; gap: 14px; align-items: center; padding: 8px 0; border-top: 1px solid var(--line); }
+.corpo-row[hidden] { display: none; }
+.corpo-row .nm { font-family: var(--head); font-weight: 700; color: var(--navy); font-size: 20px; line-height: 1.15; }
+.corpo-row .nm small { display: block; font-family: var(--body); font-weight: 400; font-size: 14px; color: var(--muted); }
+.corpo-row .tr { height: 16px; background: var(--orange); border-radius: 8px; overflow: hidden; }
+.corpo-row .tr i { display: block; height: 100%; width: 100%; background: var(--navy); }
+.corpo-row output { font-size: 15px; color: var(--text); line-height: 1.2; }
+.corpo-row output b { font-family: var(--head); font-size: 20px; color: var(--navy); }
+.corpo-legend { font-size: 14px; color: var(--muted); margin: 8px 0 10px; }
+.corpo-legend .d { display: inline-block; width: 12px; height: 12px; border-radius: 50%; margin: 0 4px 0 12px; vertical-align: -1px; }
+.corpo-legend .d:first-child { margin-left: 0; }
+.corpo-legend .o { background: var(--navy); } .corpo-legend .n { background: var(--orange); } .corpo-legend .f { background: var(--accent); box-shadow: 0 0 0 2px var(--orange); }
+.corpo-ctrl { display: flex; gap: 12px; align-items: center; }
+.corpo-ctrl input { flex: 1; accent-color: var(--orange); }
+@media (max-width: 1000px) { .corpo-sim { grid-template-columns: 1fr; } .corpo-row { grid-template-columns: 1fr 1fr; } .corpo-row .nm { grid-column: 1 / -1; } }
