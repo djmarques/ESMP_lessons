@@ -343,7 +343,8 @@
       120 days, about 10 % of the skeleton per year, cortical neurons never.
       Level 1, inside one of those neurons: water (half replaced in about a
       week), most proteins (days or weeks), a few very long-lived proteins of
-      the nuclear pores (years), and the DNA (never).
+      the nuclear pores (years), and the DNA, which stays in place but is
+      repaired all the time, so its atoms change too, slowly (illustrative rate).
       Each kind has a mean lifetime `life` in years; `exp` kinds are replaced at
       random (exponential) times, the others after a fixed lifetime. A seeded
       generator fixes the times, so the slider can go back and forth. */
@@ -353,7 +354,7 @@
     let seed = 7; const rnd = () => (seed = (seed * 16807) % 2147483647) / 2147483647;
     const KIND = {
       pele: { life: 28 / 365 }, sangue: { life: 120 / 365 }, osso: { life: 1 / 0.105, exp: true, once: true }, neuro: { life: Infinity },
-      agua: { life: 7.5 / 365 / Math.LN2, exp: true }, prot: { life: 30 / 365, exp: true }, poro: { life: 8, exp: true, once: true }, adn: { life: Infinity }
+      agua: { life: 7.5 / 365 / Math.LN2, exp: true }, prot: { life: 30 / 365, exp: true }, poro: { life: 8, exp: true, once: true }, adn: { life: 40, exp: true, once: true }   // repair swaps nucleotides slowly; the rate is illustrative
     };
     const layer = [0, 1].map(v => { const g = document.createElementNS(NS, 'g'); svg.appendChild(g); return g; });
     const make = (v, tag, attrs) => { const el = document.createElementNS(NS, tag); for (const k in attrs) el.setAttribute(k, attrs[k]); layer[v].appendChild(el); return el; };
@@ -404,6 +405,7 @@
         row.hidden = Number(row.dataset.v) !== V;
         const k = row.dataset.t, s = stat[k], pct = Math.round(s.o / s.n * 100), times = KIND[k].once ? 0 : Math.floor(t / KIND[k].life);
         row.querySelector('.tr i').style.width = pct + '%';
+        if (k === 'adn') { row.classList.add('nobar'); row.querySelector('output').innerHTML = '<b>o mais lento de todos</b><br>não há um valor medido'; return; }
         row.querySelector('output').innerHTML = '<b>' + pct + ' %</b> de tábuas originais' + (times >= 1 ? '<br>já trocou ' + times + (times === 1 ? ' vez' : ' vezes') : '');
       });
       layer.forEach((g, v) => { g.style.display = v === V ? '' : 'none'; });
