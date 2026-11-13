@@ -1,24 +1,37 @@
 /* =====================================================================
    aluno.js — o aluno responde no telemóvel e envia ao professor.
    ---------------------------------------------------------------------
-   Endereço: respostas/?f=<pasta do site da aula>&a=<atividade>
-   1. Carrega <pasta>/atividades.js, que define window.ATIVIDADES.
-   2. Pede o nome e percorre os passos da atividade, por ordem:
-        jogo         escolha múltipla com 20 s, pontos e som (certo/errado)
+   Endereço: respostas/?f=<pasta do site da aula>& uma de três coisas:
+        a=<atividade>   atividade escrita em <pasta>/atividades.js
+        q=<número>      o n-ésimo questionário/jogo dos slides de <pasta>/index.html
+                        (lido diretamente da página: ver comum/partilhado.js)
+        x=<código>      pergunta rápida lançada pelo professor durante a aula
+   1. Carrega a atividade.
+   2. Pede o nome (ou os nomes: quem não tem telemóvel responde com um colega
+      e os dois ficam registados) e percorre os passos, por ordem:
+        jogo         escolha múltipla com tempo, pontos e som (certo/errado)
+        vf           verdadeiro ou falso (certo/errado)
         classificar  um item de cada vez, escolher a categoria (certo/errado)
+        escala       cursor entre dois valores (opinião, ou estimativa com valor certo)
         opiniao      escolher uma opção, sem resposta certa
+        nuvem        até três palavras, para a nuvem de palavras da turma
         escrita      caixas de texto
    3. Envia tudo, em JSON (Content-Type text/plain, sem pedido prévio CORS),
       para o Google Apps Script de config.js, que regista na folha de cálculo
       e responde {ok:true}. Só com essa resposta aparece «Respostas recebidas»;
       senão tenta mais vezes. Uma cópia fica no telemóvel até ser confirmada.
+   4. Depois de enviado, mostra as respostas da turma em gráficos, sem nomes.
    ===================================================================== */
 (function () {
   'use strict';
   const $ = id => document.getElementById(id);
   const params = new URLSearchParams(location.search);
   const pasta = params.get('f') || '';
-  const chave = params.get('a') || '';
+  const pA = params.get('a') || '', pQ = params.get('q'), pX = params.get('x');
+  // nome da atividade para guardar no telemóvel (cada pergunta rápida tem o seu)
+  const chave = pA || (pQ != null ? 'q' + pQ : '') || (pX ? 'x' + pX.slice(-16) : '');
+  const E = window.ESMP;
+  const DISC = (window.CONFIG && window.CONFIG.DISCIPLINAS) || {};
   const url = (window.CONFIG && window.CONFIG.SCRIPT_URL || '').trim();
   const ecra = $('ecra-passo');
   const show = id => document.querySelectorAll('.ecra').forEach(s => { s.hidden = s.id !== id; });
@@ -40,22 +53,33 @@
   function falha(msg) { $('titulo').textContent = msg; $('ecra-nome').innerHTML = '<p>Volta a ler o código QR do slide.</p>'; }
 
   // only plain folder names: no "..", no other sites
-  if (!/^[a-z0-9-]+(\/[a-z0-9-]+)*$/.test(pasta) || !/^[a-z0-9-]+$/.test(chave)) return falha('Atividade não encontrada');
-  const s = document.createElement('script');
-  s.src = '../' + pasta + '/atividades.js';
-  s.onload = iniciar;
-  s.onerror = () => falha('Atividade não encontrada');
-  document.head.appendChild(s);
-
+  if (!/^[a-z0-9-]+(\/[a-z0-9-]+)*$/.test(pasta)) return falha('Atividade não encontrada');
   let act = null, passos = [];
-  const registo = { nome: '', jogo: [], escrita: [], pontos: 0, certas: 0, total: 0 };
+  const registo = { nome: '', nomes: [], jogo: [], escrita: [], pontos: 0, certas: 0, total: 0 };
+
+  if (pX) {                                     // pergunta rápida: vem toda no endereço
+    act = E.descodificar(pX);
+    if (act) act.disciplina = DISC[pasta] || pasta;
+    setTimeout(iniciar, 0);
+  } else if (pQ != null) {                      // questionário ou jogo lido dos slides da aula
+    if (!/^\d+$/.test(pQ)) return falha('Atividade não encontrada');
+    fetch('../' + pasta + '/index.html').then(r => { if (!r.ok) throw 0; return r.text(); }).then(html => {
+      act = E.extrair(new DOMParser().parseFromString(html, 'text/html'), Number(pQ));
+      if (act) act.disciplina = DISC[pasta] || pasta;
+      iniciar();
+    }).catch(() => falha('Atividade não encontrada'));
+  } else {                                      // atividade escrita em atividades.js
+    if (!/^[a-z0-9-]+$/.test(pA)) return falha('Atividade não encontrada');
+    const s = document.createElement('script');
+    s.src = '../' + pasta + '/atividades.js';
+    s.onload = () => { act = (window.ATIVIDADES || {})[pA]; iniciar(); };
+    s.onerror = () => falha('Atividade não encontrada');
+    document.head.appendChild(s);
+  }
 
   function iniciar() {
-    act = (window.ATIVIDADES || {})[chave];
     if (!act) return falha('Atividade não encontrada');
-    // formato antigo (CP 4): { jogo: [...], escrita: [...] }
-    passos = act.passos || [{ tipo: 'jogo', perguntas: act.jogo || [] }, { tipo: 'escrita', perguntas: act.escrita || [] }];
-    passos = passos.filter(p => (p.perguntas || p.itens || p.o || []).length);
+    passos = E.passos(act);     // aceita o formato antigo do CP 4 e transforma «vf» em jogo
     document.title = act.titulo;
     $('titulo').textContent = act.titulo;
     $('disciplina').textContent = act.disciplina || '';
@@ -82,10 +106,24 @@
     tick: () => tone(1200, 0, .05, 'square', .05)
   };
 
+  /* Colegas sem telemóvel: cada nome acrescentado fica com uma linha própria na folha
+     do professor, com as mesmas respostas e a mesma pontuação. */
+  $('mais-nome').addEventListener('click', () => {
+    const box = $('colegas');
+    if (box.children.length >= 3) return;
+    const d = document.createElement('div'); d.className = 'colega';
+    d.innerHTML = '<input class="nome-extra" autocomplete="off" maxlength="80" placeholder="Nome e apelido do colega"><button type="button" aria-label="Tirar este colega">×</button>';
+    d.querySelector('button').onclick = () => { d.remove(); $('mais-nome').hidden = false; };
+    box.appendChild(d); d.querySelector('input').focus();
+    if (box.children.length >= 3) $('mais-nome').hidden = true;
+  });
+
   $('comecar').addEventListener('click', () => {
     const nome = $('nome').value.trim();
     if (nome.length < 2) { $('nome').focus(); $('nome').placeholder = 'Escreve o teu nome primeiro'; return; }
-    registo.nome = nome;
+    const extra = Array.from(document.querySelectorAll('.nome-extra')).map(i => i.value.trim()).filter(n => n.length >= 2);
+    registo.nomes = [nome].concat(extra).filter((n, i, l) => l.findIndex(x => x.toLowerCase() === n.toLowerCase()) === i);
+    registo.nome = registo.nomes.join(' + ');
     try { localStorage.setItem('esmp-nome', nome); } catch (e) {}
     tone(523, 0, .14, 'triangle', .2);       // desbloqueia o áudio no iPhone (tem de ser num toque)
     passo(0);
@@ -99,7 +137,7 @@
     if (n >= passos.length) return fimDosPassos();
     show('ecra-passo'); ecra.innerHTML = ''; window.scrollTo(0, 0);
     const p = passos[n];
-    ({ jogo, classificar, opiniao, escrita })[p.tipo](p, () => passo(n + 1));
+    ({ jogo, classificar, opiniao, escrita, escala, nuvem })[p.tipo](p, () => passo(n + 1));
   }
   function intro(p) { if (p.intro) ecra.insertAdjacentHTML('beforeend', '<p class="intro">' + esc(p.intro) + '</p>'); }
 
@@ -135,15 +173,18 @@
 
   /* jogo: escolha múltipla com tempo */
   function jogo(p, next) {
-    const TOTAL = p.segundos || 20, qs = p.perguntas;
+    const TOTAL = p.segundos === 0 ? 0 : (p.segundos || 20), qs = p.perguntas;   // segundos: 0 = sem tempo
     ecra.innerHTML = '<div class="ghead"><span>Pergunta <b class="n">1</b> / ' + qs.length + '</span><span>Pontos <b class="pts">' + registo.pontos + '</b></span>' +
       '<button class="som" aria-label="Som">' + (muted ? '🔇' : '🔊') + '</button></div>' +
       '<div class="gtimer"><div class="track"><span></span></div><output>' + TOTAL + '</output></div>' +
       '<p class="stem"></p><div class="opts"></div><p class="fb"></p><button class="btn seg" hidden>Seguinte →</button>';
     const q$ = sel => ecra.querySelector(sel);
+    if (!TOTAL) q$('.gtimer').hidden = true;
+    if (p.titulo) q$('.ghead').insertAdjacentHTML('beforebegin', '<h2>' + esc(p.titulo) + '</h2>');
+    if (p.intro) q$('.ghead').insertAdjacentHTML('beforebegin', '<p class="intro">' + esc(p.intro) + '</p>');
     q$('.som').addEventListener('click', e => { muted = !muted; e.target.textContent = muted ? '🔇' : '🔊'; });
     let i = -1, left = TOTAL, timer = null, done = false;
-    function paint() { q$('output').textContent = left; q$('.track span').style.width = (left / TOTAL * 100) + '%'; ecra.classList.toggle('hurry', left <= 5 && !done); }
+    function paint() { if (!TOTAL) return; q$('output').textContent = left; q$('.track span').style.width = (left / TOTAL * 100) + '%'; ecra.classList.toggle('hurry', left <= 5 && !done); }
     function ask(k) {
       i = k; left = TOTAL; done = false;
       const q = qs[k];
@@ -151,7 +192,7 @@
       const box = q$('.opts'); box.innerHTML = '';
       q.o.forEach((t, j) => { const b = document.createElement('button'); b.className = 't' + j; b.textContent = t; b.onclick = () => reveal(j); box.appendChild(b); });
       paint(); clearInterval(timer);
-      timer = setInterval(() => { left = Math.max(0, left - 1); paint(); if (left > 0 && left <= 5) sfx.tick(); if (!left) reveal(null); }, 1000);
+      if (TOTAL) timer = setInterval(() => { left = Math.max(0, left - 1); paint(); if (left > 0 && left <= 5) sfx.tick(); if (!left) reveal(null); }, 1000);
     }
     function reveal(j) {
       if (done) return; done = true; clearInterval(timer);
@@ -159,7 +200,7 @@
       btns.forEach(b => { b.disabled = true; }); btns[q.c].classList.add('right');
       if (j !== null && !ok) btns[j].classList.add('wrong');
       let gain = 0;
-      if (ok) { gain = 100 + Math.round(50 * left / TOTAL); registo.pontos += gain; registo.certas++; sfx.right(); } else sfx.wrong();
+      if (ok) { gain = 100 + (TOTAL ? Math.round(50 * left / TOTAL) : 0); registo.pontos += gain; registo.certas++; sfx.right(); } else sfx.wrong();
       registo.total++;
       registo.jogo.push({ pergunta: q.p, resposta: j === null ? '(sem resposta)' : q.o[j], certa: ok });
       q$('.pts').textContent = registo.pontos;
@@ -195,7 +236,7 @@
         q$('.fb').innerHTML = '<b class="' + (ok ? 'ok' : 'no') + '">' + (ok ? 'Certo!' : 'Não: é ' + esc(p.categorias[it.c]) + '.') + '</b> ' + esc(it.f || '');
       } else {
         btns[j].classList.add('right');
-        registo.escrita.push({ pergunta: (p.titulo ? p.titulo + ': ' : '') + it.t, resposta: p.categorias[j] });
+        registo.escrita.push({ pergunta: (p.titulo ? p.titulo + ': ' : '') + it.t, resposta: p.categorias[j], tipo: 'opiniao' });
       }
       q$('.seg').hidden = false; q$('.seg').textContent = i === p.itens.length - 1 ? 'Continuar' : 'Seguinte →';
     }
@@ -207,15 +248,70 @@
   function opiniao(p, next) {
     ecra.innerHTML = '<h2>A tua opinião</h2>';
     intro(p);
-    ecra.insertAdjacentHTML('beforeend', '<p class="stem">' + esc(p.p) + '</p><div class="opts neutro"></div><label for="porque">' + esc(p.porque || 'Porquê? (opcional)') + '</label>' + caixa('porque', 1500) + '<button class="btn seg" disabled>Continuar</button>');
+    ecra.insertAdjacentHTML('beforeend', '<p class="stem">' + esc(p.p) + '</p><div class="opts neutro"></div>' + (p.semPorque ? '' : '<label for="porque">' + esc(p.porque || 'Porquê? (opcional)') + '</label>' + caixa('porque', 1500)) + '<button class="btn seg" disabled>Continuar</button>');
     let escolha = null;
     const box = ecra.querySelector('.opts');
     p.o.forEach(t => { const b = document.createElement('button'); b.textContent = t; b.onclick = () => { escolha = t; box.querySelectorAll('button').forEach(x => x.classList.toggle('escolhido', x === b)); ecra.querySelector('.seg').disabled = false; }; box.appendChild(b); });
     ecra.querySelector('.seg').addEventListener('click', () => {
-      const pq = $('porque').value.trim();
-      registo.escrita.push({ pergunta: p.p, resposta: escolha + (pq ? ' — ' + pq : '') });
+      const pq = $('porque') ? $('porque').value.trim() : '';
+      registo.escrita.push({ pergunta: p.p, resposta: escolha + (pq ? ' — ' + pq : ''), tipo: 'opiniao' });
       next();
     });
+  }
+
+  /* escala: um cursor por pergunta. Sem valor certo (c) é uma opinião; com valor certo é
+     uma estimativa, que conta para «certas» se ficar a menos de `tolerancia` do valor. */
+  function escala(p, next) {
+    const itens = E.itensEscala(p);
+    ecra.innerHTML = '<h2>' + esc(p.titulo || 'Onde te situas?') + '</h2>';
+    intro(p);
+    itens.forEach((it, k) => {
+      ecra.insertAdjacentHTML('beforeend', '<div class="escala" data-k="' + k + '"><p class="stem">' + esc(it.p) + '</p>' +
+        '<output class="valor">?</output>' +
+        '<input type="range" min="' + it.min + '" max="' + it.max + '" step="' + it.passo + '" value="' + (it.min + Math.round((it.max - it.min) / 2 / it.passo) * it.passo) + '" aria-label="' + esc(it.p) + '">' +
+        '<div class="pontas"><span>' + esc(it.etiquetas ? it.etiquetas[0] : it.min) + '</span><span>' + esc(it.etiquetas ? it.etiquetas[1] : it.max) + '</span></div><p class="fb"></p></div>');
+    });
+    ecra.insertAdjacentHTML('beforeend', '<p class="sm dica-escala">Arrasta cada cursor para escolheres um valor.</p><button class="btn seg" disabled>Continuar</button>');
+    const blocos = Array.from(ecra.querySelectorAll('.escala')), seg = ecra.querySelector('.seg');
+    blocos.forEach((b, k) => {
+      const inp = b.querySelector('input'), out = b.querySelector('.valor');
+      const mexeu = () => { b.classList.add('mexido'); out.textContent = inp.value + (itens[k].unidade ? ' ' + itens[k].unidade : ''); seg.disabled = !blocos.every(x => x.classList.contains('mexido')); };
+      inp.addEventListener('input', mexeu); inp.addEventListener('change', mexeu);
+      inp.addEventListener('pointerdown', mexeu);          // tocar sem arrastar também conta (fica o valor do meio)
+    });
+    let corrigido = false;
+    seg.addEventListener('click', () => {
+      if (corrigido) return next();
+      let haCertas = false;
+      blocos.forEach((b, k) => {
+        const it = itens[k], v = Number(b.querySelector('input').value);
+        if (it.c == null) { registo.escrita.push({ pergunta: it.p, resposta: String(v), tipo: 'escala' }); return; }
+        haCertas = true;
+        const ok = Math.abs(v - it.c) <= it.tolerancia + 1e-9;
+        registo.total++; if (ok) { registo.certas++; registo.pontos += 100; }
+        registo.jogo.push({ pergunta: it.p, resposta: String(v), certa: ok });
+        b.querySelector('input').disabled = true;
+        b.querySelector('.fb').innerHTML = '<b class="' + (ok ? 'ok' : 'no') + '">' + (ok ? 'Certo!' : 'O valor é ' + esc(it.c) + (it.unidade ? ' ' + esc(it.unidade) : '') + '.') + '</b> ' + esc(it.f);
+      });
+      if (!haCertas) return next();
+      corrigido = true; seg.textContent = 'Continuar';
+      const oks = blocos.filter((b, k) => itens[k].c != null && b.querySelector('.fb b.ok')).length;
+      oks ? sfx.right() : sfx.wrong();
+    });
+  }
+
+  /* nuvem: até três palavras (ou expressões curtas) para a nuvem de palavras da turma */
+  function nuvem(p, next) {
+    const max = Math.min(5, Math.max(1, p.max || 3));
+    ecra.innerHTML = '<h2>' + esc(p.titulo || 'Nuvem de palavras') + '</h2>';
+    intro(p);
+    ecra.insertAdjacentHTML('beforeend', '<p class="stem">' + esc(p.p) + '</p><p class="sm">' + (max > 1 ? 'Escreve até ' + max + ' palavras, uma em cada campo.' : 'Escreve uma palavra.') + '</p>');
+    for (let k = 0; k < max; k++) ecra.insertAdjacentHTML('beforeend', '<input type="text" class="linha palavra" maxlength="28" autocomplete="off" autocapitalize="none" placeholder="Palavra ' + (k + 1) + '">');
+    ecra.insertAdjacentHTML('beforeend', '<button class="btn seg" disabled>Continuar</button>');
+    const inps = Array.from(ecra.querySelectorAll('.palavra')), seg = ecra.querySelector('.seg');
+    const lidas = () => inps.map(i => E.palavra(i.value)).filter((w, i, l) => w && l.indexOf(w) === i);
+    inps.forEach(i => i.addEventListener('input', () => { seg.disabled = !lidas().length; }));
+    seg.addEventListener('click', () => { registo.escrita.push({ pergunta: p.p, resposta: lidas().join('; '), tipo: 'nuvem' }); next(); });
   }
 
   /* escrita: caixas de texto */
@@ -234,7 +330,7 @@
   let payload = null;
   function fimDosPassos() {
     payload = {
-      disciplina: act.disciplina || '', atividade: act.titulo, pasta: pasta, chave: chave, nome: registo.nome,
+      disciplina: act.disciplina || '', atividade: act.titulo, pasta: pasta, chave: chave, nome: registo.nome, nomes: registo.nomes,
       data: new Date().toISOString(), pontos: registo.pontos, certas: registo.certas, total: registo.total,
       jogo: registo.jogo, escrita: registo.escrita
     };
@@ -281,13 +377,22 @@
       try {
         await post(payload);
         aEnviar = false; tirarPend(payload);
-        estado('ok', 'Respostas recebidas', 'Obrigado, ' + payload.nome.split(' ')[0] + '. O professor já tem as tuas respostas. Podes fechar esta página.');
+        const dois = (payload.nomes || []).length > 1;
+        estado('ok', 'Respostas recebidas', 'Obrigado, ' + (dois ? payload.nomes.map(n => n.split(' ')[0]).join(' e ') : payload.nome.split(' ')[0]) + '. O professor já tem as ' + (dois ? 'vossas respostas, registadas em nome de cada um.' : 'tuas respostas.'));
+        turma();
         return;
       } catch (e) { /* tenta outra vez */ }
     }
     aEnviar = false;
     estado('erro', 'Ainda não foi enviado', 'Verifica a ligação à internet (dados móveis ou Wi-Fi) e carrega no botão. As tuas respostas estão guardadas neste telemóvel.');
     $('reenviar').hidden = false;
+  }
+  /* Depois de enviado: as respostas da turma, sem nomes (barras, histograma, nuvem). */
+  let painelTurma = null;
+  function turma() {
+    const box = $('turma'); if (!box || painelTurma) return;
+    box.hidden = false;
+    painelTurma = E.painel($('turma-painel'), { disciplina: payload.disciplina, titulo: payload.atividade, passos: act.passos || passos }, { url: url, meu: registo, revelar: true, auto: 15000 });
   }
   function estado(tipo, titulo, texto) {
     const f = $('ecra-fim'); f.dataset.estado = tipo;

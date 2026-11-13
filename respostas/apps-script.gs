@@ -6,6 +6,15 @@
  * por disciplina e atividade) e responde {ok:true} ao telemóvel, que só
  * então mostra «Respostas recebidas». O email por envio está desligado.
  *
+ * Novembro de 2026 (versão 3):
+ *  - um envio pode trazer vários nomes (colegas sem telemóvel): cada nome
+ *    fica com a sua linha, com as mesmas respostas e a mesma pontuação;
+ *  - o endereço /exec?acao=resultados&d=<disciplina>&a=<atividade> devolve
+ *    as respostas da turma já contadas e SEM NOMES, para os gráficos do
+ *    telemóvel e do projetor. Só saem as colunas de escolha (perguntas de
+ *    jogo, opiniões, escalas e nuvens de palavras); as colunas «Escrita»
+ *    (textos livres) nunca saem daqui.
+ *
  * Como instalar: ver respostas/LEIA-ME.md. Para atualizar: colar este código
  * por cima do anterior → Implementar → Gerir implementações → lápis →
  * Versão: Nova versão → Implementar (o endereço /exec mantém-se).
@@ -25,7 +34,11 @@ function doPost(e) {
   // esperavam mais de 20 s, o pedido falhava e o telemóvel dizia «Enviado!» na mesma.)
   try {
     const d = JSON.parse(e.postData.contents);
-    const nome = limpar(d.nome, 80) || '(sem nome)';
+    // vários nomes = alunos a responder juntos no mesmo telemóvel: uma linha para cada um
+    let nomes = (Array.isArray(d.nomes) && d.nomes.length ? d.nomes : [d.nome])
+      .map(n => limpar(n, 80).trim()).filter(n => n).slice(0, 6);
+    if (!nomes.length) nomes = ['(sem nome)'];
+    const nome = nomes.join(' + ');
     // pedidos antigos do CP 4 não trazem disciplina
     const disciplina = limpar(d.disciplina, 40) || 'CP 4';
     const atividade = limpar(d.atividade, 80) || 'Atividade';
@@ -34,11 +47,13 @@ function doPost(e) {
     const agora = new Date();
 
     // 1. Folha de cálculo: um separador por atividade, uma linha por formando
-    const folha = separador(disciplina === 'CP 4' ? atividade : disciplina + ' · ' + atividade, jogo, escrita);
-    const linha = [agora, nome, Number(d.pontos) || 0, (Number(d.certas) || 0) + ' / ' + (Number(d.total) || 0)]
-      .concat(jogo.map(j => (j.certa ? '✓ ' : '✗ ') + limpar(j.resposta, 200)))
+    const folha = separador(nomeSeparador(disciplina, atividade), jogo, escrita);
+    const respostas = jogo.map(j => (j.certa ? '✓ ' : '✗ ') + limpar(j.resposta, 200))
       .concat(escrita.map(x => limpar(x.resposta, 3000)));
-    folha.appendRow(linha.map(seguro));
+    nomes.forEach(n => {
+      const linha = [agora, n, Number(d.pontos) || 0, (Number(d.certas) || 0) + ' / ' + (Number(d.total) || 0)].concat(respostas);
+      folha.appendRow(linha.map(seguro));
+    });
 
     // 2. Email (desligado por defeito)
     if (ENVIAR_EMAIL && MailApp.getRemainingDailyQuota() > 0) {
@@ -62,15 +77,57 @@ function doPost(e) {
   }
 }
 
-/** Abrir o endereço /exec no navegador mostra esta mensagem: serve para confirmar que está a funcionar. */
-function doGet() {
-  return ContentService.createTextOutput('O recetor de respostas das aulas está a funcionar.');
+/** Abrir o endereço /exec no navegador mostra a mensagem: serve para confirmar que está a funcionar.
+    Com ?acao=resultados&d=<disciplina>&a=<atividade> devolve as respostas da turma, contadas e sem nomes. */
+function doGet(e) {
+  const q = (e && e.parameter) || {};
+  if (q.acao === 'resultados') {
+    try { return resposta(resultados(limpar(q.d, 40) || 'CP 4', limpar(q.a, 80) || 'Atividade')); }
+    catch (err) { return resposta({ ok: false, erro: String(err) }); }
+  }
+  return ContentService.createTextOutput('O recetor de respostas das aulas está a funcionar (versão 3: vários nomes e respostas da turma).');
+}
+
+/** Conta as respostas de um separador. Cada aluno conta uma vez (a última resposta que enviou). */
+function resultados(disciplina, atividade) {
+  const vazio = { ok: true, n: 0, colunas: [] };
+  const id = PropertiesService.getScriptProperties().getProperty('FOLHA_ID');
+  if (!id) return vazio;                                   // ainda não há folha: nada para mostrar
+  const sh = planilha().getSheetByName(nomeSeparador(disciplina, atividade).replace(/[\[\]\*\?\/\\:]/g, ' ').slice(0, 90));
+  if (!sh || sh.getLastRow() < 2) return vazio;
+  const v = sh.getDataRange().getDisplayValues(), cab = v[0];
+  const ultima = {};                                        // nome → última linha desse aluno
+  for (let r = 1; r < v.length; r++) ultima[String(v[r][1]).trim().toLowerCase()] = r;
+  const linhas = Object.keys(ultima).map(k => v[ultima[k]]);
+  const colunas = [];
+  for (let c = 4; c < cab.length; c++) {
+    const h = String(cab[c]);
+    let m, tipo;
+    if ((m = h.match(/^\d+: ([\s\S]*)$/))) tipo = 'jogo';
+    else if ((m = h.match(/^(Opinião|Escala|Nuvem) \d+: ([\s\S]*)$/))) { tipo = { 'Opinião': 'opiniao', 'Escala': 'escala', 'Nuvem': 'nuvem' }[m[1]]; m = [0, m[2]]; }
+    else continue;                                          // «Escrita …»: texto livre, não sai daqui
+    const cont = {};
+    const soma = k => { k = String(k).trim().slice(0, 200); if (k && (cont[k] || Object.keys(cont).length < 300)) cont[k] = (cont[k] || 0) + 1; };
+    linhas.forEach(l => {
+      const x = String(l[c] == null ? '' : l[c]);
+      if (!x) return;
+      if (tipo === 'jogo') soma(x.replace(/^[✓✗] /, ''));
+      else if (tipo === 'opiniao') soma(x.split(' — ')[0]);   // só a escolha; o «porquê» fica na folha
+      else if (tipo === 'nuvem') x.split(';').forEach(w => soma(w.toLowerCase()));
+      else soma(x);
+    });
+    colunas.push({ tipo: tipo, pergunta: m[1], contagens: cont });
+  }
+  return { ok: true, n: linhas.length, colunas: colunas };
+}
+function nomeSeparador(disciplina, atividade) {
+  return disciplina === 'CP 4' ? atividade : disciplina + ' · ' + atividade;   // os separadores antigos do CP 4 não têm prefixo
 }
 
 /** Executar uma vez no editor (botão «Executar») para autorizar e testar: cria a folha e manda um email de teste. */
 function testar() {
   const r = doPost({ postData: { contents: JSON.stringify({
-    nome: 'Formando de teste', atividade: 'Teste', pontos: 140, certas: 1, total: 1,
+    nome: 'Formando de teste', nomes: ['Formando de teste', 'Colega sem telemóvel'], atividade: 'Teste', pontos: 140, certas: 1, total: 1,
     jogo: [{ pergunta: 'Pergunta de teste?', resposta: 'Resposta certa', certa: true }],
     escrita: [{ pergunta: 'Pergunta escrita de teste', resposta: 'Isto é um teste.' }]
   }) } });
@@ -109,7 +166,8 @@ function separador(atividade, jogo, escrita) {
     sh = ss.insertSheet(nome);
     const cab = ['Data', 'Nome', 'Pontos', 'Certas']
       .concat(jogo.map((j, k) => (k + 1) + ': ' + limpar(j.pergunta, 100)))
-      .concat(escrita.map((x, k) => 'Escrita ' + (k + 1) + ': ' + limpar(x.pergunta, 100)));
+      // «Opinião», «Escala» e «Nuvem» podem aparecer nos gráficos da turma; «Escrita» nunca
+      .concat(escrita.map((x, k) => (({ opiniao: 'Opinião', escala: 'Escala', nuvem: 'Nuvem' })[x.tipo] || 'Escrita') + ' ' + (k + 1) + ': ' + limpar(x.pergunta, 100)));
     sh.appendRow(cab.map(seguro));   // o cabeçalho segue a primeira resposta recebida
     sh.setFrozenRows(1);
     sh.getRange(1, 1, 1, cab.length).setFontWeight('bold');

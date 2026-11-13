@@ -14,7 +14,8 @@
   respostas/index.html — página do aluno no telemóvel, partilhada por todas as
   disciplinas. Abre-se pelo código QR dos slides «No telemóvel»:
     respostas/?f=ai-2ano/o-trabalho&a=labor
-  f = pasta do site da aula (onde está atividades.js); a = chave da atividade.
+  f = pasta do site da aula; a = chave da atividade em atividades.js
+  (ou q = número do questionário nos slides, ou x = pergunta rápida).
   O endereço de envio está em config.js. Ver LEIA-ME.md.
 -->
 <main id="app">
@@ -29,7 +30,9 @@
   <section id="ecra-nome" class="ecra">
     <label for="nome">O teu nome</label>
     <input id="nome" autocomplete="name" maxlength="80" placeholder="Nome e apelido">
-    <p class="sm">O nome e as respostas são enviados ao professor. Só ele os vê.</p>
+    <div id="colegas"></div>
+    <button type="button" class="ligacao" id="mais-nome">+ Responder com um colega que não tem telemóvel</button>
+    <p class="sm">O nome e as respostas são enviados ao professor. Só ele vê os nomes e os textos que escreveres. As tuas escolhas entram, sem nome, nos gráficos da turma que aparecem no fim.</p>
     <button class="btn orange" id="comecar">Começar</button>
     <p class="aviso" id="aviso-config" hidden>Atenção: o envio ainda não está configurado. Podes responder, e no fim mostras o ecrã ao professor.</p>
   </section>
@@ -41,10 +44,12 @@
     <h2 id="fim-titulo" aria-live="polite">A enviar…</h2>
     <p id="fim-texto"></p>
     <button class="btn" id="reenviar" hidden>Tentar enviar outra vez</button>
+    <div id="turma" hidden><h2>As respostas da turma</h2><div id="turma-painel"></div></div>
     <div id="resumo" class="resumo"></div>
   </section>
 </main>
 <script src="config.js"></script>
+<script src="../comum/partilhado.js"></script>
 <script src="aluno.js"></script>
 </body>
 </html>

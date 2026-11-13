@@ -61,3 +61,19 @@ output { font-weight:700; font-size:20px; min-width:28px; text-align:right; }
 .sem-teclado { display:block; margin:6px 0 0 auto; font:inherit; font-size:14px; color:var(--blue); background:none; border:0; padding:6px 0; text-decoration:underline; }
 .sem-teclado:disabled { color:var(--green); text-decoration:none; }
 input.linha { margin-top:2px; }
+
+/* ---- novembro de 2026: vários nomes, escala, nuvem de palavras, respostas da turma ---- */
+.ligacao { display:block; width:100%; margin:10px 0 0; padding:10px 12px; font:inherit; font-size:16px; font-weight:700; text-align:left; color:var(--blue); background:var(--blue-light); border:0; border-radius:10px; }
+.colega { display:flex; gap:8px; margin-top:8px; }
+.colega button { flex:0 0 48px; font-size:24px; border:2px solid var(--line); border-radius:10px; background:#fff; color:var(--navy); }
+.escala { background:#fff; border:1px solid var(--line); border-radius:12px; padding:14px; margin:0 0 14px; }
+.escala .stem { font-size:20px; margin-bottom:6px; }
+.escala .valor { display:block; text-align:center; font-family:var(--head); font-size:40px; min-width:0; color:var(--line); }
+.escala.mexido .valor { color:var(--orange); }
+.escala input[type=range] { padding:0; border:0; height:44px; accent-color:var(--orange); background:none; }
+.escala .pontas { display:flex; justify-content:space-between; gap:12px; font-size:14px; color:#5B6670; }
+.escala .pontas span:last-child { text-align:right; }
+.escala .fb { min-height:0; margin-top:8px; }
+input.palavra { margin-top:8px; }
+#turma { text-align:left; margin-top:26px; border-top:2px solid var(--line); padding-top:14px; }
+#turma h2 { text-align:center; }

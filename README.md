@@ -8,6 +8,10 @@ Página inicial e sites interativos das aulas, prontos para o GitHub Pages.
 index.html          página inicial (lista de disciplinas e temas)
 catalogo.js         a lista que a página inicial mostra: edita só este ficheiro
 .nojekyll           diz ao GitHub Pages para servir os ficheiros tal como estão
+comum/              ferramentas iguais em todas as aulas: telemóvel em todos os questionários,
+                    respostas da turma, quadro, grafo de vocabulário, pergunta rápida (ver comum/LEIA-ME.md)
+respostas/          página do aluno no telemóvel e script da folha «Avaliação contínua»
+demo/               atividade de demonstração com todos os tipos de pergunta
 clc6/               CLC 6 · Culturas de urbanismo e mobilidade
 cp4/                CP 4 · Processos identitários
 ai-3ano/

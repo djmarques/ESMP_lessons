@@ -4,8 +4,10 @@ Esta pasta tem a página que os alunos abrem no telemóvel pelo código QR dos s
 
     respostas/?f=ai-2ano/o-trabalho&a=labor
 
-- `f` é a pasta do site da aula, onde está o ficheiro `atividades.js`;
-- `a` é o nome da atividade dentro desse ficheiro.
+- `f` é a pasta do site da aula;
+- `a` é o nome de uma atividade escrita no `atividades.js` dessa pasta;
+- em vez de `a`, `q=3` abre o quarto questionário ou jogo dos slides dessa aula (lido diretamente do `index.html`: é assim que todos os questionários de todas as aulas funcionam no telemóvel);
+- em vez de `a`, `x=…` é uma pergunta rápida lançada pelo professor (tecla `P` nos slides).
 
 Quando o aluno carrega em **Enviar**, as respostas vão para o Google Apps Script (endereço em `config.js`). O script escreve-as na folha de cálculo do teu Google Drive, num separador por disciplina e atividade, e manda-te um email com o assunto «disciplina · atividade · nome · data».
 
@@ -25,8 +27,20 @@ Cada atividade, no `atividades.js` do site da aula, tem `disciplina`, `titulo` e
 | --- | --- | --- |
 | `jogo` | escolha múltipla, 20 segundos por pergunta, pontos e som | sim |
 | `classificar` | um item de cada vez, escolhe a categoria | sim, se o item tiver a resposta certa (`c`) |
+| `vf` | verdadeiro ou falso, uma afirmação de cada vez (`afirmacoes: [{ t, c: true, f }]`) | sim |
+| `escala` | arrasta um cursor entre `min` e `max` (`etiquetas` para as pontas) | só se tiver valor certo (`c`, com `tolerancia`) |
+| `nuvem` | escreve até `max` palavras (3 por defeito) para a nuvem da turma | não |
 | `opiniao` | escolhe uma opção e, se quiser, explica porquê | não |
 | `escrita` | responde em caixas de texto | não |
+
+Há um exemplo de cada tipo em `demo/atividades.js`, para copiar. Para experimentar: `respostas/?f=demo&a=experimentar`.
+
+## Novembro de 2026 (versão 3): vários nomes e respostas da turma
+
+- **Colega sem telemóvel:** no primeiro ecrã, «Responder com um colega que não tem telemóvel» acrescenta outro nome (até quatro no total). Na folha, cada nome fica com a sua linha, com as mesmas respostas e a mesma pontuação.
+- **Respostas da turma:** depois do sinal verde, o telemóvel mostra as respostas de todos, sem nomes: barras nas perguntas de escolha, histograma e média nas escalas, nuvem nas palavras. A resposta do próprio aluno vem marcada. Os textos livres (`escrita` e o «porquê» das opiniões) nunca saem da folha.
+- Na folha, as colunas passam a chamar-se «Opinião», «Escala» e «Nuvem» além de «Escrita». Só as três primeiras, e as perguntas de jogo, entram nos gráficos. Nos separadores criados antes desta versão as opiniões estão em colunas «Escrita» e por isso não aparecem em gráfico.
+- **É preciso atualizar o script uma vez** (instruções em baixo). Até lá, tudo continua a ser gravado como antes, mas os gráficos da turma não aparecem e dois nomes ficam na mesma linha («Ana + Bruno»).
 
 ## Atualizar o script no Google
 
