@@ -33,6 +33,7 @@
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Caladea:ital,wght@0,400;0,700;1,400&family=Carlito:ital,wght@0,400;0,700;1,400&display=swap">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
 <link rel="stylesheet" href="style.css">
+<link rel="stylesheet" href="fundadores.css">
 </head>
 <body>
 
@@ -745,12 +746,139 @@
 <article class="slide divider" id="aula-3" data-src="42" data-nav="Abertura da aula 3">
   <p class="kicker">Aula 3</p>
   <h2 class="display">Principais fundadores da construção europeia</h2>
-  <p class="lead">Jean Monnet · Robert Schuman e Konrad Adenauer · Winston Churchill · Jacques Delors</p>
+  <!-- The cast: each portrait is a link to that person's slide. -->
+  <ul class="elenco">
+    <li style="--i:0"><a href="#monnet"><figure class="retrato"><img src="assets/fundadores/monnet.webp" alt="Retrato de Jean Monnet" data-iniciais="JM"></figure><b>Jean Monnet</b><span>França</span></a></li>
+    <li style="--i:1"><a href="#schuman-adenauer"><figure class="retrato"><img src="assets/fundadores/schuman.webp" alt="Retrato de Robert Schuman" data-iniciais="RS"></figure><b>Robert Schuman</b><span>França</span></a></li>
+    <li style="--i:2"><a href="#schuman-adenauer"><figure class="retrato"><img src="assets/fundadores/adenauer.webp" alt="Retrato de Konrad Adenauer" data-iniciais="KA"></figure><b>Konrad Adenauer</b><span>Alemanha</span></a></li>
+    <li style="--i:3"><a href="#churchill"><figure class="retrato"><img src="assets/fundadores/churchill.webp" alt="Retrato de Winston Churchill" data-iniciais="WC"></figure><b>Winston Churchill</b><span>Reino Unido</span></a></li>
+    <li style="--i:4"><a href="#delors"><figure class="retrato"><img src="assets/fundadores/delors.webp" alt="Retrato de Jacques Delors" data-iniciais="JD"></figure><b>Jacques Delors</b><span>França</span></a></li>
+  </ul>
+</article>
+
+<article class="slide" id="filme-fundadores" data-nav="Filme: os fundadores">
+  <p class="kicker">Aula 3 · Um filme em 7 cenas</p>
+  <h2>Como nasceu a Europa unida?</h2>
+  <!-- The film. Each .cena after the first is one build (data-step), so the arrow keys move scene by scene;
+       the Reproduzir button plays them alone (data-dur = seconds on screen). Behaviour: fundadores.js. -->
+  <div class="filme">
+    <div class="ecra">
+      <div class="cena centro" data-dur="4">
+        <div class="texto">
+          <p class="local">Europa · depois de 1945</p>
+          <p class="titulo-filme e" style="--d:.8s">Os fundadores</p>
+          <p class="papel e" style="--d:1.5s">Cinco pessoas, uma ideia: uma Europa unida para garantir a paz.</p>
+        </div>
+      </div>
+
+      <div class="cena" data-step="1" data-keep data-dur="9">
+        <figure class="retrato"><img src="assets/fundadores/churchill.webp" alt="Retrato de Winston Churchill" data-iniciais="WC"></figure>
+        <div class="texto">
+          <p class="local">Zurique · Suíça</p>
+          <p class="ano">1946</p>
+          <p class="nome e" style="--d:1.1s">Winston Churchill</p>
+          <p class="papel e" style="--d:1.4s">Reino Unido</p>
+          <p class="fala e" style="--d:2.2s">«Devemos criar uma espécie de Estados Unidos da Europa.»</p>
+        </div>
+      </div>
+
+      <div class="cena" data-step="2" data-keep data-dur="9">
+        <figure class="retrato"><img src="assets/fundadores/monnet.webp" alt="Retrato de Jean Monnet" data-iniciais="JM"></figure>
+        <div class="texto">
+          <p class="local">França</p>
+          <p class="ano">1950</p>
+          <p class="nome e" style="--d:1.1s">Jean Monnet</p>
+          <p class="papel e" style="--d:1.4s">Consultor económico e político francês</p>
+          <p class="fala e" style="--d:2.2s">A ideia: pôr em comum o carvão e o aço, a matéria da guerra.</p>
+        </div>
+      </div>
+
+      <div class="cena" data-step="3" data-keep data-dur="9">
+        <figure class="retrato"><img src="assets/fundadores/schuman.webp" alt="Retrato de Robert Schuman" data-iniciais="RS"></figure>
+        <div class="texto">
+          <p class="local">Paris · 9 de maio</p>
+          <p class="ano">1950</p>
+          <p class="nome e" style="--d:1.1s">Robert Schuman</p>
+          <p class="papel e" style="--d:1.4s">Ministro dos Negócios Estrangeiros de França</p>
+          <p class="fala e" style="--d:2.2s">Apresenta o plano: a Declaração Schuman. Hoje, o 9 de maio é o Dia da Europa.</p>
+        </div>
+      </div>
+
+      <div class="cena centro" data-step="4" data-keep data-dur="9">
+        <div class="texto">
+          <p class="local">França e Alemanha · 1950</p>
+          <div class="dupla">
+            <figure class="esq"><figure class="retrato"><img src="assets/fundadores/schuman.webp" alt="Retrato de Robert Schuman" data-iniciais="RS"></figure><figcaption><b>Robert Schuman</b>França</figcaption></figure>
+            <i class="fa-solid fa-handshake aperto" aria-hidden="true"></i>
+            <figure class="dir"><figure class="retrato"><img src="assets/fundadores/adenauer.webp" alt="Retrato de Konrad Adenauer" data-iniciais="KA"></figure><figcaption><b>Konrad Adenauer</b>Chanceler da Alemanha (Ocidental)</figcaption></figure>
+          </div>
+          <p class="fala e" style="--d:2.2s">Adenauer aceita o plano.</p>
+        </div>
+      </div>
+
+      <div class="cena centro" data-step="5" data-keep data-dur="10">
+        <div class="texto">
+          <p class="local">Tratado de Paris</p>
+          <p class="ano">1951</p>
+          <p class="nome e" style="--d:1.1s">Nasce a Comunidade Europeia do Carvão e do Aço</p>
+          <ul class="marcos">
+            <li class="e" style="--d:1.8s">França</li><li class="e" style="--d:2.1s">Alemanha Ocidental</li><li class="e" style="--d:2.4s">Itália</li>
+            <li class="e" style="--d:2.7s">Bélgica</li><li class="e" style="--d:3s">Países Baixos</li><li class="e" style="--d:3.3s">Luxemburgo</li>
+          </ul>
+          <p class="papel e" style="--d:4.2s">Jean Monnet é o primeiro presidente do seu órgão executivo.</p>
+        </div>
+      </div>
+
+      <div class="cena" data-step="6" data-keep data-dur="11">
+        <figure class="retrato"><img src="assets/fundadores/delors.webp" alt="Retrato de Jacques Delors" data-iniciais="JD"></figure>
+        <div class="texto">
+          <p class="local">Comissão Europeia</p>
+          <p class="ano">1985</p>
+          <p class="nome e" style="--d:1.1s">Jacques Delors</p>
+          <p class="papel e" style="--d:1.4s">Presidente da Comissão Europeia, entre 1985 e 1995</p>
+          <ul class="marcos">
+            <li class="e" style="--d:2.2s"><i class="fa-solid fa-file-signature"></i><time>1986</time>Ato Único Europeu</li>
+            <li class="e" style="--d:2.8s"><i class="fa-solid fa-graduation-cap"></i><time>1987</time>Erasmus</li>
+            <li class="e" style="--d:3.4s"><i class="fa-solid fa-truck-fast"></i><time>1993</time>Mercado Único</li>
+            <li class="e" style="--d:4s"><i class="fa-solid fa-euro-sign"></i><time>2002</time>O euro</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="cena centro" data-step="7" data-keep>
+        <div class="texto">
+          <p class="local">Elenco</p>
+          <ul class="creditos">
+            <li class="e" style="--d:.6s"><figure class="retrato"><img src="assets/fundadores/churchill.webp" alt="Retrato de Winston Churchill" data-iniciais="WC"></figure><b>Winston Churchill</b><span>Reino Unido</span></li>
+            <li class="e" style="--d:.9s"><figure class="retrato"><img src="assets/fundadores/monnet.webp" alt="Retrato de Jean Monnet" data-iniciais="JM"></figure><b>Jean Monnet</b><span>França</span></li>
+            <li class="e" style="--d:1.2s"><figure class="retrato"><img src="assets/fundadores/schuman.webp" alt="Retrato de Robert Schuman" data-iniciais="RS"></figure><b>Robert Schuman</b><span>França</span></li>
+            <li class="e" style="--d:1.5s"><figure class="retrato"><img src="assets/fundadores/adenauer.webp" alt="Retrato de Konrad Adenauer" data-iniciais="KA"></figure><b>Konrad Adenauer</b><span>Alemanha</span></li>
+            <li class="e" style="--d:1.8s"><figure class="retrato"><img src="assets/fundadores/delors.webp" alt="Retrato de Jacques Delors" data-iniciais="JD"></figure><b>Jacques Delors</b><span>França</span></li>
+          </ul>
+          <p class="fala e" style="--d:2.8s">Quem fez o quê? Vamos ver um a um.</p>
+        </div>
+      </div>
+
+      <ol class="fita" aria-label="Momentos do filme">
+        <li data-cenas="1 1"><button type="button">1946</button></li>
+        <li data-cenas="2 4"><button type="button">1950</button></li>
+        <li data-cenas="5 5"><button type="button">1951</button></li>
+        <li data-cenas="6 6"><button type="button">1985–1995</button></li>
+        <li data-cenas="7 7"><button type="button">Elenco</button></li>
+      </ol>
+      <div class="tempo" aria-hidden="true"></div>
+    </div>
+    <p class="comandos"><button type="button" class="btn orange tocar">▶ Reproduzir</button><span class="cena-n" aria-live="polite"></span><span>ou <kbd>→</kbd> para avançar cena a cena</span></p>
+  </div>
 </article>
 
 <article class="slide" id="monnet" data-src="43">
-  <p class="kicker">A construção europeia</p>
-  <h2>Jean Monnet</h2>
+  <header class="pessoa">
+    <figure class="retrato"><img src="assets/fundadores/monnet.webp" alt="Retrato de Jean Monnet" data-iniciais="JM"></figure>
+    <div><p class="kicker">A construção europeia</p>
+    <h2>Jean Monnet</h2>
+    <p class="ficha">1888–1979 · França</p></div>
+  </header>
   <div class="cols wide-right">
     <div>
       <p class="lead">Consultor económico e político francês. Dedicou a sua vida à causa da integração europeia, para restabelecer e manter a paz.</p>
@@ -780,8 +908,8 @@
   <p class="kicker">A construção europeia</p>
   <h2>Robert Schuman e Konrad Adenauer</h2>
   <div class="cols" style="--n:2">
-    <div class="card"><p class="h3">Robert Schuman</p><p>Ministro dos Negócios Estrangeiros de França, entre 1948 e 1952.</p></div>
-    <div class="card"><p class="h3">Konrad Adenauer</p><p>Chanceler da Alemanha (Ocidental), entre 1949 e 1963.</p></div>
+    <div class="card com-retrato"><figure class="retrato"><img src="assets/fundadores/schuman.webp" alt="Retrato de Robert Schuman" data-iniciais="RS"></figure><div><p class="h3">Robert Schuman</p><p>Ministro dos Negócios Estrangeiros de França, entre 1948 e 1952.</p></div></div>
+    <div class="card com-retrato"><figure class="retrato"><img src="assets/fundadores/adenauer.webp" alt="Retrato de Konrad Adenauer" data-iniciais="KA"></figure><div><p class="h3">Konrad Adenauer</p><p>Chanceler da Alemanha (Ocidental), entre 1949 e 1963.</p></div></div>
   </div>
   <!-- From a plan between two neighbours to the first supranational community, one step at a time. -->
   <ol class="flow">
@@ -794,8 +922,12 @@
 </article>
 
 <article class="slide" id="churchill" data-src="45">
-  <p class="kicker">A construção europeia</p>
-  <h2>Winston Churchill</h2>
+  <header class="pessoa">
+    <figure class="retrato"><img src="assets/fundadores/churchill.webp" alt="Retrato de Winston Churchill" data-iniciais="WC"></figure>
+    <div><p class="kicker">A construção europeia</p>
+    <h2>Winston Churchill</h2>
+    <p class="ficha">1874–1965 · Reino Unido</p></div>
+  </header>
   <div class="cols wide-right">
     <p class="lead">Antigo oficial do exército, repórter de guerra e primeiro-ministro britânico: um dos primeiros a propor e defender a criação dos «Estados Unidos da Europa». Defendia que só uma Europa unida poderia assegurar a paz.</p>
     <blockquote class="big-quote">Devemos criar uma espécie de Estados Unidos da Europa.<cite>Winston Churchill, discurso à juventude académica, Zurique, 1946</cite></blockquote>
@@ -812,8 +944,12 @@
 </article>
 
 <article class="slide" id="delors" data-src="46">
-  <p class="kicker">A construção europeia</p>
-  <h2>Jacques Delors</h2>
+  <header class="pessoa">
+    <figure class="retrato"><img src="assets/fundadores/delors.webp" alt="Retrato de Jacques Delors" data-iniciais="JD"></figure>
+    <div><p class="kicker">A construção europeia</p>
+    <h2>Jacques Delors</h2>
+    <p class="ficha">1925–2023 · França</p></div>
+  </header>
   <p class="lead">Político francês. Foi presidente da Comissão Europeia entre 1985 e 1995.</p>
   <ol class="tl icons">
     <li data-step="1"><i class="fa-solid fa-landmark"></i><time>1985</time><b>Presidente da Comissão</b>Propõe acabar com as fronteiras aduaneiras e fiscais entre os Estados-Membros.</li>
@@ -1816,6 +1952,7 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcode-generator/1.4.4/qrcode.min.js"></script>
 <script src="notes.js"></script>
 <script src="app.js"></script>
+<script src="fundadores.js"></script>
 <!-- ferramentas comuns a todas as aulas: telemóvel em todos os questionários, respostas da turma, quadro, grafo, pergunta rápida (ver comum/LEIA-ME.md) -->
 <script src="../../comum/partilhado.js"></script>
 <script src="../../comum/aula.js"></script>

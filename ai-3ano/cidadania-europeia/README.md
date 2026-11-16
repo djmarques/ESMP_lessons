@@ -15,6 +15,8 @@ fonts, icons and QR codes, which load from Google Fonts and cdnjs).
 | `index.html` | All the content: one `<article class="slide">` per slide, grouped by lesson |
 | `style.css` | Appearance: the deck's palette (navy, burnt orange, sand) and typefaces (Cambria, Calibri) |
 | `app.js` | Behaviour: navigation, step-by-step builds, quizzes, research tasks, sorting activity, notes |
+| `fundadores.css`, `fundadores.js` | Lesson 3 only: the founders' portraits and the film slide (`#filme-fundadores`) |
+| `assets/fundadores/` | The founders' portraits (`monnet.webp`, `schuman.webp`, `adenauer.webp`, `churchill.webp`). Save a photograph as `delors.webp` here and it replaces the initials «JD» everywhere |
 | `notes.js` | Speaker notes from the PowerPoint deck (generated: do not edit by hand) |
 | `assets/` | Images taken from the deck: the enlargement maps, the CE mark, the charger illustrations |
 | `tools/extract_notes.py` | Rebuilds `notes.js` from a `.pptx` |
