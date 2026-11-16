@@ -3,7 +3,7 @@
 Site interativo para projetar na sala e para os alunos estudarem em casa. Constrói a ideia de aprendizagem peça a peça, como uma escada em que cada degrau acrescenta um só conceito:
 
 1. **O que é aprender?** A definição montada em três peças (experiência, mudança, estável e duradoura), o que não é aprendizagem, aprender sem mostrar, voluntária e involuntária, desaprender.
-2. **O que ajuda a aprender?** Fatores individuais (maturação, atenção, motivação, aprendizagem anterior), sociais e situacionais.
+2. **O que ajuda a aprender?** Um mapa animado arruma cada fator na sua família: individuais (maturação, atenção, motivação, aprendizagem anterior), sociais (estímulos, afetos, escola) e situacionais (sentido, feedback, reforço). Cada fator tem depois a sua cena animada, e um jogo de três opções («de que família é?») fecha a lição. Depois do meio sociocultural há três slides com dados (o elevador social, segundo a OCDE; o bairro onde se cresce, segundo Chetty e colegas; o meio e o cérebro, segundo Noble e Gianaros) e um jogo de escolha múltipla sobre eles; as fontes completas estão nas notas do professor.
 3. **Degrau 1: habituação** (com simulação de som).
 4. **Degrau 2: condicionamento clássico** (Pavlov, o pequeno Albert, Peter e o coelho, com a simulação do cão).
 5. **Degrau 3: condicionamento operante** (Thorndike, Skinner, reforço e punição, com a simulação da caixa de Skinner e o quadro interativo das duas perguntas).
@@ -27,7 +27,7 @@ Cada slide tem, por baixo do título, um parágrafo curto de contexto (a classe 
 | Ficheiro | O que tem |
 | --- | --- |
 | `index.html` | Todo o conteúdo: um `<section class="slide">` por slide |
-| `style.css` | Aspeto (secção 16: as composições e simulações deste módulo) |
+| `style.css` | Aspeto (secção 16: as composições e simulações deste módulo; secção 17: as cenas animadas da lição 2) |
 | `app.js` | Comportamento: navegação, passos, jogos, simulações, temporizadores |
 | `notes.js` | Notas do professor, uma por slide |
 
@@ -39,6 +39,17 @@ Cada slide tem, por baixo do título, um parágrafo curto de contexto (a classe 
 | `←` | Passo anterior (ou slide anterior) |
 | `N` | Notas do professor |
 | `F` | Ecrã inteiro |
+
+## Cenas animadas e mapa dos fatores (lição 2)
+
+Funcionam como as cenas de «O trabalho». Os slides com a classe `cena` têm um desenho SVG (`.palco`) em que quem aprende é sempre a figura laranja com um ponto branco no peito.
+
+- `data-step="n"` faz aparecer elementos, dentro e fora do desenho.
+- Para mover ou trocar coisas num clique, o `app.js` acrescenta ao slide as classes `ge1`, `ge2`… («o passo é pelo menos n»). As regras de cada cena estão no fim do `style.css` (por exemplo `#s-cerebro.ge2 #cer-f { transform: translateX(250px) scale(1.5) }`).
+- `data-steps="n"` no `<section>` indica quantos cliques tem a cena.
+- A faixa por cima do título (`<div class="fam">`) mostra as três famílias; a família do slide leva a classe `now` e abre com os seus fatores, e o fator do slide também leva `now`.
+
+A versão anterior desta lição está em `archive/index_2026-11-16.html`.
 
 ## Simulações
 
