@@ -9,7 +9,7 @@
    Widgets:
      contagio   a price rise spreads to the neighbouring houses
      oferta     supply and demand: what moves the price of houses
-     curvas     supply and demand drawn piece by piece (follows the clicks)
+     curvas     supply and demand, Manim style: data-modo procura | oferta | equilibrio | explorar
      renda      land rent (bid rent) by distance to the centre
      quinze     the 15-minute city: what is within reach
      pendular   commuting into the centre over a day
@@ -226,117 +226,152 @@
     paint();
   };
 
-  /* ---------- 2b. curvas: supply and demand drawn piece by piece -------
-     Follows the presenter's clicks (slide a3-curvas):
-       1 the axes · 2 demand: how many buyers at each price · 3 supply: how
-       many houses for sale at each price · 4 the equilibrium point · 5 more
-       buyers: demand moves right · 6 new flats: supply moves right.
+  /* ---------- 2b. curvas: the law of supply and demand, Manim style ----
+     Dark board, lines drawn one stroke at a time, big text. One widget, four
+     slides (data-modo):
+       procura     rows of buyers at three prices → the demand line
+       oferta      rows of houses for sale at the same prices → the supply line
+       equilibrio  too many houses above, too few below → the meeting point
+       explorar    sliders move both lines and the point
      Same straight lines as the 3D board in bairro3d.js:
        demand  P = 200 + 12,5 × (B − Q)     supply  P = 200 + 12,5 × (Q − S)
-     with B = 4 buyers and S = 4 houses at the start (P = 200 mil €). */
+     B buyers, S houses for sale; they meet at P = 200 + 6,25 × (B − S). */
   W.curvas = function (w) {
-    const s = svg(660, 450, w, 'Gráfico da procura e da oferta de casas, desenhado passo a passo');
-    const X = q => 70 + q * 38, Y = p => 392 - (p - 100) * 1.62;
+    const modo = w.dataset.modo || 'explorar';
+    const K = { fg: '#F6F3EC', dim: 'rgba(246,243,236,.45)', grid: 'rgba(246,243,236,.12)', dem: '#F0A673', sup: '#8EC1E6', pt: '#FFFFFF', bad: '#F0A673' };
+    const big = modo !== 'explorar';
+    // Scales: the three definition slides zoom in on prices 100–300 and up to 14 houses; the explorer shows more.
+    const Q1 = big ? 14 : 24, P0 = big ? 100 : 50, P1 = big ? 300 : 350;
+    const VW = 1000, VH = big ? 480 : 430, X0 = 96, Y0 = VH - 56, XR = VW - 70, YT = 52;
+    const X = q => X0 + q * (XR - X0) / Q1, Y = p => Y0 - (p - P0) * (Y0 - YT) / (P1 - P0);
+    const s = svg(VW, VH, w, 'Gráfico da procura e da oferta de casas');
+    s.classList.add('mn-svg');
     const parts = [];
-    /** a group that shows from build `from` to build `to`, and fades to `dimTo` opacity after `dimAt` */
-    function part(from, to = 99, dimAt = 99, dimTo = 0.18) {
-      const g = el('g', { opacity: 0 }, s);
-      g.style.transition = 'opacity .7s';
+    function part(from, to = 99, dimAt = 99, dimTo = 0.2) {
+      const g = el('g', { opacity: 0, class: 'mn-part' }, s);
       parts.push({ g, from, to, dimAt, dimTo });
       return g;
     }
-    function drawLine(g, q1, p1, q2, p2, color, dashed) {
-      const l = el('line', { x1: X(q1), y1: Y(p1), x2: X(q2), y2: Y(p2), stroke: color, 'stroke-width': dashed ? 3 : 5, 'stroke-linecap': 'round', pathLength: 1 }, g);
-      if (dashed) l.setAttribute('stroke-dasharray', '.02 .02');
-      else l.classList.add('draw');                      // style.css: .draw is drawn when it gets the class .on
-      return l;
+    const txt = (g, x, y, t, o = {}) => el('text', Object.assign({ x, y, fill: K.fg, class: 'mn-t' }, o), g, t);
+    function line(g, q1, p1, q2, p2, color, o = {}) {
+      return el('line', Object.assign({ x1: X(q1), y1: Y(p1), x2: X(q2), y2: Y(p2), stroke: color, 'stroke-width': 6, 'stroke-linecap': 'round', class: o.ghost ? '' : 'draw', pathLength: 1 }, o.ghost ? { 'stroke-dasharray': '.015 .015', 'stroke-width': 3, opacity: .55 } : {}), g);
     }
-    const demand = B => [Math.max(0, B - 8), 200 + 12.5 * (B - Math.max(0, B - 8)), Math.min(14, B + 8), 200 + 12.5 * (B - Math.min(14, B + 8))];
-    const supply = S => [Math.max(0, S - 8), 200 + 12.5 * (Math.max(0, S - 8) - S), Math.min(14, S + 8), 200 + 12.5 * (Math.min(14, S + 8) - S)];
+    const clip = (q1, q2) => [Math.max(0, q1), Math.min(Q1, q2)];
+    const dLine = (g, B, o) => { const [a, b] = clip(B - (P1 - 200) / 12.5, B + (200 - P0) / 12.5); return line(g, a, 200 + 12.5 * (B - a), b, 200 + 12.5 * (B - b), K.dem, o); };
+    const sLine = (g, S, o) => { const [a, b] = clip(S - (200 - P0) / 12.5, S + (P1 - 200) / 12.5); return line(g, a, 200 + 12.5 * (a - S), b, 200 + 12.5 * (b - S), K.sup, o); };
+    const dot = (g, q, p, color, r = 9) => el('circle', { cx: X(q), cy: Y(p), r, fill: color, stroke: '#1E2A33', 'stroke-width': 3, class: 'mn-pop' }, g);
 
-    // 1 · axes
-    const ax = part(1);
-    el('line', { x1: 70, y1: 392, x2: 625, y2: 392, stroke: C.navy, 'stroke-width': 2 }, ax);
-    el('line', { x1: 70, y1: 392, x2: 70, y2: 40, stroke: C.navy, 'stroke-width': 2 }, ax);
-    for (let p = 100; p <= 300; p += 50) { el('text', { x: 62, y: Y(p) + 5, 'text-anchor': 'end', class: 'wg-s', fill: C.muted }, ax, p); el('line', { x1: 66, x2: 70, y1: Y(p), y2: Y(p), stroke: C.navy }, ax); }
-    for (let q = 0; q <= 14; q += 2) el('text', { x: X(q), y: 412, 'text-anchor': 'middle', class: 'wg-s', fill: C.muted }, ax, q);
-    el('text', { x: 76, y: 30, class: 'wg-s', 'font-weight': 700 }, ax, '↑ preço de uma casa (mil €)');
-    el('text', { x: 625, y: 440, 'text-anchor': 'end', class: 'wg-s', 'font-weight': 700 }, ax, 'número de casas →');
+    // axes (all modes)
+    const ax = part(big ? 1 : 0);
+    for (let p = P0; p <= P1; p += 50) {
+      el('line', { x1: X0, x2: XR, y1: Y(p), y2: Y(p), stroke: K.grid }, ax);
+      txt(ax, X0 - 12, Y(p) + 8, p, { 'text-anchor': 'end', fill: K.dim, class: 'mn-s' });
+    }
+    for (let q = 0; q <= Q1; q += big ? 2 : 4) txt(ax, X(q), Y0 + 32, q, { 'text-anchor': 'middle', fill: K.dim, class: 'mn-s' });
+    el('line', { x1: X0, y1: Y0, x2: XR + 10, y2: Y0, stroke: K.fg, 'stroke-width': 2.5 }, ax);
+    el('line', { x1: X0, y1: Y0, x2: X0, y2: YT - 20, stroke: K.fg, 'stroke-width': 2.5 }, ax);
+    txt(ax, X0 + 10, YT - 22, 'preço de uma casa (mil €)', { class: 'mn-t mn-eixo' });
+    txt(ax, XR + 10, Y0 - 14, 'número de casas', { 'text-anchor': 'end', class: 'mn-t mn-eixo' });
 
-    // 2 · demand: rows of buyers at three prices, then the line through them
-    const dRows = part(2, 4, 3);
-    [[225, 2], [200, 4], [175, 6]].forEach(([p, n], k) => {
-      const row = el('g', { class: 'wg-pop' }, dRows);
-      row.style.animationDelay = (k * 0.35) + 's';
-      for (let j = 0; j < n; j++) person(row, X(j + 0.5), Y(p) - 3, 0.45, j === 0 && p === 200 ? C.blue : C.navy);
-      el('line', { x1: 70, x2: X(n), y1: Y(p), y2: Y(p), stroke: C.line, 'stroke-dasharray': '3 4' }, row);
-    });
-    const dLine = part(2, 4);
-    drawLine(dLine, ...demand(4), C.orange);
-    [[225, 2], [200, 4], [175, 6]].forEach(([p, n]) => el('circle', { cx: X(n), cy: Y(p), r: 7, fill: C.orange, stroke: '#fff', 'stroke-width': 2 }, dLine));
-    const dName = part(2, 4);
-    el('text', { x: X(10.9), y: Y(127), class: 'wg-t', fill: C.orange, 'font-weight': 700 }, dName, 'procura');
-    const dLab = part(2, 3);
-    el('text', { x: X(8.2), y: Y(163), class: 'wg-s', fill: C.orange, 'font-weight': 700 }, dLab, 'mais cara → menos compradores');
+    /** A row of n icons from the price axis to the point (q = n), at price p. */
+    function row(g, p, n, kind) {
+      const r = el('g', {}, g);
+      for (let k = 0; k < n; k++) {
+        const cx = X(k + 0.5);
+        if (kind === 'p') person(r, cx, Y(p) - 4, 0.62, K.dem);
+        else house(r, cx - 15, Y(p) - 34, 30, 30, '#1E2A33', K.sup);
+      }
+      el('line', { x1: X0, x2: X(n), y1: Y(p), y2: Y(p), stroke: K.dim, 'stroke-dasharray': '4 6' }, r);
+      return r;
+    }
 
-    // 3 · supply: rows of houses for sale at the same prices, then its line
-    const sRows = part(3, 4, 4);
-    [[175, 2], [200, 4], [225, 6]].forEach(([p, n], k) => {
-      const row = el('g', { class: 'wg-pop' }, sRows);
-      row.style.animationDelay = (k * 0.35) + 's';
-      for (let j = 0; j < n; j++) house(row, X(j + 0.5) - 11, Y(p) - 26, 22, 22, C.cream, C.blue);
-      el('line', { x1: 70, x2: X(n), y1: Y(p), y2: Y(p), stroke: C.line, 'stroke-dasharray': '3 4' }, row);
-    });
-    const sLine = part(3, 5);
-    drawLine(sLine, ...supply(4), C.blue);
-    [[175, 2], [200, 4], [225, 6]].forEach(([p, n]) => el('circle', { cx: X(n), cy: Y(p), r: 7, fill: C.blue, stroke: '#fff', 'stroke-width': 2 }, sLine));
-    const sName = part(3, 4);
-    el('text', { x: X(12) + 8, y: Y(300) + 5, class: 'wg-t', fill: C.blue, 'font-weight': 700 }, sName, 'oferta');
-    const sLab = part(3, 3);
-    el('text', { x: X(4.6), y: Y(290), class: 'wg-s', fill: C.blue, 'font-weight': 700 }, sLab, 'mais cara → mais casas à venda');
+    if (modo === 'procura' || modo === 'oferta') {
+      const isD = modo === 'procura', col = isD ? K.dem : K.sup;
+      const pts = isD ? [[225, 2], [200, 4], [175, 6]] : [[175, 2], [200, 4], [225, 6]];
+      if (!isD) { const g = part(1); dLine(g, 4, { ghost: true }); txt(g, X(10.3), Y(138), 'procura', { fill: K.dem, opacity: .7, class: 'mn-s' }); }
+      pts.forEach(([p, n], k) => {
+        const g = part(2 + k, 99, 5, 0.25);
+        row(g, p, n, isD ? 'p' : 'h');
+        dot(g, n, p, col);
+        txt(g, X(n) + 22, Y(p) + 9, 'a ' + p + ' mil €: ' + n + (isD ? ' compradores' : ' casas à venda'), { class: 'mn-t mn-lado', fill: col });
+      });
+      const L = part(5);
+      isD ? dLine(L, 4) : sLine(L, 4);
+      pts.forEach(([p, n]) => dot(L, n, p, col));
+      txt(L, isD ? X(11.1) : X(10.4), isD ? Y(142) : Y(292), isD ? 'procura' : 'oferta', { fill: col, class: 'mn-t mn-nome' });
+      txt(L, X(isD ? 6.6 : 4.4), isD ? Y(270) : Y(132), isD ? 'mais cara → menos compradores' : 'mais cara → mais casas à venda', { fill: col, class: 'mn-t mn-lado' });
+    }
 
-    // 4 · equilibrium: where buyers and houses for sale are the same number
-    const eq = part(4, 4);
-    el('line', { x1: 70, x2: X(4), y1: Y(200), y2: Y(200), stroke: C.navy, 'stroke-dasharray': '5 5' }, eq);
-    el('line', { x1: X(4), x2: X(4), y1: Y(200), y2: 392, stroke: C.navy, 'stroke-dasharray': '5 5' }, eq);
-    el('circle', { cx: X(4), cy: Y(200), r: 11, fill: C.navy, stroke: '#fff', 'stroke-width': 3, class: 'wg-pulse' }, eq);
-    el('text', { x: X(4) + 18, y: Y(200) + 6, class: 'wg-t', 'font-weight': 700 }, eq, 'equilíbrio: 4 casas a 200 mil €');
-    el('text', { x: X(8.2), y: Y(234), class: 'wg-s', fill: C.blue }, eq, 'a 225 mil €: 6 casas, 2 compradores');
-    el('text', { x: X(8.2), y: Y(234) + 18, class: 'wg-s', fill: C.blue, 'font-weight': 700 }, eq, 'sobram casas → o preço desce ↓');
-    el('text', { x: X(8.2), y: Y(176), class: 'wg-s', fill: C.orange }, eq, 'a 175 mil €: 6 compradores, 2 casas');
-    el('text', { x: X(8.2), y: Y(176) + 18, class: 'wg-s', fill: C.orange, 'font-weight': 700 }, eq, 'faltam casas → o preço sobe ↑');
+    if (modo === 'equilibrio') {
+      const g1 = part(1);
+      dLine(g1, 4); sLine(g1, 4);
+      txt(g1, X(10.7), Y(146), 'procura', { fill: K.dem, class: 'mn-t mn-nome' });
+      txt(g1, X(11.6), Y(285), 'oferta', { fill: K.sup, class: 'mn-t mn-nome' });
+      // above the crossing: 2 buyers, 6 houses → houses left over, the price falls
+      const g2 = part(2, 3, 3, 0.3);
+      el('line', { x1: X(2), x2: X(6), y1: Y(225), y2: Y(225), stroke: K.fg, 'stroke-width': 3, 'stroke-dasharray': '2 7', 'stroke-linecap': 'round' }, g2);
+      dot(g2, 2, 225, K.dem); dot(g2, 6, 225, K.sup);
+      txt(g2, X(6.5), Y(225) + 9, 'a 225 mil €: 2 compradores, 6 casas', { class: 'mn-t mn-lado' });
+      txt(g2, X(6.5), Y(225) + 44, 'sobram casas → o preço desce ↓', { class: 'mn-t mn-lado', fill: K.sup, 'font-weight': 700 });
+      // below: 6 buyers, 2 houses → houses missing, the price rises
+      const g3 = part(3, 3);
+      el('line', { x1: X(2), x2: X(6), y1: Y(175), y2: Y(175), stroke: K.fg, 'stroke-width': 3, 'stroke-dasharray': '2 7', 'stroke-linecap': 'round' }, g3);
+      dot(g3, 2, 175, K.sup); dot(g3, 6, 175, K.dem);
+      txt(g3, X(6.5), Y(175) + 9, 'a 175 mil €: 6 compradores, 2 casas', { class: 'mn-t mn-lado' });
+      txt(g3, X(6.5), Y(175) + 44, 'faltam casas → o preço sobe ↑', { class: 'mn-t mn-lado', fill: K.dem, 'font-weight': 700 });
+      // the meeting point
+      const g4 = part(4);
+      el('line', { x1: X0, x2: X(4), y1: Y(200), y2: Y(200), stroke: K.fg, 'stroke-dasharray': '6 6' }, g4);
+      el('line', { x1: X(4), x2: X(4), y1: Y(200), y2: Y0, stroke: K.fg, 'stroke-dasharray': '6 6' }, g4);
+      el('circle', { cx: X(4), cy: Y(200), r: 15, fill: K.pt, stroke: '#1E2A33', 'stroke-width': 4, class: 'wg-pulse' }, g4);
+      txt(g4, X(4) + 26, Y(200) - 14, 'equilíbrio: 4 casas a 200 mil €', { class: 'mn-t mn-nome', fill: K.pt });
+    }
 
-    // 5 · more buyers: demand moves right, the price rises
-    const d2 = part(5);
-    drawLine(d2, ...demand(4), C.orange, true);
-    drawLine(d2, ...demand(12), C.orange);
-    const e2 = part(5, 5);
-    el('line', { x1: 70, x2: X(8), y1: Y(250), y2: Y(250), stroke: C.navy, 'stroke-dasharray': '5 5' }, e2);
-    el('circle', { cx: X(8), cy: Y(250), r: 11, fill: C.navy, stroke: '#fff', 'stroke-width': 3, class: 'wg-pulse' }, e2);
-    el('text', { x: X(4), y: Y(250) - 10, 'text-anchor': 'middle', class: 'wg-t', 'font-weight': 700 }, e2, '250 mil € (+25%)');
-    el('text', { x: X(1.1), y: Y(292), class: 'wg-s', fill: C.orange, 'font-weight': 700 }, e2, 'mais 8 compradores: imigração, turismo, investimento');
-    el('path', { d: `M${X(0.6)},${Y(203)} L${X(0.6)},${Y(245)}`, stroke: C.orange, 'stroke-width': 3, 'marker-end': 'url(#cv-arrow)' }, e2);
+    if (modo === 'explorar') {
+      const ghost = part(0);
+      dLine(ghost, 4, { ghost: true }); sLine(ghost, 4, { ghost: true });
+      const live = part(0);
+      const D = el('line', { stroke: K.dem, 'stroke-width': 6, 'stroke-linecap': 'round' }, live);
+      const S = el('line', { stroke: K.sup, 'stroke-width': 6, 'stroke-linecap': 'round' }, live);
+      const gh = el('line', { stroke: K.fg, 'stroke-dasharray': '6 6' }, live), gv = el('line', { stroke: K.fg, 'stroke-dasharray': '6 6' }, live);
+      const pt = el('circle', { r: 14, fill: K.pt, stroke: '#1E2A33', 'stroke-width': 4 }, live);
+      const ptT = txt(live, 0, 0, '', { class: 'mn-t mn-nome', fill: K.pt });
+      const dT = txt(live, 0, 0, 'procura', { class: 'mn-t mn-lado', fill: K.dem, 'font-weight': 700 });
+      const sT = txt(live, 0, 0, 'oferta', { class: 'mn-t mn-lado', fill: K.sup, 'font-weight': 700 });
+      const read = document.createElement('div'); read.className = 'mn-read'; w.appendChild(read);
+      const ctr = document.createElement('div'); ctr.className = 'mn-ctr'; w.appendChild(ctr);
+      const v = { B: 4, S: 4, j: 3 };
+      const lost = j => Math.round((j - 3) * 4 / 3);       // same rule as the board
+      function set(ln, q1, p1, q2, p2) { ln.setAttribute('x1', X(q1)); ln.setAttribute('y1', Y(p1)); ln.setAttribute('x2', X(q2)); ln.setAttribute('y2', Y(p2)); }
+      function paint() {
+        const B = Math.max(1, Math.min(20, v.B - lost(v.j))), Sv = v.S;
+        const P = 200 + 6.25 * (B - Sv), Q = (B + Sv) / 2;
+        let [a, b] = clip(B - (P1 - 200) / 12.5, B + (200 - P0) / 12.5); set(D, a, 200 + 12.5 * (B - a), b, 200 + 12.5 * (B - b));
+        dT.setAttribute('x', X(b) - 6); dT.setAttribute('y', Y(200 + 12.5 * (B - b)) - 14); dT.setAttribute('text-anchor', 'end');
+        [a, b] = clip(Sv - (200 - P0) / 12.5, Sv + (P1 - 200) / 12.5); set(S, a, 200 + 12.5 * (a - Sv), b, 200 + 12.5 * (b - Sv));
+        sT.setAttribute('x', X(b) - 6); sT.setAttribute('y', Y(200 + 12.5 * (b - Sv)) + 34); sT.setAttribute('text-anchor', 'end');
+        set(gh, 0, P, Q, P); set(gv, Q, P, Q, P0);
+        pt.setAttribute('cx', X(Q)); pt.setAttribute('cy', Y(P));
+        ptT.textContent = nf(P) + ' mil €';
+        ptT.setAttribute('x', X(Q) + 22); ptT.setAttribute('y', Y(P) - 16);
+        const ch = (P / 200 - 1) * 100;
+        read.innerHTML = '<span>Preço de equilíbrio: <b>' + nf(P) + ' mil €</b> (' + (ch > 0 ? '+' : '') + nf(ch, 1) + '%)</span><span>Casas vendidas: <b>' + nf(Q, Q % 1 ? 1 : 0) + '</b></span>' +
+          (v.j !== 3 ? '<span>Com juros a ' + v.j + '%, ' + (lost(v.j) > 0 ? 'desistem ' + lost(v.j) : 'juntam-se ' + (-lost(v.j))) + ' compradores</span>' : '');
+      }
+      const sl = (label, key, min, max, fmt) => slider(ctr, { label, min, max, value: v[key], fmt, onInput: x => { v[key] = x; paint(); } });
+      sl('Querem comprar (procura)', 'B', 1, 20, x => x + ' pessoas');
+      sl('Casas à venda (oferta)', 'S', 4, 20, x => x + ' casas');
+      sl('Juros do crédito', 'j', 1, 7, x => x + '%');
+      ctr.querySelectorAll('input').forEach(i => i.addEventListener('change', () => i.blur()));
+      paint();
+    }
 
-    // 6 · new flats: supply moves right, the price comes back down
-    const s2 = part(6);
-    drawLine(s2, ...supply(4), C.blue, true);
-    drawLine(s2, ...supply(12), C.blue);
-    const e3 = part(6);
-    el('line', { x1: 70, x2: X(12), y1: Y(200), y2: Y(200), stroke: C.navy, 'stroke-dasharray': '5 5' }, e3);
-    el('circle', { cx: X(12), cy: Y(200), r: 11, fill: C.navy, stroke: '#fff', 'stroke-width': 3, class: 'wg-pulse' }, e3);
-    el('text', { x: X(6.5), y: Y(200) - 10, 'text-anchor': 'middle', class: 'wg-t', 'font-weight': 700 }, e3, '12 casas a 200 mil €');
-    el('text', { x: X(9.6), y: Y(140), class: 'wg-s', fill: C.blue, 'font-weight': 700 }, e3, 'mais 8 casas novas à venda');
-    const defs = el('defs', {}, s);
-    const mk = el('marker', { id: 'cv-arrow', viewBox: '0 0 10 10', refX: 5, refY: 5, markerWidth: 5, markerHeight: 5, orient: 'auto-start-reverse' }, defs);
-    el('path', { d: 'M0,0 L10,5 L0,10 Z', fill: C.orange }, mk);
-
-    s.querySelectorAll('text').forEach(t => t.classList.add('cv-halo'));
     onStep(w, k => {
       parts.forEach(pt => {
         const on = k >= pt.from && k <= pt.to;
         pt.g.setAttribute('opacity', on ? (k >= pt.dimAt ? pt.dimTo : 1) : 0);
+        pt.g.classList.toggle('on', on);
         pt.g.querySelectorAll('.draw').forEach(l => l.classList.toggle('on', on));
-        pt.g.querySelectorAll('.wg-pop').forEach(r => { r.style.animationName = on ? '' : 'none'; });
       });
     });
   };

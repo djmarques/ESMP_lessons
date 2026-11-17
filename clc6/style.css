@@ -678,13 +678,18 @@ html:not(.b3d-ok) .b3d-lado { display: grid; gap: 10px; }
 .b3d-nota.b3d-forte { background: var(--navy); border-color: var(--navy); color: #fff; }
 .b3d-mini { flex: none; width: 100%; max-width: 260px; height: auto; margin-top: auto !important; background: rgba(255, 255, 255, .92); border-radius: 10px; box-shadow: 0 4px 14px rgba(30, 42, 51, .08); }
 /* .pilha: only the latest card of the build shows (the board itself shows what came before) */
-.b3d-ok .b3d-lado.pilha > :not(.b3d-mini):has(~ [data-step].on) { display: none; }
+.b3d-ok .b3d-lado.pilha > :not(.b3d-mini):not(.b3d-grafico):has(~ [data-step].on) { display: none; }
 .b3d-ok .b3d-lado.pilha > [data-step]:not(.on) { display: none; }
 html:not(.b3d-ok) .b3d-mini { display: none; }
 .b3d-mini .mini-t { font: 12px var(--body); fill: var(--navy); }
 @media (max-width: 900px) {
   .b3d-slide h2 { font-size: 24px; }
-  .b3d-ok .b3d-lado { left: 8px; right: 8px; top: auto; bottom: 8px; width: auto; max-height: 42%; justify-content: flex-end; }
+  /* phone: the picture on top, the cards under it (not over it) */
+  .b3d-ok .b3d-slide .b3d-palco { height: auto !important; padding-top: 58vh; overflow: visible; background: none; border: 0; }
+  .b3d-ok .b3d-palco canvas, .b3d-ok .b3d-camada { top: 0; bottom: auto; height: 58vh; border-radius: 14px; border: 1px solid #DCD6C9; background: radial-gradient(ellipse at 50% 40%, #FFFFFF, #EAE4D8 100%); }
+  .b3d-ok .b3d-camada { background: none; border-color: transparent; }
+  .b3d-ok .b3d-lado { position: static; width: auto; max-height: none; overflow: visible; margin-top: 8px; }
+  .b3d-som { top: calc(58vh - 46px); bottom: auto; }
   .b3d-lado .card, .b3d-intro { font-size: 14px; padding: 7px 10px; }
   .b3d-lado .card .sm { font-size: 13px; }
   .b3d-lado .ask { font-size: 16px; }
@@ -697,8 +702,70 @@ html:not(.b3d-ok) .b3d-mini { display: none; }
 html:not(.b3d-ok) .b3d-som { display: none; }
 .b3d-ok .b3d-lado:has([data-step].on) .b3d-intro { display: none; }
 .b3d-ok .b3d-palco { height: 520px; }   /* bairro3d.js fits it to the window */
-@media (max-width: 900px) { .b3d-ok .b3d-slide .b3d-palco { height: 62vh; } }
 .wg[data-widget="curvas"] .wg-svg { max-height: calc(100vh - 250px); }
 .cv-halo { paint-order: stroke; stroke: #fff; stroke-width: 5px; stroke-linejoin: round; }
 #a3-curvas .split > .grid { gap: 8px !important; }
 #a3-curvas .ask { margin-top: 4px; font-size: 21px; }
+
+/* ---------- 13. Aula 3 · gráficos de barras no tabuleiro e sliders ------ */
+.b3d-ok .b3d-lado.largo { width: 42%; }
+.b3d-grafico { flex: none; width: 100%; height: auto; background: rgba(255, 255, 255, .94); border-radius: 12px; padding: 12px 14px 6px; box-shadow: 0 4px 14px rgba(30, 42, 51, .08); }
+.b3d-grafico.vazio { display: none; }
+.b3d-grafico .gr-tit { font: 700 24px var(--head); fill: var(--navy); }
+.b3d-grafico .gr-rot { font: 19px var(--body); fill: var(--text); }
+.b3d-grafico .gr-val { font: 700 22px var(--body); fill: var(--navy); animation: grin .5s var(--ease) both; }
+.b3d-grafico .gr-nota { font-weight: 400; font-size: 16px; fill: var(--muted); }
+.b3d-grafico .gr-barra { transform-box: fill-box; transform-origin: left center; animation: grgrow 1s var(--ease) both; }
+@keyframes grgrow { from { transform: scaleX(0); } to { transform: scaleX(1); } }
+@keyframes grin { from { opacity: 0; } to { opacity: 1; } }
+.b3d-fonte { font-size: 12px; margin: 4px 0 0; line-height: 1.3; }
+.b3d-rng { display: grid; grid-template-columns: 1fr auto; gap: 0 10px; align-items: center; font-size: 15px; min-width: 200px; }
+.b3d-rng span { grid-column: 1 / -1; }
+.b3d-rng span { font-weight: 700; color: var(--navy); }
+.b3d-rng input { width: 100%; accent-color: var(--orange); height: 26px; cursor: pointer; }
+.b3d-rng output { font: 700 18px var(--head); color: var(--orange); }
+.b3d-barra .wg-btns:has(.b3d-rng) { gap: 4px 22px; }
+
+/* ---------- 14. Aula 3 · procura e oferta ao estilo Manim ---------------
+   A dark board (navy), lines that draw themselves, big type. The definition
+   sits under the graph so the graph can use the whole width. */
+.manim-slide h2 { font-size: 34px; margin-bottom: 10px; }
+.manim-slide .kicker { margin-bottom: 2px; }
+.quadro { background: var(--navy); border-radius: 16px; padding: 14px 22px 16px; color: var(--cream); }
+.mn-svg { display: block; width: 100%; height: auto; max-height: calc(100vh - 330px); margin: 0 auto; }
+#a3-curvas .mn-svg { max-height: calc(100vh - 420px); }
+.mn-svg .mn-t { font-family: var(--head); font-size: 27px; }
+.mn-svg .mn-s { font-family: var(--body); font-size: 22px; }
+.mn-svg .mn-eixo { font-size: 24px; font-style: italic; fill-opacity: .85; }
+.mn-svg .mn-lado { font-size: 26px; }
+.mn-svg .mn-nome { font-size: 32px; font-weight: 700; }
+.mn-part { transition: opacity .6s var(--ease); }
+.mn-part.on .mn-pop { transform-box: fill-box; transform-origin: center; animation: mnpop .55s cubic-bezier(.3, 1.6, .5, 1) both; }
+.mn-part.on text { animation: mnwrite .7s var(--ease) both; }
+@keyframes mnpop { from { transform: scale(0); } to { transform: scale(1); } }
+@keyframes mnwrite { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: none; } }
+.mn-svg .draw { transition: stroke-dashoffset 1.3s var(--ease); }
+.quadro-def { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 14px; margin-top: 10px; padding-top: 12px; border-top: 1px solid rgba(246, 243, 236, .18); font-size: 26px; line-height: 1.3; }
+.qd-term { font: 700 30px var(--head); color: var(--accent); }
+.qd-eq, .qd-op { color: var(--accent); font-weight: 700; }
+.qd-part { background: rgba(246, 243, 236, .1); border-radius: 8px; padding: 2px 12px; }
+.quadro-def.on .qd-part, .quadro-def.on .qd-op { animation: mnwrite .6s var(--ease) both; }
+.quadro-def.on > :nth-child(3) { animation-delay: .25s; } .quadro-def.on > :nth-child(4) { animation-delay: .5s; } .quadro-def.on > :nth-child(5) { animation-delay: .75s; }
+.qd-ask { font: italic 26px var(--head); color: var(--accent); }
+.mn-read { display: flex; flex-wrap: wrap; gap: 4px 30px; font-size: 22px; margin: 6px 4px; }
+.mn-read b { font-family: var(--head); color: var(--accent); font-size: 26px; }
+.mn-ctr { display: grid; gap: 2px; }
+.mn-ctr .rng { grid-template-columns: 300px 1fr 130px; }
+.mn-ctr .rng span { color: var(--cream); font-size: 20px; }
+.mn-ctr .rng input { accent-color: var(--accent); height: 30px; }
+.mn-ctr .rng output { color: var(--accent); font-size: 24px; }
+@media (max-width: 900px) {
+  .manim-slide h2 { font-size: 22px; }
+  .quadro { padding: 10px 10px 12px; }
+  .quadro-def { font-size: 17px; } .qd-term { font-size: 20px; } .qd-ask { font-size: 18px; }
+  .mn-read { font-size: 16px; } .mn-read b { font-size: 19px; }
+  .mn-svg .mn-s { font-size: 40px; } .mn-svg .mn-eixo { font-size: 40px; } .mn-svg .mn-lado { display: none; } .mn-svg .mn-nome { font-size: 52px; }   /* phone: only what can be read */
+  .mn-ctr .rng { grid-template-columns: 1fr 90px; } .mn-ctr .rng span { grid-column: 1 / -1; font-size: 16px; }
+  .b3d-ok .b3d-lado.largo { width: auto; }
+  .b3d-rng { grid-template-columns: 1fr 90px; } .b3d-rng span { grid-column: 1 / -1; }
+}

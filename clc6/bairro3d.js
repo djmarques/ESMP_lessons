@@ -88,17 +88,24 @@
   const marketPrice = (B, S) => 200 + 6.25 * (B - S);
   const SALE_HOUSES = [9, 13, 18, 22];                  // the four houses for sale at the start
 
+  /** Interest rates: each point above 3% makes about 4/3 of a buyer give up
+      (credit gets dear); each point below brings buyers in. */
+  const lostToRates = j => Math.round((j - 3) * 4 / 3);
+  /** What each build of slide a3-oferta shows; the sliders start from it. */
+  const ofertaSeed = step => ({ B: step >= 1 ? 12 : 4, S: step >= 2 ? 12 : 4, j: step >= 3 ? 6 : 3 });
+
   function oferta(step, user) {
-    const st = user.state || { B: step >= 1 ? 12 : 4, predio: step >= 2, juros: step >= 3 };
-    const S = 4 + (st.predio ? 8 : 0);
-    const B = Math.max(1, st.B - (st.juros ? 4 : 0));
+    const st = user.state || ofertaSeed(step);
+    const S = st.S;
+    const B = Math.max(1, Math.min(20, st.B - lostToRates(st.j)));   // buyers who can still pay
     const P = marketPrice(B, S);
     const pieces = { tiago: null };
-    if (st.predio) pieces.predio = placeOf('predio');
+    const newFlats = S - 4;
+    if (newFlats > 0) pieces.predio = placeOf('predio');
     // Buyers stand in front of the houses for sale; when there are more
     // buyers than houses they crowd round the same doors.
     const slots = SALE_HOUSES.map(i => ({ x: at(i).x, z: at(i).z + 0.95 }));
-    if (st.predio) for (let k = 0; k < 8; k++) slots.push({ x: PLACES.predio[0] + 1.3 + (k % 4) * 0.62, z: BACK + 0.15 + Math.floor(k / 4) * 0.55 });
+    for (let k = 0; k < newFlats; k++) slots.push({ x: PLACES.predio[0] + 1.3 + (k % 8) * 0.58, z: BACK + 0.1 + Math.floor(k / 8) * 0.55 });
     for (let k = 0; k < 20; k++) {
       const name = 'c' + k;
       if (k < B) {
@@ -106,7 +113,7 @@
         const angle = layer * 2.2, rad = layer ? 0.55 : 0;
         pieces[name] = { x: slot.x + Math.sin(angle) * rad, y: 0, z: slot.z + Math.cos(angle) * rad * 0.6, s: 1 };
       } else if (k < st.B) {
-        pieces[name] = { x: (k % 2 ? 1 : -1) * 9.5, y: 0, z: HZ(3.5), s: 0 };      // left because credit got dear
+        pieces[name] = { x: (k % 2 ? 1 : -1) * 9.5, y: 0, z: HZ(3.5), s: 0 };      // gave up: credit got dear
       } else {
         pieces[name] = { x: -3 + (k % 6), y: 0, z: 8, s: 0 };               // not here yet
       }
@@ -115,11 +122,35 @@
     pieces.c0 = { ...pieces.c0, s: 0 };
     return {
       cam: { from: [0, 13.2, 12.6], at: [0, 0, 0.1], fit: true },
-      pieces, prices: true, forSale: SALE_HOUSES, market: { B, S, P, juros: st.juros, predio: st.predio },
+      pieces, prices: true, forSale: SALE_HOUSES, market: { B, S, P, j: st.j },
+      texts: { predio: 'Prédio novo: ' + newFlats + (newFlats === 1 ? ' casa' : ' casas') + ' à venda' },
       shocks: [{ id: 'mercado', kind: 'market', E: P / 200 - 1, src: SALE_HOUSES }],
       speak: [],
     };
   }
+
+  /* The housing numbers (slide a3-numeros), as bar charts next to the board.
+     INE: prices of homes actually sold (2nd quarter of 2026) and rents of
+     new contracts (2nd quarter of 2026). idealista: prices asked in the
+     adverts (Portugal, October 2026; Lisbon, September 2026). Net minimum
+     wage: 920 € minus 11% social security = 818,80 €. */
+  const NUM = {
+    m2: { titulo: 'Preço por m² (euros)', max: 6600, linhas: [
+      { rotulo: 'Portugal · casas vendidas', valor: 2445, cor: '#A44A16', nota: '+18,4% num ano' },
+      { rotulo: 'Lisboa · casas vendidas', valor: 5299, cor: '#A44A16' } ] },
+    m2b: { titulo: 'Preço por m² (euros)', max: 6600, linhas: [
+      { rotulo: 'Portugal · casas vendidas', valor: 2445, cor: '#A44A16', nota: '+18,4% num ano' },
+      { rotulo: 'Portugal · preço pedido nos anúncios', valor: 3249, cor: '#F0A673' },
+      { rotulo: 'Lisboa · casas vendidas', valor: 5299, cor: '#A44A16' },
+      { rotulo: 'Lisboa · preço pedido nos anúncios', valor: 6256, cor: '#F0A673' } ] },
+    t2: { titulo: 'Comprar o T2 da D. Rosa (80 m²)', max: 200000, linhas: [
+      { rotulo: 'Preço: 80 m² × 2 445 €', valor: 195600, cor: '#A44A16' },
+      { rotulo: 'Um ano de salário mínimo, líquido', valor: 11463, cor: '#556B3C', nota: '14 × 818,80 €' } ] },
+    renda: { titulo: 'Por mês (euros)', max: 1400, linhas: [
+      { rotulo: 'Salário mínimo, líquido', valor: 819, cor: '#556B3C' },
+      { rotulo: 'Renda de um T2 de 80 m² · Portugal', valor: 814, cor: '#A44A16', nota: '80 × 10,17 €' },
+      { rotulo: 'Renda de um T2 de 80 m² · Lisboa', valor: 1375, cor: '#A44A16', nota: '80 × 17,19 €' } ] },
+  };
 
   const SLIDES = {
     'a3-escalas': {
@@ -139,6 +170,15 @@
       },
     },
 
+    'a3-numeros': {
+      layout(step) {
+        const p = { rosa: rosaSpot };
+        const cam = step >= 3 ? CLOSE_ROSA : WIDE;
+        const chart = step >= 4 ? NUM.renda : step === 3 ? NUM.t2 : step === 2 ? NUM.m2b : step === 1 ? NUM.m2 : null;
+        return { cam, pieces: p, ring: step >= 3, prices: true, chart, speak: step === 0 ? ['rosa'] : [], tag: step >= 3 ? 'T2 · 80 m²' : null };
+      },
+    },
+
     'a3-preco': {
       layout(step) {
         const p = { rosa: rosaSpot };
@@ -153,15 +193,13 @@
 
     'a3-oferta': {
       layout: oferta,
-      buttons: [
-        { t: 'Mais procura', f: u => { u.state.B = Math.min(20, u.state.B + 4); } },
-        { t: 'Menos procura', f: u => { u.state.B = Math.max(4, u.state.B - 4); } },
-        { t: 'Prédio novo', f: u => { u.state.predio = !u.state.predio; }, sel: (u, L) => L.market.predio },
-        { t: 'Juros sobem', f: u => { u.state.juros = !u.state.juros; }, sel: (u, L) => L.market.juros },
-        { t: 'Repor', reset: true },
+      /** Sliders: they start from what the current build shows; moving one changes the board. */
+      sliders: [
+        { key: 'B', label: 'Querem comprar (procura)', min: 1, max: 20, fmt: v => v + ' pessoas' },
+        { key: 'S', label: 'Casas à venda (oferta)', min: 4, max: 20, fmt: v => v + ' casas' },
+        { key: 'j', label: 'Juros do crédito', min: 1, max: 7, fmt: v => v + '%' },
       ],
-      /** Buttons start from what the current build shows. */
-      seed: step => ({ B: step >= 1 ? 12 : 4, predio: step >= 2, juros: step >= 3 }),
+      seed: ofertaSeed,
     },
 
     'a3-contagio': {
@@ -355,7 +393,8 @@
   label('Paragem de autocarro', 'b3d-nota', pieces.paragem, 1.05);
   label('Estação de metro', 'b3d-nota b3d-forte', pieces.metro, 1.65);
   label('Supermercado', 'b3d-nota b3d-forte', pieces.super, 1.25);
-  label('Prédio novo: 8 casas à venda', 'b3d-nota b3d-forte', pieces.predio, 3.05);
+  label('Prédio novo', 'b3d-nota b3d-forte', pieces.predio, 3.05).key = 'predio';
+  const tagRosa = label('', 'b3d-nota b3d-forte', [rosaHouse.x, HOUSE.h + 1.0, rosaHouse.z], 0);
   label('Viaduto: acesso a uma ponte nova', 'b3d-nota b3d-forte', [3.5, 2.3, BACK], 0).piece = pieces.viaduto;
   label('ruído', 'b3d-nota', pieces.carro1, 0.9);
 
@@ -472,6 +511,15 @@
       const def = (cfg.buttons || [])[k];
       b.classList.toggle('sel', !!(def && def.sel && def.sel(user, L)));
     });
+    // Sliders show the state in force (the build's, or what was moved).
+    if (cfg.sliders) {
+      const st = user.state || cfg.seed(current.step);
+      current.el.querySelectorAll('.b3d-rng').forEach((row, k) => {
+        const def = cfg.sliders[k], v = st[def.key], inp = row.querySelector('input');
+        if (Number(inp.value) !== v) inp.value = v;
+        row.querySelector('output').textContent = def.fmt ? def.fmt(v) : v;
+      });
+    }
     if (snap) snapPieces(L);
   }
   const ease3 = t => t * t * (3 - 2 * t);
@@ -523,16 +571,16 @@
     const bar = el.querySelector('.b3d-barra');
     const stage = el.closest('.stage');
     const pad = stage ? parseFloat(getComputedStyle(stage).paddingBottom) || 0 : 0;
-    const below = (bar ? bar.offsetHeight + 10 : 0) + Math.max(pad, 70) + 6;
+    const foot = el.querySelector('.b3d-fonte');
+    const below = (bar ? bar.offsetHeight + 10 : 0) + (foot ? foot.offsetHeight + 6 : 0) + Math.max(pad, 70) + 6;
     palco.style.height = Math.max(320, Math.min(820, window.innerHeight - top - below)) + 'px';
   }
   window.addEventListener('resize', () => { if (current) fitHeight(current.el); });
 
   function resize() {
-    const host = canvas.parentElement;
-    if (!host) return;
-    width = host.clientWidth || 1;
-    height = host.clientHeight || 1;
+    if (!canvas.parentElement) return;
+    width = canvas.clientWidth || 1;                     // the picture's own size (on phones the cards sit under it)
+    height = canvas.clientHeight || 1;
     renderer.setSize(width, height, false);
     camera.aspect = width / height;
     // Wide screens: the cards sit on the left, so move the picture right.
@@ -552,9 +600,14 @@
   function freeArea() {
     if (!current) return { x0: -1, x1: 1, y0: -1, y1: 1 };
     const lado = current.el.querySelector('.b3d-lado');
-    const busy = lado && lado.querySelector(':scope > :not([data-step]):not(.b3d-intro), :scope > [data-step].on, :scope > .b3d-intro:only-child, :scope > .b3d-intro:not(:has(~ .on))');
-    if (width / height > 1.25) return { x0: busy && lado.offsetWidth ? -1 + 2 * (lado.offsetLeft + lado.offsetWidth + 10) / width : -0.94, x1: 0.94, y0: -0.94, y1: 0.92 };
-    return { x0: -0.95, x1: 0.95, y0: -0.12, y1: 0.93 };
+    const busy = lado && lado.offsetHeight > 0 && [...lado.children].some(c => c.offsetHeight > 0 && getComputedStyle(c).opacity !== '0' && getComputedStyle(c).display !== 'none');
+    const full = { x0: -0.94, x1: 0.94, y0: -0.94, y1: 0.92 };
+    if (!busy) return full;
+    // Where is the caption box? A column on the left (projector) or a strip at the bottom (phone).
+    const top = lado.offsetTop + [...lado.children].reduce((m, c) => (c.offsetHeight > 0 && getComputedStyle(c).opacity !== '0' && getComputedStyle(c).display !== 'none') ? Math.min(m, c.offsetTop) : m, 1e9);
+    if (top >= height - 10) return full;                 // cards under the picture (phones)
+    if (lado.offsetWidth < 0.6 * width) return { ...full, x0: -1 + 2 * (lado.offsetLeft + lado.offsetWidth + 10) / width };
+    return { ...full, y0: Math.min(0.5, 1 - 2 * (top - 8) / height) };
   }
   const probe = new T.PerspectiveCamera();
   function bounds(points, from, at) {
@@ -564,7 +617,7 @@
     return b;
   }
   function solveShot(shot) {
-    if (!shot.fit && width / height <= 1.25) shot = { ...shot, fit: true };   // phones: always show the whole board
+    if (!shot.fit && width / height <= 1.25) shot = { ...shot, fit: true };   // narrow screens: always show the whole board
     const A = freeArea();
     const at = new T.Vector3(...shot.at), from = new T.Vector3(...shot.from);
     const dir = from.clone().sub(at).normalize();
@@ -681,6 +734,9 @@
       tg.el.classList.toggle('so-venda', tag === 'À VENDA');
       p.on = !!L.prices; tg.on = !!L.prices && tag !== '';
     }
+    for (const item of labels) if (item.key && L.texts && L.texts[item.key] && item.el.textContent !== L.texts[item.key]) item.el.textContent = L.texts[item.key];
+    if (tagRosa.el.textContent !== (L.tag || '')) tagRosa.el.textContent = L.tag || '';
+    tagRosa.on = !!L.tag;
     for (const item of labels) {
       const isPiece = item.target && !Array.isArray(item.target);
       if (isPiece) point.copy(item.target.position).setY(item.target.position.y + item.height * item.target.scale.y);
@@ -701,7 +757,7 @@
   /** The readout under the board: the same sentences as the 2D widget. */
   function readout(sold) {
     const box = current.el.querySelector('.b3d-read');
-    if (!box) return;
+    if (!box) { drawChart(current.el, current.L.chart); return; }
     const L = current.L;
     if (!L.prices) { box.innerHTML = ''; return; }
     let sum = 0, up = 0, down = 0;
@@ -714,9 +770,31 @@
     let html = '<span>Preço médio do bairro: <b>' + nf(mean) + ' mil €</b> (' + (ch > 0.05 ? '+' : '') + nf(ch, 1) + '%)</span>' +
       '<span>Casas que subiram <b>sem obras nenhumas</b>: <b>' + up + '</b></span>';
     if (down) html += '<span class="desce">Casas que desceram: <b>' + down + '</b></span>';
-    if (L.market) html += '<span>Compradores: <b>' + L.market.B + '</b> · Casas à venda: <b>' + L.market.S + '</b>' + (L.market.juros ? ' · <b>juros altos</b>' : '') + '</span>';
+    if (L.market) html += '<span>Conseguem comprar: <b>' + L.market.B + '</b> · Casas à venda: <b>' + L.market.S + '</b></span>';
     if (box.innerHTML !== html) box.innerHTML = html;
     if (L.market) drawMini(current.el.querySelector('.b3d-mini'), L.market);
+    drawChart(current.el, L.chart);
+  }
+
+  /** Bar chart in the caption column (slide a3-numeros). Redrawn when the chart changes; the bars grow from zero. */
+  function drawChart(el, chart) {
+    const svg = el.querySelector('.b3d-grafico');
+    if (!svg) return;
+    const key = chart ? chart.titulo + chart.linhas.length : '';
+    if (svg.dataset.key === key) return;
+    svg.dataset.key = key;
+    svg.classList.toggle('vazio', !chart);
+    if (!chart) { svg.innerHTML = ''; return; }
+    const W = 440, rowH = 72, H = 48 + chart.linhas.length * rowH, num = v => String(Math.round(v)).replace(/\B(?=(\d{3})+(?!\d))/g, ' ');
+    svg.setAttribute('viewBox', `0 0 ${W} ${H}`);
+    let out = `<text x="0" y="24" class="gr-tit">${chart.titulo}</text>`;
+    chart.linhas.forEach((r, k) => {
+      const y = 48 + k * rowH, w = Math.max(4, (W - 150) * r.valor / chart.max);
+      out += `<text x="0" y="${y + 18}" class="gr-rot">${r.rotulo}</text>` +
+        `<rect class="gr-barra" x="0" y="${y + 27}" width="${w}" height="28" rx="5" fill="${r.cor}" style="animation-delay:${k * 0.25}s"/>` +
+        `<text x="${w + 8}" y="${y + 49}" class="gr-val" style="animation-delay:${k * 0.25 + 0.5}s">${num(r.valor)}${r.nota ? ' <tspan class="gr-nota">' + r.nota + '</tspan>' : ''}</text>`;
+    });
+    svg.innerHTML = out;
   }
 
   /** A small supply-and-demand graph next to the board (same lines as slide a3-curvas). */
@@ -773,6 +851,27 @@
       paint(); palcoEl.append(sb);
     }
     if (cfg.hint && btns) { const h = document.createElement('p'); h.className = 'b3d-dica'; h.textContent = cfg.hint; btns.before(h); }
+    if (btns && cfg.sliders) cfg.sliders.forEach(def => {
+      const row = document.createElement('label');
+      row.className = 'b3d-rng';
+      row.innerHTML = '<span></span><input type="range"><output></output>';
+      row.firstChild.textContent = def.label;
+      const inp = row.querySelector('input');
+      inp.min = def.min; inp.max = def.max; inp.step = def.step || 1;
+      inp.dataset.key = def.key;
+      inp.addEventListener('input', e => {
+        e.stopPropagation();
+        if (!current || current.el !== el) return;
+        const u = current.user;
+        if (!u.state) u.state = cfg.seed(current.step);
+        u.state[def.key] = Number(inp.value);
+        refresh(false);
+      });
+      inp.addEventListener('keydown', e => e.stopPropagation());          // arrow keys move the slider, not the slide
+      inp.addEventListener('change', () => inp.blur());                    // …until it is let go
+      inp.addEventListener('click', e => e.stopPropagation());
+      btns.append(row);
+    });
     if (btns && cfg.buttons) cfg.buttons.forEach(def => {
       const b = document.createElement('button');
       b.type = 'button'; b.className = 'btn ghost'; b.textContent = def.t;

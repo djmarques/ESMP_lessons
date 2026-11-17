@@ -114,7 +114,9 @@ Os exemplos completos estão em `index.html`.
 
 ## O bairro da D. Rosa em 3D (`bairro3d.js`)
 
-Um tabuleiro 3D com 32 casas (os mesmos preços e cores da simulação «contagio») que atravessa a Aula 3 em quatro slides: «Qualidade de vida: da casa ao bairro», «Quem decide o preço de uma casa?», «Oferta e procura no bairro» e «Uma venda cara sobe a rua toda». Cada clique (→) muda a câmara e as peças; os botões por baixo do tabuleiro constroem uma estação de metro, um supermercado, um viaduto ou um prédio novo, mudam a procura e os juros. Clicar numa casa vende-a por mais 40%. Sons gerados no navegador (botão 🔊 no canto, partilhado com os jogos).
+Um tabuleiro 3D com 32 casas (os mesmos preços e cores da simulação «contagio») que atravessa a Aula 3 em cinco slides: «Qualidade de vida: da casa ao bairro», «A crise da habitação em números» (gráficos de barras ao lado do tabuleiro), «Quem decide o preço de uma casa?», «Oferta e procura no bairro» (sliders de procura, oferta e juros) e «Uma venda cara sobe a rua toda» (botões que constroem uma estação de metro, um supermercado ou um viaduto). Cada clique (→) muda a câmara e as peças. No telemóvel, o tabuleiro fica em cima e os cartões por baixo.
+
+Os números do slide da crise da habitação estão em `NUM`, perto do início do `bairro3d.js` (fontes no próprio slide e nas notas). Clicar numa casa vende-a por mais 40%. Sons gerados no navegador (botão 🔊 no canto, partilhado com os jogos).
 
 Para mudar a história, edita a função `layout` de cada slide em `SLIDES`, no início do ficheiro. Se o navegador não tiver 3D, os slides mostram o desenho 2D antigo.
 
@@ -124,7 +126,7 @@ Cada simulação é um `<div class="wg" data-widget="nome"></div>` no `index.htm
 
 | Nome | Slide | O que faz |
 | --- | --- | --- |
-| `curvas` | Aula 3 · A procura e a oferta, passo a passo | o gráfico desenha-se a cada clique (→): procura, oferta, equilíbrio, deslocações |
+| `curvas` | Aula 3 · A procura, A oferta, O equilíbrio, Experimenta | quadro escuro ao estilo Manim; `data-modo` escolhe o slide; no último, sliders de procura, oferta e juros |
 | `oferta` | Aula 3 · Oferta e procura no bairro | só aparece se o navegador não tiver 3D (substitui o tabuleiro) |
 | `contagio` | Aula 3 · Uma venda cara sobe a rua toda | só aparece se o navegador não tiver 3D (substitui o tabuleiro) |
 | `quinze` | Aula 9 · A cidade dos 15 minutos | o que se alcança a pé, de bicicleta ou de carro |

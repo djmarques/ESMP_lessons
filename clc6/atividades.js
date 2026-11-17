@@ -144,14 +144,14 @@ window.ATIVIDADES = {
       "f": "A+ é a classe mais eficiente."
      },
      {
-      "p": "Quanto subiram os preços das casas num ano (2.º trimestre de 2026)?",
+      "p": "Quanto subiu num ano o preço mediano das casas vendidas (2.º trimestre de 2026)?",
       "o": [
        "cerca de 2%",
-       "cerca de 16,5%",
+       "cerca de 18,4%",
        "cerca de 50%"
       ],
       "c": 1,
-      "f": "INE: +16,5%."
+      "f": "INE: +18,4%."
      },
      {
       "p": "Que percentagem da população portuguesa não conseguia manter a casa aquecida em 2024?",
