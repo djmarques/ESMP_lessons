@@ -924,6 +924,48 @@ window.ATIVIDADES = {
    }
   ]
  },
+ "oferta": {
+ "disciplina": "CLC 6",
+ "titulo": "Oferta e procura no bairro",
+ "passos": [
+  {
+   "tipo": "jogo",
+   "perguntas": [
+    {
+     "p": "Chegam ao bairro mais compradores e não se constrói nada. O preço das casas…",
+     "o": ["sobe", "desce", "fica igual"],
+     "c": 0,
+     "f": "Mais procura para as mesmas casas: o equilíbrio passa para um preço mais alto."
+    },
+    {
+     "p": "Constrói-se um prédio com muitas casas novas à venda. O preço…",
+     "o": ["sobe", "desce", "fica igual"],
+     "c": 1,
+     "f": "Mais oferta: há casas para mais compradores e o preço desce."
+    },
+    {
+     "p": "Os juros do crédito à habitação sobem muito. O que acontece?",
+     "o": ["mais pessoas compram casa", "menos pessoas conseguem comprar e o preço desce", "o preço sobe"],
+     "c": 1,
+     "f": "O crédito fica caro: a procura desce e, com ela, o preço."
+    },
+    {
+     "p": "No gráfico, o ponto de equilíbrio é onde…",
+     "o": ["o preço é o mais baixo possível", "há tantos compradores como casas à venda", "não há compradores"],
+     "c": 1,
+     "f": "No cruzamento das duas linhas, procura e oferta são iguais."
+    }
+   ]
+  },
+  {
+   "tipo": "escrita",
+   "perguntas": [
+    "Que duas coisas, juntas, fazem o preço das casas disparar? Explica por palavras tuas."
+   ],
+   "titulo": "Por palavras tuas"
+  }
+ ]
+},
  "contagio": {
  "disciplina": "CLC 6",
  "titulo": "O contágio dos preços",

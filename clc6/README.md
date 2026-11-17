@@ -21,6 +21,8 @@ Os slides com o botão **Responder no telemóvel** mostram um código QR: os for
 | `app.js` | Comportamento: navegação, passos, questionários, temporizadores, códigos QR |
 | `widgets.js` | Simulações e animações interativas (ver abaixo) |
 | `notes.js` | Notas do formador, uma por slide |
+| `bairro3d.js` | Aula 3 · o bairro da D. Rosa em 3D (ver abaixo) |
+| `assets/vendor/three.min.js` | three.js, versão 160 (desenho 3D; licença MIT), guardado aqui para funcionar sem internet |
 
 ## Publicar no GitHub Pages
 
@@ -110,14 +112,21 @@ O código QR é gerado a partir de `data-url` (precisa de internet; sem ela, fic
 
 Os exemplos completos estão em `index.html`.
 
+## O bairro da D. Rosa em 3D (`bairro3d.js`)
+
+Um tabuleiro 3D com 32 casas (os mesmos preços e cores da simulação «contagio») que atravessa a Aula 3 em quatro slides: «Qualidade de vida: da casa ao bairro», «Quem decide o preço de uma casa?», «Oferta e procura no bairro» e «Uma venda cara sobe a rua toda». Cada clique (→) muda a câmara e as peças; os botões por baixo do tabuleiro constroem uma estação de metro, um supermercado, um viaduto ou um prédio novo, mudam a procura e os juros. Clicar numa casa vende-a por mais 40%. Sons gerados no navegador (botão 🔊 no canto, partilhado com os jogos).
+
+Para mudar a história, edita a função `layout` de cada slide em `SLIDES`, no início do ficheiro. Se o navegador não tiver 3D, os slides mostram o desenho 2D antigo.
+
 ## Simulações e animações (`widgets.js`)
 
 Cada simulação é um `<div class="wg" data-widget="nome"></div>` no `index.html`; o `widgets.js` desenha-a e cria os botões e as barras. Os cliques dentro de uma simulação não mudam de slide.
 
 | Nome | Slide | O que faz |
 | --- | --- | --- |
-| `oferta` | Aula 3 · Oferta e procura | curvas de oferta e procura com barras (procura, oferta, juros) |
-| `contagio` | Aula 3 · Uma venda cara sobe a rua toda | clica numa casa: a subida espalha-se às vizinhas |
+| `curvas` | Aula 3 · A procura e a oferta, passo a passo | o gráfico desenha-se a cada clique (→): procura, oferta, equilíbrio, deslocações |
+| `oferta` | Aula 3 · Oferta e procura no bairro | só aparece se o navegador não tiver 3D (substitui o tabuleiro) |
+| `contagio` | Aula 3 · Uma venda cara sobe a rua toda | só aparece se o navegador não tiver 3D (substitui o tabuleiro) |
 | `quinze` | Aula 9 · A cidade dos 15 minutos | o que se alcança a pé, de bicicleta ou de carro |
 | `renda` | Aula 9 · A renda locativa | as curvas aparecem a cada clique (→); no fim, a estação de metro |
 | `ruralurb` | Aula 10 · De aldeia a cidade | barra que transforma a paisagem |

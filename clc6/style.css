@@ -624,3 +624,81 @@ tr[data-step] { transform: none; }
 #a27-primeiro.ge4 .amina { transform: translateX(672px); }
 #a27-primeiro.ge5 .amina { transform: translateX(862px); }
 #a27-primeiro .amina { transform: translateX(10px); }
+
+/* ---------- 12. Aula 3 · o bairro em 3D (bairro3d.js) ----------------
+   One 3D board reused by the slides a3-escalas, a3-preco, a3-oferta and
+   a3-contagio. The board fills the slide; the cards of each build sit in a
+   column over the empty left side of the picture (.b3d-lado). Without
+   WebGL, <html> lacks .b3d-ok: the cards show as a normal column and the
+   original 2D drawing (.b3d-fallback) shows under them. */
+.wg-pulse { transform-box: fill-box; transform-origin: center; animation: pulse 1.6s ease-in-out infinite; }
+.b3d-slide { max-width: 1400px; }
+.b3d-slide h2 { font-size: 34px; margin-bottom: 12px; }
+.b3d-slide .kicker { margin-bottom: 2px; }
+.b3d-palco { position: relative; }
+.b3d-ok .b3d-palco { border-radius: 14px; overflow: hidden; border: 1px solid #DCD6C9;
+  background: radial-gradient(ellipse at 62% 38%, #FFFFFF 0%, #F6F3EC 55%, #EAE4D8 100%); }
+.b3d-palco canvas { position: absolute; inset: 0; display: block; width: 100%; height: 100%; }
+.b3d-camada { position: absolute; inset: 0; pointer-events: none; overflow: hidden; z-index: 1; }
+.b3d-ok .b3d-lado { position: absolute; z-index: 2; left: 16px; top: 16px; bottom: 16px; width: 28%; display: flex; flex-direction: column; gap: 9px; pointer-events: none; overflow: hidden; }
+.b3d-lado > * { margin: 0; }
+.b3d-lado .card { padding: 10px 14px; font-size: 17px; line-height: 1.32; box-shadow: 0 4px 14px rgba(30, 42, 51, .08); }
+.b3d-lado .card h3 { margin: 0 0 3px; font-size: 19px; }
+.b3d-lado .card .sm { margin: 0; font-size: 15px; }
+.b3d-lado .card .label { margin: 0 0 2px; }
+.b3d-lado .ddef { background: rgba(255, 255, 255, .92); border-radius: 10px; padding: 8px 10px; box-shadow: 0 4px 14px rgba(30, 42, 51, .08); }
+.b3d-lado .ask { font-size: 20px; line-height: 1.3; background: rgba(255, 255, 255, .88); border-radius: 10px; padding: 8px 12px; }
+.b3d-intro { font-size: 17px; line-height: 1.35; background: rgba(255, 255, 255, .85); border-radius: 10px; padding: 8px 12px; }
+.b3d-barra { display: none; }
+.b3d-ok .b3d-barra { display: flex; flex-wrap: wrap; align-items: center; gap: 4px 18px; margin-top: 8px; padding-right: 250px; }
+.b3d-barra .wg-read { margin: 0; font-size: 17px; gap: 4px 20px; }
+.b3d-barra .wg-read b { font-size: 19px; }
+.b3d-barra .wg-read .desce, .b3d-barra .wg-read .desce b { color: var(--blue); }
+.b3d-barra .wg-btns { margin: 0; }
+.b3d-barra .wg-btns .btn { font-size: 15px; padding: 6px 12px; }
+.b3d-barra .modes { margin: 0; }
+.b3d-dica { margin: 0; font-size: 15px; color: var(--muted); }
+.b3d-fallback { display: none; }
+html:not(.b3d-ok) .b3d-fallback { display: block; margin-top: 14px; }
+html:not(.b3d-ok) .b3d-lado { display: grid; gap: 10px; }
+/* labels drawn over the picture */
+.b3d-et { position: absolute; left: 0; top: 0; opacity: 0; transition: opacity .4s; white-space: nowrap; will-change: transform; }
+.b3d-et.visivel { opacity: 1; }
+.b3d-preco { font: 700 13px/1 var(--body); color: var(--navy); letter-spacing: -.01em; }
+.b3d-preco.claro { color: #fff; }
+.b3d-tag { padding: 1px 6px; border-radius: 99px; background: var(--orange); color: #fff; font: 700 11px/1.3 var(--body); box-shadow: 0 1px 3px rgba(30, 42, 51, .25); }
+.b3d-tag.desce { background: var(--blue); }
+.b3d-tag.venda { outline: 2px solid var(--navy); }           /* for sale, with its price change */
+.b3d-tag.so-venda { background: var(--navy); outline: 0; }    /* for sale, price unchanged */
+.b3d-pessoa { padding-bottom: 11px; }
+.b3d-pessoa b { display: inline-flex; align-items: center; gap: 5px; padding: 1px 9px 1px 4px; border-radius: 99px; background: var(--navy); color: #fff; font: 700 13px/1.35 var(--body); }
+.b3d-pessoa i { width: 11px; height: 11px; border-radius: 50%; border: 2px solid #fff; }
+.b3d-pessoa::after { content: ""; position: absolute; bottom: 2px; left: 50%; margin-left: -6px; border: 6px solid transparent; border-bottom: 0; border-top: 8px solid var(--navy); }
+.b3d-nota { padding: 1px 8px; border-radius: 6px; background: rgba(255, 255, 255, .92); border: 1px solid #DCD6C9; color: var(--navy); font: 700 13px/1.35 var(--body); }
+.b3d-nota.b3d-forte { background: var(--navy); border-color: var(--navy); color: #fff; }
+.b3d-mini { flex: none; width: 100%; max-width: 260px; height: auto; margin-top: auto !important; background: rgba(255, 255, 255, .92); border-radius: 10px; box-shadow: 0 4px 14px rgba(30, 42, 51, .08); }
+/* .pilha: only the latest card of the build shows (the board itself shows what came before) */
+.b3d-ok .b3d-lado.pilha > :not(.b3d-mini):has(~ [data-step].on) { display: none; }
+.b3d-ok .b3d-lado.pilha > [data-step]:not(.on) { display: none; }
+html:not(.b3d-ok) .b3d-mini { display: none; }
+.b3d-mini .mini-t { font: 12px var(--body); fill: var(--navy); }
+@media (max-width: 900px) {
+  .b3d-slide h2 { font-size: 24px; }
+  .b3d-ok .b3d-lado { left: 8px; right: 8px; top: auto; bottom: 8px; width: auto; max-height: 42%; justify-content: flex-end; }
+  .b3d-lado .card, .b3d-intro { font-size: 14px; padding: 7px 10px; }
+  .b3d-lado .card .sm { font-size: 13px; }
+  .b3d-lado .ask { font-size: 16px; }
+  .b3d-lado > [data-step].on:not(:last-child):has(~ [data-step].on), .b3d-intro:has(~ [data-step].on) { display: none; }  /* phone: only the latest card */
+  .b3d-mini { display: none; }
+  .b3d-preco { font-size: 10px; } .b3d-tag { font-size: 9px; padding: 0 4px; }
+  .b3d-ok .b3d-barra { padding-right: 0; }
+}
+.b3d-som { position: absolute; z-index: 3; right: 10px; bottom: 10px; width: 36px; height: 36px; border-radius: 50%; border: 1px solid #DCD6C9; background: rgba(255, 255, 255, .9); font-size: 17px; line-height: 1; cursor: pointer; }
+html:not(.b3d-ok) .b3d-som { display: none; }
+.b3d-ok .b3d-lado:has([data-step].on) .b3d-intro { display: none; }
+.b3d-ok .b3d-palco { height: 520px; }   /* bairro3d.js fits it to the window */
+@media (max-width: 900px) { .b3d-ok .b3d-slide .b3d-palco { height: 62vh; } }
+.wg[data-widget="curvas"] .wg-svg { max-height: calc(100vh - 250px); }
+.cv-halo { paint-order: stroke; stroke: #fff; stroke-width: 5px; stroke-linejoin: round; }
+#a3-curvas .split > .grid { gap: 8px !important; }
+#a3-curvas .ask { margin-top: 4px; font-size: 21px; }
