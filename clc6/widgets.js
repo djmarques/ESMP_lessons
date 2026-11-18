@@ -511,7 +511,7 @@
     });
     const mk = document.createElement('div'); mk.className = 'cp-s3 cp-mk'; w.appendChild(mk);   // the two market sliders sit under the houses
     slider(mk, { label: 'Procura na zona', min: -10, max: 10, value: 0, fmt: x => x === 0 ? 'normal' : (x > 0 ? 'forte +' : 'fraca −') + Math.abs(x) + '%', onInput: x => { v.mercado = x; paint(); } });
-    slider(mk, { label: 'Quanto acima do valor vou pedir', min: -10, max: 30, value: 5, fmt: x => (x > 0 ? '+' : x < 0 ? '−' : '') + Math.abs(x) + '%', onInput: x => { v.pedir = x; paint(); } });
+    slider(mk, { label: 'Quanto acima do valor vou pedir (venda e renda)', min: -10, max: 30, value: 5, fmt: x => (x > 0 ? '+' : x < 0 ? '−' : '') + Math.abs(x) + '%', onInput: x => { v.pedir = x; paint(); } });
     mk.querySelectorAll('input').forEach(i => i.addEventListener('change', () => i.blur()));
     const eur = x => String(Math.round(x)).replace(/\B(?=(\d{3})+(?!\d))/g, ' ') + ' €';
     function paint() {
@@ -520,13 +520,15 @@
       adjBox.querySelectorAll('.cp-seg').forEach((row, r) => row.querySelectorAll('button').forEach((b, j) => b.classList.toggle('sel', v[ADJ[r].k] === j)));
       const adj = ADJ.reduce((t, a) => t + a.o[v[a.k]][1], 0);
       const f = (1 + adj / 100) * (1 + v.mercado / 100);
-      const valor = im.m2 * im.area * f, pedido = valor * (1 + v.pedir / 100), renda = im.renda * im.area * f;
+      const valor = im.m2 * im.area * f, pedido = valor * (1 + v.pedir / 100);
       const interessados = Math.max(0, Math.round(10 * (1 - (v.pedir + 10) / 40)));
-      const yieldB = renda * 12 / valor * 100;
+      // rent follows the value of the house: value × the area's gross yield (INE rent ÷ INE price) ÷ 12
+      const yieldZ = im.renda * 12 / im.m2, rendaMerc = valor * yieldZ / 12, rendaPedir = rendaMerc * (1 + v.pedir / 100);
+      const pct = x => (x * 100).toFixed(1).replace('.', ',') + '%';
       conta.innerHTML =
         '<div class="cp-linha cp-s1"><span class="cp-pill">' + eur(im.m2).replace(' €', '') + ' €/m²</span><span class="cp-op">×</span><span class="cp-pill">' + im.area + ' m²</span><span class="cp-op">×</span><span class="cp-pill cp-s2">ajustes ' + (adj >= 0 ? '+' : '−') + Math.abs(adj) + '%</span><span class="cp-op cp-s3">×</span><span class="cp-pill cp-s3">procura ' + (v.mercado >= 0 ? '+' : '−') + Math.abs(v.mercado) + '%</span><span class="cp-op">=</span><span class="cp-res">' + eur(valor) + '</span><small>valor de mercado estimado · ' + im.ref + '</small></div>' +
         '<div class="cp-linha cp-s3"><span class="cp-label">Preço a pedir no anúncio</span><span class="cp-res cp-grande">' + eur(pedido) + '</span><span class="cp-interesse" title="ilustrativo">' + '<i class="cp-peao"></i>'.repeat(interessados) + '<i class="cp-peao vazio"></i>'.repeat(10 - interessados) + '</span><small>' + interessados + ' interessados por semana (ilustrativo): mais caro, menos compradores</small></div>' +
-        '<div class="cp-linha cp-s4"><span class="cp-label">Ou arrendar:</span><span class="cp-pill">' + (im.renda + '').replace('.', ',') + ' €/m²</span><span class="cp-op">×</span><span class="cp-pill">' + im.area + ' m²</span><span class="cp-op">× ajustes =</span><span class="cp-res cp-grande">' + eur(renda) + ' por mês</span><small>renda de um ano ÷ valor = ' + yieldB.toFixed(1).replace('.', ',') + '% (rentabilidade bruta)</small></div>';
+        '<div class="cp-linha cp-s4"><span class="cp-label">Ou arrendar:</span><span class="cp-pill">' + eur(valor) + '</span><span class="cp-op">×</span><span class="cp-pill">' + pct(yieldZ) + '</span><span class="cp-op">÷ 12 =</span><span class="cp-res">' + eur(rendaMerc) + '</span><span class="cp-op">→</span><span class="cp-label">a pedir</span><span class="cp-res cp-grande">' + eur(rendaPedir) + ' por mês</span><small>' + pct(yieldZ) + ' = rentabilidade bruta da zona: renda de um ano ÷ preço da casa (' + (im.renda + '').replace('.', ',') + ' € × 12 ÷ ' + eur(im.m2).replace(' €', '') + ' €, medianas do INE). Se o valor da casa sobe, a renda sobe.</small></div>';
     }
     paint();
     onStep(w, k => { for (let n = 1; n <= 4; n++) w.classList.toggle('cp-ve' + n, k >= n); });
