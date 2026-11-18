@@ -116,7 +116,7 @@
   // (2) «Respostas da turma» ao lado dos botões e códigos QR que já existiam
   const atividades = {};
   function atividade(f, a) {
-    atividades[f] = atividades[f] || carregar(RAIZ + f + '/atividades.js').then(() => { const x = window.ATIVIDADES || {}; window.ATIVIDADES = undefined; return x; });
+    atividades[f] = atividades[f] || carregar(RAIZ + f + '/atividades.js?v=' + Date.now()).then(() => { const x = window.ATIVIDADES || {}; window.ATIVIDADES = undefined; return x; });
     return atividades[f].then(t => t[a]);
   }
   document.querySelectorAll('.phone-btn[data-path], .phone-qr[data-path], a.act-btn[href*="respostas/"]').forEach(orig => {

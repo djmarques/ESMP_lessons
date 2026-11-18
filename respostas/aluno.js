@@ -71,7 +71,7 @@
   } else {                                      // atividade escrita em atividades.js
     if (!/^[a-z0-9-]+$/.test(pA)) return falha('Atividade não encontrada');
     const s = document.createElement('script');
-    s.src = '../' + pasta + '/atividades.js';
+    s.src = '../' + pasta + '/atividades.js?v=' + Date.now();   // sem cache: o telemóvel lê sempre a versão publicada
     s.onload = () => { act = (window.ATIVIDADES || {})[pA]; iniciar(); };
     s.onerror = () => falha('Atividade não encontrada');
     document.head.appendChild(s);

@@ -212,9 +212,9 @@ window.ATIVIDADES = {
    }
   ]
  },
- "jogo3b": {
+ "j3criterios": {
   "disciplina": "CLC 6",
-  "titulo": "Jogo: revisão da aula 3",
+  "titulo": "Jogo rápido: critérios de qualidade",
   "passos": [
    {
     "tipo": "jogo",
@@ -240,6 +240,46 @@ window.ATIVIDADES = {
       "c": 0,
       "f": "O ar não se renova e a humidade fica."
      },
+     {
+      "p": "Um prédio sem elevador nem rampa falha sobretudo no critério…",
+      "o": [
+       "segurança e privacidade",
+       "acessibilidade",
+       "luz natural"
+      ],
+      "c": 1,
+      "f": "Entrar e circular com mobilidade reduzida."
+     },
+     {
+      "p": "«Planeamento habitacional» é…",
+      "o": [
+       "decorar as casas por dentro",
+       "vender as casas pelo preço mais alto",
+       "decidir onde, como e para quem se constroem casas"
+      ],
+      "c": 2,
+      "f": "Para que todos possam viver com qualidade."
+     }
+    ]
+   },
+   {
+    "tipo": "escrita",
+    "titulo": "Agora, por palavras tuas",
+    "intro": "Duas ou três frases.",
+    "perguntas": [
+     "Uma casa pode ser boa e, mesmo assim, a qualidade de vida de quem lá vive ser má? Explica com um exemplo."
+    ]
+   }
+  ]
+ },
+ "j3preco": {
+  "disciplina": "CLC 6",
+  "titulo": "Jogo rápido: o preço das casas",
+  "passos": [
+   {
+    "tipo": "jogo",
+    "segundos": 25,
+    "perguntas": [
      {
       "p": "Duas casas iguais: uma em Lisboa, outra em Bragança. Porque é mais cara a de Lisboa?",
       "o": [
@@ -289,6 +329,36 @@ window.ATIVIDADES = {
       ],
       "c": 1,
       "f": "80 × 10,17 ≈ 814 €."
+     }
+    ]
+   },
+   {
+    "tipo": "escrita",
+    "titulo": "Agora, por palavras tuas",
+    "intro": "Duas ou três frases.",
+    "perguntas": [
+     "Porque é que a mesma casa custa mais em Lisboa do que em Bragança? Usa as palavras «procura» e «oferta»."
+    ]
+   }
+  ]
+ },
+ "j3frio": {
+  "disciplina": "CLC 6",
+  "titulo": "Jogo rápido: uma casa fria… e quente",
+  "passos": [
+   {
+    "tipo": "jogo",
+    "segundos": 25,
+    "perguntas": [
+     {
+      "p": "Conforto térmico é sentir-se bem com a temperatura da casa, mais ou menos entre…",
+      "o": [
+       "5 e 10 °C",
+       "18 e 25 °C",
+       "28 e 35 °C"
+      ],
+      "c": 1,
+      "f": "Sem frio nem calor."
      },
      {
       "p": "Pobreza energética é…",
@@ -319,7 +389,27 @@ window.ATIVIDADES = {
       ],
       "c": 1,
       "f": "Já não é um verão estranho: é uma tendência."
-     },
+     }
+    ]
+   },
+   {
+    "tipo": "escrita",
+    "titulo": "Agora, por palavras tuas",
+    "intro": "Duas ou três frases.",
+    "perguntas": [
+     "Porque é que uma casa mal isolada é um problema no inverno e também no verão? Indica uma medida que ajude."
+    ]
+   }
+  ]
+ },
+ "j3anuncio": {
+  "disciplina": "CLC 6",
+  "titulo": "Jogo rápido: o anúncio de uma casa",
+  "passos": [
+   {
+    "tipo": "jogo",
+    "segundos": 25,
+    "perguntas": [
      {
       "p": "Um anúncio diz «T3, 2 assoalhadas». Isto…",
       "o": [
@@ -331,6 +421,16 @@ window.ATIVIDADES = {
       "f": "Assoalhadas são quartos e salas: um T3 com sala tem 4."
      },
      {
+      "p": "A área bruta é maior do que a área útil porque…",
+      "o": [
+       "inclui o jardim do prédio",
+       "inclui a espessura das paredes",
+       "é medida noutra unidade"
+      ],
+      "c": 1,
+      "f": "A área útil mede-se por dentro das paredes."
+     },
+     {
       "p": "Num anúncio de venda ou de arrendamento, a classe energética é…",
       "o": [
        "obrigatória",
@@ -339,23 +439,24 @@ window.ATIVIDADES = {
       ],
       "c": 0,
       "f": "Sem ela, um particular pode pagar uma coima de 250 a 3 740 €."
+     },
+     {
+      "p": "Uma imobiliária que anuncia uma casa tem de mostrar…",
+      "o": [
+       "o nome do dono da casa",
+       "o número da sua licença AMI",
+       "a fatura da luz"
+      ],
+      "c": 1,
+      "f": "AMI: atividade de mediação imobiliária."
      }
     ]
-   }
-  ]
- },
- "palavras3": {
-  "disciplina": "CLC 6",
-  "titulo": "Por palavras tuas: o que faz uma casa boa?",
-  "passos": [
+   },
    {
     "tipo": "escrita",
-    "titulo": "Por palavras tuas",
-    "intro": "Duas ou três frases em cada resposta.",
+    "titulo": "Agora, por palavras tuas",
+    "intro": "Duas ou três frases.",
     "perguntas": [
-     "Uma casa pode ser boa e, mesmo assim, a qualidade de vida de quem lá vive ser má? Explica com um exemplo.",
-     "Porque é que a mesma casa custa mais em Lisboa do que em Bragança? Usa as palavras «procura» e «oferta».",
-     "Porque é que uma casa mal isolada é um problema no inverno e também no verão? Indica uma medida que ajude.",
      "Um anúncio diz só «Fantástico T2, imperdível!». Que três informações faltam para saberes se a casa te interessa?"
     ]
    }
