@@ -16,6 +16,7 @@ Esta pasta junta o que é igual em todos os sites das aulas. Cada `index.html` c
 
 - **«Responder no telemóvel»** em todos os questionários (`.quiz`) e jogos (`.game`) que não tinham botão. Não é preciso escrever nada em `atividades.js`: o telemóvel lê as perguntas do próprio slide. Cada questionário fica com o seu separador na folha «Avaliação contínua», com o título do slide.
 - **«Respostas da turma»** ao lado dos botões que já existiam e dentro da janela do código QR: gráficos que se atualizam de 5 em 5 segundos, sem nomes. A caixa «Mostrar as respostas certas» pinta a opção certa de verde quando quiseres.
+- **Respostas da turma dentro do slide:** `<div class="esmp-ao-vivo" data-path="../respostas/?f=<pasta>&a=<atividade>"></div>` mostra, no próprio slide, o código QR e o painel da turma (por exemplo uma nuvem de palavras de aquecimento). Só vai buscar respostas enquanto o slide está à vista. As respostas passam pela folha, porque é aí que são contadas. Exemplo: CLC 6, aula 3, «Nuvem de palavras: uma casa boa».
 - **Barra de ferramentas** no canto inferior direito (ou pelo teclado):
 
 | Tecla | Ferramenta |

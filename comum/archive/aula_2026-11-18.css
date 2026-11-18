@@ -1,0 +1,91 @@
+/* comum/aula.css — ferramentas do professor (comum/aula.js): botões do telemóvel,
+   respostas da turma, pergunta rápida, grafo de vocabulário e quadro.
+   Mesmas cores dos sites das aulas: azul-escuro, laranja queimado, creme. */
+
+/* ---- botões acrescentados aos slides ---- */
+.esmp-tel, .esmp-ver { font: inherit; font-size: 15px; font-weight: 700; cursor: pointer; border: 0; border-radius: 999px; padding: 9px 18px; background: #A44A16; color: #fff; line-height: 1.2; }
+.esmp-tel { float: right; margin: 0 0 12px 18px; position: relative; z-index: 2; width: auto !important; max-width: max-content !important; }
+.slide > .esmp-tel { align-self: flex-end; margin-left: auto !important; margin-right: 0 !important; }   /* sites em que o slide é uma coluna flexível (AI 12.º) */
+.esmp-tel::before { content: "▣ "; }
+.esmp-ver { background: #1E2A33; margin: 0 0 12px 10px; vertical-align: middle; }
+.phone-btn + .esmp-ver { float: right; }
+.phone-qr .esmp-ver { display: block; margin: 10px auto 0; }
+.esmp-ver::before { content: "▮▯▮ "; letter-spacing: -2px; font-size: 11px; vertical-align: 1px; }
+
+/* ---- barra de ferramentas ---- */
+.esmp-doca { position: fixed; right: 12px; bottom: 84px; z-index: 900; display: flex; flex-direction: column; gap: 6px; opacity: .5; transition: opacity .2s; }
+.esmp-doca:hover, .esmp-doca:focus-within { opacity: 1; }
+.esmp-doca button { display: flex; align-items: center; gap: 8px; height: 42px; min-width: 42px; padding: 0 10px; border: 0; border-radius: 999px; background: #1E2A33; color: #fff; cursor: pointer; font: 700 14px Carlito, Calibri, Arial, sans-serif; box-shadow: 0 2px 8px rgba(0,0,0,.25); align-self: flex-end; }
+.esmp-doca button span { max-width: 0; overflow: hidden; white-space: nowrap; transition: max-width .2s; }
+.esmp-doca:hover button span, .esmp-doca button:focus-visible span { max-width: 90px; }
+.esmp-doca button:hover { background: #A44A16; }
+@media print { .esmp-doca, .esmp-tel, .esmp-ver { display: none !important; } }
+@media (max-width: 700px) { .esmp-doca { bottom: 120px; right: 8px; } }
+
+/* ---- camadas ---- */
+.esmp-ov { position: fixed; inset: 0; z-index: 1000; font-family: Carlito, Calibri, Arial, sans-serif; color: #1E2A33; box-sizing: border-box; }
+.esmp-ov *, .esmp-ov *::before { box-sizing: border-box; }
+.esmp-ov [hidden] { display: none !important; }
+.esmp-sessao, .esmp-rapida { background: rgba(30,42,51,.85); display: grid; place-items: center; padding: 2vh 2vw; }
+.esmp-ov .es-caixa { background: #F6F3EC; border-radius: 16px; padding: 22px 28px; width: min(1500px, 96vw); max-height: 96vh; display: flex; flex-direction: column; overflow: hidden; }
+.esmp-ov header { display: flex; justify-content: space-between; align-items: flex-start; gap: 20px; margin-bottom: 14px; }
+.esmp-ov .es-k { font-size: 13px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; color: #A44A16; margin: 0 0 4px; }
+.esmp-ov h3 { font-family: Caladea, Cambria, Georgia, serif; font-size: 30px; line-height: 1.15; margin: 0; color: #1E2A33; }
+.esmp-ov .es-x { flex: none; font: inherit; font-weight: 700; font-size: 15px; border: 2px solid #C9D1D8; background: #fff; color: #1E2A33; border-radius: 999px; padding: 7px 16px; cursor: pointer; }
+.es-cols { display: grid; grid-template-columns: minmax(280px, 38%) 1fr; gap: 28px; min-height: 0; flex: 1; }
+.es-qr { text-align: center; background: #fff; border-radius: 14px; padding: 18px; align-self: start; }
+.es-qr .code canvas, .es-qr .code img, .es-qr .code svg { width: min(100%, 58vh) !important; height: auto !important; aspect-ratio: 1; display: block; margin: 0 auto 10px; }
+.es-qr .code canvas[style*="none"], .es-qr .code img[style*="none"] { display: none !important; }   /* o qrcodejs cria um canvas e uma imagem e esconde um deles */
+.es-qr a { display: block; color: #2F6E9E; font-size: 14px; word-break: break-all; }
+.es-qr p { margin: 10px 0 0; font-size: 18px; font-weight: 700; }
+.es-qr .es-sm { font-size: 14px; font-weight: 400; color: #5B6670; }
+.es-res { overflow: auto; min-height: 0; font-size: 20px; padding-right: 6px; }
+.es-rev { display: inline-flex; align-items: center; gap: 8px; font-size: 16px; font-weight: 700; margin: 0 0 10px; cursor: pointer; }
+.es-rev input { width: 20px; height: 20px; accent-color: #2E6B4F; }
+@media (max-width: 900px) { .es-cols { grid-template-columns: 1fr; overflow: auto; } .es-res { overflow: visible; } }
+
+/* ---- pergunta rápida ---- */
+.esmp-rapida .es-caixa { width: min(760px, 96vw); overflow: auto; }
+.er-tipos { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; margin-bottom: 14px; }
+.er-tipos label { cursor: pointer; }
+.er-tipos input { position: absolute; opacity: 0; }
+.er-tipos span { display: block; text-align: center; padding: 12px 6px; border-radius: 12px; background: #fff; border: 2px solid #C9D1D8; font-weight: 700; font-size: 16px; }
+.er-tipos input:checked + span { background: #1E2A33; border-color: #1E2A33; color: #fff; }
+.er-tipos input:focus-visible + span { outline: 3px solid #F0A673; }
+.er-l { display: block; font-weight: 700; font-size: 16px; margin: 0 0 12px; }
+.er-l textarea, .er-l input, .er-l select { display: block; width: 100%; margin-top: 5px; font: inherit; font-weight: 400; font-size: 18px; padding: 10px 12px; border: 2px solid #C9D1D8; border-radius: 10px; background: #fff; color: #1E2A33; }
+.er-grelha { display: grid; grid-template-columns: 1fr 1fr; gap: 0 14px; }
+.er-ir { font: inherit; font-size: 18px; font-weight: 700; border: 0; border-radius: 12px; padding: 13px; background: #A44A16; color: #fff; cursor: pointer; width: 100%; }
+.er-erro { background: #FBE3D2; border-radius: 10px; padding: 9px 12px; margin: 0 0 12px; font-weight: 700; }
+.er-ant { margin-top: 18px; border-top: 2px solid #E2DED7; padding-top: 12px; }
+.er-ant button { display: block; width: 100%; text-align: left; font: inherit; font-size: 15px; background: #fff; border: 1px solid #E2DED7; border-radius: 8px; padding: 8px 12px; margin-top: 6px; cursor: pointer; color: #1E2A33; }
+@media (max-width: 640px) { .er-tipos { grid-template-columns: 1fr 1fr; } }
+
+/* ---- grafo de vocabulário ---- */
+.esmp-grafo { background: #1E2A33; display: flex; flex-direction: column; z-index: 1010; }
+.esmp-grafo svg { flex: 1; min-height: 0; width: 100%; touch-action: none; user-select: none; }
+.eg-barra, .eq-barra { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; padding: 10px 14px; background: rgba(255,255,255,.08); color: #F6F3EC; font-size: 15px; }
+.eg-barra button, .eq-barra button, .eg-barra input { font: inherit; font-size: 15px; border-radius: 999px; border: 0; padding: 8px 14px; }
+.eg-barra button, .eq-barra button { background: #F6F3EC; color: #1E2A33; font-weight: 700; cursor: pointer; }
+.eg-barra button:hover, .eq-barra button:hover { background: #F0A673; }
+.eg-barra input { background: #fff; color: #1E2A33; width: 190px; }
+.eg-tit { font-family: Caladea, Cambria, Georgia, serif; font-size: 20px; max-width: 30vw; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.eg-nova, .eg-sel { display: flex; gap: 6px; align-items: center; }
+.eg-dica { color: #F0A673; flex: 1; min-width: 200px; }
+.eg-fim { display: flex; gap: 6px; flex-wrap: wrap; }
+
+/* ---- quadro ---- */
+.esmp-quadro { z-index: 1020; }
+.esmp-quadro[data-fundo="escuro"] { background: #1E2A33; }
+.esmp-quadro[data-fundo="claro"] { background: #F6F3EC; }
+.esmp-quadro[data-fundo="slide"] { background: transparent; }
+.esmp-quadro canvas { position: absolute; inset: 0; width: 100%; height: 100%; touch-action: none; cursor: crosshair; }
+.eq-barra { position: absolute; left: 50%; bottom: 14px; transform: translateX(-50%); background: rgba(30,42,51,.92); border-radius: 999px; padding: 8px 14px; box-shadow: 0 4px 18px rgba(0,0,0,.35); flex-wrap: nowrap; max-width: 98vw; overflow-x: auto; white-space: nowrap; }
+.esmp-quadro[data-fundo="escuro"] .eq-barra { background: rgba(255,255,255,.12); }
+.eq-cores, .eq-esp { display: flex; gap: 6px; align-items: center; }
+.eq-barra .eq-cor { width: 30px; height: 30px; padding: 0; border-radius: 50%; background: var(--c); border: 2px solid rgba(255,255,255,.55); flex: none; }
+.eq-barra .eq-cor:hover { background: var(--c); }
+.eq-barra .eq-cor.on { outline: 3px solid #F0A673; outline-offset: 2px; }
+.eq-esp button { width: 34px; height: 30px; padding: 0 6px; display: grid; place-items: center; }
+.eq-esp i { display: block; width: 100%; background: #1E2A33; border-radius: 9px; }
+.eq-barra button.on { background: #F0A673; }

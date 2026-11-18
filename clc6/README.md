@@ -1,14 +1,14 @@
 # CLC 6 · Culturas de urbanismo e mobilidade
 
-Site interativo das aulas de Cultura, Língua e Comunicação 6 (formação de adultos), para projetar na sala. Tem 257 slides:
+Site interativo das aulas de Cultura, Língua e Comunicação 6 (formação de adultos), para projetar na sala. Tem 265 slides:
 
 - o **programa** (núcleo gerador, os quatro DR e o percurso da casa ao mundo, avaliação);
-- **DR1 · A casa** (aulas 1 a 8). Revisto em novembro de 2026 com Geografia A: na aula 3, quem decide o preço de uma casa, oferta e procura (simulação), o contágio dos preços (simulação) e a onda que chega à periferia (dados do INE); na aula 5, povoamento disperso e concentrado;
+- **DR1 · A casa** (aulas 1 a 8). Revisto em novembro de 2026 com Geografia A: na aula 3, quem decide o preço de uma casa, oferta e procura (simulação), o contágio dos preços (simulação) e a onda que chega à periferia (dados do INE); ainda na aula 3 (18 de novembro), uma nuvem de palavras de aquecimento, um jogo de revisão com 12 perguntas e quatro perguntas de resposta curta; na aula 5, povoamento disperso e concentrado;
 - **DR2 · Vizinhança e trabalho** (aulas 9 a 15): equipamentos e cidade dos 15 minutos, Jane Jacobs, área central e renda locativa; Cesário Verde, Caeiro, Campos e Simmel; memória dos lugares, gentrificação, relato e crónica; suburbanização, modelos de Burgess, Hoyt e Harris-Ullman, integrar ou romper, Hume; movimentos pendulares, distância-tempo, turismo e alojamento local; sotaques e dialetos (Lindley Cintra); apresentações;
 - **DR3 · Instituições** (aulas 16 a 22): a polissemia da Polis, Aristóteles, a lei das vilas e cidades, rede urbana, Lefebvre; o PDM e a classificação do solo (simulação «Planeia o teu concelho»); lei, decreto-lei, portaria, despacho e o Regulamento Geral do Ruído; prevenção rodoviária (simulação da distância de paragem) e campanhas; quem trata de quê, pesquisa e resumo; consulta pública simulada (Vale Novo) com Rawls; apresentações;
 - **DR4 · Mobilidades** (aulas 23 a 28): migrações, fluxos e números (INE, AIMA, Observatório da Emigração), repulsão e atração (Lee), Kant e Arendt; a cidade que muda, arte e equipamentos culturais; Camões, Cesário, Campos e Soeiro Pereira Gomes, o relato de vivências; o português no mundo, apreciação crítica, Acordo Ortográfico; integrar (serviços, Português Língua de Acolhimento, vocabulário do trabalho); apresentações e fecho.
 
-Os slides com o botão **Responder no telemóvel** mostram um código QR: os formandos respondem no telemóvel e as respostas ficam na folha de cálculo «Avaliação contínua» (ver `../respostas/LEIA-ME.md`). As atividades estão em `atividades.js`. As versões anteriores dos ficheiros estão em `archive/`.
+Os slides com o botão **Responder no telemóvel** mostram um código QR: os formandos respondem no telemóvel e as respostas ficam na folha de cálculo «Avaliação contínua» (ver `../respostas/LEIA-ME.md`). Num slide também pode estar o código QR com as respostas da turma ao lado, ao vivo: `<div class="esmp-ao-vivo" data-path="../respostas/?f=clc6&a=ideal"></div>` (é assim a nuvem de palavras da aula 3; ver `../comum/LEIA-ME.md`). As atividades estão em `atividades.js`. As versões anteriores dos ficheiros estão em `archive/`.
 
 É HTML, CSS e JavaScript simples: não precisa de instalação nem de compilação. Funciona aberto diretamente no navegador (duplo clique em `index.html`) e no GitHub Pages.
 
@@ -69,7 +69,7 @@ Peças disponíveis: `card` (com variantes `blue`, `peach`, `dark`, `green`), `g
 
 ## Jogos
 
-Cada aula tem um jogo de escolha múltipla com 8 perguntas: uma de cada vez, 20 segundos por pergunta, pontos com bónus de rapidez e som de acerto e de erro. A turma responde de braço no ar (ou com os dedos, 1 a 4) e o formador clica na resposta mais votada, ou usa as teclas 1 a 4; Enter passa à seguinte. O botão do altifalante liga e desliga o som. As perguntas de escolha múltipla que já existiam ficaram como «Revisão», para estudar em casa.
+Cada aula tem um jogo de escolha múltipla com 8 perguntas: uma de cada vez, 20 segundos por pergunta, pontos com bónus de rapidez e som de acerto e de erro. A turma responde de braço no ar (ou com os dedos, 1 a 4) e o formador clica na resposta mais votada, ou usa as teclas 1 a 4; Enter passa à seguinte. O botão do altifalante liga e desliga o som. As perguntas de escolha múltipla que já existiam ficaram como «Revisão», para estudar em casa. A aula 3 tem um segundo jogo, «Jogo: percebeste a aula?» (12 perguntas de compreensão, 25 segundos cada), seguido de «Por palavras tuas» (quatro respostas curtas no telemóvel).
 
 Para mudar uma pergunta, procura o texto no `index.html`: cada pergunta é um `<div class="gq" data-answer="b">`, e `data-answer` diz qual dos botões (`a`, `b`, `c`, `d`) é o certo.
 

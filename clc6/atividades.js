@@ -2,16 +2,13 @@
 window.ATIVIDADES = {
  "ideal": {
   "disciplina": "CLC 6",
-  "titulo": "A casa onde gostavas de viver",
+  "titulo": "Nuvem: uma casa boa",
   "passos": [
    {
-    "tipo": "escrita",
-    "titulo": "A casa onde gostavas de viver",
-    "perguntas": [
-     "Três coisas indispensáveis numa casa para ti.",
-     "Uma coisa que a tua casa tem e de que gostas mesmo.",
-     "Uma coisa que falta à tua casa (dentro ou à volta)."
-    ]
+    "tipo": "nuvem",
+    "titulo": "Uma casa boa tem de ter…",
+    "p": "O que tem de ter uma casa para ser boa para ti?",
+    "max": 3
    }
   ]
  },
@@ -211,6 +208,155 @@ window.ATIVIDADES = {
       "c": 0,
       "f": "Nascente: manhã; poente: tarde."
      }
+    ]
+   }
+  ]
+ },
+ "jogo3b": {
+  "disciplina": "CLC 6",
+  "titulo": "Jogo: revisão da aula 3",
+  "passos": [
+   {
+    "tipo": "jogo",
+    "segundos": 25,
+    "perguntas": [
+     {
+      "p": "Cinco pessoas vivem num T1. Que critério de qualidade falha?",
+      "o": [
+       "a luz natural",
+       "a área adequada",
+       "a localização"
+      ],
+      "c": 1,
+      "f": "Há sobrelotação: pouco espaço para quem lá vive."
+     },
+     {
+      "p": "Há bolor nas paredes da casa de banho. Que critério falha?",
+      "o": [
+       "a ventilação",
+       "a acessibilidade",
+       "o custo comportável"
+      ],
+      "c": 0,
+      "f": "O ar não se renova e a humidade fica."
+     },
+     {
+      "p": "Duas casas iguais: uma em Lisboa, outra em Bragança. Porque é mais cara a de Lisboa?",
+      "o": [
+       "é maior",
+       "tem mais anos",
+       "está num sítio onde há mais procura"
+      ],
+      "c": 2,
+      "f": "A casa é igual: muda o sítio e quem a quer."
+     },
+     {
+      "p": "O preço escrito nos anúncios costuma ser…",
+      "o": [
+       "mais alto do que o preço a que a casa se vende",
+       "igual ao preço final",
+       "mais baixo do que o preço final"
+      ],
+      "c": 0,
+      "f": "É um preço pedido: pode ser negociado."
+     },
+     {
+      "p": "A casa do vizinho vendeu-se muito cara. Porque é que a tua passa a «valer» mais?",
+      "o": [
+       "fizeste obras",
+       "o banco e a imobiliária comparam com as vendas ali perto",
+       "o Estado subiu os impostos"
+      ],
+      "c": 1,
+      "f": "Avaliação por comparação: a subida passa de casa em casa."
+     },
+     {
+      "p": "Os preços em Loures subiram mais depressa do que em Lisboa. Porquê?",
+      "o": [
+       "construíram-se casas a mais em Loures",
+       "quem não consegue pagar Lisboa procura casa à volta",
+       "as casas de Loures são todas novas"
+      ],
+      "c": 1,
+      "f": "A procura muda-se para a periferia. (Casas a mais fariam o preço descer.)"
+     },
+     {
+      "p": "Um T2 de 80 m², a 10,17 € por m², tem uma renda de cerca de…",
+      "o": [
+       "81 € por mês",
+       "814 € por mês",
+       "8 140 € por mês"
+      ],
+      "c": 1,
+      "f": "80 × 10,17 ≈ 814 €."
+     },
+     {
+      "p": "Pobreza energética é…",
+      "o": [
+       "gastar pouca eletricidade",
+       "não conseguir ter a energia de que se precisa para aquecer, arrefecer ou iluminar a casa",
+       "não ter televisão em casa"
+      ],
+      "c": 1,
+      "f": "Por pouco rendimento, energia cara e casas pouco eficientes."
+     },
+     {
+      "p": "No verão, o que ajuda a manter a casa fresca?",
+      "o": [
+       "fechar tudo durante a noite",
+       "abrir as janelas ao sol do meio-dia",
+       "sombreamento exterior e ventilar à noite"
+      ],
+      "c": 2,
+      "f": "Não deixar o sol entrar e deixar entrar o ar fresco da noite."
+     },
+     {
+      "p": "Para o IPMA, uma onda de calor é…",
+      "o": [
+       "um dia acima de 30 °C",
+       "pelo menos 6 dias seguidos com máximas 5 °C acima do normal",
+       "um verão sem chuva"
+      ],
+      "c": 1,
+      "f": "Já não é um verão estranho: é uma tendência."
+     },
+     {
+      "p": "Um anúncio diz «T3, 2 assoalhadas». Isto…",
+      "o": [
+       "está errado: os três quartos já são três assoalhadas",
+       "está certo",
+       "está certo se a cozinha for grande"
+      ],
+      "c": 0,
+      "f": "Assoalhadas são quartos e salas: um T3 com sala tem 4."
+     },
+     {
+      "p": "Num anúncio de venda ou de arrendamento, a classe energética é…",
+      "o": [
+       "obrigatória",
+       "opcional",
+       "só para casas novas"
+      ],
+      "c": 0,
+      "f": "Sem ela, um particular pode pagar uma coima de 250 a 3 740 €."
+     }
+    ]
+   }
+  ]
+ },
+ "palavras3": {
+  "disciplina": "CLC 6",
+  "titulo": "Por palavras tuas: o que faz uma casa boa?",
+  "passos": [
+   {
+    "tipo": "escrita",
+    "titulo": "Por palavras tuas",
+    "intro": "Duas ou três frases em cada resposta.",
+    "perguntas": [
+     "Uma casa pode ser boa e, mesmo assim, a qualidade de vida de quem lá vive ser má? Explica com um exemplo.",
+     "Porque é que a mesma casa custa mais em Lisboa do que em Bragança? Usa as palavras «procura» e «oferta».",
+     "Porque é que uma casa mal isolada é um problema no inverno e também no verão? Indica uma medida que ajude.",
+     "Um anúncio diz só «Fantástico T2, imperdível!». Que três informações faltam para saberes se a casa te interessa?"
     ]
    }
   ]

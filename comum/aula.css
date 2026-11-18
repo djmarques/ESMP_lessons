@@ -19,6 +19,16 @@
 .esmp-doca button span { max-width: 0; overflow: hidden; white-space: nowrap; transition: max-width .2s; }
 .esmp-doca:hover button span, .esmp-doca button:focus-visible span { max-width: 90px; }
 .esmp-doca button:hover { background: #A44A16; }
+/* ---- respostas da turma dentro de um slide (.esmp-ao-vivo) ---- */
+.esmp-ao-vivo { display: grid; grid-template-columns: minmax(200px, 27%) 1fr; gap: 22px; align-items: start; margin: 14px 0 10px; font-family: Carlito, Calibri, Arial, sans-serif; }
+.esmp-ao-vivo .eav-qr { background: #fff; border-radius: 14px; padding: 14px; text-align: center; }
+.esmp-ao-vivo .eav-qr .code canvas, .esmp-ao-vivo .eav-qr .code img { width: 100% !important; height: auto !important; aspect-ratio: 1; display: block; margin: 0 auto 8px; }
+.esmp-ao-vivo .eav-qr .code canvas[style*="none"], .esmp-ao-vivo .eav-qr .code img[style*="none"] { display: none !important; }
+.esmp-ao-vivo .eav-qr a { display: block; color: #2F6E9E; font-size: 13px; word-break: break-all; }
+.esmp-ao-vivo .eav-qr p { margin: 8px 0 0; font-size: 16px; font-weight: 700; }
+.esmp-ao-vivo .eav-painel { font-size: 18px; min-height: 280px; }
+.esmp-ao-vivo .er-nuvem { font-size: clamp(22px, 2.4vw, 34px); min-height: 220px; }
+@media (max-width: 700px) { .esmp-ao-vivo { grid-template-columns: 1fr; } .esmp-ao-vivo .eav-qr { max-width: 260px; margin: 0 auto; } }
 @media print { .esmp-doca, .esmp-tel, .esmp-ver { display: none !important; } }
 @media (max-width: 700px) { .esmp-doca { bottom: 120px; right: 8px; } }
 

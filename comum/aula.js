@@ -12,6 +12,8 @@
         diretamente dos slides (respostas/?f=<pasta>&q=<n>).
      2. «Respostas da turma»: ao lado do código QR, gráficos de barras ao vivo
         com as respostas que vão chegando à folha «Avaliação contínua».
+        Com <div class="esmp-ao-vivo" data-path="…"></div>, o código QR e o
+        painel aparecem dentro do próprio slide (ex.: nuvem de aquecimento).
      3. Uma barra de ferramentas (canto inferior direito):
           D  desenhar por cima do slide
           Q  quadro em branco
@@ -130,6 +132,40 @@
         sessao({ disciplina: act.disciplina || (cfg().DISCIPLINAS || {})[f] || 'CP 4', titulo: act.titulo, passos: act.passos, jogo: act.jogo, escrita: act.escrita }, u.href);
       }).catch(() => {});
     });
+  });
+
+  // (2b) Respostas da turma DENTRO de um slide (por exemplo uma nuvem de palavras de aquecimento):
+  //   <div class="esmp-ao-vivo" data-path="../respostas/?f=clc6&a=ideal"></div>
+  // Mostra o código QR e, ao lado, o painel da turma. O painel só pede respostas
+  // ao Apps Script enquanto o slide está à vista (classe «current»).
+  document.querySelectorAll('.esmp-ao-vivo[data-path]').forEach(box => {
+    const u = new URL(box.dataset.path, location.href);
+    const f = u.searchParams.get('f'), a = u.searchParams.get('a');
+    const slide = box.closest('.slide');
+    if (!f || !a || !slide) return;
+    box.innerHTML = '<div class="eav-qr"><div class="code"></div><a target="_blank" rel="noopener"></a><p>Lê o código · escreve o teu nome · responde</p></div><div class="eav-painel"></div>';
+    isolar(box);
+    const link = box.querySelector('.eav-qr a'); link.href = u.href;
+    if (!PUBLICADO) link.textContent = 'O código QR aparece quando o site estiver publicado (GitHub Pages).';
+    else { link.textContent = u.href.replace(/^https?:\/\/(www\.)?/, '').slice(0, 70); E.qr(box.querySelector('.code'), u.href, 360); }
+    let painel = null, aLigar = false;
+    const visivel = () => slide.classList.contains('current');
+    function ligar() {
+      if (painel || aLigar) return;
+      aLigar = true;
+      config.then(() => atividade(f, a)).then(act => {
+        aLigar = false;
+        if (!act || painel || !visivel()) return;
+        painel = E.painel(box.querySelector('.eav-painel'), { disciplina: act.disciplina || (cfg().DISCIPLINAS || {})[f] || f, titulo: act.titulo, passos: act.passos, jogo: act.jogo, escrita: act.escrita }, {
+          url: (cfg().SCRIPT_URL || '').trim(), auto: 5000, revelar: false,
+          grafo: (perg, cont) => grafo({ id: 'n-' + act.titulo.slice(0, 40) + '-' + perg.slice(0, 40), titulo: perg, palavras: cont }),
+          aoAtualizar: nuvens => { if (grafoAberto) { const n = nuvens.find(x => x.p === grafoAberto.pergunta); if (n) grafoAberto.juntar(n.c); } }
+        });
+      }).catch(() => { aLigar = false; });
+    }
+    function desligar() { if (painel) { painel.parar(); painel = null; } }
+    new MutationObserver(() => (visivel() ? ligar() : desligar())).observe(slide, { attributes: true, attributeFilter: ['class'] });
+    if (visivel()) ligar();
   });
 
   /* =====================================================================
