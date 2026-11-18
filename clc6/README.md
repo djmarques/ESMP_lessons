@@ -116,6 +116,8 @@ Os exemplos completos estão em `index.html`.
 
 Um tabuleiro 3D com 32 casas (os mesmos preços e cores da simulação «contagio») que atravessa a Aula 3 em cinco slides: «Qualidade de vida: da casa ao bairro», «A crise da habitação em números» (gráficos de barras ao lado do tabuleiro), «Quem decide o preço de uma casa?», «Oferta e procura no bairro» (sliders de procura, oferta e juros) e «Uma venda cara sobe a rua toda» (botões que constroem uma estação de metro, um supermercado ou um viaduto). Cada clique (→) muda a câmara e as peças. No telemóvel, o tabuleiro fica em cima e os cartões por baixo.
 
+O slide «Uma casa fria… e quente» usa o mesmo motor 3D para mostrar a casa da D. Rosa em corte: botões de inverno e verão e de sete medidas (isolar o telhado e as paredes, janelas eficientes, vedar frinchas, sombreamento exterior, ventilar à noite, telhado claro), bolas que mostram o calor a passar e a temperatura dentro de casa. O modelo de calor está na função `thermal` (ilustrativo).
+
 Os números do slide da crise da habitação estão em `NUM`, perto do início do `bairro3d.js` (fontes no próprio slide e nas notas). Clicar numa casa vende-a por mais 40%. Sons gerados no navegador (botão 🔊 no canto, partilhado com os jogos).
 
 Para mudar a história, edita a função `layout` de cada slide em `SLIDES`, no início do ficheiro. Se o navegador não tiver 3D, os slides mostram o desenho 2D antigo.
@@ -127,6 +129,9 @@ Cada simulação é um `<div class="wg" data-widget="nome"></div>` no `index.htm
 | Nome | Slide | O que faz |
 | --- | --- | --- |
 | `curvas` | Aula 3 · A procura, A oferta, O equilíbrio, Experimenta | quadro escuro ao estilo Manim; `data-modo` escolhe o slide; no último, sliders de procura, oferta e juros |
+| `clima` | Aula 3 · O clima está a mudar | quadro escuro: temperatura média por década, ondas de calor por ano, anos mais quentes, extremos de calor e de frio |
+| `anuncio` | Aula 3 · A estrutura de um anúncio | cada clique acende uma parte do anúncio fictício e mostra a definição; clicar numa parte também |
+| `calcpreco` | Aula 3 · Quanto pedir? | método da comparação para o preço e a renda dos três imóveis da atividade de escrita |
 | `oferta` | Aula 3 · Oferta e procura no bairro | só aparece se o navegador não tiver 3D (substitui o tabuleiro) |
 | `contagio` | Aula 3 · Uma venda cara sobe a rua toda | só aparece se o navegador não tiver 3D (substitui o tabuleiro) |
 | `quinze` | Aula 9 · A cidade dos 15 minutos | o que se alcança a pé, de bicicleta ou de carro |

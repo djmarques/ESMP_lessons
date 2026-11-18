@@ -10,6 +10,9 @@
      contagio   a price rise spreads to the neighbouring houses
      oferta     supply and demand: what moves the price of houses
      curvas     supply and demand, Manim style: data-modo procura | oferta | equilibrio | explorar
+     clima      climate change in Portugal: temperature, heat waves, hottest years (Manim style)
+     anuncio    the parts of a house advert, one per click, with definitions
+     calcpreco  how much to ask: price and rent by the comparison method
      renda      land rent (bid rent) by distance to the centre
      quinze     the 15-minute city: what is within reach
      pendular   commuting into the centre over a day
@@ -374,6 +377,159 @@
         pt.g.querySelectorAll('.draw').forEach(l => l.classList.toggle('on', on));
       });
     });
+  };
+
+  /* ---------- 2c. clima: climate change in Portugal (Manim style) -------
+     Follows the clicks (slide a3-clima):
+       1 mean temperature, decade 2005–2014 vs 2015–2024 (INE)
+       2 heat waves per year: decade averages (INE) and recent years (IPMA)
+       3 the five hottest years since 1931 (IPMA)
+       4 hot extremes up, cold extremes down (IPCC, sixth report) */
+  W.clima = function (w) {
+    const K = { fg: '#F6F3EC', dim: 'rgba(246,243,236,.45)', grid: 'rgba(246,243,236,.12)', hot: '#F0A673', hot2: '#E8743B', cold: '#8EC1E6' };
+    const s = svg(1000, 440, w, 'Gráficos: temperatura média e ondas de calor em Portugal continental');
+    s.classList.add('mn-svg');
+    const parts = [];
+    const part = (from, to = 99, dimAt = 99, dimTo = 0.22) => { const g = el('g', { opacity: 0, class: 'mn-part' }, s); parts.push({ g, from, to, dimAt, dimTo }); return g; };
+    const txt = (g, x, y, t, o = {}) => el('text', Object.assign({ x, y, fill: K.fg, class: 'mn-t' }, o), g, t);
+    // 1 · two thermometers (the scale starts at 15 °C, said on the drawing)
+    const A = part(1, 99, 3);
+    txt(A, 30, 34, 'Temperatura média anual', { class: 'mn-t mn-nome' });
+    const T0 = 15, T1 = 16.5, Yb = 330, Yt = 80, Ty = v => Yb - (v - T0) * (Yb - Yt) / (T1 - T0);
+    [[2005, 15.53, 110], [2015, 16.08, 300]].forEach(([y0, v, x], k) => {
+      el('rect', { x: x - 18, y: Yt - 10, width: 36, height: Yb - Yt + 10, rx: 18, fill: 'none', stroke: K.fg, 'stroke-width': 3 }, A);
+      el('circle', { cx: x, cy: Yb + 22, r: 30, fill: k ? K.hot2 : K.hot }, A);
+      const bar = el('rect', { x: x - 11, y: Ty(v), width: 22, height: Yb - Ty(v) + 10, rx: 9, fill: k ? K.hot2 : K.hot, class: 'mn-sobe' }, A);
+      bar.style.animationDelay = (0.3 + k * 0.5) + 's';
+      txt(A, x, Ty(v) - 22, (v + '').replace('.', ',') + ' °C', { 'text-anchor': 'middle', class: 'mn-t mn-nome' });
+      txt(A, x, Yb + 84, y0 + '–' + (y0 + 9), { 'text-anchor': 'middle', class: 'mn-t mn-lado' });
+    });
+    for (let v = 15; v <= 16.5; v += 0.5) { el('line', { x1: 64, x2: 86, y1: Ty(v), y2: Ty(v), stroke: K.dim }, A); txt(A, 58, Ty(v) + 7, (v + '').replace('.', ','), { 'text-anchor': 'end', fill: K.dim, class: 'mn-s' }); }
+    txt(A, 30, 436, 'a escala começa nos 15 °C', { fill: K.dim, class: 'mn-s' });
+    const plus = txt(A, 206, 300, '+0,55 °C', { 'text-anchor': 'middle', fill: K.hot, class: 'mn-t mn-grande' });
+    plus.style.animationDelay = '1.2s';
+    // 2 · heat waves per year
+    const B = part(2, 99, 3);
+    const X0 = 470, Y0 = 356, Hy = v => Y0 - v * 32;
+    txt(B, X0, 34, 'Ondas de calor por ano', { class: 'mn-t mn-nome' });
+    for (let v = 0; v <= 8; v += 2) { el('line', { x1: X0, x2: 985, y1: Hy(v), y2: Hy(v), stroke: K.grid }, B); txt(B, X0 - 10, Hy(v) + 8, v, { 'text-anchor': 'end', fill: K.dim, class: 'mn-s' }); }
+    const bars = [['média\n2005–14', 3, K.dim], ['média\n2015–24', 5, K.dim], ['2022', 6, K.hot], ['2023', 7, K.hot], ['2024', 8, K.hot2], ['2025', 6, K.hot], ['2026*', 6, K.hot]];
+    bars.forEach(([lab, v, col], k) => {
+      const x = X0 + 18 + k * 72;
+      const r = el('rect', { x, y: Hy(v), width: 50, height: Y0 - Hy(v), rx: 5, fill: col, class: 'mn-sobe' }, B);
+      r.style.animationDelay = (0.2 + k * 0.18) + 's';
+      txt(B, x + 25, Hy(v) - 10, v, { 'text-anchor': 'middle', class: 'mn-t mn-lado', 'font-weight': 700 });
+      lab.split('\n').forEach((l, j) => txt(B, x + 25, Y0 + 30 + j * 26, l, { 'text-anchor': 'middle', fill: k < 2 ? K.dim : K.fg, class: 'mn-s' }));
+    });
+    txt(B, 985, 438, '* até julho de 2026', { 'text-anchor': 'end', fill: K.dim, class: 'mn-s' });
+    // 3 · the five hottest years
+    const C3 = part(3, 3);
+    txt(C3, 500, 120, 'Os 5 anos mais quentes desde 1931', { 'text-anchor': 'middle', class: 'mn-t mn-nome' });
+    ['2022', '2023', '1997', '2024', '2025'].forEach((y, k) => {
+      const x = 220 + k * 140, g = el('g', { class: 'mn-pop' }, C3);
+      g.style.animationDelay = (0.2 + k * 0.25) + 's';
+      el('rect', { x: x - 58, y: 160, width: 116, height: 76, rx: 14, fill: y === '1997' ? 'rgba(246,243,236,.15)' : K.hot2 }, g);
+      txt(g, x, 212, y, { 'text-anchor': 'middle', class: 'mn-t mn-grande' });
+      txt(g, x, 268, (k + 1) + '.º', { 'text-anchor': 'middle', fill: K.dim, class: 'mn-s' });
+    });
+    txt(C3, 500, 330, '4 destes 5 anos são os últimos 4 anos', { 'text-anchor': 'middle', fill: K.hot, class: 'mn-t mn-lado', 'font-weight': 700 });
+    // 4 · hot up, cold down
+    const D = part(4, 4);
+    const card = (x, col, arrow, l1, l2) => {
+      const g = el('g', { class: 'mn-pop' }, D);
+      el('rect', { x, y: 90, width: 400, height: 250, rx: 18, fill: 'rgba(246,243,236,.08)', stroke: col, 'stroke-width': 3 }, g);
+      txt(g, x + 200, 190, arrow, { 'text-anchor': 'middle', fill: col, class: 'mn-t mn-enorme' });
+      txt(g, x + 200, 250, l1, { 'text-anchor': 'middle', fill: col, class: 'mn-t mn-nome' });
+      txt(g, x + 200, 292, l2, { 'text-anchor': 'middle', class: 'mn-t mn-lado' });
+      return g;
+    };
+    card(70, K.hot, '↑', 'Extremos de calor', 'mais frequentes e intensos');
+    card(530, K.cold, '↓', 'Extremos de frio', 'menos frequentes, mas ainda há').style.animationDelay = '.5s';
+    txt(D, 500, 400, 'IPCC, 6.º relatório (desde 1950)', { 'text-anchor': 'middle', fill: K.dim, class: 'mn-s' });
+    onStep(w, k => parts.forEach(pt => { const on = k >= pt.from && k <= pt.to; pt.g.setAttribute('opacity', on ? (k >= pt.dimAt ? pt.dimTo : 1) : 0); pt.g.classList.toggle('on', on); }));
+  };
+
+  /* ---------- 2d. anuncio: the parts of a house advert ----------------
+     The advert is HTML in index.html; each part carries data-ordem (its
+     build), data-titulo and data-def. Each click lights the next part and
+     shows its definition in the box; clicking a part shows its own. */
+  W.anuncio = function (w) {
+    const slide = w.closest('.slide');
+    const box = slide.querySelector('.an-def');
+    const parts = Array.from(w.querySelectorAll('[data-ordem]')).sort((a, b) => a.dataset.ordem - b.dataset.ordem);
+    function show(p) {
+      parts.forEach(x => x.classList.toggle('an-atual', x === p));
+      if (!p) { box.innerHTML = '<p class="an-vazio">Clica numa parte do anúncio, ou avança (→).</p>'; return; }
+      box.innerHTML = '<span class="an-num">' + p.dataset.ordem + '</span><h3>' + p.dataset.titulo + '</h3><p>' + p.dataset.def + '</p>' + (p.dataset.lei ? '<p class="an-lei">' + p.dataset.lei + '</p>' : '');
+    }
+    parts.forEach(p => {
+      const n = document.createElement('span'); n.className = 'an-badge'; n.textContent = p.dataset.ordem; p.prepend(n);
+      p.tabIndex = 0;
+      p.addEventListener('click', e => { e.stopPropagation(); show(p); });
+      p.addEventListener('keydown', e => { if (e.key === 'Enter') { e.stopPropagation(); show(p); } });
+    });
+    onStep(w, k => { parts.forEach(p => p.classList.toggle('an-visto', Number(p.dataset.ordem) <= k)); show(parts.find(p => Number(p.dataset.ordem) === k) || null); });
+  };
+
+  /* ---------- 2e. calcpreco: how much to ask for a house --------------
+     The comparison method: price per m² of the area (INE median) × area
+     × adjustments for what this house has; then the market and the
+     margin for negotiating. The rent the same way, with the rent per m².
+     The adjustment percentages are rules of thumb for the lesson. The
+     "interested buyers" bar is illustrative: it follows the demand line
+     of the previous slides (dearer → fewer buyers). */
+  W.calcpreco = function (w) {
+    const IM = [
+      { nome: 'T2 no bairro da D. Rosa', area: 80, m2: 2445, renda: 10.17, ref: 'Portugal · INE, 2.º trim. 2026', fact: '80 m² · 2.º andar sem elevador · varanda · classe D · bom estado', est: 1, efi: 1, ext: 1, elev: 1 },
+      { nome: 'T1 em Lisboa', area: 50, m2: 5299, renda: 17.19, ref: 'Lisboa · INE, 2.º trim. 2026', fact: '50 m² · 4.º andar com elevador · sem varanda · classe C · remodelado', est: 2, efi: 1, ext: 0, elev: 0 },
+      { nome: 'Moradia T3 na Grande Lisboa', area: 130, m2: 3836, renda: 14.38, ref: 'Grande Lisboa · INE, 1.º trim. 2026', fact: '130 m² · jardim · classe F · precisa de obras', est: 0, efi: 0, ext: 2, elev: 0 },
+    ];
+    const ADJ = [
+      { k: 'est', nome: 'Estado', o: [['precisa de obras', -15], ['bom estado', 0], ['remodelado', 10]] },
+      { k: 'efi', nome: 'Classe energética', o: [['E ou F', -5], ['C ou D', 0], ['A ou B', 5]] },
+      { k: 'ext', nome: 'Espaço exterior', o: [['nenhum', -3], ['varanda', 3], ['jardim ou terraço', 8]] },
+      { k: 'elev', nome: 'Acesso', o: [['elevador ou rés-do-chão', 0], ['andar alto sem elevador', -5]] },
+    ];
+    const v = { i: 0, est: 1, efi: 1, ext: 1, elev: 1, mercado: 0, pedir: 5 };
+    w.innerHTML = '<div class="cp-imoveis"></div><div class="cp-conta"></div><div class="cp-ctr"></div>';
+    const imBox = w.querySelector('.cp-imoveis'), conta = w.querySelector('.cp-conta'), ctr = w.querySelector('.cp-ctr');
+    IM.forEach((im, i) => {
+      const b = document.createElement('button'); b.type = 'button'; b.className = 'cp-im';
+      b.innerHTML = '<b>' + im.nome + '</b><span>' + im.fact + '</span>';
+      b.addEventListener('click', e => { e.stopPropagation(); v.i = i; ['est', 'efi', 'ext', 'elev'].forEach(k => { v[k] = im[k]; }); paint(); });
+      imBox.appendChild(b);
+    });
+    const adjBox = document.createElement('div'); adjBox.className = 'cp-adj cp-s2'; ctr.appendChild(adjBox);
+    ADJ.forEach(a => {
+      const row = document.createElement('div'); row.className = 'cp-seg'; row.innerHTML = '<span>' + a.nome + '</span>';
+      a.o.forEach(([lab, pct], j) => {
+        const b = document.createElement('button'); b.type = 'button'; b.textContent = lab + ' ' + (pct > 0 ? '+' : pct < 0 ? '−' : '±') + Math.abs(pct) + '%';
+        b.addEventListener('click', e => { e.stopPropagation(); v[a.k] = j; paint(); });
+        row.appendChild(b);
+      });
+      adjBox.appendChild(row);
+    });
+    const mk = document.createElement('div'); mk.className = 'cp-s3 cp-mk'; w.appendChild(mk);   // the two market sliders sit under the houses
+    slider(mk, { label: 'Procura na zona', min: -10, max: 10, value: 0, fmt: x => x === 0 ? 'normal' : (x > 0 ? 'forte +' : 'fraca −') + Math.abs(x) + '%', onInput: x => { v.mercado = x; paint(); } });
+    slider(mk, { label: 'Quanto acima do valor vou pedir', min: -10, max: 30, value: 5, fmt: x => (x > 0 ? '+' : x < 0 ? '−' : '') + Math.abs(x) + '%', onInput: x => { v.pedir = x; paint(); } });
+    mk.querySelectorAll('input').forEach(i => i.addEventListener('change', () => i.blur()));
+    const eur = x => String(Math.round(x)).replace(/\B(?=(\d{3})+(?!\d))/g, ' ') + ' €';
+    function paint() {
+      const im = IM[v.i];
+      imBox.querySelectorAll('.cp-im').forEach((b, i) => b.classList.toggle('sel', i === v.i));
+      adjBox.querySelectorAll('.cp-seg').forEach((row, r) => row.querySelectorAll('button').forEach((b, j) => b.classList.toggle('sel', v[ADJ[r].k] === j)));
+      const adj = ADJ.reduce((t, a) => t + a.o[v[a.k]][1], 0);
+      const f = (1 + adj / 100) * (1 + v.mercado / 100);
+      const valor = im.m2 * im.area * f, pedido = valor * (1 + v.pedir / 100), renda = im.renda * im.area * f;
+      const interessados = Math.max(0, Math.round(10 * (1 - (v.pedir + 10) / 40)));
+      const yieldB = renda * 12 / valor * 100;
+      conta.innerHTML =
+        '<div class="cp-linha cp-s1"><span class="cp-pill">' + eur(im.m2).replace(' €', '') + ' €/m²</span><span class="cp-op">×</span><span class="cp-pill">' + im.area + ' m²</span><span class="cp-op">×</span><span class="cp-pill cp-s2">ajustes ' + (adj >= 0 ? '+' : '−') + Math.abs(adj) + '%</span><span class="cp-op cp-s3">×</span><span class="cp-pill cp-s3">procura ' + (v.mercado >= 0 ? '+' : '−') + Math.abs(v.mercado) + '%</span><span class="cp-op">=</span><span class="cp-res">' + eur(valor) + '</span><small>valor de mercado estimado · ' + im.ref + '</small></div>' +
+        '<div class="cp-linha cp-s3"><span class="cp-label">Preço a pedir no anúncio</span><span class="cp-res cp-grande">' + eur(pedido) + '</span><span class="cp-interesse" title="ilustrativo">' + '<i class="cp-peao"></i>'.repeat(interessados) + '<i class="cp-peao vazio"></i>'.repeat(10 - interessados) + '</span><small>' + interessados + ' interessados por semana (ilustrativo): mais caro, menos compradores</small></div>' +
+        '<div class="cp-linha cp-s4"><span class="cp-label">Ou arrendar:</span><span class="cp-pill">' + (im.renda + '').replace('.', ',') + ' €/m²</span><span class="cp-op">×</span><span class="cp-pill">' + im.area + ' m²</span><span class="cp-op">× ajustes =</span><span class="cp-res cp-grande">' + eur(renda) + ' por mês</span><small>renda de um ano ÷ valor = ' + yieldB.toFixed(1).replace('.', ',') + '% (rentabilidade bruta)</small></div>';
+    }
+    paint();
+    onStep(w, k => { for (let n = 1; n <= 4; n++) w.classList.toggle('cp-ve' + n, k >= n); });
   };
 
   /* ---------- 3. renda: bid rent by distance to the centre ------------ */

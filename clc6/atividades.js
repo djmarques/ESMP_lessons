@@ -85,15 +85,43 @@ window.ATIVIDADES = {
  },
  "anuncio": {
   "disciplina": "CLC 6",
-  "titulo": "Um anúncio honesto da minha casa",
+  "titulo": "O meu anúncio",
   "passos": [
    {
+    "tipo": "opiniao",
+    "p": "Que imóvel escolhes?",
+    "o": ["T2 no bairro da D. Rosa", "T1 em Lisboa", "Moradia T3 na Grande Lisboa"],
+    "porque": "Vais vender ou arrendar? Porquê?"
+   },
+   {
     "tipo": "escrita",
-    "titulo": "O teu anúncio",
-    "intro": "60 a 100 palavras. Tipologia e área, três qualidades verdadeiras, um defeito dito com cuidado, a localização. Sem «fantástico» nem «imperdível». Podes inventar uma casa.",
-    "perguntas": [
-     "Escreve aqui o teu anúncio."
-    ]
+    "titulo": "O preço",
+    "intro": "Usa o método da comparação: preço (ou renda) por m² da zona × área × ajustes. Escreve a conta e o valor que vais pedir.",
+    "perguntas": ["A tua conta e o preço (ou a renda) que vais pedir."]
+   },
+   {
+    "tipo": "escrita",
+    "titulo": "O anúncio",
+    "intro": "60 a 100 palavras: título, preço, tipologia e área, localização, classe energética, estado e andar, três qualidades verdadeiras, um defeito dito com cuidado, contacto. Sem «fantástico» nem «imperdível».",
+    "perguntas": ["Escreve aqui o teu anúncio."]
+   }
+  ]
+ },
+ "frio": {
+  "disciplina": "CLC 6",
+  "titulo": "Uma casa fria… e quente",
+  "passos": [
+   {
+    "tipo": "opiniao",
+    "p": "A tua casa é fria no inverno?",
+    "o": ["Sim, muito", "Às vezes", "Não"],
+    "porque": "E no verão, é quente?"
+   },
+   {
+    "tipo": "opiniao",
+    "p": "Que medida escolhias primeiro para a tua casa?",
+    "o": ["Isolar o telhado", "Isolar as paredes", "Janelas eficientes", "Vedar frinchas", "Sombreamento exterior", "Ventilar à noite", "Telhado claro"],
+    "porque": "Porquê essa?"
    }
   ]
  },

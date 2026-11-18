@@ -152,6 +152,49 @@
       { rotulo: 'Renda de um T2 de 80 m² · Lisboa', valor: 1375, cor: '#A44A16', nota: '80 × 17,19 €' } ] },
   };
 
+  /* ======================================================================
+     Slide a3-frio: D. Rosa's house cut open, in winter and in summer.
+     A deliberately simple heat balance (steady state, one room), only to
+     show the direction and the rough size of each effect:
+       heat that leaves or enters per degree of difference (UA), shared
+       by the roof (30%, ADENE), the walls, the windows and the gaps;
+       gains from people, appliances and the sun;
+       indoor temperature = outdoor + gains ÷ UA (winter), and in summer
+       also the cool night air when the windows open at night.
+     The percentages are for the lesson, not for a real project.
+     ====================================================================== */
+  const CX = 60;                                         // the cut-open house stands away from the board
+  function thermal(season, m) {
+    const UA = {
+      telhado: 30 * (m.telhado ? 0.25 : 1), paredes: 30 * (m.paredes ? 0.35 : 1),
+      janelas: 20 * (m.janelas ? 0.5 : 1), frinchas: 20 * (m.frinchas ? 0.4 : 1),
+    };
+    const UAt = UA.telhado + UA.paredes + UA.janelas + UA.frinchas;
+    const share = {};
+    if (season === 'inverno') {
+      const Tout = 8, sunWin = 80 * (m.sombra ? 0.25 : 1), G = 220 + sunWin - (m.claro ? 10 : 0);
+      const Tin = Tout + G / UAt;
+      const need = Math.max(0, UAt * (18 - Tout) - G) / (100 * 10 - 300);
+      for (const c in UA) share[c] = UA[c] / UAt;
+      return { Tout, Tin, need, share, UA, sunWin, sunRoof: 0 };
+    }
+    const Tout = 29, Tday = 36, Tnight = 21, sunWin = 90 * (m.sombra ? 0.25 : 1), sunRoof = 120 * (m.claro ? 0.4 : 1) * (m.telhado ? 0.3 : 1);
+    const G = 30 + sunWin + sunRoof, UAv = m.ventilacao ? 40 : 0;
+    const Tin = (UAt * Tout + UAv * Tnight + G) / (UAt + UAv);
+    const need = Math.max(0, UAt * (Tout - 25) + UAv * (Tnight - 25) + G) / (100 * 4 + 240);
+    // heat that comes in during the afternoon (36 °C outside): what the balls and the percentages show
+    const flow = { telhado: UA.telhado * Math.max(0, Tday - Tin) + sunRoof, paredes: UA.paredes * Math.max(0, Tday - Tin), janelas: UA.janelas * Math.max(0, Tday - Tin) + sunWin, frinchas: UA.frinchas * Math.max(0, Tday - Tin) };
+    const tot = Object.values(flow).reduce((a, b) => a + b, 0) || 1;
+    for (const c in flow) share[c] = flow[c] / tot;
+    return { Tout, Tday, Tnight, Tin, need, share, UA, sunWin, sunRoof, vent: UAv > 0 };
+  }
+  const tog = (u, k) => { u.m = u.m || {}; u.m[k] = !u.m[k]; };
+  /** Energy poverty, as a bar chart in the caption column (INE 2025; Eurostat 2024 for the EU). */
+  const POBREZA = { titulo: 'Em Portugal, não conseguem… (%)', max: 32, linhas: [
+    { rotulo: 'manter a casa quente no inverno', valor: 15.6, cor: '#2F6E9E', nota: 'Portugal, 2025' },
+    { rotulo: 'ter a casa fresca no verão', valor: 28.2, cor: '#A44A16', nota: 'Portugal, 2025' },
+    { rotulo: 'manter a casa quente · média da UE', valor: 9.2, cor: '#8197A8', nota: 'UE, 2024' } ] };
+
   const SLIDES = {
     'a3-escalas': {
       layout(step) {
@@ -202,6 +245,55 @@
       seed: ofertaSeed,
     },
 
+    'a3-frio': {
+      layout(step, user) {
+        const season = user.season || (step >= 4 ? 'verao' : 'inverno');
+        const m = user.m || {};
+        const th = thermal(season, m);
+        const p = { rosaCasa: { ...CASA.rosa, s: 1 } };
+        if (m.telhado) p.isoTelhado = { ...CASA.base.isoTelhado, s: 1 };
+        if (m.paredes) p.isoParedes = { ...CASA.base.isoParedes, s: 1 };
+        p[m.janelas ? 'janela2' : 'janela1'] = { ...CASA.base.janela1, s: 1 };
+        if (m.frinchas) p.vedantes = { ...CASA.base.vedantes, s: 1 };
+        if (m.sombra) p.sombras = { ...CASA.base.sombras, s: 1 };
+        if (m.ventilacao && season === 'verao') p.ventilacao = { ...CASA.base.ventilacao, s: 1 };
+        p[season === 'verao' ? 'sol' : 'nuvens'] = { ...CASA.base[season === 'verao' ? 'sol' : 'nuvens'], s: 1 };
+        const T = Math.round(th.Tin);
+        const t1 = th.Tin, fala = t1 < 15 ? 'Que frio!' : t1 < 18 ? 'Ainda está fresco…' : t1 <= 25.5 ? 'Estou bem' : t1 <= 27 ? 'Está abafado…' : 'Que calor!';
+        const pct = c => Math.round(th.share[c] * 100) + '%';
+        return {
+          cam: { from: [CX + 5.5, 6.2, 14.5], at: [CX, 1.7, 0], box: CASA.box }, lightAt: [CX, 0, 0],
+          pieces: p, prices: false, house: true, season, m, th,
+          chart: step === 2 ? POBREZA : null,
+          texts: { fala, lTelhado: 'Telhado ' + pct('telhado'), lParedes: 'Paredes ' + pct('paredes'), lJanelas: 'Janelas ' + pct('janelas'), lFrinchas: 'Frinchas ' + pct('frinchas') },
+          speak: ['rosaCasa'], shiver: th.Tin < 16, sweat: th.Tin > 27,
+        };
+      },
+      /** A new build goes back to its own season (the measures stay). */
+      onStep(u) { delete u.season; },
+      buttons: [
+        { t: '❄ Inverno', f: u => { u.season = 'inverno'; }, sel: (u, L) => L.season === 'inverno', grupo: 'estacao' },
+        { t: '☀ Verão', f: u => { u.season = 'verao'; }, sel: (u, L) => L.season === 'verao', grupo: 'estacao' },
+        { t: 'Isolar o telhado', f: u => tog(u, 'telhado'), sel: (u, L) => !!L.m.telhado },
+        { t: 'Isolar as paredes', f: u => tog(u, 'paredes'), sel: (u, L) => !!L.m.paredes },
+        { t: 'Janelas eficientes', f: u => tog(u, 'janelas'), sel: (u, L) => !!L.m.janelas },
+        { t: 'Vedar frinchas', f: u => tog(u, 'frinchas'), sel: (u, L) => !!L.m.frinchas },
+        { t: 'Sombreamento exterior', f: u => tog(u, 'sombra'), sel: (u, L) => !!L.m.sombra },
+        { t: 'Ventilar à noite', f: u => tog(u, 'ventilacao'), sel: (u, L) => !!L.m.ventilacao },
+        { t: 'Telhado claro', f: u => tog(u, 'claro'), sel: (u, L) => !!L.m.claro },
+        { t: 'Repor', reset: true },
+      ],
+      readout(L) {
+        const th = L.th, t = th.Tin, inv = L.season === 'inverno';
+        const cls = t < 18 ? 'frio' : t > 25 ? 'quente' : 'bem';
+        return '<span>Lá fora: <b>' + (inv ? nf(th.Tout) + ' °C' : th.Tday + ' °C à tarde, ' + th.Tnight + ' °C à noite') + '</b>' + (inv ? '' : ' (onda de calor)') + '</span>' +
+          '<span>Dentro, sem ' + (inv ? 'aquecimento' : 'ar condicionado') + ': <b class="t-' + cls + '">' + nf(t, 1) + ' °C</b></span>' +
+          '<span>Conforto: <b>18 a 25 °C</b></span>' +
+          '<span>Energia para ' + (inv ? 'aquecer até 18 °C' : 'arrefecer até 25 °C') + ': <b>' + Math.round(th.need * 100) + '%</b> <span class="b3d-energia"><i style="width:' + Math.min(100, th.need * 100) + '%"></i></span></span>';
+      },
+      frame: casaFrame,
+    },
+
     'a3-contagio': {
       layout(step, user) {
         const p = { rosa: rosaSpot, tiago: tiagoSpot };
@@ -248,7 +340,7 @@
   Object.assign(sun.shadow.camera, { left: -14, right: 14, top: 12, bottom: -12, near: 1, far: 45 });
   sun.shadow.bias = -0.0005;
   sun.shadow.radius = 4;
-  scene.add(sun);
+  scene.add(sun, sun.target);
 
   /* ---------- Building blocks ---------- */
   const clay = (color, extra) => new T.MeshStandardMaterial(Object.assign({ color, roughness: 0.82, metalness: 0 }, extra));
@@ -364,6 +456,163 @@
   const grua = group(box(0.14, 3.2, 0.14, C.apricot, 0, 1.6, 0), box(2.6, 0.12, 0.12, C.apricot, 0.7, 3.2, 0), box(0.5, 0.25, 0.25, C.navy, -0.45, 3.0, 0), box(0.02, 1.0, 0.02, C.navy, 1.6, 2.7, 0));
   grua.visible = false; scene.add(grua);
 
+  /* ---------- The cut-open house (slide a3-frio) ---------- */
+  const CASA = { base: {} };
+  {
+    const W = 6, D = 4.4, H = 2.8, t = 0.22;
+    const wallMat = clay(0xf1e9dc), cutMat = clay(C.navy), floorMat = clay(0xd9cdb8);
+    const add0 = o => { scene.add(o); return o; };
+    add0(box(13, 0.3, 10, 0xd6dcc8, CX, -0.15, 0.4));                           // garden
+    add0(box(W + 0.4, 0.2, D + 0.4, 0xbfb3a0, CX, 0.1, 0));                      // floor slab
+    add0(mesh(new T.BoxGeometry(W - 0.2, 0.02, D - 0.2), floorMat, CX, 0.21, 0));
+    /** A wall along x (back) or z (sides) with one opening (window or door). */
+    function wall(axis, len, hgt, thick, cx, cz, hole, mat) {
+      const g = new T.Group();
+      const part = (a0, a1, y0, y1) => {
+        if (a1 - a0 < 0.01 || y1 - y0 < 0.01) return;
+        const a = (a0 + a1) / 2, l = a1 - a0, h = y1 - y0;
+        const m = axis === 'x' ? mesh(new T.BoxGeometry(l, h, thick), mat, cx + a, 0.2 + (y0 + y1) / 2, cz) : mesh(new T.BoxGeometry(thick, h, l), mat, cx, 0.2 + (y0 + y1) / 2, cz + a);
+        g.add(m);
+      };
+      const L0 = -len / 2, L1 = len / 2;
+      if (!hole) part(L0, L1, 0, hgt);
+      else { part(L0, hole.a0, 0, hgt); part(hole.a1, L1, 0, hgt); part(hole.a0, hole.a1, 0, hole.y0); part(hole.a0, hole.a1, hole.y1, hgt); }
+      return g;
+    }
+    const winBack = { a0: -1.5, a1: 0.1, y0: 0.9, y1: 2.1 }, winSide = { a0: -0.9, a1: 0.7, y0: 0.9, y1: 2.1 }, door = { a0: 0.3, a1: 1.3, y0: 0, y1: 2.1 };
+    add0(wall('x', W, H, t, CX, -D / 2 + t / 2, winBack, wallMat));               // back wall, with a window
+    add0(wall('z', D, H, t, CX + W / 2 - t / 2, 0, winSide, wallMat));            // right wall, with a window
+    add0(wall('z', D, H, t, CX - W / 2 + t / 2, 0, door, wallMat));               // left wall, with the door
+    // the cut: navy edges where the front wall was taken away
+    for (const x of [-W / 2 + t / 2, W / 2 - t / 2]) add0(mesh(new T.BoxGeometry(t + 0.02, H, 0.04), cutMat, CX + x, 0.2 + H / 2, D / 2));
+    add0(mesh(new T.BoxGeometry(W, 0.14, D), clay(0xece4d6), CX, 0.2 + H + 0.07, 0));   // ceiling
+    // gable roof, ridge along x, so the cut shows the attic triangle
+    const rise = 1.5, half = D / 2 + 0.3, slope = Math.atan2(rise, half), len = Math.hypot(rise, half);
+    CASA.roofMat = clay(C.orange, { roughness: 0.7 });
+    for (const s of [-1, 1]) {
+      const r = mesh(new T.BoxGeometry(W + 0.6, 0.16, len), CASA.roofMat, CX, 0.2 + H + 0.14 + rise / 2, s * half / 2);
+      r.rotation.x = s * slope; add0(r);
+    }
+    for (const s of [-1, 1]) {                                                   // the two gable triangles
+      const sh = new T.Shape(); sh.moveTo(-D / 2, 0); sh.lineTo(D / 2, 0); sh.lineTo(0, rise); sh.lineTo(-D / 2, 0);
+      const g = mesh(new T.ExtrudeGeometry(sh, { depth: t, bevelEnabled: false }), wallMat, CX + s * (W / 2 - t / 2) - t / 2, 0.2 + H + 0.14, 0);
+      g.rotation.y = Math.PI / 2; add0(g);
+    }
+    // inside: sofa, rug, lamp, table
+    add0(box(1.8, 0.42, 0.75, 0x56718a, CX - 0.6, 0.42, -1.45)); add0(box(1.8, 0.55, 0.18, 0x56718a, CX - 0.6, 0.75, -1.75));
+    add0(box(2.4, 0.02, 1.6, C.peach, CX - 0.4, 0.23, -0.3)); add0(box(0.7, 0.4, 0.5, 0x8a6a4a, CX + 1.6, 0.42, -1.4));
+    add0(mesh(new T.CylinderGeometry(0.03, 0.03, 1.5, 8), clay(C.navy), CX + 2.3, 0.95, -1.6)); add0(mesh(new T.SphereGeometry(0.18, 16, 12), clay(0xfff1c9, { emissive: 0xffe7a8, emissiveIntensity: 0.6 }), CX + 2.3, 1.75, -1.6));
+    add0(tree(CX - 5.2, -2.6, 1.6)); add0(tree(CX + 5.4, -3.0, 1.3));
+    CASA.box = [CX - 4.6, -0.3, -3.2, CX + 4.6, 0.2 + H + 1.9, 3.0];
+    CASA.rosa = { x: CX + 0.6, y: 0.22, z: -0.3 };
+
+    /* Measures and weather: pieces that appear (grow) when switched on. */
+    const piece = (name, obj, pos) => { add(name, obj); obj.position.set(...pos); CASA.base[name] = { x: pos[0], y: pos[1], z: pos[2] }; return obj; };
+    const yellow = 0xf2cf6b;
+    piece('isoTelhado', box(W - 0.1, 0.24, D - 0.1, yellow, 0, 0.12, 0), [CX, 0.2 + H + 0.14, 0]);
+    const iso = new T.Group(), isoMat = clay(0xe8edf2);
+    iso.add(wall('x', W + 0.36, H, 0.16, 0, -D / 2 - 0.08, winBack, isoMat), wall('z', D, H, 0.16, W / 2 + 0.08, 0, winSide, isoMat), wall('z', D, H, 0.16, -W / 2 - 0.08, 0, door, isoMat));
+    iso.children.forEach(g => g.children.forEach(m => { m.position.y -= 0.2; }));
+    piece('isoParedes', iso, [CX, 0.2, 0]);
+    function janela(dbl) {
+      const g = new T.Group(), fr = clay(dbl ? C.navy : 0xc9c1b4), glass = new T.MeshStandardMaterial({ color: 0xbfe0f2, transparent: true, opacity: 0.45, roughness: 0.1 });
+      const f = (w, h, d, x, y, z) => g.add(mesh(new T.BoxGeometry(w, h, d), fr, x, y, z));
+      // back window (in x), side window (in z)
+      const bw = winBack.a1 - winBack.a0, bx = (winBack.a0 + winBack.a1) / 2, by = (winBack.y0 + winBack.y1) / 2, fz = -D / 2 + t / 2;
+      const th = dbl ? 0.08 : 0.05;
+      f(bw, th, 0.1, bx, winBack.y0, fz); f(bw, th, 0.1, bx, winBack.y1, fz); f(th, winBack.y1 - winBack.y0, 0.1, winBack.a0, by, fz); f(th, winBack.y1 - winBack.y0, 0.1, winBack.a1, by, fz); f(th, winBack.y1 - winBack.y0, 0.1, bx, by, fz);
+      const sw = winSide.a1 - winSide.a0, sz = (winSide.a0 + winSide.a1) / 2, sy = (winSide.y0 + winSide.y1) / 2, fx = W / 2 - t / 2;
+      f(0.1, th, sw, fx, winSide.y0, sz); f(0.1, th, sw, fx, winSide.y1, sz); f(0.1, winSide.y1 - winSide.y0, th, fx, sy, winSide.a0); f(0.1, winSide.y1 - winSide.y0, th, fx, sy, winSide.a1);
+      for (const k of dbl ? [-0.03, 0.03] : [0]) {
+        g.add(new T.Mesh(new T.BoxGeometry(bw, winBack.y1 - winBack.y0, 0.01), glass).translateX(bx).translateY(by).translateZ(fz + k));
+        g.add(new T.Mesh(new T.BoxGeometry(0.01, winSide.y1 - winSide.y0, sw), glass).translateX(fx + k).translateY(sy).translateZ(sz));
+      }
+      return g;
+    }
+    piece('janela1', janela(false), [CX, 0.2, 0]);
+    piece('janela2', janela(true), [CX, 0.2, 0]);
+    CASA.base.janela2 = CASA.base.janela1;
+    const ved = new T.Group(), sealMat = clay(0x2b2b2b);
+    ved.add(mesh(new T.BoxGeometry(0.26, 0.06, door.a1 - door.a0), sealMat, -W / 2 + t / 2, 2.1, (door.a0 + door.a1) / 2));
+    ved.add(mesh(new T.BoxGeometry(0.26, 0.04, door.a1 - door.a0), sealMat, -W / 2 + t / 2, 0.02, (door.a0 + door.a1) / 2));
+    piece('vedantes', ved, [CX, 0.2, 0]);
+    const sh = new T.Group(), slat = clay(0xe9e1d2);
+    for (let k = 0; k < 6; k++) sh.add(mesh(new T.BoxGeometry(1.8, 0.05, 0.16), slat, (winBack.a0 + winBack.a1) / 2, 0.95 + k * 0.2, -D / 2 - 0.3));
+    for (let k = 0; k < 6; k++) sh.add(mesh(new T.BoxGeometry(0.16, 0.05, 1.8), slat, W / 2 + 0.32, 0.95 + k * 0.2, (winSide.a0 + winSide.a1) / 2));
+    piece('sombras', sh, [CX, 0.2, 0]);
+    const vent = new T.Group(), ventMat = clay(0x8ec1e6, { emissive: 0x8ec1e6, emissiveIntensity: 0.5 });
+    for (let k = 0; k < 4; k++) { const c = mesh(new T.ConeGeometry(0.16, 0.4, 12), ventMat, 2.6 - k * 1.5, 1.4, 0.0); c.rotation.z = Math.PI / 2; vent.add(c); }
+    piece('ventilacao', vent, [CX, 0.2, 0]);
+    piece('sol', mesh(new T.SphereGeometry(0.7, 24, 16), new T.MeshBasicMaterial({ color: 0xffd36b })), [CX + 3.8, 7.6, -4.5]);
+    const cl = new T.Group(), cm = clay(0xb9c1c8, { roughness: 1 });
+    for (const [x, y, r] of [[0, 0, 0.8], [0.9, 0.1, 0.65], [-0.9, -0.05, 0.6], [0.3, 0.45, 0.6]]) cl.add(mesh(new T.SphereGeometry(r, 18, 12), cm, x, y, 0));
+    piece('nuvens', cl, [CX - 2.5, 6.9, -4.2]);
+    const rosa = pawn(C.apricot); rosa.children.forEach(k => k.scale.multiplyScalar(2.1)); rosa.children[1].position.y *= 2.1;
+    add('rosaCasa', rosa, { walks: true });
+
+    /* Heat flow: small glowing balls along paths through each part of the house. */
+    const P = (x, y, z) => new T.Vector3(CX + x, 0.2 + y, z);
+    CASA.paths = {
+      telhado: [[P(-1.5, 2.2, -0.5), P(-1.5, 4.6, -0.5)], [P(0.8, 2.2, 0.3), P(0.8, 4.6, 0.3)], [P(2, 2.2, -1), P(2, 4.4, -1)]],
+      paredes: [[P(-2, 1.2, -1.6), P(-2, 1.2, -3.2)], [P(1.4, 0.6, -1.6), P(1.4, 0.6, -3.2)], [P(2.4, 1.4, 1.4), P(4.1, 1.4, 1.4)], [P(-2.4, 2.4, -1.2), P(-4.1, 2.4, -1.2)]],
+      janelas: [[P(-0.7, 1.5, -1.5), P(-0.7, 1.5, -3.3)], [P(2.3, 1.5, -0.1), P(4.2, 1.5, -0.1)]],
+      frinchas: [[P(-2.3, 1.9, 0.8), P(-4.1, 1.9, 0.8)], [P(-2.3, 0.15, 0.8), P(-4.1, 0.15, 0.8)], [P(0.15, 2.05, -1.6), P(0.15, 2.05, -3.2)]],
+      solJanela: [[P(3.4, 6.5, -4.4), P(-0.7, 0.3, -0.6)]], solTelhado: [[P(3.6, 7, -4.4), P(0.5, 3.2, -0.8)]],
+      vento: [[P(4.2, 1.4, -0.1), P(-4.2, 1.4, 0.8)]],
+    };
+    const ballGeo = new T.SphereGeometry(0.075, 10, 8);
+    const mats = { quente: new T.MeshBasicMaterial({ color: 0xe8743b }), sol: new T.MeshBasicMaterial({ color: 0xffc94d }), frio: new T.MeshBasicMaterial({ color: 0x8ec1e6 }) };
+    CASA.balls = [];
+    for (let k = 0; k < 140; k++) { const b = new T.Mesh(ballGeo, mats.quente); b.visible = false; scene.add(b); CASA.balls.push({ b, t: Math.random(), path: null, off: new T.Vector3(), on: false }); }
+    CASA.mats = mats;
+  }
+
+  /** Per frame on slide a3-frio: move the heat balls, tint the roof, shiver or sweat. */
+  function casaFrame(dt, time, L) {
+    const th = L.th, inv = L.season === 'inverno';
+    // how many balls per stream: proportional to the heat that flows there (max 14 per path)
+    const streams = [];
+    const amount = c => inv ? th.UA[c] * Math.max(0, th.Tin - th.Tout) : th.UA[c] * Math.max(0, th.Tday - th.Tin);
+    const scale = inv ? 0.11 : 0.09;
+    for (const c of ['telhado', 'paredes', 'janelas', 'frinchas']) {
+      const n = Math.round(amount(c) * scale);
+      CASA.paths[c].forEach(pth => streams.push({ pth, n: Math.min(14, Math.round(n / CASA.paths[c].length)), mat: 'quente', rev: !inv }));
+    }
+    if (!inv) {
+      streams.push({ pth: CASA.paths.solJanela[0], n: Math.round(th.sunWin / 7), mat: 'sol' });
+      streams.push({ pth: CASA.paths.solTelhado[0], n: Math.round(th.sunRoof / 9), mat: 'sol' });
+      if (th.vent) streams.push({ pth: CASA.paths.vento[0], n: 12, mat: 'frio' });
+    } else streams.push({ pth: CASA.paths.solJanela[0], n: Math.round(th.sunWin / 9), mat: 'sol' });
+    let k = 0;
+    for (const st of streams) for (let j = 0; j < st.n && k < CASA.balls.length; j++, k++) {
+      const ball = CASA.balls[k];
+      if (ball.path !== st.pth) { ball.path = st.pth; ball.t = j / Math.max(1, st.n); ball.off.set((Math.random() - 0.5) * 0.5, (Math.random() - 0.5) * 0.3, (Math.random() - 0.5) * 0.5); }
+      ball.t = (ball.t + dt * 0.35) % 1;
+      const [a, b] = st.pth, u = st.rev ? 1 - ball.t : ball.t;
+      ball.b.position.lerpVectors(a, b, u).add(ball.off);
+      ball.b.material = CASA.mats[st.mat];
+      ball.b.visible = true;
+    }
+    for (; k < CASA.balls.length; k++) { CASA.balls[k].b.visible = false; CASA.balls[k].path = null; }
+    // a light roof reflects the sun
+    CASA.roofMat.color.lerp(new T.Color(L.m.claro ? 0xece6da : C.orange), Math.min(1, dt * 4));
+    // D. Rosa shivers in the cold and droops in the heat
+    const r = pieces.rosaCasa;
+    if (L.shiver) r.position.x += Math.sin(time / 28) * 0.02;
+    r.rotation.z = L.sweat ? Math.sin(time / 500) * 0.12 : 0;
+  }
+  /** Sun and sky: the board's light, or winter / summer light over the cut-open house. */
+  function lightFor(L) {
+    const key = L.lightAt ? L.season : 'board';
+    if (lightFor.key === key) return;
+    lightFor.key = key;
+    if (!L.lightAt) { sun.position.set(-8, 16, 9); sun.target.position.set(0, 0, 0); sun.intensity = 2.3; sun.color.setHex(0xfff0dc); }
+    else if (L.season === 'verao') { sun.position.set(L.lightAt[0] + 4, 18, -6); sun.target.position.set(...L.lightAt); sun.intensity = 3.0; sun.color.setHex(0xffe2b0); }
+    else { sun.position.set(L.lightAt[0] - 7, 9, 9); sun.target.position.set(...L.lightAt); sun.intensity = 1.25; sun.color.setHex(0xdfe7f0); }
+    sun.target.updateMatrixWorld();
+  }
+  function hideCasaBalls() { for (const b of CASA.balls) { b.b.visible = false; b.path = null; } }
+
   /* ---------- Labels (HTML over the picture) ---------- */
   const labels = [];
   function label(html, cls, target, height) {
@@ -445,6 +694,12 @@
     };
   })();
 
+  // the cut-open house: what D. Rosa says, and how much heat goes through each part
+  label('', 'b3d-fala', pieces.rosaCasa, 1.95).key = 'fala';
+  for (const [k, pos] of [['lTelhado', [CX - 2.2, 4.75, 0.6]], ['lParedes', [CX - 3.6, 1.1, -2.2]], ['lJanelas', [CX + 3.7, 2.55, -0.1]], ['lFrinchas', [CX - 3.9, 2.6, 1.6]]]) {
+    const it = label('', 'b3d-nota b3d-fluxo', pos, 0); it.key = k; it.onlyHouse = true;
+  }
+
   /* ======================================================================
      Engine
      ====================================================================== */
@@ -506,6 +761,7 @@
       const p = progressMax(old, now);
       shockState.set(id, { s: { ...old.s, E: 0, delay: 0 }, Eprev: old.Eprev + (old.s.E - old.Eprev) * p, t0: now });
     }
+    current.el.querySelector('.b3d-palco').dataset.estacao = L.season || '';
     // Buttons that stay pressed.
     current.el.querySelectorAll('.b3d-btns button').forEach((b, k) => {
       const def = (cfg.buttons || [])[k];
@@ -616,13 +872,15 @@
     for (const p of points) { point.copy(p).project(probe); b.x0 = Math.min(b.x0, point.x); b.x1 = Math.max(b.x1, point.x); b.y0 = Math.min(b.y0, point.y); b.y1 = Math.max(b.y1, point.y); }
     return b;
   }
+  const boxCorners = b => { const out = []; for (const x of [b[0], b[3]]) for (const y of [b[1], b[4]]) for (const z of [b[2], b[5]]) out.push(new T.Vector3(x, y, z)); return out; };
   function solveShot(shot) {
+    if (shot.box) shot = { ...shot, fit: true };
     if (!shot.fit && width / height <= 1.25) shot = { ...shot, fit: true };   // narrow screens: always show the whole board
     const A = freeArea();
     const at = new T.Vector3(...shot.at), from = new T.Vector3(...shot.from);
     const dir = from.clone().sub(at).normalize();
     let dist = from.distanceTo(at) * (shot.fit ? 1 : 1.26);   // 1.26: the close shots were set for a 30° lens
-    const pts = shot.fit ? CORNERS : [at.clone()];   // a copy: `at` itself moves below
+    const pts = shot.box ? boxCorners(shot.box) : shot.fit ? CORNERS : [at.clone()];   // a copy: `at` itself moves below
     for (let pass = 0; pass < 3; pass++) {
       if (shot.fit) {                                    // closest distance at which the board fits the area
         let lo = 4, hi = 90;
@@ -652,6 +910,7 @@
     if (step !== current.step) {                         // a new build: start from what the build shows
       current.step = step;
       if (current.cfg.seed) current.user.state = null;
+      if (current.cfg.onStep) current.cfg.onStep(current.user);
       refresh(false);
     }
     const L = current.L, now = performance.now();
@@ -699,6 +958,11 @@
     ring.visible = !!L.ring;
     ring.scale.setScalar(1 + Math.sin(time / 300) * 0.04); ring.scale.y = 0.8;
 
+    /* Slide-specific animation (the cut-open house) and the light for it. */
+    if (current.cfg.frame) current.cfg.frame(dt, time, L);
+    else if (CASA.balls[0].b.visible || CASA.balls[1].b.visible) hideCasaBalls();
+    lightFor(L);
+
     /* Prices and colours. */
     for (let i = 0; i < N; i++) {
       const goal = goalRatio(i, now);
@@ -743,7 +1007,8 @@
       else point.set(...item.target);
       point.project(camera);
       let on;
-      if ('on' in item) on = item.on;
+      if (item.onlyHouse) on = !!L.house;
+      else if ('on' in item) on = item.on;
       else if (item.piece) on = item.piece.scale.x > 0.5 && item.piece.scale.y > 0.9;
       else on = isPiece && item.target.scale.x > 0.5 && item.target.scale.y > 0.9;
       on = on && point.z < 1 && point.x > -1.1 && point.x < 1.1 && point.y > -1.1 && point.y < 1.1;
@@ -758,6 +1023,12 @@
   function readout(sold) {
     const box = current.el.querySelector('.b3d-read');
     if (!box) { drawChart(current.el, current.L.chart); return; }
+    if (current.cfg.readout) {
+      const html = current.cfg.readout(current.L);
+      if (box.innerHTML !== html) box.innerHTML = html;
+      drawChart(current.el, current.L.chart);
+      return;
+    }
     const L = current.L;
     if (!L.prices) { box.innerHTML = ''; return; }
     let sum = 0, up = 0, down = 0;

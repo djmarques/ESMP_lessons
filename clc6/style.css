@@ -769,3 +769,101 @@ html:not(.b3d-ok) .b3d-som { display: none; }
   .b3d-ok .b3d-lado.largo { width: auto; }
   .b3d-rng { grid-template-columns: 1fr 90px; } .b3d-rng span { grid-column: 1 / -1; }
 }
+
+/* ---------- 15. Aula 3 · a casa em corte (conforto térmico) ------------ */
+.b3d-ok .b3d-palco[data-estacao="inverno"] { background: radial-gradient(ellipse at 62% 30%, #F3F6F9 0%, #DCE4EC 60%, #C9D3DD 100%); }
+.b3d-ok .b3d-palco[data-estacao="verao"] { background: radial-gradient(ellipse at 70% 20%, #FFF8E6 0%, #FBE7C2 55%, #F1CDB0 100%); }
+.b3d-barra .t-frio { color: var(--blue) !important; } .b3d-barra .t-bem { color: var(--green) !important; } .b3d-barra .t-quente { color: #B3261E !important; }
+.b3d-energia { display: inline-block; vertical-align: middle; width: 90px; height: 12px; border-radius: 6px; background: var(--line); overflow: hidden; margin-left: 4px; }
+.b3d-energia i { display: block; height: 100%; background: var(--orange); transition: width .5s var(--ease); }
+.b3d-fala { padding: 2px 10px 12px; }
+.b3d-fala:not(:empty) { background: none; }
+.b3d-fala { font: italic 700 15px var(--head); color: var(--navy); }
+.b3d-fala::before { content: ""; position: absolute; inset: 0 0 10px; background: #fff; border-radius: 12px; border: 1px solid #DCD6C9; z-index: -1; }
+.b3d-fluxo { font-size: 14px; }
+.b3d-barra .wg-btns .btn.sel { background: var(--navy); color: #fff; }
+
+/* ---------- 16. Aula 3 · quadro com várias definições (só a última) ----- */
+.quadro.pilha .quadro-def.on:has(~ .quadro-def.on) { display: none; }
+.quadro.pilha .quadro-def:not(.on) { display: none; }
+.mn-svg .mn-grande { font-size: 40px; font-weight: 700; }
+.mn-svg .mn-enorme { font-size: 96px; font-weight: 700; }
+.mn-part.on .mn-sobe { transform-box: fill-box; transform-origin: center bottom; animation: mnsobe 1s var(--ease) both; }
+@keyframes mnsobe { from { transform: scaleY(0); } to { transform: scaleY(1); } }
+
+/* ---------- 17. Aula 3 · o anúncio, parte a parte ---------------------- */
+.an-wrap { display: grid; grid-template-columns: minmax(0, 1.05fr) minmax(0, 1fr); gap: 26px; align-items: start; }
+.anuncio { background: #fff; border: 1px solid var(--line); border-radius: 14px; padding: 0 0 12px; box-shadow: 0 6px 22px rgba(30, 42, 51, .08); overflow: hidden; font-size: 17px; }
+.an-foto { position: relative; } .an-foto svg { display: block; width: 100%; height: auto; max-height: 26vh; object-fit: cover; }
+.an-ficticio { position: absolute; left: 10px; top: 10px; background: rgba(30, 42, 51, .85); color: #fff; font-size: 12px; padding: 2px 8px; border-radius: 99px; }
+.an-parte { position: relative; margin: 6px 14px 0; padding: 3px 8px 3px 34px; border-radius: 8px; cursor: pointer; transition: background .3s, box-shadow .3s; }
+.an-parte:hover { background: var(--cream); }
+.an-badge { position: absolute; left: 4px; top: 50%; transform: translateY(-50%); width: 24px; height: 24px; border-radius: 50%; background: var(--line); color: var(--navy); font: 700 13px/24px var(--body); text-align: center; transition: background .3s, color .3s; }
+.an-parte.an-visto .an-badge { background: var(--orange); color: #fff; }
+.an-parte.an-atual { background: var(--orange-light); box-shadow: 0 0 0 3px var(--orange); }
+.an-titulo { margin: 0; font: 700 24px var(--head); color: var(--navy); }
+.an-preco { margin: 0; font: 700 28px var(--head); color: var(--orange); } .an-preco small { font: 15px var(--body); color: var(--muted); }
+.an-chips { display: flex; flex-wrap: wrap; gap: 0 4px; margin: 0 6px; }
+.an-chips .an-parte { margin: 6px 4px 0; background: var(--cream); }
+.an-chips .an-parte.an-atual { background: var(--orange-light); }
+.an-classe b { display: inline-block; background: #E6B422; color: #1E2A33; padding: 0 8px; border-radius: 4px; margin-right: 4px; }
+.an-local, .an-linha, .an-desc, .an-contacto { margin: 0; line-height: 1.35; }
+.an-desc { color: var(--text); } .an-contacto { font-size: 15px; color: var(--muted); }
+.an-def { min-height: 220px; background: var(--navy); color: var(--cream); border-radius: 14px; padding: 18px 22px; position: relative; }
+.an-def h3 { margin: 0 0 8px; font: 700 30px var(--head); color: #fff; padding-right: 50px; }
+.an-def p { margin: 0 0 10px; font-size: 22px; line-height: 1.4; }
+.an-def .an-lei { font-size: 18px; color: var(--accent); border-top: 1px solid rgba(246, 243, 236, .2); padding-top: 10px; }
+.an-def .an-vazio { color: rgba(246, 243, 236, .7); }
+.an-num { position: absolute; right: 18px; top: 14px; width: 40px; height: 40px; border-radius: 50%; background: var(--orange); color: #fff; font: 700 20px/40px var(--body); text-align: center; }
+.slide.current .an-def h3, .slide.current .an-def p { animation: enter .4s var(--ease) both; }
+@media (max-width: 900px) { .an-wrap { grid-template-columns: 1fr; } .an-def h3 { font-size: 24px; } .an-def p { font-size: 18px; } }
+
+/* ---------- 18. Aula 3 · calculadora do preço e da renda -------------- */
+.calc { display: grid; grid-template-columns: 270px minmax(0, 1fr); grid-template-areas: "im conta" "im ctr"; gap: 12px 22px; align-items: start; }
+.cp-imoveis { grid-area: im; display: grid; gap: 10px; }
+.cp-im { text-align: left; font: inherit; background: var(--cream); border: 2px solid transparent; border-radius: 12px; padding: 10px 12px; cursor: pointer; }
+.cp-im b { display: block; font: 700 19px var(--head); color: var(--navy); margin-bottom: 2px; }
+.cp-im span { font-size: 15px; color: var(--text); line-height: 1.3; }
+.cp-im.sel { border-color: var(--orange); background: var(--orange-light); }
+.cp-conta { grid-area: conta; display: grid; gap: 10px; }
+.cp-linha { display: flex; flex-wrap: wrap; align-items: center; gap: 6px 10px; background: #fff; border: 1px solid var(--line); border-radius: 12px; padding: 10px 14px; }
+.cp-linha small { flex-basis: 100%; color: var(--muted); font-size: 15px; }
+.cp-pill { background: var(--cream); border-radius: 8px; padding: 2px 10px; font: 700 22px var(--head); color: var(--navy); }
+.cp-op { font: 700 24px var(--head); color: var(--orange); }
+.cp-res { font: 700 26px var(--head); color: var(--orange); }
+.cp-res.cp-grande { font-size: 32px; }
+.cp-label { font: 700 20px var(--body); color: var(--navy); }
+.cp-interesse { display: inline-flex; gap: 3px; margin-left: auto; }
+.cp-peao { width: 14px; height: 24px; background: var(--navy); border-radius: 7px 7px 3px 3px; position: relative; }
+.cp-peao::before { content: ""; position: absolute; left: 1px; top: -10px; width: 12px; height: 12px; border-radius: 50%; background: inherit; }
+.cp-peao.vazio { background: var(--line); }
+.cp-ctr { grid-area: ctr; display: grid; gap: 6px; }
+.cp-seg { display: flex; flex-wrap: wrap; align-items: center; gap: 4px 6px; }
+.cp-seg > span { font-weight: 700; color: var(--navy); min-width: 150px; font-size: 16px; }
+.cp-seg button { font: inherit; font-size: 15px; border: 1px solid var(--line); background: #fff; border-radius: 99px; padding: 3px 10px; cursor: pointer; }
+.cp-seg button.sel { background: var(--navy); color: #fff; border-color: var(--navy); }
+.calc .rng { grid-template-columns: 260px 1fr 110px; }
+.calc .cp-s1, .calc .cp-s2, .calc .cp-s3, .calc .cp-s4 { transition: opacity .5s var(--ease); }
+.calc:not(.cp-ve1) .cp-s1, .calc:not(.cp-ve2) .cp-s2, .calc:not(.cp-ve3) .cp-s3, .calc:not(.cp-ve4) .cp-s4 { opacity: .1; pointer-events: none; }
+@media (max-width: 900px) { .calc { grid-template-columns: 1fr; grid-template-areas: "im" "conta" "ctr"; } .cp-imoveis { grid-template-columns: 1fr; } .cp-pill { font-size: 17px; } .cp-res { font-size: 20px; } .cp-res.cp-grande { font-size: 24px; } }
+/* tighter bars under the board when there are many buttons (a3-frio) */
+#a3-frio .b3d-barra .wg-read { font-size: 16px; } #a3-frio .b3d-barra .wg-read b { font-size: 18px; }
+#a3-frio .b3d-barra .wg-btns .btn { font-size: 14px; padding: 4px 10px; }
+#a3-frio .b3d-barra { gap: 2px 14px; }
+.an-foto svg { max-height: 19vh; width: 100%; }
+.anuncio { font-size: 16px; } .an-parte { margin-top: 4px; padding-top: 2px; padding-bottom: 2px; }
+.an-titulo { font-size: 22px; } .an-preco { font-size: 25px; }
+.cp-adj { display: grid; grid-template-columns: 1fr 1fr; gap: 6px 16px; }
+.cp-seg > span { min-width: 0; flex-basis: 100%; font-size: 15px; }
+.cp-linha { padding: 8px 12px; } .cp-linha small { font-size: 14px; }
+.calc .rng { margin: 2px 0; }
+@media (max-width: 900px) { .cp-adj { grid-template-columns: 1fr; } }
+.calc { grid-template-areas: "im conta" "mk ctr"; }
+.cp-mk { grid-area: mk; display: grid; gap: 4px; }
+.cp-mk .rng { grid-template-columns: 1fr auto; gap: 0 8px; margin: 0; }
+.cp-mk .rng span { grid-column: 1 / -1; font-size: 15px; }
+.cp-mk .rng output { font-size: 18px; }
+@media (max-width: 900px) {
+  .calc { grid-template-areas: "im" "conta" "mk" "ctr"; }
+  #a3-clima .mn-svg .mn-nome { font-size: 30px; } #a3-clima .mn-svg .mn-s { font-size: 24px; } #a3-clima .mn-svg .mn-grande { font-size: 34px; }
+}
