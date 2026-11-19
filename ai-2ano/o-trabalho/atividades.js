@@ -1182,5 +1182,144 @@ window.ATIVIDADES = {
     "porque": "O que fez a diferença?"
    }
   ]
+ },
+ "ci-oficina": {
+  "disciplina": "AI 11.º",
+  "titulo": "Oficina ou fábrica?",
+  "passos": [
+   {
+    "tipo": "classificar",
+    "titulo": "Oficina ou fábrica?",
+    "intro": "Para cada frase, escolhe: oficina (o artesão) ou fábrica (o capitalista e os operários).",
+    "categorias": [
+     "Oficina",
+     "Fábrica"
+    ],
+    "itens": [
+     {
+      "t": "O dono trabalha com as suas próprias ferramentas.",
+      "c": 0,
+      "f": "Oficina: o artesão põe as ferramentas e o trabalho."
+     },
+     {
+      "t": "Quem investe o dinheiro não é quem trabalha nas máquinas.",
+      "c": 1,
+      "f": "Fábrica: empresa capitalista."
+     },
+     {
+      "t": "Centenas de operários trabalham no mesmo edifício.",
+      "c": 1,
+      "f": "Fábrica: concentração da mão de obra."
+     },
+     {
+      "t": "Uma pessoa faz o produto do princípio ao fim.",
+      "c": 0,
+      "f": "Oficina: o artesão domina todo o trabalho."
+     },
+     {
+      "t": "O horário é marcado pelo sino e um capataz vigia o ritmo.",
+      "c": 1,
+      "f": "Fábrica: disciplina laboral."
+     },
+     {
+      "t": "Funciona dia e noite, por turnos.",
+      "c": 1,
+      "f": "Fábrica: laboração contínua, com luz artificial."
+     },
+     {
+      "t": "Quem trabalha é dono do que produz.",
+      "c": 0,
+      "f": "Oficina: o produto é do artesão."
+     },
+     {
+      "t": "Um edifício construído de propósito, com casa da máquina e chaminé.",
+      "c": 1,
+      "f": "Fábrica: edifício especializado, com tipologia própria."
+     }
+    ]
+   }
+  ]
+ },
+ "ci-ia": {
+  "disciplina": "AI 11.º",
+  "titulo": "A IA generativa e o trabalho especializado",
+  "passos": [
+   {
+    "tipo": "opiniao",
+    "p": "Até que ponto a inteligência artificial generativa pode desvalorizar o trabalho intelectual especializado?",
+    "o": [
+     "Muito",
+     "Um pouco",
+     "Quase nada",
+     "Depende da profissão"
+    ],
+    "porque": "Porquê? Dá o exemplo de uma profissão."
+   },
+   {
+    "tipo": "escrita",
+    "titulo": "Na tua futura profissão",
+    "perguntas": [
+     "Uma tarefa que a IA poderia fazer por ti.",
+     "Uma tarefa que continuaria a ser tua. Porquê?"
+    ]
+   }
+  ]
+ },
+ "ci-cascata": {
+  "disciplina": "AI 11.º",
+  "titulo": "Fase depressiva ou fase expansiva?",
+  "passos": [
+   {
+    "tipo": "classificar",
+    "titulo": "Em que fase estamos?",
+    "intro": "Para cada acontecimento, escolhe: fase depressiva ou fase expansiva.",
+    "categorias": [
+     "Fase depressiva",
+     "Fase expansiva"
+    ],
+    "itens": [
+     {
+      "t": "As fábricas despedem operários.",
+      "c": 0,
+      "f": "Desemprego: fase depressiva."
+     },
+     {
+      "t": "Uma nova invenção cria um mercado novo.",
+      "c": 1,
+      "f": "Uma invenção pode iniciar a fase expansiva."
+     },
+     {
+      "t": "Os armazéns enchem-se de mercadorias por vender.",
+      "c": 0,
+      "f": "Superprodução: o início da crise."
+     },
+     {
+      "t": "Os salários e as horas de trabalho são cortados.",
+      "c": 0,
+      "f": "Subemprego: fase depressiva."
+     },
+     {
+      "t": "A procura aumenta e os lucros sobem.",
+      "c": 1,
+      "f": "Fase expansiva."
+     },
+     {
+      "t": "As minas vendem menos e despedem.",
+      "c": 0,
+      "f": "A crise passa a outros setores: cascata."
+     },
+     {
+      "t": "As empresas contratam e produzem mais.",
+      "c": 1,
+      "f": "Fase expansiva."
+     },
+     {
+      "t": "Os preços descem e há falências.",
+      "c": 0,
+      "f": "Fase depressiva."
+     }
+    ]
+   }
+  ]
  }
 };

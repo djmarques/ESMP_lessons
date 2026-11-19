@@ -1,11 +1,11 @@
 # Área de Integração 11.º · O trabalho
 
-Site interativo do tema-problema 6.1, para projetar na sala e para os alunos estudarem em casa. Tem 157 slides em 9 lições, pela ordem em que são dadas, mais uma lição extra:
+Site interativo do tema-problema 6.1, para projetar na sala e para os alunos estudarem em casa. Tem 176 slides em 9 lições, pela ordem em que são dadas, mais uma lição extra:
 
 1. O que é trabalhar? (física, economia, filosofia, Organização Internacional do Trabalho)
 2. Do ócio ao dever (Aristóteles, São Bento, Lutero, Calvino, Weber)
 3. Labor, obra e ação (Hannah Arendt)
-4. História do trabalho I e II (cenas animadas: da recoleção ao comércio triangular; da manufatura aos sindicatos)
+4. História do trabalho I e II (cenas animadas: da recoleção ao comércio triangular; da manufatura aos sindicatos; a civilização industrial: energia, fábricas, crises)
 5. Organizar o trabalho I e II (Smith, Taylor, Ford, Toyota; automação, globalização, teletrabalho, plataformas)
 6. Direito do trabalho (Código do Trabalho, contratos, Constituição)
 7. Emprego e desemprego (setores de atividade, precariedade, taxa de desemprego, consequências, medidas)
@@ -79,3 +79,17 @@ A versão anterior destas lições (com a galeria de dez quadros) está em `arch
 Os slides «Porque é tão difícil o primeiro emprego?», «O trabalho dá mais do que um salário» e «Idadismo» também têm números do Instituto Nacional de Estatística (5,5 %, 19,9 %, 36,8 %, 6 em cada 10): atualiza-os quando mudarem.
 
 Os dados do desemprego (slides «A taxa de desemprego» e «Quantos estão sem trabalho?») são do Instituto Nacional de Estatística, 3.º trimestre de 2026. Quando sair o trimestre seguinte, muda os valores no `index.html`: procura por `5,5 %`, `19,9 %` e `value="316.8"` (o valor inicial da barra deslizante, com ponto).
+
+## Lição 4b: a civilização industrial (novembro de 2026)
+
+Bloco novo de 19 slides, entre a revisão da história do trabalho e «5 · Organizar o trabalho I», a partir do documento «Civilização industrial» (economia e sociedade; transformações económicas; novas fontes de energia; das oficinas às fábricas; as crises do capitalismo), mais as consequências na cidade (o rio, o ar, a mariposa) e a luta pelos direitos. Três a quatro aulas.
+
+| Ficheiro | O que tem |
+| --- | --- |
+| `industria3d.js` | Cinco animações 3D (comboio a vapor, motor de quatro tempos, turbina e dínamo, fiação de algodão dia e noite, cidade industrial). Um só desenhador 3D para todas; cada animação é uma tabela de passos, por isso a seta para trás funciona. Precisa de `assets/vendor/three.min.js` (three.js 160, guardado no site para funcionar sem internet) |
+| `civind.js` | As peças 2D: a calculadora da força do vapor (F = p × A), os três ciclos económicos e o modelo animado da cascata da crise (equações diferenciais resolvidas no navegador) |
+
+- As legendas das animações estão no `index.html` (um `<p>` por passo, dentro de `.i3d-leg`); os textos das etiquetas sobre a imagem estão no `industria3d.js`, procurando por `S.label(`.
+- Som: o botão do altifalante, no canto das animações, liga e desliga o som de todo o site (o mesmo dos jogos).
+- Atividades no telemóvel: `ci-oficina` (oficina ou fábrica), `ci-ia` (debate sobre a inteligência artificial generativa) e `ci-cascata` (fase depressiva ou expansiva), no `atividades.js`.
+- Sem WebGL (computadores muito antigos), as animações não aparecem, mas as legendas contam a história.
