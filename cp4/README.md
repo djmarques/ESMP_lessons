@@ -18,6 +18,8 @@ As ilustrações estão em `assets/`.
 | `style.css` | Aspeto (cores e tipos de letra da apresentação original) |
 | `app.js` | Comportamento: navegação, passos, questionários, temporizadores, códigos QR |
 | `notes.js` | Notas do formador, uma por slide |
+| `cerebro3d.js`, `cerebro3d.css` | Os três slides 3D do bloco DR1.3: o trajeto da barra de Gage, o cérebro interativo (lobos, tálamo, corpo caloso) e a lobotomia. Um só modelo de cérebro, feito por código |
+| `assets/vendor/three.min.js` | three.js (versão 160, licença MIT), a biblioteca que desenha o 3D. Fica no repositório para funcionar sem internet |
 | `aluno.html` e afins | Página do formando no telemóvel (ver `LEIA-ME-telemovel.md`) |
 
 ## Publicar no GitHub Pages
@@ -112,3 +114,11 @@ Os exemplos completos estão em `index.html`.
 ## Cenas animadas (blocos DR1.5 e DR2.1, e a «Teoria do corpo»)
 
 Os slides com a classe `cena` têm um desenho SVG em que «eu» sou a figura laranja e «o outro» é a figura azul. `data-step` faz aparecer elementos; para mover coisas num clique, o `app.js` acrescenta ao slide as classes `ge1`, `ge2`… e as regras de cada cena estão no fim do `style.css`. `data-steps` no `<section>` indica quantos cliques tem a cena.
+
+## Slides 3D (bloco DR1.3)
+
+`#s-gage-3d` e `#s-lobotomia-3d` são animações por passos: cada clique (→) é um momento, e a legenda em baixo conta-o. Para mudar uma legenda, edita o `<p data-step="n">` dentro de `.legendas` no `index.html`. O que a câmara mostra em cada passo está na tabela `CAMERA` de cada cena, em `cerebro3d.js`.
+
+`#s-cerebro-3d` é interativo: arrasta para rodar, roda do rato para aproximar, clica num lobo. Os textos de cada lobo estão em `INFO`, em `cerebro3d.js`.
+
+Se o navegador não tiver 3D (WebGL), aparece uma mensagem e as legendas continuam a contar a história. Experimenta uma vez no computador da sala: a animação foi testada num navegador simulado.

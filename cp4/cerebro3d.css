@@ -1,0 +1,80 @@
+/* =====================================================================
+   cerebro3d.css — styles for the brain slides of block DR1.3
+   (3D stage, labels and captions over the canvas, the brain explorer's
+   side panel, the neurons-and-glia diagram). Uses the tokens of style.css.
+   ===================================================================== */
+
+/* ---------- 3D stage ------------------------------------------------- */
+.palco {
+  position: relative; overflow: hidden; border-radius: 12px;
+  height: min(64vh, 600px); min-height: 340px;
+  background: radial-gradient(ellipse at 50% 42%, #2b3945, var(--navy) 78%);
+  color: var(--cream);
+}
+.palco canvas { display: block; width: 100%; height: 100%; touch-action: none; cursor: grab; }
+.palco canvas:active { cursor: grabbing; }
+.palco.sem-3d::after {
+  content: "A animação 3D não está disponível neste navegador: as legendas contam a história.";
+  position: absolute; inset: 38% 10% auto; text-align: center; color: var(--peach);
+}
+
+/* Labels: HTML positioned over a 3D point by cerebro3d.js */
+.etiqueta { position: absolute; left: 0; top: 0; opacity: 0; transition: opacity .5s; pointer-events: none; white-space: nowrap; will-change: transform; }
+.etiqueta.visivel { opacity: 1; }
+.nota-et { padding: 1px 9px; border-radius: 99px; background: rgba(18, 25, 31, .72); font-size: 14px; color: var(--peach); }
+.pais-et { font: 700 13px var(--body); letter-spacing: .12em; text-transform: uppercase; color: #fff; text-shadow: 0 1px 6px #000, 0 0 2px #000; }
+.comum-et { padding: 3px 12px; border-radius: 99px; background: var(--accent); color: var(--navy); font: 700 16px var(--head); }
+
+/* Captions inside the stage: only the latest revealed one shows */
+.legendas {
+  position: absolute; left: 18px; bottom: 18px; z-index: 2; max-width: min(620px, calc(100% - 36px));
+  padding: 12px 16px; border-left: 4px solid var(--orange); border-radius: 4px; background: rgba(18, 25, 31, .86);
+}
+.legendas { display: grid; align-items: end; }
+.legendas > p { grid-area: 1 / 1; margin: 0; font-size: 19px; line-height: 1.35; color: var(--cream); }   /* all captions share one cell: the box fits the longest */
+.legendas > p:has(~ p.on) { opacity: 0; visibility: hidden; }
+.legendas time { display: block; margin-bottom: 3px; font: 700 13px ui-monospace, Menlo, Consolas, monospace; letter-spacing: .14em; text-transform: uppercase; color: var(--accent); }
+.legendas b { color: #fff; }
+
+/* ---------- Brain explorer: canvas + side panel ---------------------- */
+.cerebro-split { display: grid; grid-template-columns: 1fr 300px; gap: 22px; align-items: stretch; }
+.cerebro-lado { display: flex; flex-direction: column; gap: 12px; }
+.lobos { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+.lobos button, .cerebro-ver button {
+  display: flex; align-items: center; gap: 8px; text-align: left; font-size: 16px;
+  background: var(--white); color: var(--navy); border: 1px solid var(--line); border-radius: 8px; padding: 7px 10px;
+}
+.lobos button i { width: 14px; height: 14px; border-radius: 50%; flex: none; background: var(--c); }
+.lobos button[aria-pressed="true"], .cerebro-ver button[aria-pressed="true"] { background: var(--navy); color: #fff; border-color: var(--navy); }
+.cerebro-ver { display: flex; gap: 8px; flex-wrap: wrap; }
+.cerebro-info { flex: 1; }
+.cerebro-info p { margin: 0; font-size: 18px; }
+.dica { font-size: 14px; color: var(--muted); margin: 0; }
+
+/* ---------- Neurons and glia diagram --------------------------------- */
+.neuro { width: 100%; height: auto; display: block; }
+.neuro .soft { opacity: .25; transition: opacity .5s var(--ease); }
+.neuro text { font-family: var(--body); font-size: 19px; fill: var(--navy); }
+.ligacoes { grid-template-columns: 1.45fr 1fr; gap: 28px; align-items: center; }
+.ligacoes-cartoes { gap: 10px; }
+.ligacoes-cartoes .card { padding: 14px 18px; font-size: 17px; line-height: 1.35; }
+.neuro text.b { font-weight: 700; }
+/* each part lights up in its step (class geN on the slide, set by app.js) */
+.ge1 .neuro .p-neuro, .ge2 .neuro .p-glia, .ge3 .neuro .p-branca { opacity: 1; }
+.neuro .sinal { offset-path: path("M150 190 C 230 190, 260 190, 330 190 L 610 190"); offset-rotate: 0deg; opacity: 0; }
+.ge1 .neuro .sinal { animation: sinal 2.4s linear infinite; }
+@keyframes sinal { 0% { offset-distance: 0%; opacity: 0; } 8% { opacity: 1; } 92% { opacity: 1; } 100% { offset-distance: 100%; opacity: 0; } }
+
+@media (max-width: 860px) {
+  .cerebro-split, .ligacoes { grid-template-columns: 1fr; }
+  .palco { height: 58vh; min-height: 300px; }
+  .legendas { left: 10px; bottom: 10px; max-width: calc(100% - 20px); }
+  .legendas > p { font-size: 16px; }
+  .pais-et { font-size: 11px; } .nota-et { font-size: 12px; }
+}
+@media (prefers-reduced-motion: reduce) { .ge1 .neuro .sinal { animation: none; opacity: 1; offset-distance: 60%; } }
+
+/* ---------- Program link slide (s-gage-ponte) ------------------------ */
+.ponte .label { display: flex; align-items: center; gap: 8px; }
+.num.sm-num { width: 26px; height: 26px; font-size: 15px; }
+.ponte .card.dark { align-self: stretch; }

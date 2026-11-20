@@ -182,6 +182,97 @@ window.ATIVIDADES = {
    "Que dica recebeste do teu colega na entrevista?"
   ]
  },
+ "cerebro": {
+  "disciplina": "CP 4",
+  "titulo": "O cérebro de Gage",
+  "jogo": [
+   {
+    "p": "Que lobo fica atrás da testa e ajuda a planear e a travar impulsos?",
+    "o": [
+     "o lobo frontal",
+     "o lobo occipital",
+     "o lobo temporal"
+    ],
+    "c": 0,
+    "f": "Na parte da frente do lobo frontal fica o córtex pré-frontal."
+   },
+   {
+    "p": "O lobo occipital, na nuca, trata sobretudo…",
+    "o": [
+     "da audição",
+     "da visão",
+     "do equilíbrio"
+    ],
+    "c": 1,
+    "f": "A audição é no lobo temporal; o equilíbrio, sobretudo no cerebelo."
+   },
+   {
+    "p": "O que fazem as células da glia?",
+    "o": [
+     "pensam no lugar dos neurónios",
+     "transportam o sangue",
+     "alimentam, protegem e isolam os neurónios"
+    ],
+    "c": 2,
+    "f": "Há mais ou menos tantas como neurónios."
+   },
+   {
+    "p": "A substância branca é feita de…",
+    "o": [
+     "axónios cobertos de mielina",
+     "corpos dos neurónios",
+     "vasos sanguíneos"
+    ],
+    "c": 0,
+    "f": "São as «estradas» entre regiões do cérebro."
+   },
+   {
+    "p": "O tálamo funciona como…",
+    "o": [
+     "o centro da memória",
+     "uma estação de retransmissão para o córtex",
+     "o centro da visão"
+    ],
+    "c": 1,
+    "f": "Recebe a informação dos sentidos (menos o olfato) e envia-a para o córtex."
+   },
+   {
+    "p": "A leucotomia e a lobotomia cortavam as ligações entre…",
+    "o": [
+     "o cerebelo e a medula",
+     "os dois olhos",
+     "o córtex pré-frontal e o tálamo"
+    ],
+    "c": 2,
+    "f": "Primeiro com álcool, depois com o leucótomo."
+   },
+   {
+    "p": "No dilema da ponte, doentes com lesão no pré-frontal ventromedial…",
+    "o": [
+     "aceitaram mais vezes empurrar o homem",
+     "recusaram sempre",
+     "não conseguiram responder"
+    ],
+    "c": 0,
+    "f": "Decidiram mais como Mill (Koenigs e colegas, 2007)."
+   },
+   {
+    "p": "Para Sapolsky, o córtex pré-frontal…",
+    "o": [
+     "já nasce pronto",
+     "é igual em todas as culturas",
+     "é o último a amadurecer e o mais moldado pela experiência"
+    ],
+    "c": 2,
+    "f": "Por isso as regras sociais se aprendem no contexto em que vivemos."
+   }
+  ],
+  "escrita": [
+   "No problema do elétrico que mais te custou, o que decidiste? Pensaste como Kant ou como Mill? Porquê?",
+   "Depois do acidente, Gage continuou a ser a mesma pessoa? Justifica em duas ou três frases.",
+   "Onde aprendeste as regras de conduta que usas no trabalho (família, escola, colegas, chefias)? Dá um exemplo."
+  ]
+ },
  "gage": {
   "disciplina": "CP 4",
   "titulo": "Gage, Ricoeur e Levinas",
