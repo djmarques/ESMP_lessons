@@ -18,7 +18,8 @@ As ilustrações estão em `assets/`.
 | `style.css` | Aspeto (cores e tipos de letra da apresentação original) |
 | `app.js` | Comportamento: navegação, passos, questionários, temporizadores, códigos QR |
 | `notes.js` | Notas do formador, uma por slide |
-| `cerebro3d.js`, `cerebro3d.css` | Os três slides 3D do bloco DR1.3: o trajeto da barra de Gage, o cérebro interativo (lobos, tálamo, corpo caloso) e a lobotomia. Um só modelo de cérebro, feito por código |
+| `cerebro3d.js`, `cerebro3d.css` | Os três slides 3D do bloco DR1.3: o trajeto da barra de Gage, o cérebro interativo e a lobotomia transorbital |
+| `cerebro3d-dados.js` | A anatomia real usada pelos slides 3D (gerada, não editar à mão): córtex e estruturas profundas do FreeSurfer fsaverage; crânio, mandíbula e olhos do BodyParts3D; feixes de substância branca do atlas HCP1065 |
 | `assets/vendor/three.min.js` | three.js (versão 160, licença MIT), a biblioteca que desenha o 3D. Fica no repositório para funcionar sem internet |
 | `aluno.html` e afins | Página do formando no telemóvel (ver `LEIA-ME-telemovel.md`) |
 
@@ -117,8 +118,18 @@ Os slides com a classe `cena` têm um desenho SVG em que «eu» sou a figura lar
 
 ## Slides 3D (bloco DR1.3)
 
-`#s-gage-3d` e `#s-lobotomia-3d` são animações por passos: cada clique (→) é um momento, e a legenda em baixo conta-o. Para mudar uma legenda, edita o `<p data-step="n">` dentro de `.legendas` no `index.html`. O que a câmara mostra em cada passo está na tabela `CAMERA` de cada cena, em `cerebro3d.js`.
+Os três slides usam anatomia real, não desenhada à mão:
 
-`#s-cerebro-3d` é interativo: arrasta para rodar, roda do rato para aproximar, clica num lobo. Os textos de cada lobo estão em `INFO`, em `cerebro3d.js`.
+- **Cérebro**: FreeSurfer *fsaverage* (média de 40 ressonâncias magnéticas): córtex com os lobos (atlas de Desikan-Killiany), o córtex pré-frontal (áreas de Brodmann, atlas PALS-B12), tálamo, núcleos da base, hipocampo, amígdala, corpo caloso, ventrículos, cerebelo e tronco cerebral.
+- **Crânio, mandíbula e olhos**: BodyParts3D, (c) The Database Center for Life Science, licenciado em CC Attribution-Share Alike 2.1 Japan. Ajustado à volta do cérebro fsaverage.
+- **Feixes de substância branca**: atlas de tractografia HCP1065 (Fang-Cheng Yeh, 2022, *Nature Communications* 13, 4933), CC BY-SA 4.0. Os dados foram fornecidos em parte pelo Human Connectome Project, WU-Minn Consortium (investigadores principais: David Van Essen e Kamil Ugurbil; 1U54MH091657), financiado pelos 16 institutos e centros dos NIH que apoiam o NIH Blueprint for Neuroscience Research, e pelo McDonnell Center for Systems Neuroscience da Washington University.
+- **Trajeto da barra de Gage**: ajustado à reconstrução de John Van Horn e colegas (*PLoS ONE*, 2012); no modelo, a barra atravessa 3,9% do córtex (Van Horn: 3,97%).
+- **Lobotomia transorbital**: a técnica descrita por Walter Freeman, citada por Elliot Valenstein (*Great and Desperate Cures*, 1986).
 
-Se o navegador não tiver 3D (WebGL), aparece uma mensagem e as legendas continuam a contar a história. Experimenta uma vez no computador da sala: a animação foi testada num navegador simulado.
+Por causa das licenças CC BY-SA, o ficheiro `cerebro3d-dados.js` fica também sob CC BY-SA.
+
+`#s-gage-3d` e `#s-lobotomia-3d` são animações por passos: cada clique (→) é um momento, e a legenda em baixo conta-o. Para mudar uma legenda, edita o `<p data-step="n">` dentro de `.legendas` no `index.html`. O que a câmara mostra em cada passo está na tabela `CAMERA` de cada cena, em `cerebro3d.js` (em milímetros).
+
+`#s-cerebro-3d` é interativo: arrasta para rodar, roda do rato para aproximar, clica numa parte. Os textos de cada parte estão em `INFO`, em `cerebro3d.js`.
+
+O ficheiro de anatomia tem cerca de 3,7 MB: a primeira abertura do site demora um pouco mais. Se o navegador não tiver 3D (WebGL), aparece uma mensagem e as legendas continuam a contar a história.

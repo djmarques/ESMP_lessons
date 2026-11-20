@@ -662,7 +662,7 @@
   <div class="wrap">
     <p class="kicker">Um caso real</p>
     <h2>Phineas Gage</h2>
-    <p class="sub">o dilema do elétrico · o acidente · o cérebro em 3D · onde estão as regras? · «já não era o Gage» · a lobotomia</p>
+    <p class="sub">o dilema do elétrico · o acidente · o cérebro em 3D · onde estão as regras? · «já não era o Gage» · a lobotomia transorbital</p>
   </div>
 </section>
 
@@ -731,25 +731,25 @@
 </section>
 
 <section class="slide" id="s-gage-3d" data-lesson="DR1.3 · Phineas Gage e o outro" data-title="Animação 3D: o trajeto da barra">
-  <p class="kicker">Phineas Gage · animação 3D</p>
+  <p class="kicker">Phineas Gage · reconstrução 3D</p>
   <h2>O trajeto da barra</h2>
-  <div class="palco" role="img" aria-label="Animação 3D: a barra de ferro atravessa a cabeça de Phineas Gage e destrói parte do lobo frontal esquerdo">
+  <div class="palco" role="img" aria-label="Reconstrução 3D com um crânio e um cérebro reais: a barra de ferro entra por baixo do arco zigomático esquerdo, passa atrás do olho esquerdo e sai no topo do crânio, destruindo parte do lobo frontal esquerdo e as fibras que o atravessam">
     <div class="legendas">
-      <p><time>Vermont · 13 de setembro de 1848</time>Phineas Gage, 25 anos, calca pólvora dentro de um buraco na rocha com uma barra de ferro.</p>
-      <p data-step="1"><time>A explosão</time>Uma faísca acende a pólvora. A barra (1,09 m, 6 kg) é disparada para cima.</p>
-      <p data-step="2"><time>O trajeto</time>Entra por baixo da maçã do rosto esquerda, passa por trás do olho e sai pelo topo da cabeça. Cai a cerca de 25 metros.</p>
-      <p data-step="3"><time>O que destruiu</time>Sobretudo o <b>lobo frontal esquerdo</b>, em especial o córtex pré-frontal.</p>
-      <p data-step="4"><time>As «estradas» cortadas</time>Cerca de 4% do córtex e 11% da <b>substância branca</b>: as ligações entre as regiões do cérebro.</p>
+      <p><time>Vermont · 13 de setembro de 1848</time>Phineas Gage, 25 anos, calca pólvora dentro de um buraco na rocha com uma barra de ferro de 109 cm e 6 kg.</p>
+      <p data-step="1"><time>A explosão</time>Uma faísca acende a pólvora. A barra é disparada para cima, com a ponta afiada à frente, e atravessa-lhe a cabeça.</p>
+      <p data-step="2"><time>O trajeto</time>Entra por baixo do <b>arco zigomático</b> esquerdo, passa por trás do olho esquerdo, fura a base do crânio e sai no topo, perto da linha do meio. Cai a cerca de 25 metros.</p>
+      <p data-step="3"><time>O que destruiu</time>Cerca de <b>4% do córtex</b>, todo do lado esquerdo: o córtex <b>pré-frontal</b> por cima da órbita (orbitofrontal) e a parte da frente do lobo frontal. O lado direito ficou intacto.</p>
+      <p data-step="4"><time>As «estradas» cortadas</time>Cerca de <b>11% da substância branca</b>. A vermelho, as fibras que passavam no caminho da barra: ligavam o pré-frontal ao resto do cérebro, incluindo o outro hemisfério.</p>
     </div>
   </div>
-  <p class="source">John Harlow, relatos de 1848 e 1868; John Van Horn e colegas, «Mapping connectivity damage in the case of Phineas Gage», <i>PLoS ONE</i> (2012). Modelo simplificado, não à escala exata.</p>
+  <p class="source">Crânio: BodyParts3D (DBCLS, CC BY-SA 2.1 JP); cérebro: FreeSurfer fsaverage; fibras: atlas HCP1065 (Fang-Cheng Yeh, 2022). Trajeto ajustado à reconstrução de John Van Horn e colegas, <i>PLoS ONE</i> (2012); John Harlow (1848, 1868).</p>
 </section>
 
 <section class="slide" id="s-cerebro-3d" data-lesson="DR1.3 · Phineas Gage e o outro" data-title="Explora: os quatro lobos em 3D">
   <p class="kicker">Explora · o cérebro em 3D</p>
   <h2>Os quatro lobos do cérebro</h2>
   <div class="cerebro-split">
-    <div class="palco" role="img" aria-label="Modelo 3D do cérebro que se pode rodar, com os lobos frontal, parietal, temporal e occipital, o cerebelo e o tronco cerebral"></div>
+    <div class="palco" role="img" aria-label="Modelo 3D real de um crânio e de um cérebro que se pode rodar: lobos frontal, parietal, temporal e occipital, córtex pré-frontal, cerebelo, tronco cerebral, tálamo e outras estruturas profundas"></div>
     <div class="cerebro-lado">
       <div class="lobos">
         <button data-lobo="frontal" style="--c:#E59A63"><i></i>Frontal</button>
@@ -758,13 +758,15 @@
         <button data-lobo="occipital" style="--c:#D9B26F"><i></i>Occipital</button>
         <button data-lobo="cerebelo" style="--c:#9C7E9A"><i></i>Cerebelo</button>
         <button data-lobo="tronco" style="--c:#A7B0B8"><i></i>Tronco cerebral</button>
-        <button data-lobo="prefrontal" style="--c:#B8501C;grid-column:1 / -1"><i></i>Córtex pré-frontal</button>
+        <button data-lobo="prefrontal" style="--c:#B8501C"><i></i>Pré-frontal</button>
+        <button data-lobo="talamo" style="--c:#F2C14E"><i></i>Tálamo</button>
       </div>
-      <div class="cerebro-ver"><button data-ver="dentro" aria-pressed="false">Ver por dentro</button><button data-ver="separar" aria-pressed="false">Separar os hemisférios</button></div>
+      <div class="cerebro-ver"><button data-ver="cranio">Crânio</button><button data-ver="dentro" aria-pressed="false">Ver por dentro</button><button data-ver="fibras" aria-pressed="false">Fibras tálamo ↔ pré-frontal</button><button data-ver="separar" aria-pressed="false">Separar os hemisférios</button></div>
       <div class="card cerebro-info"><h3></h3><p></p></div>
-      <p class="dica">Arrasta para rodar · roda do rato para aproximar · clica num lobo</p>
+      <p class="dica">Arrasta para rodar · roda do rato para aproximar · clica numa parte</p>
     </div>
   </div>
+  <p class="source">Cérebro: FreeSurfer fsaverage (média de 40 ressonâncias magnéticas); crânio: BodyParts3D (DBCLS, CC BY-SA 2.1 JP); fibras: atlas de tractografia HCP1065 (Fang-Cheng Yeh, 2022).</p>
 </section>
 
 <section class="slide" id="s-ligacoes" data-lesson="DR1.3 · Phineas Gage e o outro" data-title="Como está ligado o cérebro? Neurónios e glia">
@@ -908,20 +910,21 @@
   <p class="source">Michael Koenigs, Liane Young, Ralph Adolphs, Daniel Tranel, Fiery Cushman, Marc Hauser e António Damásio, «Damage to the prefrontal cortex increases utilitarian moral judgements», <i>Nature</i> (2007).</p>
 </section>
 
-<section class="slide" id="s-lobotomia-3d" data-lesson="DR1.3 · Phineas Gage e o outro" data-title="Animação 3D: como se fazia a lobotomia">
-  <p class="kicker">Lobotomia · animação 3D</p>
+<section class="slide" id="s-lobotomia-3d" data-lesson="DR1.3 · Phineas Gage e o outro" data-title="Animação 3D: a lobotomia transorbital">
+  <p class="kicker">Lobotomia transorbital · reconstrução 3D</p>
   <h2>Desligar o córtex pré-frontal do tálamo</h2>
-  <div class="palco" role="img" aria-label="Animação 3D: o tálamo envia sinais para todo o córtex; a leucotomia e a lobotomia cortam as fibras que ligam o córtex pré-frontal ao tálamo">
+  <div class="palco" role="img" aria-label="Reconstrução 3D com um crânio e um cérebro reais da lobotomia transorbital de Walter Freeman: um instrumento entra por cima de cada olho, fura o teto da órbita e corta as fibras que ligam o córtex pré-frontal ao tálamo">
     <div class="legendas">
-      <p><time>O tálamo</time>No centro do cérebro, o tálamo funciona como uma <b>estação de retransmissão</b>: recebe a informação dos sentidos (menos o olfato) e envia-a para o córtex.</p>
-      <p data-step="1"><time>Córtex pré-frontal ↔ tálamo</time>O córtex pré-frontal e o tálamo estão ligados por feixes de substância branca, nos dois sentidos.</p>
-      <p data-step="2"><time>1935 · Lisboa</time>Egas Moniz e Almeida Lima abrem dois furos no crânio e destroem substância branca do lobo frontal: primeiro com injeções de álcool, depois com o <b>leucótomo</b>, um instrumento que corta.</p>
-      <p data-step="3"><time>1936 · Estados Unidos</time>Walter Freeman e James Watts copiam e alteram o método e chamam-lhe <b>lobotomia</b>. Na versão «padrão», entram pelos lados do crânio e cortam as fibras entre o córtex pré-frontal e o tálamo.</p>
-      <p data-step="4"><time>1946 · lobotomia transorbital</time>Freeman passa a entrar pela órbita, por cima do olho, com um instrumento fino. O objetivo é o mesmo: cortar a ligação ao tálamo.</p>
-      <p data-step="5"><time>O resultado</time>O córtex pré-frontal fica desligado. Muitos doentes ficam calmos, mas <b>apáticos e sem iniciativa</b>.</p>
+      <p><time>1946 · Washington</time>O psiquiatra Walter Freeman cria a <b>lobotomia transorbital</b>, sem cirurgião nem bloco operatório. O doente é posto inconsciente com eletrochoques.</p>
+      <p data-step="1"><time>A entrada</time>Freeman levanta a pálpebra superior e encosta o instrumento (o <b>orbitoclasto</b>, um picador de aço graduado) por cima do olho, a cerca de 3 cm do meio da cara, paralelo ao nariz.</p>
+      <p data-step="2"><time>O teto da órbita</time>Com pancadas de martelo, fura o <b>teto da órbita</b>, uma lâmina fina de osso entre o olho e o lobo frontal, e empurra a ponta até 5 cm de profundidade.</p>
+      <p data-step="3"><time>O primeiro corte</time>Puxa o cabo para fora: a ponta varre para dentro e corta a <b>substância branca</b>. As fibras que ligam o tálamo ao pré-frontal ficam cortadas (a cinzento).</p>
+      <p data-step="4"><time>1948 · o corte frontal profundo</time>Volta a meio, empurra mais 2 cm (7 cm) e varre outra vez, para dentro e para fora. Corta mais fibras, mais fundo.</p>
+      <p data-step="5"><time>O outro lado</time>Repete tudo pelo outro olho. A operação inteira demora menos de dez minutos.</p>
+      <p data-step="6"><time>O resultado</time>O pré-frontal (a cinzento) fica desligado do tálamo. Muitos doentes ficam calmos, mas <b>apáticos, sem iniciativa, infantis</b>. Freeman chamou-lhe «infância induzida cirurgicamente».</p>
     </div>
   </div>
-  <p class="source">Encyclopaedia Britannica, «Lobotomy»; Bengt Jansson, «Controversial psychosurgery resulted in a Nobel Prize», nobelprize.org. Modelo simplificado.</p>
+  <p class="source">Elliot Valenstein, <i>Great and Desperate Cures</i> (1986); Walter Freeman, «Transorbital lobotomy», <i>American Journal of Psychiatry</i> (1949). Crânio: BodyParts3D; cérebro: FreeSurfer fsaverage; fibras: radiação talâmica anterior, atlas HCP1065 (Yeh, 2022). Ângulos de varrimento aproximados.</p>
 </section>
 
 <section class="slide" id="s-lobotomia" data-lesson="DR1.3 · Phineas Gage e o outro" data-title="De Gage à lobotomia">
@@ -1715,6 +1718,7 @@
 <script src="app.js"></script>
 <!-- 3D brain slides of block DR1.3 (three.js kept in the repository: works offline) -->
 <script src="assets/vendor/three.min.js"></script>
+<script src="cerebro3d-dados.js"></script>
 <script src="cerebro3d.js"></script>
 <!-- ferramentas comuns a todas as aulas: telemóvel em todos os questionários, respostas da turma, quadro, grafo, pergunta rápida (ver comum/LEIA-ME.md) -->
 <script src="../comum/partilhado.js"></script>
