@@ -448,49 +448,95 @@
 <div class="i3d-barra"><div class="i3d-read" hidden></div><div class="i3d-ctl"></div></div>
 <p class="source">Fontes: Britannica, «Energy conversion: developments of the Industrial Revolution»; Science Museum Group (Rocket, 1829). Animação original, simplificada.</p>
 </section>
-<section class="slide ci manim-slide" id="s-ci-vapor-fisica" data-lesson="4 · Civilização industrial" data-title="A física da máquina a vapor">
-<p class="kicker">1.1 · A física da máquina a vapor · experimenta</p><h2>Porque é que o vapor empurra com tanta força?</h2>
+<section class="slide ci manim-slide" id="s-ci-vapor-fisica" data-lesson="4 · Civilização industrial" data-title="A física da máquina a vapor" data-steps="4">
+<p class="kicker">1.1 · A física da máquina a vapor · uma equação de cada vez</p><h2>Porque é que o vapor empurra com tanta força?</h2>
 <div class="quadro civ-fis" data-civ="forca">
- <div class="cf-eqs">
-  <p class="cf-eq"><span class="v c1">p</span> = <span class="v c2">F</span> ÷ <span class="v c3">A</span></p>
-  <p class="cf-eq" data-step="1"><span class="v c2">F</span> = <span class="v c1">p</span> × <span class="v c3">A</span></p>
-  <p class="cf-eq" data-step="2"><span class="v c4">W</span> = <span class="v c2">F</span> × <span class="v c5">d</span></p>
-  <p class="cf-eq" data-step="3"><span class="v c6">P</span> = <span class="v c4">W</span> ÷ <span class="v c7">t</span></p>
-  <p class="cf-eq" data-step="4"><span class="v c8">η</span> = útil ÷ gasto</p>
+ <div class="cf-cadeia">
+  <span><span class="v c1">p</span> pressão</span><i data-step="1">→</i><span data-step="1"><span class="v c2">F</span> força</span><i data-step="2">→</i><span data-step="2"><span class="v c4">W</span> trabalho</span><i data-step="3">→</i><span data-step="3"><span class="v c6">P</span> potência</span><i data-step="4">→</i><span data-step="4"><span class="v c8">η</span> rendimento</span>
  </div>
- <div class="cf-det pilha">
-  <div class="cf-bloco">
-   <p><span class="v c1">p</span> <b>pressão</b>: a força em cada metro quadrado (em pascal, Pa)</p>
-   <p><span class="v c2">F</span> <b>força</b> com que o vapor empurra (em newton, N)</p>
-   <p><span class="v c3">A</span> <b>área</b> do pistão (em metros quadrados, m²)</p>
-   <p class="cf-sm">1 bar = 100&nbsp;000 Pa: mais ou menos a pressão do ar à nossa volta.</p>
-  </div>
-  <div class="cf-bloco" data-step="1">
-   <p>Mesma fórmula, ao contrário: quanto maior a pressão e o pistão, maior a força.</p>
-   <label class="rng"><span><span class="v c1">p</span> pressão do vapor</span><input type="range" name="p" min="1" max="4" step="0.1" value="3.4"><output data-out="p"></output></label>
-   <label class="rng"><span>diâmetro do pistão</span><input type="range" name="d" min="10" max="40" step="1" value="20"><output data-out="d"></output></label>
-   <p class="cf-res"><span class="v c3">A</span> = <b data-out="A"></b> &nbsp; <span class="v c2">F</span> = <b data-out="F"></b></p>
-   <p class="cf-res">É como levantar <b data-out="kg"></b>.</p>
-   <p class="cf-sm">Valores iniciais do Rocket de Stephenson (1829): cerca de 3,4 bar e cilindros de 20 cm.</p>
-  </div>
-  <div class="cf-bloco" data-step="2">
-   <p><span class="v c4">W</span> <b>trabalho</b> (em joule, J): o mesmo W = F × d da primeira aula!</p>
-   <p><span class="v c5">d</span> <b>distância</b> que o pistão percorre: 0,43 m no Rocket</p>
-   <p class="cf-res"><span class="v c4">W</span> = <b data-out="W"></b> em cada empurrão</p>
-  </div>
-  <div class="cf-bloco" data-step="3">
-   <p><span class="v c6">P</span> <b>potência</b> (em watt, W): trabalho feito em cada segundo</p>
-   <p><span class="v c7">t</span> <b>tempo</b> (em segundos)</p>
-   <p class="cf-res">Com 4 empurrões por segundo: <span class="v c6">P</span> = <b data-out="P"></b></p>
-  </div>
-  <div class="cf-bloco" data-step="4">
-   <p><span class="v c8">η</span> <b>rendimento</b>: que parte da energia do carvão vira trabalho útil</p>
-   <div class="cf-barras">
-    <span>Newcomen, 1712</span><i style="--w:2%"></i><b>0,5 a 1 %</b>
-    <span>Watt, c. 1780</span><i style="--w:6%"></i><b>2 a 3 %</b>
-    <span>Central elétrica atual</span><i style="--w:80%"></i><b>cerca de 40 %</b>
+ <div class="cf-corpo">
+  <div class="cf-esq">
+   <svg class="cf-pistao" viewBox="0 0 560 384" role="img" aria-label="Caldeira com vapor, cilindro e pistão; setas mostram a pressão, a força, a distância percorrida e a parte da energia do carvão que é aproveitada">
+    <defs><marker id="cf-ponta" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M0,0 L10,5 L0,10 Z" fill="context-stroke"/></marker></defs>
+    <rect x="20" y="50" width="170" height="190" rx="22" class="cf-caldeira"/>
+    <text x="105" y="40" text-anchor="middle" class="cf-rot">caldeira</text>
+    <rect x="190" y="143" width="32" height="24" class="cf-cano"/>
+    <rect x="222" y="82" width="78" height="146" class="cf-vapor-cil"/>
+    <rect x="220" y="80" width="262" height="150" rx="4" class="cf-cilindro"/>
+    <text x="350" y="252" text-anchor="middle" class="cf-rot cf-rot-cil">cilindro</text>
+    <g class="pz pz-p">
+     <path d="M105,145 L105,80" class="cf-seta c1"/><path d="M105,145 L105,212" class="cf-seta c1"/><path d="M105,145 L40,145" class="cf-seta c1"/><path d="M105,145 L170,145" class="cf-seta c1"/>
+     <path d="M105,145 L60,100" class="cf-seta c1"/><path d="M105,145 L150,190" class="cf-seta c1"/><path d="M105,145 L60,190" class="cf-seta c1"/><path d="M105,145 L150,100" class="cf-seta c1"/>
+     <path d="M240,115 L290,115" class="cf-seta c1"/><path d="M240,155 L290,155" class="cf-seta c1"/><path d="M240,195 L290,195" class="cf-seta c1"/>
+     <text x="105" y="275" text-anchor="middle" class="cf-letra c1">p</text>
+    </g>
+    <g class="pistao">
+     <rect x="324" y="148" width="210" height="14" class="cf-haste"/>
+     <rect x="300" y="82" width="24" height="146" class="cf-embolo"/>
+     <g class="pz pz-A"><ellipse class="pz-face" cx="300" cy="155" rx="12" ry="62"/><text x="300" y="164" text-anchor="middle" class="cf-letra-in">A</text></g>
+     <g class="pz pz-F"><path d="M335,60 L445,60" class="cf-seta grossa c2"/><text x="390" y="46" text-anchor="middle" class="cf-letra c2">F</text></g>
+    </g>
+    <g class="pz pz-d"><path d="M300,262 L380,262 M300,252 L300,272 M380,252 L380,272" class="cf-cota"/><text x="340" y="296" text-anchor="middle" class="cf-letra c5">d = 0,43 m</text></g>
+    <g class="pz pz-t"><circle cx="525" cy="262" r="22" class="cf-relogio"/><path d="M525,262 L525,246 M525,262 L537,266" class="cf-ponteiros"/><text x="495" y="270" text-anchor="end" class="cf-letra c7">t = 1 s</text></g>
+    <g class="pz pz-n">
+     <text x="20" y="328" class="cf-rot">energia do carvão: 100 %</text><rect x="20" y="336" width="520" height="14" rx="4" class="cf-total"/>
+     <rect x="20" y="358" width="16" height="14" rx="3" class="cf-util"/><text x="44" y="371" class="cf-rot c8t">útil: cerca de 3 %; o resto perde-se em calor</text>
+    </g>
+   </svg>
+   <div class="cf-ctl" data-step="1">
+    <label class="rng"><span><span class="v c1">p</span> pressão do vapor</span><input type="range" name="p" min="1" max="4" step="0.1" value="3.4"><output data-out="p"></output></label>
+    <label class="rng"><span><span class="v c3">A</span> diâmetro do pistão</span><input type="range" name="d" min="10" max="40" step="1" value="20"><output data-out="d"></output></label>
    </div>
-   <p class="cf-sm">Quase todo o calor se perdia: por isso a máquina precisava de tanto carvão.</p>
+  </div>
+  <div class="cf-det pilha">
+   <div class="cf-bloco">
+    <p class="cf-q">O que é a pressão?</p>
+    <p class="cf-pal">pressão = força ÷ área</p>
+    <p class="cf-eq"><span class="v c1">p</span> = <span class="v c2">F</span> ÷ <span class="v c3">A</span></p>
+    <p>É a força que cai em cada metro quadrado. Fechado na caldeira, o vapor empurra todas as paredes, e também o pistão.</p>
+    <p class="cf-num">Caldeira do Rocket (1829): <span class="v c1">p</span> ≈ 3,4 bar = 340&nbsp;000 Pa</p>
+    <p class="cf-sm">1 bar = 100&nbsp;000 pascal (Pa): mais ou menos a pressão do ar à nossa volta.</p>
+    <p class="cf-liga">Sabemos a pressão. Com que força é empurrado o pistão?</p>
+   </div>
+   <div class="cf-bloco" data-step="1">
+    <p class="cf-q">Com que força empurra o vapor?</p>
+    <p class="cf-pal">se pressão = força ÷ área, então força = pressão × área</p>
+    <p class="cf-eq"><span class="v c2">F</span> = <span class="v c1">p</span> × <span class="v c3">A</span></p>
+    <p class="cf-sm">O que estava a dividir passa para o outro lado a multiplicar. Mexe nas barras.</p>
+    <p class="cf-num"><span class="v c2">F</span> = <b data-out="pa"></b> × <b data-out="A"></b> = <b data-out="F"></b></p>
+    <p class="cf-sig">É como levantar <b data-out="kg"></b>.</p>
+    <p class="cf-liga">Esta força empurra o pistão ao longo do cilindro. Quanta energia gasta em cada empurrão?</p>
+   </div>
+   <div class="cf-bloco" data-step="2">
+    <p class="cf-q">Quanta energia gasta um empurrão?</p>
+    <p class="cf-pal">trabalho = força × distância</p>
+    <p class="cf-eq"><span class="v c4">W</span> = <span class="v c2">F</span> × <span class="v c5">d</span></p>
+    <p class="cf-sm">É o W = F × d da primeira aula: o trabalho, em física, medido em joule (J).</p>
+    <p class="cf-num"><span class="v c4">W</span> = <b data-out="F"></b> × 0,43 m = <b data-out="W"></b></p>
+    <p class="cf-sig">Chegava para levantar uma pessoa de 70 kg a <b data-out="alt"></b> de altura.</p>
+    <p class="cf-liga">Mas o pistão não empurra uma vez só: empurra várias vezes por segundo.</p>
+   </div>
+   <div class="cf-bloco" data-step="3">
+    <p class="cf-q">Quanta energia em cada segundo?</p>
+    <p class="cf-pal">potência = trabalho ÷ tempo</p>
+    <p class="cf-eq"><span class="v c6">P</span> = <span class="v c4">W</span> ÷ <span class="v c7">t</span></p>
+    <p class="cf-sm">Medida em watt (W): um watt é um joule por segundo. Para as contas serem fáceis: 4 empurrões por segundo.</p>
+    <p class="cf-num"><span class="v c6">P</span> = 4 × <b data-out="W"></b> ÷ 1 s = <b data-out="P"></b></p>
+    <p class="cf-sig">Cerca de <b data-out="kW"></b>, ou <b data-out="cv"></b> cavalos-vapor.</p>
+    <p class="cf-liga">E quanta energia teve o carvão de dar para isto?</p>
+   </div>
+   <div class="cf-bloco" data-step="4">
+    <p class="cf-q">Que parte do carvão vira trabalho?</p>
+    <p class="cf-pal">rendimento = energia útil ÷ energia do carvão</p>
+    <p class="cf-eq"><span class="v c8">η</span> = útil ÷ total</p>
+    <div class="cf-barras">
+     <span>Newcomen, 1712</span><i style="--w:2%"></i><b>0,5 a 1 %</b>
+     <span>Watt, c. 1780</span><i style="--w:6%"></i><b>2 a 3 %</b>
+     <span>Central elétrica atual</span><i style="--w:80%"></i><b>cerca de 40 %</b>
+    </div>
+    <p class="cf-num">Com <span class="v c8">η</span> = 3 %, para dar <b data-out="kW"></b> o fogo tinha de dar cerca de <b data-out="fogo"></b>.</p>
+    <p class="cf-sig">O resto perdia-se em calor: por isso a máquina gastava tanto carvão.</p>
+   </div>
   </div>
  </div>
 </div>
@@ -525,9 +571,11 @@
 <div class="i3d-palco"></div>
 <div class="i3d-leg"><p><time>1831</time>Michael Faraday descobre que um íman e um fio de cobre podem criar corrente elétrica, desde que um deles se mexa: é a <b>indução eletromagnética</b>.</p><p data-step="1"><time>A turbina</time>Água a cair ou vapor a alta pressão batem nas pás da turbina e fazem-na girar. A turbina faz girar a bobina.</p><p data-step="2"><time>O dínamo</time>A bobina roda entre os dois polos do íman e nasce uma corrente no fio: a lâmpada acende. Aqui a corrente vai e vem, mudando de sentido a cada meia volta.</p><p data-step="3"><time>Experimenta</time>Mais depressa, ou com mais voltas de fio: mais tensão, mais luz. Com a turbina parada, não há corrente.</p><p data-step="4"><time>1866 · 1882 · 1884</time>Werner von Siemens apresenta o dínamo (1866–1867); abrem as primeiras centrais elétricas públicas (1882); Charles Parsons inventa a turbina a vapor moderna (1884). A eletricidade chega às fábricas e às ruas.</p></div>
 <div class="i3d-barra"><div class="i3d-read" hidden></div><div class="i3d-ctl"></div></div>
-<div class="quadro civ-dina" data-step="3"><p class="cf-eq"><span class="v c1">ε</span> = <span class="v c2">N</span> × <span class="v c3">B</span> × <span class="v c4">A</span> × <span class="v c5">ω</span></p>
-<p class="cf-defs"><span class="v c1">ε</span> tensão máxima (volt) · <span class="v c2">N</span> voltas de fio · <span class="v c3">B</span> força do íman · <span class="v c4">A</span> área da bobina · <span class="v c5">ω</span> rapidez da rotação</p>
-<p class="cf-defs">Se a bobina para, <span class="v c5">ω</span> = 0 e não há tensão. Depois, <span class="v c6">P</span> = <span class="v c1">V</span> × <span class="v c7">I</span>: potência (watt) = tensão (volt) × corrente (ampere).</p></div>
+<div class="quadro civ-dina" data-step="3">
+<p class="cf-pal">tensão = voltas de fio × força do íman × área da bobina × rapidez da rotação</p>
+<p class="cf-eq"><span class="v c1">V</span> = <span class="v c2">N</span> × <span class="v c3">B</span> × <span class="v c4">A</span> × <span class="v c5">ω</span></p>
+<p class="cf-num" data-din>Agora: <span class="v c2">N</span> = 3 voltas de fio, <span class="v c5">ω</span> = 3 voltas por segundo → tensão a 30 % da máxima.</p>
+<p class="cf-liga">Duplica uma das letras e a tensão duplica; se <span class="v c5">ω</span> = 0, não há tensão. A tensão empurra a corrente (<span class="v c7">I</span>) até à lâmpada, e a potência que ela recebe é <span class="v c6">P</span> = <span class="v c1">V</span> × <span class="v c7">I</span>.</p></div>
 <p class="source">Fontes: Britannica, «electromagnetic induction», «dynamo», «turbine». Animação original, simplificada.</p>
 </section>
 <section class="slide ci" id="s-ci-oficina" data-lesson="4 · Civilização industrial" data-title="Oficina ou fábrica: quem põe o quê?">
@@ -607,9 +655,9 @@
   <text x="985" y="240" class="mn-s mn-eixo" fill="#F6F3EC" text-anchor="end">tempo →</text>
   <g class="mn-part" data-step="1" data-k="trend"><text x="985" y="62" class="mn-s" fill="#F6F3EC" text-anchor="end">tendência secular</text></g>
   <g class="mn-part" data-step="2" data-k="real"><text x="300" y="232" class="mn-s" fill="#F0A673">o que acontece</text></g>
-  <g class="mn-part" data-step="3" data-k="kitchin"><text x="20" y="312" class="mn-s mn-nome" fill="#DCE8F2">Kitchin</text><text x="20" y="338" class="mn-s" fill="#DCE8F2">3 a 5 anos</text></g>
-  <g class="mn-part" data-step="4" data-k="juglar"><text x="20" y="392" class="mn-s mn-nome" fill="#F0A673">Juglar</text><text x="20" y="418" class="mn-s" fill="#F0A673">6 a 10 anos</text></g>
-  <g class="mn-part" data-step="5" data-k="kondratieff"><text x="20" y="472" class="mn-s mn-nome" fill="#F1CDB0">Kondratieff</text><text x="20" y="498" class="mn-s" fill="#F1CDB0">50 a 60 anos</text></g>
+  <g class="mn-part" data-step="3" data-k="kitchin"><text x="20" y="312" class="mn-s mn-nome" fill="#DCE8F2">Kitchin</text><text x="20" y="338" class="mn-s mn-anos" fill="#DCE8F2">3 a 5 anos</text></g>
+  <g class="mn-part" data-step="4" data-k="juglar"><text x="20" y="392" class="mn-s mn-nome" fill="#F0A673">Juglar</text><text x="20" y="418" class="mn-s mn-anos" fill="#F0A673">6 a 10 anos</text></g>
+  <g class="mn-part" data-step="5" data-k="kondratieff"><text x="20" y="472" class="mn-s mn-nome" fill="#F1CDB0">Kondratieff</text><text x="20" y="498" class="mn-s mn-anos" fill="#F1CDB0">50 a 60 anos</text></g>
   <text x="985" y="552" class="mn-s" fill="#F6F3EC" fill-opacity=".6" text-anchor="end">curvas ilustrativas, não são dados</text>
 </svg>
 <div class="pilha">
@@ -639,42 +687,65 @@
 <p class="ask" data-step="4">Hoje, numa crise, quem tenta travar a cascata?</p>
 </section>
 <section class="slide ci manim-slide" id="s-ci-cascata" data-lesson="4 · Civilização industrial" data-title="O efeito em cascata (modelo)" data-steps="3">
-<button class="phone-btn" data-path="../../respostas/?f=ai-2ano/o-trabalho&a=ci-cascata">Responder no telemóvel</button><p class="kicker">1.4 · O efeito em cascata · modelo animado</p><h2>Uma quebra nas vendas: o que vem a seguir?</h2>
+<button class="phone-btn" data-path="../../respostas/?f=ai-2ano/o-trabalho&a=ci-cascata">Responder no telemóvel</button><p class="kicker">1.4 · O efeito em cascata · modelo animado</p><h2>Uma quebra nas vendas: e depois?</h2>
 <div class="quadro civ-cascata" data-civ="cascata">
  <div class="cs-topo">
-  <svg class="cs-rede" viewBox="0 0 1000 490" role="img" aria-label="Rede da economia: famílias, lojas, fábricas, minas e outros compradores, com moedas a circular"></svg>
+  <svg class="cs-anel" viewBox="-40 0 1080 500" role="img" aria-label="Roda da economia: vendas, armazéns, produção, emprego, salários e compras das famílias, ligadas por setas; os outros compradores entram nas vendas e os armazéns cheios fazem descer os preços"></svg>
   <div class="cs-lado">
-   <p class="cs-fase">Equilíbrio</p>
-   <div class="cs-num"></div>
-   <label class="rng" data-step="1"><span>Quebra nas vendas</span><input type="range" name="quebra" min="0" max="40" step="5" value="20"><output data-out="quebra">20 %</output></label>
-   <div class="cs-btns" data-step="3"><button class="btn ghost" data-acao="invencao">Nova invenção</button><button class="btn ghost" data-acao="reconversao">Reconversão</button><button class="btn ghost" data-acao="corte">Corte drástico da produção</button><button class="btn ghost" data-acao="repor">Recomeçar</button></div>
+   <p class="cs-fase">Equilíbrio: tudo no normal</p>
+   <p class="cs-ajuda">100 = normal · <b class="d">azul</b>: abaixo · <b class="e">laranja</b>: acima · contorno grosso: a mudar agora</p>
+   <label class="rng" data-step="1"><span>Quebra nas encomendas</span><input type="range" name="quebra" min="0" max="40" step="5" value="20"><output data-out="quebra">20 %</output></label>
+   <div class="cs-btns" data-step="1"><button class="btn ghost" data-acao="pausa">Pausa</button><button class="btn ghost" data-acao="repor">Recomeçar</button></div>
+   <div class="cs-btns" data-step="3"><button class="btn ghost" data-acao="invencao">Nova invenção</button><button class="btn ghost" data-acao="reconversao">Reconversão</button><button class="btn ghost" data-acao="corte">Corte drástico da produção</button></div>
   </div>
  </div>
- <svg class="cs-grafico" viewBox="0 0 1000 300" role="img" aria-label="Gráfico das vendas, da produção, do emprego, dos preços e das mercadorias por vender ao longo dos meses"></svg>
+ <svg class="cs-grafico" viewBox="0 0 1000 128" role="img" aria-label="Gráfico das vendas, da produção, do emprego e dos preços ao longo dos meses, com a fase depressiva e a fase expansiva assinaladas por baixo"></svg>
  <div class="cs-legenda"></div>
 </div>
 <div class="i3d-leg ci-leg">
- <p>Tudo equilibrado: as famílias compram nas lojas; as lojas e outros compradores encomendam às fábricas; as fábricas pagam salários e compram matérias-primas às minas.</p>
- <p data-step="1"><b>A procura cai.</b> Um imprevisto (um mercado que fecha, uma moda que muda) e as mercadorias ficam por vender nos armazéns.</p>
- <p data-step="2"><b>Cascata.</b> Para cortar despesas, as fábricas despedem (<b>desemprego</b>), cortam salários ou horas (<b>subemprego</b>) e compram menos matérias-primas: as minas também despedem. Com menos salários, as famílias compram menos… e as vendas voltam a cair. Os preços descem: é a <b>fase depressiva</b>.</p>
+ <p><b>Lê a roda no sentido dos ponteiros do relógio.</b> Tudo no normal (100): as famílias gastam parte dos salários em compras; essas compras, mais as encomendas dos outros compradores, são as vendas das fábricas; as fábricas produzem, dão emprego (também nas minas, que lhes vendem as matérias-primas) e pagam salários. A roda gira.</p>
+ <p data-step="1"><b>As encomendas caem.</b> Um imprevisto (um mercado que fecha, uma moda que muda): os outros compradores encomendam menos. As vendas descem e o que sobra fica nos armazéns.</p>
+ <p data-step="2"><b>Cascata: segue a roda.</b> Armazéns cheios → produz-se menos → despedimentos (<b>desemprego</b>) e cortes de salários ou horas (<b>subemprego</b>), nas fábricas e nas minas → menos salários → menos compras → as vendas voltam a cair. Os preços descem. É a <b>fase depressiva</b>.</p>
  <p data-step="3"><b>Como sair?</b> Uma nova invenção, uma reconversão das atividades ou um corte drástico da produção voltam a acertar a produção com o consumo: começa uma <b>fase expansiva</b>. Experimenta os botões.</p>
 </div>
-<p class="source">Modelo para a aula, simplificado: mostra o mecanismo, não reproduz nenhuma crise real. As equações estão no slide seguinte.</p>
+<p class="source">Modelo para a aula, simplificado: mostra o mecanismo, não reproduz nenhuma crise real. Um mês do modelo por segundo. As equações estão no slide seguinte.</p>
 </section>
-<section class="slide ci manim-slide" id="s-ci-modelo" data-lesson="4 · Civilização industrial" data-title="As equações da cascata">
-<p class="kicker">Para quem quer ver por dentro · opcional</p><h2>As equações da cascata</h2>
+<section class="slide ci manim-slide" id="s-ci-modelo" data-lesson="4 · Civilização industrial" data-title="As equações da cascata" data-steps="6">
+<p class="kicker">Para quem quer ver por dentro · opcional · uma equação de cada vez</p><h2>As equações da cascata</h2>
 <div class="quadro civ-modelo">
- <p class="cm-eq"><span class="v c4">D</span> = <span class="v c6">c</span> × <span class="v c3">R</span> + <span class="v c5">G</span></p>
- <p class="cm-def">vendas = parte do rendimento das famílias que é gasta (os salários) + o que compram os outros compradores</p>
- <p class="cm-eq" data-step="1">Δ<span class="v c7">S</span> / Δt = <span class="v c1">Y</span> − <span class="v c4">D</span></p>
- <p class="cm-def" data-step="1">as mercadorias por vender aumentam quando se produz mais do que se vende</p>
- <p class="cm-eq" data-step="2">Δ<span class="v c1">Y</span> / Δt = a × (<span class="v c4">D</span> − b × (<span class="v c7">S</span> − S₀) − <span class="v c1">Y</span>)</p>
- <p class="cm-def" data-step="2">as fábricas tentam produzir o que vendem, e menos ainda se os armazéns estão cheios</p>
- <p class="cm-eq" data-step="3">Δ<span class="v c2">E</span> / Δt = k × (<span class="v c1">Y</span> − <span class="v c2">E</span>) &nbsp;&nbsp; Δ<span class="v c8">p</span> / Δt = − m × (<span class="v c7">S</span> − S₀) ÷ S₀ × <span class="v c8">p</span></p>
- <p class="cm-def" data-step="3">o emprego segue a produção, com atraso; armazéns cheios fazem descer os preços</p>
- <p class="cm-nota" data-step="4"><b>Δ</b> (delta) quer dizer «variação»: Δ/Δt é quanto muda em cada mês. São <b>equações diferenciais</b>: dizem como as coisas mudam, e o computador calcula, passo a passo, onde vão parar. Quando <span class="v c5">G</span> cai, <span class="v c4">D</span> cai, <span class="v c7">S</span> sobe, <span class="v c1">Y</span> e <span class="v c2">E</span> descem, <span class="v c3">R</span> desce… e <span class="v c4">D</span> volta a cair: é a cascata.</p>
+ <svg class="cs-anel cm-anel" viewBox="-40 0 1080 500" data-civ="anel" role="img" aria-label="A roda da cascata; acende-se a parte que cada equação descreve"></svg>
+ <div class="cf-det pilha cm-passos">
+  <div class="cf-bloco">
+   <p class="cf-q">1 · De onde vêm as vendas?</p><p class="cf-pal">vendas = parte dos salários que as famílias gastam + encomendas dos outros compradores</p><p class="cf-eq"><span class="v c4">D</span> = <span class="v c6">c</span> × <span class="v c3">R</span> + <span class="v c5">G</span></p>
+   <p class="cf-sm"><span class="v c4">D</span> vendas · <span class="v c6">c</span> parte do salário que é gasta (0,4) · <span class="v c3">R</span> salários · <span class="v c5">G</span> encomendas dos outros</p><p class="cf-num">Normal: 0,4 × 100 + 60 = 100. Com uma quebra de 20 nas encomendas: 0,4 × 100 + 40 = 80.</p><p class="cf-liga">O que não se vende vai para o armazém.</p>
+  </div>
+  <div class="cf-bloco" data-step="1">
+   <p class="cf-q">2 · Quanto enche o armazém?</p><p class="cf-pal">o que o armazém ganha num mês = produção − vendas</p><p class="cf-eq">Δ<span class="v c7">S</span> / Δt = <span class="v c1">Y</span> − <span class="v c4">D</span></p>
+   <p class="cf-sm"><b>Δ</b> (delta) quer dizer «variação»: Δ<span class="v c7">S</span> / Δt é quanto muda o armazém (<span class="v c7">S</span>) num mês (<span class="v c8">t</span>). <span class="v c1">Y</span> produção.</p><p class="cf-num">Produção 100, vendas 80: o armazém ganha 20 por mês.</p><p class="cf-liga">Com o armazém a encher, quanto querem produzir as fábricas?</p>
+  </div>
+  <div class="cf-bloco" data-step="2">
+   <p class="cf-q">3 · Quanto querem produzir as fábricas?</p><p class="cf-pal">objetivo = vendas − uma parte do que está a mais no armazém</p><p class="cf-eq">objetivo = <span class="v c4">D</span> − b × (<span class="v c7">S</span> − S₀)</p>
+   <p class="cf-sm">S₀ o armazém normal (20) · b a parte do excesso que querem escoar por mês (0,25)</p><p class="cf-num">Vendas 80, armazém com 40, isto é, 20 a mais: objetivo = 80 − 0,25 × 20 = 75.</p><p class="cf-liga">Mas a produção não muda de um dia para o outro.</p>
+  </div>
+  <div class="cf-bloco" data-step="3">
+   <p class="cf-q">4 · Como muda a produção?</p><p class="cf-pal">a produção aproxima-se do objetivo, um bocado em cada mês</p><p class="cf-eq">Δ<span class="v c1">Y</span> / Δt = a × (objetivo − <span class="v c1">Y</span>)</p>
+   <p class="cf-sm">a rapidez do ajuste (0,7): quanto maior a distância ao objetivo, mais depressa muda</p><p class="cf-num">Produção 100, objetivo 75: no início, desce 0,7 × 25 ≈ 17 por mês.</p><p class="cf-liga">Menos produção precisa de menos gente.</p>
+  </div>
+  <div class="cf-bloco" data-step="4">
+   <p class="cf-q">5 · Quantos continuam a trabalhar?</p><p class="cf-pal">o emprego segue a produção, mais devagar</p><p class="cf-eq">Δ<span class="v c2">E</span> / Δt = k × (<span class="v c1">Y</span> − <span class="v c2">E</span>)</p>
+   <p class="cf-sm">k rapidez (0,3): despedir e contratar leva tempo. As minas acompanham as fábricas da mesma maneira (<span class="v c2">M</span>).</p><p class="cf-num">Produção 80, emprego 100: perdem-se 0,3 × 20 = 6 empregos em cada 100, por mês.</p><p class="cf-liga">Menos emprego, menos salários.</p>
+  </div>
+  <div class="cf-bloco" data-step="5">
+   <p class="cf-q">6 · A roda fecha-se</p><p class="cf-pal">salários = emprego nas fábricas e nas minas; e os salários voltam à primeira equação</p><p class="cf-eq"><span class="v c3">R</span> = (<span class="v c2">E</span> + <span class="v c2">M</span>) ÷ 2<br><small class="cf-volta">e volta a entrar em</small> <span class="v c4">D</span> = <span class="v c6">c</span> × <span class="v c3">R</span> + <span class="v c5">G</span></p>
+   <p class="cf-sm">É por isto que a quebra não fica por ali: cada volta da roda puxa a seguinte.</p><p class="cf-num">Se os salários descem para 90: vendas = 0,4 × 90 + 40 = 76. As vendas voltam a cair: é a cascata.</p><p class="cf-liga">E os preços?</p>
+  </div>
+  <div class="cf-bloco" data-step="6">
+   <p class="cf-q">7 · E os preços?</p><p class="cf-pal">se o armazém está acima do normal, os preços descem</p><p class="cf-eq">Δ<span class="v c8">p</span> / Δt = − m × (<span class="v c7">S</span> − S₀) ÷ S₀ × <span class="v c8">p</span></p>
+   <p class="cf-sm">m rapidez (0,03) · (<span class="v c7">S</span> − S₀) ÷ S₀ quanto o armazém está acima do normal (0,5 = 50 %)</p><p class="cf-num">Armazém 50 % acima do normal: os preços descem 0,03 × 0,5 = 1,5 % por mês.</p><p class="cf-liga">São equações diferenciais: dizem como as coisas mudam. O computador soma as mudanças mês a mês e desenha a cascata do slide anterior.</p>
+  </div>
+ </div>
 </div>
-<p class="source">Valores usados: c = 0,4; a = 0,7; b = 0,25; k = 0,3; m = 0,03; S₀ = 20. No modelo, preços mais baixos também fazem vender um pouco mais.</p>
+<p class="source">Valores do modelo: c = 0,4; a = 0,7; b = 0,25; k = 0,3; m = 0,03; S₀ = 20. No modelo, preços mais baixos também fazem vender um pouco mais.</p>
 </section>
 <section class="slide ci" id="s-ci-datas" data-lesson="4 · Civilização industrial" data-title="1873, 1914, 1929">
 <p class="kicker">1.4 · Três datas</p><h2>1873, 1914, 1929</h2>

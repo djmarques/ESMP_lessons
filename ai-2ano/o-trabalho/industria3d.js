@@ -672,6 +672,12 @@
     readout(S, step) {
       if (step < 2) return '';
       const pct = Math.round(clamp(S.V) * 100);
+      const din = S.el.querySelector('[data-din]');
+      if (din && step >= 3) {                                // the equation under the picture, with today's numbers
+        const n = S.user.espiras ?? 3, w = S.user.voltas ?? 3;
+        const html = `Agora: <span class="v c2">N</span> = ${n} ${n === 1 ? 'volta' : 'voltas'} de fio, <span class="v c5">ω</span> = ${String(w).replace('.', ',')} voltas por segundo → tensão a <b>${pct} %</b> da máxima.`;
+        if (din._h !== html) { din.innerHTML = html; din._h = html; }
+      }
       return `<span>Tensão (em relação ao máximo) <i class="i3d-barra-mini"><b style="width:${pct}%"></b></i> <b>${pct} %</b></span>`;
     },
   };
@@ -1115,7 +1121,7 @@
       below += n.offsetHeight + 8;
     }
     const top = palco.getBoundingClientRect().top - (el.closest('.stage') || document.body).getBoundingClientRect().top;
-    palco.style.height = Math.max(300, Math.min(780, window.innerHeight - top - below - 64)) + 'px';
+    palco.style.height = Math.max(260, Math.min(780, window.innerHeight - top - below - 84)) + 'px';   // 84: room for the navigation pill
   }
 
   function resize() {
@@ -1164,17 +1170,36 @@
     eye.lerp(tmpV, k);
     camera.position.copy(eye); camera.lookAt(look);
     renderer.render(S.scene, camera);
-    // labels
+    // labels: project each one, then push apart any that would overlap (and keep them inside the picture)
+    const placed = [];
     for (const item of S.labels) {
-      const show = item.show(step, S);
+      const show = item.show(step, S) && item.el.style.visibility !== 'hidden';
+      let vis = false;
       if (show) {
         const tg = item.target;
         if (Array.isArray(tg)) tmpV.set(...tg); else { tg.getWorldPosition(tmpV); tmpV.y += item.dy; }
         tmpV.project(camera);
-        const vis = tmpV.z < 1 && Math.abs(tmpV.x) < 1.1 && Math.abs(tmpV.y) < 1.1;
-        item.el.classList.toggle('visivel', vis);
-        if (vis) item.el.style.transform = `translate(-50%, -100%) translate(${((tmpV.x + 1) / 2 * width).toFixed(1)}px, ${((1 - tmpV.y) / 2 * height).toFixed(1)}px)`;
-      } else item.el.classList.remove('visivel');
+        vis = tmpV.z < 1 && Math.abs(tmpV.x) < 1.1 && Math.abs(tmpV.y) < 1.1;
+      }
+      item.el.classList.toggle('visivel', vis);
+      if (!vis) { item.y = undefined; continue; }
+      const w = item.el.offsetWidth || 80, h = item.el.offsetHeight || 22;
+      let cx = (tmpV.x + 1) / 2 * width, bottom = (1 - tmpV.y) / 2 * height;
+      cx = Math.max(w / 2 + 4, Math.min(width - w / 2 - 4, cx));
+      bottom = Math.max(h + 4, Math.min(height - 4, bottom));
+      // try the natural place, then a little higher or lower, until it touches no label already placed
+      const free = b => placed.every(o => b - h >= o.b + 3 || b <= o.b - o.h - 3 || cx + w / 2 <= o.x - o.w / 2 - 3 || cx - w / 2 >= o.x + o.w / 2 + 3);
+      let best = bottom;
+      if (!free(bottom)) {
+        for (let k = 1; k < 40; k++) {
+          const up = bottom - k * 6, down = bottom + k * 6;
+          if (up - h >= 2 && free(up)) { best = up; break; }
+          if (down <= height - 2 && free(down)) { best = down; break; }
+        }
+      }
+      item.y = item.y === undefined ? best : item.y + (best - item.y) * 0.35;     // glide, do not jump
+      placed.push({ x: cx, b: best, w, h });
+      item.el.style.transform = `translate(-50%, -100%) translate(${cx.toFixed(1)}px, ${item.y.toFixed(1)}px)`;
     }
     // readout under the picture (4 times a second is enough)
     if (S.cfg.readout && time - (S.lastRead || 0) > 250) {

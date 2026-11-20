@@ -1,9 +1,10 @@
 /* ==========================================================================
    civind.js — «A civilização industrial»: the 2D pieces (no 3D needed).
-     1. Steam physics: F = p × A with sliders (slide s-ci-vapor-fisica)
+     1. Steam physics, one equation at a time, with sliders (s-ci-vapor-fisica)
      2. The three economic cycles, drawn in Manim style (s-ci-ciclos)
-     3. The crisis cascade: a small model of an economy, drawn as a network
-        with money flowing between its parts, and a live chart (s-ci-cascata)
+     3. The loop of the crisis: six boxes in a ring (shared by 4 and 5)
+     4. The crisis cascade: the loop driven by a small model, and a live chart (s-ci-cascata)
+     5. The equations of the cascade, lighting up the loop one part at a time (s-ci-modelo)
    Each piece looks for its own element and does nothing if it is absent.
    Code comments in English; every text students read in European Portuguese.
    ========================================================================== */
@@ -23,23 +24,28 @@
     if (node.matches('input')) node.addEventListener('change', () => node.blur());
   };
 
-  /* ---------- 1. Steam physics: F = p × A ---------- */
+  /* ---------- 1. Steam physics, one equation at a time ----------
+     p (pressure) → F = p × A (force) → W = F × d (work) → P = W ÷ t (power) → η (efficiency).
+     Every result is computed from the two sliders, so each equation uses the number
+     the one before it produced. */
   document.querySelectorAll('[data-civ="forca"]').forEach(box => {
     const p = box.querySelector('[name="p"]'), d = box.querySelector('[name="d"]');
-    const out = k => box.querySelectorAll('[data-out="' + k + '"]');
+    const round = (v, step) => Math.round(v / step) * step;
     function paint() {
       const bar = Number(p.value), cm = Number(d.value);
       const Pa = bar * 100000, r = cm / 200, A = Math.PI * r * r, F = Pa * A;
-      const set = (k, v) => out(k).forEach(o => { o.textContent = v; });
-      set('p', fmt(bar, 1) + ' bar');
-      set('pa', fmt(Pa) + ' Pa');
-      set('d', fmt(cm) + ' cm');
-      set('A', fmt(A, 3) + ' m²');
-      set('F', fmt(F) + ' N');
-      set('kg', fmt(F / 9.8, 0) + ' kg');
-      const W = F * 0.432;                                  // stroke of 0,432 m (Rocket, 1829)
-      set('W', fmt(W) + ' J');
-      set('P', fmt(W * 4 / 1000, 1) + ' kW');               // 4 strokes per second (2 turns, both sides)
+      const W = F * 0.432;                                   // stroke of 0,432 m (Rocket, 1829)
+      const P = W * 4;                                       // 4 pushes per second (a round number for the sums)
+      const vals = {
+        p: fmt(bar, 1) + ' bar', pa: fmt(Pa) + ' Pa', d: fmt(cm) + ' cm', A: fmt(A, 3) + ' m²',
+        F: fmt(round(F, 10)) + ' N', kg: fmt(round(F / 9.8, 10)) + ' kg',
+        W: fmt(round(W, 10)) + ' J', alt: fmt(W / (70 * 9.8), 1) + ' m',
+        P: fmt(round(P, 100)) + ' W', kW: fmt(P / 1000, 0) + ' kW', cv: fmt(P / 735.5, 0),
+        fogo: fmt(round(P / 0.03 / 1000, 10)) + ' kW',
+      };
+      for (const k in vals) box.querySelectorAll('[data-out="' + k + '"]').forEach(o => { o.textContent = vals[k]; });
+      const face = box.querySelector('.pz-face');            // the piston face grows with the diameter
+      if (face) face.setAttribute('ry', (30 + cm * 1.6).toFixed(1));
     }
     [p, d].forEach(i => { stopNav(i); i.addEventListener('input', paint); });
     paint();
@@ -72,37 +78,123 @@
     });
   });
 
-  /* ---------- 3. The crisis cascade ----------
+
+  /* ---------- 3. The loop of the crisis (drawn by the cascade and by the equations slide) ----------
+     Six boxes in a ring, read clockwise: sales → warehouse → production → jobs → wages →
+     household purchases → sales again. «Other buyers» feed the sales from outside (that is where
+     the drop comes from) and full warehouses push prices down. Each box shows its level against
+     normal (100): blue when below, orange when above. */
+  const RING = {
+    ven: { x: 500, y: 92, t: 'Vendas', s: 'o que as fábricas vendem' },
+    arm: { x: 820, y: 190, t: 'Armazéns', s: 'mercadorias por vender' },
+    pro: { x: 820, y: 352, t: 'Produção', s: 'o que as fábricas fazem' },
+    emp: { x: 500, y: 446, t: 'Emprego', s: 'nas fábricas e nas minas' },
+    sal: { x: 180, y: 352, t: 'Salários', s: 'o que as famílias ganham' },
+    com: { x: 180, y: 190, t: 'Compras', s: 'o que as famílias gastam' },
+    pre: { x: 500, y: 270, t: 'Preços', s: '', small: true },
+    out: { x: 850, y: 30, t: 'Outros compradores', s: '', tag: true },
+  };
+  const LINKS = [
+    { a: 'ven', b: 'arm', t: 'o que sobra\nfica guardado' },
+    { a: 'arm', b: 'pro', t: 'armazém cheio:\nproduz-se menos' },
+    { a: 'pro', b: 'emp', t: 'decide quantos\ntrabalham' },
+    { a: 'emp', b: 'sal', t: 'quem trabalha\nrecebe' },
+    { a: 'sal', b: 'com', t: 'parte do salário\né gasta' },
+    { a: 'com', b: 'ven', t: 'cada compra\né uma venda' },
+    { a: 'out', b: 'ven', t: '', side: true },
+    { a: 'arm', b: 'pre', t: 'armazém cheio:\npreços descem', side: true },
+    { a: 'pre', b: 'ven', t: '', side: true, faint: true },
+  ];
+  function buildRing(svg) {
+    const W = 236, H = 92;
+    const size = n => (n.small ? [170, 64] : n.tag ? [250, 44] : [W, H]);
+    el('defs', {}, svg).innerHTML = '<marker id="cs-ponta" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 Z" fill="context-stroke"/></marker>';
+    const gL = el('g', {}, svg), gD = el('g', {}, svg), gN = el('g', {}, svg);
+    // where a line from a box's centre towards a point leaves the box
+    const edge = (n, tx, ty) => {
+      const [w, h] = size(n), dx = tx - n.x, dy = ty - n.y;
+      const k = Math.min(Math.abs((w / 2 + 6) / (dx || 1e-6)), Math.abs((h / 2 + 6) / (dy || 1e-6)));
+      return [n.x + dx * k, n.y + dy * k];
+    };
+    const links = LINKS.map(l => {
+      const A = RING[l.a], B = RING[l.b];
+      const [x1, y1] = edge(A, B.x, B.y), [x2, y2] = edge(B, A.x, A.y);
+      const g = el('g', { class: 'cs-lig' + (l.side ? ' lado' : '') + (l.faint ? ' tenue' : ''), 'data-l': l.a + '-' + l.b }, gL);
+      const path = el('path', { d: `M${x1.toFixed(1)},${y1.toFixed(1)} L${x2.toFixed(1)},${y2.toFixed(1)}`, 'marker-end': 'url(#cs-ponta)' }, g);
+      if (l.t) {
+        // label on the outer side of the ring (the one about prices sits inside), one or two lines
+        const mx = (x1 + x2) / 2, my = (y1 + y2) / 2, ox = mx - 500, oy = my - 268, len = Math.hypot(ox, oy) || 1;
+        const inside = l.b === 'pre';
+        let tx = mx + ox / len * 40, ty = my + oy / len * 40, anchor = Math.abs(ox) < 60 ? 'middle' : ox > 0 ? 'start' : 'end';
+        if (inside) { tx = mx + 30; ty = my + 44; anchor = 'middle'; }
+        const lines = l.t.split('\n');
+        const t = el('text', { x: tx.toFixed(1), y: (ty - (lines.length - 1) * 12 + 7).toFixed(1), 'text-anchor': anchor, class: 'cs-lrot' }, g);
+        lines.forEach((ln, i) => { const sp = el('tspan', { x: tx.toFixed(1), dy: i ? 25 : 0 }, t); sp.textContent = ln; });
+      }
+      const dots = l.faint ? [] : [0, 1, 2].map(i => ({ u: i / 3, c: el('circle', { r: 6, class: 'cs-ponto' }, gD) }));
+      return { ...l, g, path, x1, y1, x2, y2, dots };
+    });
+    const nodes = {};
+    for (const k in RING) {
+      const n = RING[k], [w, h] = size(n);
+      const g = el('g', { class: 'cs-caixa' + (n.small ? ' peq' : '') + (n.tag ? ' tag' : ''), 'data-n': k, transform: `translate(${n.x - w / 2},${n.y - h / 2})` }, gN);
+      el('rect', { width: w, height: h, rx: 14, class: 'cs-fundo' }, g);
+      const tt = el('text', { x: 16, y: n.tag ? 29 : 32, class: 'cs-tit' }, g); tt.textContent = n.t;
+      const nodeRef = { g, n, w, h };
+      if (!n.tag) {
+        nodeRef.val = el('text', { x: w - 16, y: 32, 'text-anchor': 'end', class: 'cs-val' }, g);
+        if (n.s) { const s = el('text', { x: 16, y: 56, class: 'cs-sub' }, g); s.textContent = n.s; }
+        const by = n.small ? 44 : 70, bw = w - 32;
+        el('rect', { x: 16, y: by, width: bw, height: 10, rx: 5, class: 'cs-trilho' }, g);
+        nodeRef.bar = el('rect', { x: 16, y: by, width: bw * 100 / 150, height: 10, rx: 5, class: 'cs-barra' }, g);
+        el('line', { x1: 16 + bw * 100 / 150, x2: 16 + bw * 100 / 150, y1: by - 4, y2: by + 14, class: 'cs-cem' }, g);
+        nodeRef.bw = bw;
+      }
+      nodes[k] = nodeRef;
+    }
+    return { nodes, links };
+  }
+  function paintNode(nd, v) {
+    if (!nd.bar) return;
+    nd.val.textContent = fmt(v);
+    nd.bar.setAttribute('width', (nd.bw * clamp(v, 0, 150) / 150).toFixed(1));
+    const st = v < 97 ? 'baixo' : v > 103 ? 'alto' : '';
+    nd.g.setAttribute('class', nd.g.getAttribute('class').replace(/ (baixo|alto)/g, '') + (st ? ' ' + st : ''));
+    return st;
+  }
+
+  /* ---------- 4. The crisis cascade: the loop driven by a small model ----------
      A teaching model, not a model of any real economy. Indices, 100 = normal.
-       Y  production of the factories        E  workers employed in the factories
+       Y  production of the factories        E  workers in the factories
        M  production (and jobs) in the mines and the cotton trade (raw materials)
        S  goods made but not sold (stock)    p  price level
        G  "other buyers" (exports, investment, other firms): the part of demand that can change suddenly
-     Households spend c of their wage income (wages follow jobs: E and M).
-       D  = (c · income + G) · (1 + e · (1 − p/100))        sales (lower prices sell a little more)
-       dS/dt = Y − D                                          unsold goods pile up
-       dY/dt = a · (D − b · (S − S0) − Y)                     firms produce what they sell, less to clear the stock
-       dE/dt = k · (Y − E)      dM/dt = k · (Y − M)           jobs follow production; mines follow the factories
-       dp/dt = −m · (S − S0) / S0 · p                         full warehouses push prices down
-     Time unit: one month. */
+       D  = (c · R + G) · (1 + e · (1 − p/100))     sales; R = wage income = (E + M) / 2
+       dS/dt = Y − D                                unsold goods pile up
+       dY/dt = a · (D − b · (S − S0) − Y)           firms aim at their sales, less to clear the stock
+       dE/dt = k · (Y − E)   dM/dt = k · (Y − M)    jobs follow production, more slowly
+       dp/dt = −m · (S − S0) / S0 · p               full warehouses push prices down
+     Time unit: one month; the animation runs one month per second. */
   document.querySelectorAll('[data-civ="cascata"]').forEach(root => {
     const slide = root.closest('.slide');
-    const net = root.querySelector('.cs-rede'), chart = root.querySelector('.cs-grafico');
     const P = { c: 0.4, a: 0.7, b: 0.25, k: 0.3, m: 0.03, S0: 20, e: 0.25 };
-    const G0 = 60;
-    const stockIdx = S => 100 + (S - P.S0) * 2.5;          // unsold goods as an index: 100 = the normal stock
-    let st, hist, gUser, tMonth;
+    const G0 = 60, WIN = 48;
+    const stockIdx = S => 100 + (S - P.S0) * 2.5;            // unsold goods as an index: 100 = the normal stock
+    const ring = buildRing(root.querySelector('.cs-anel'));
+    const chart = root.querySelector('.cs-grafico');
+    let st, hist, gUser, tMonth, paused = false;
     function reset() {
       st = { Y: 100, E: 100, M: 100, S: P.S0, p: 100 };
       tMonth = 0; gUser = 0;
-      hist = [];                                             // 60 calm months already on the chart
-      for (let t = -60; t <= 0; t += 0.5) hist.push({ t, D: 100, Y: 100, E: 100, p: 100, S: 100, dY: 0 });
+      hist = [];
+      for (let t = -WIN; t <= 0; t += 0.5) hist.push({ t, D: 100, Y: 100, E: 100, p: 100, dY: 0 });
     }
     reset();
     const qIn = root.querySelector('[name="quebra"]');
     const shock = () => (stepOf(slide) >= 1 ? Number(qIn.value) : 0);
-    function G() { return Math.max(0, G0 - shock() + gUser); }
-    function demand(s) { const inc = 0.5 * s.E + 0.5 * s.M; return (P.c * inc + G()) * (1 + P.e * (1 - s.p / 100)); }
+    const G = () => Math.max(0, G0 - shock() + gUser);
+    const income = s => 0.5 * s.E + 0.5 * s.M;
+    const demand = s => (P.c * income(s) + G()) * (1 + P.e * (1 - s.p / 100));
     function deriv(s) {
       const D = demand(s);
       return { Y: P.a * (D - P.b * (s.S - P.S0) - s.Y), E: P.k * (s.Y - s.E), M: P.k * (s.Y - s.M), S: s.Y - D, p: -P.m * (s.S - P.S0) / P.S0 * s.p };
@@ -115,82 +207,34 @@
       tMonth += h;
     }
     function stepOf(sl) { let k = 0; while (sl.classList.contains('ge' + (k + 1))) k++; return k; }
-
-    // --- the network: five places, money flowing between them as coins ---
-    const NODES = {
-      fam: { x: 130, y: 250, t: 'Famílias' },
-      loj: { x: 440, y: 95, t: 'Lojas' },
-      fab: { x: 760, y: 250, t: 'Fábricas' },
-      min: { x: 440, y: 395, t: 'Minas e algodão' },
-      out: { x: 850, y: 110, t: 'Outros compradores' },
-    };
-    // simple drawn icons (no emoji: they do not show on every computer)
-    const ICONS = {
-      fam: 'M-26,22 L-22,-2 Q-16,-8 -10,-2 L-6,22 Z M-16,-12 m-7,0 a7,7 0 1,0 14,0 a7,7 0 1,0 -14,0 M6,22 L9,4 Q14,-1 19,4 L22,22 Z M14,-6 m-6,0 a6,6 0 1,0 12,0 a6,6 0 1,0 -12,0',
-      loj: 'M-26,-8 L26,-8 L22,-20 L-22,-20 Z M-22,-8 L-22,22 L22,22 L22,-8 Z M-8,4 L8,4 L8,22 L-8,22 Z',
-      fab: 'M-28,22 L-28,-4 L-14,-14 L-14,-4 L0,-14 L0,-4 L14,-14 L14,22 Z M16,22 L16,-26 L24,-26 L24,22 Z',
-      min: 'M-24,-14 Q0,-30 24,-14 L20,-10 Q0,-22 -20,-10 Z M-3,-18 L3,-18 L3,24 L-3,24 Z',
-      out: 'M0,-24 a24,24 0 1,0 0.1,0 Z M-24,0 L24,0 M0,-24 Q-14,0 0,24 Q14,0 0,-24',
-    };
-    const EDGES = [
-      { a: 'fam', b: 'loj', t: 'compras', f: s => P.c * (0.5 * s.E + 0.5 * s.M) },
-      { a: 'loj', b: 'fab', t: 'vendas', f: s => demand(s) - G(), bend: -30 },
-      { a: 'out', b: 'fab', t: 'encomendas', f: () => G() },
-      { a: 'fab', b: 'fam', t: 'salários', f: s => 0.5 * s.E, bend: 60 },
-      { a: 'fab', b: 'min', t: 'matérias-primas', f: s => 0.5 * s.Y },
-      { a: 'min', b: 'fam', t: 'salários', f: s => 0.5 * s.M },
-    ];
-    const gEdges = el('g', {}, net), gCoins = el('g', {}, net), gNodes = el('g', {}, net);
-    EDGES.forEach(e => {
-      const A = NODES[e.a], B = NODES[e.b];
-      const mx = (A.x + B.x) / 2, my = (A.y + B.y) / 2, dx = B.x - A.x, dy = B.y - A.y, len = Math.hypot(dx, dy);
-      const bend = e.bend || 26, cx = mx - dy / len * bend, cy = my + dx / len * bend;
-      e.path = el('path', { d: `M${A.x},${A.y} Q${cx},${cy} ${B.x},${B.y}`, class: 'cs-aresta', fill: 'none' }, gEdges);
-      e.len = e.path.getTotalLength ? e.path.getTotalLength() : len;
-      const lx = 0.25 * A.x + 0.5 * cx + 0.25 * B.x, ly = 0.25 * A.y + 0.5 * cy + 0.25 * B.y;
-      e.lab = el('text', { x: lx, y: ly - 10, class: 'cs-rot', 'text-anchor': 'middle' }, gEdges);
-      e.lab.textContent = e.t;
-      e.pct = el('text', { x: lx, y: ly + 24, class: 'cs-pct', 'text-anchor': 'middle' }, gEdges);
-      e.coins = Array.from({ length: 10 }, (_, i) => ({ u: i / 10, c: el('circle', { r: 9, class: 'cs-moeda' }, gCoins) }));
-      e.base = e.f({ Y: 100, E: 100, M: 100, S: P.S0, p: 100 });
+    // what each box shows (100 = normal)
+    const values = s => ({
+      ven: demand(s), arm: stockIdx(s.S), pro: s.Y, emp: income(s), sal: income(s),
+      com: income(s), pre: s.p,          // purchases = c · R: as an index it moves exactly like the wages
     });
-    for (const k in NODES) {
-      const n = NODES[k];
-      n.g = el('g', { transform: `translate(${n.x},${n.y})`, class: 'cs-no' }, gNodes);
-      el('circle', { r: 54, class: 'cs-bola' }, n.g);
-      el('path', { d: ICONS[k], class: 'cs-ic', transform: 'scale(1.35)' }, n.g);
-      const tt = el('text', { y: k === 'min' ? 86 : -66, 'text-anchor': 'middle', class: 'cs-nome' }, n.g); tt.textContent = n.t;
-    }
-    // workers (10 small figures) under the factories and the mines; stock boxes beside the factories
-    const people = (n, dx, dy) => Array.from({ length: 10 }, (_, i) => el('circle', { cx: dx + (i % 5) * 20, cy: dy + Math.floor(i / 5) * 22, r: 8, class: 'cs-pessoa' }, n.g));
-    NODES.fab.people = people(NODES.fab, -40, 72);
-    NODES.min.people = people(NODES.min, 70, -14);
-    NODES.fab.boxes = Array.from({ length: 12 }, (_, i) => el('rect', { x: 66 + (i % 3) * 24, y: 14 - Math.floor(i / 3) * 24, width: 21, height: 21, class: 'cs-caixa' }, NODES.fab.g));
-    const priceTag = el('text', { x: 0, y: -100, 'text-anchor': 'middle', class: 'cs-preco' }, NODES.fab.g);
-    priceTag.setAttribute('y', 150);
 
-    // --- the chart: last 60 months ---
-    const CW = 1000, CH = 300, L = 60, R = 990, TOP = 20, BOT = 260;
+    // --- the chart: four lines and, under them, a strip that names the phase ---
+    const L = 110, R = 990, TOP = 8, BOT = 90, STRIP = 98;
     const SERIES = [
-      { k: 'D', t: 'Vendas', col: '#F0A673', f: s => demand(s) },
-      { k: 'Y', t: 'Produção', col: '#F6F3EC', f: s => s.Y },
-      { k: 'E', t: 'Emprego', col: '#8FB8DA', f: s => 0.5 * s.E + 0.5 * s.M },
-      { k: 'p', t: 'Preços', col: '#C7D59F', f: s => s.p },
-      { k: 'S', t: 'Por vender (100 = normal)', col: '#B88A6A', f: s => stockIdx(s.S), dash: '8 6' },
+      { k: 'D', t: 'Vendas', col: '#F0A673' },
+      { k: 'Y', t: 'Produção', col: '#F6F3EC' },
+      { k: 'E', t: 'Emprego', col: '#8FB8DA' },
+      { k: 'p', t: 'Preços', col: '#C7D59F' },
     ];
-    const yOf = v => BOT - (clamp(v, 40, 160) - 40) / 120 * (BOT - TOP);
-    const gBg = el('g', {}, chart);
-    el('line', { x1: L, x2: R, y1: yOf(100), y2: yOf(100), class: 'cs-cem' }, chart);
-    const t100 = el('text', { x: L - 8, y: yOf(100) + 6, 'text-anchor': 'end', class: 'cs-eixo' }, chart); t100.textContent = '100';
-    const t60 = el('text', { x: L - 8, y: yOf(60) + 6, 'text-anchor': 'end', class: 'cs-eixo' }, chart); t60.textContent = '60';
-    const t140 = el('text', { x: L - 8, y: yOf(140) + 6, 'text-anchor': 'end', class: 'cs-eixo' }, chart); t140.textContent = '140';
-    const tx = el('text', { x: R, y: CH - 8, 'text-anchor': 'end', class: 'cs-eixo' }, chart); tx.textContent = 'meses →';
-    SERIES.forEach(s => { s.line = el('polyline', { fill: 'none', stroke: s.col, 'stroke-width': s.k === 'Y' ? 4 : 3, 'stroke-dasharray': s.dash || 'none', class: 'cs-serie' }, chart); });
+    const yOf = v => BOT - (clamp(v, 50, 150) - 50) / 100 * (BOT - TOP);
+    [50, 100, 150].forEach(v => {
+      if (v !== 100) { el('line', { x1: L, x2: R, y1: yOf(v), y2: yOf(v), class: 'cs-grelha' }, chart); return; }
+      el('line', { x1: L, x2: R, y1: yOf(v), y2: yOf(v), class: v === 100 ? 'cs-cem' : 'cs-grelha' }, chart);
+      const t = el('text', { x: L - 10, y: yOf(v) + 7, 'text-anchor': 'end', class: 'cs-eixo' }, chart); t.textContent = v === 100 ? '100 normal' : v;
+    });
+    const tx = el('text', { x: L - 10, y: 119, 'text-anchor': 'end', class: 'cs-eixo' }, chart); tx.textContent = 'meses →';
+    SERIES.forEach(s => { s.line = el('polyline', { fill: 'none', stroke: s.col, 'stroke-width': s.k === 'Y' ? 5 : 3.5, class: 'cs-serie' }, chart); });
+    const gStrip = el('g', {}, chart);
     const leg = root.querySelector('.cs-legenda');
-    if (leg) leg.innerHTML = SERIES.map(s => `<span><i style="background:${s.col}${s.dash ? ';background:repeating-linear-gradient(90deg,' + s.col + ' 0 6px,transparent 6px 10px)' : ''}"></i>${s.t}</span>`).join('');
+    if (leg) leg.innerHTML = SERIES.map(s => `<span><i style="background:${s.col}"></i>${s.t}</span>`).join('') + '<span><i class="d"></i>fase depressiva</span><span><i class="e"></i>fase expansiva</span>';
     const phaseEl = root.querySelector('.cs-fase');
+    const pauseBtn = root.querySelector('[data-acao="pausa"]');
 
-    // --- buttons ---
     root.querySelectorAll('[data-acao]').forEach(b => {
       stopNav(b);
       b.addEventListener('click', () => {
@@ -199,72 +243,100 @@
         if (a === 'reconversao') gUser = Math.max(gUser, shock());
         if (a === 'corte') { st.Y *= 0.6; st.S = P.S0 * 0.6; }
         if (a === 'repor') { reset(); qIn.value = 20; root.querySelector('[data-out="quebra"]').textContent = '20 %'; }
+        if (a === 'pausa') { paused = !paused; b.textContent = paused ? 'Continuar' : 'Pausa'; b.classList.toggle('sel', paused); }
       });
     });
     stopNav(qIn);
     qIn.addEventListener('input', () => { root.querySelector('[data-out="quebra"]').textContent = qIn.value + ' %'; });
 
-    let lastStep = -1, last = 0, running = false;
+    let lastStep = -1, last = 0, running = false, prevVals = null, rates = {};
     function frame(now) {
       if (!slide.classList.contains('current')) { running = false; return; }
       requestAnimationFrame(frame);
       const dt = Math.min((now - last) / 1000 || 0.016, 0.05); last = now;
       const step = stepOf(slide);
       if (step !== lastStep) { if (step === 0) reset(); if (step < 3) gUser = 0; lastStep = step; }
-      // two months of model time per second of real time
-      const h = dt * 2;
-      for (let i = 0; i < 4; i++) stepModel(h / 4);
-      hist.push({ t: tMonth, D: demand(st), Y: st.Y, E: 0.5 * st.E + 0.5 * st.M, p: st.p, S: stockIdx(st.S), dY: deriv(st).Y });
-      while (hist.length && tMonth - hist[0].t > 60) hist.shift();
-      // chart
-      const t0 = tMonth - 60, xOf = t => L + (t - t0) / 60 * (R - L);
-      SERIES.forEach(s => { s.line.setAttribute('points', hist.map(q => xOf(q.t).toFixed(1) + ',' + yOf(q[s.k]).toFixed(1)).join(' ')); });
-      // background bands: depressive phase (production falling) and expansive phase (rising)
-      if (!frame.n || frame.n++ % 6 === 0) {
-        frame.n = frame.n || 1;
-        gBg.replaceChildren();
-        let start = null, kind = null;
-        const flush = (endT) => { if (start === null || kind === null) return; el('rect', { x: xOf(start), y: TOP, width: Math.max(0, xOf(endT) - xOf(start)), height: BOT - TOP, class: kind === 'd' ? 'cs-depr' : 'cs-expa' }, gBg); };
-        hist.forEach(q => {
-          const k = q.dY < -0.15 ? 'd' : q.dY > 0.15 ? 'e' : null;
-          if (k !== kind) { flush(q.t); start = q.t; kind = k; }
+      const h = paused ? 0 : dt;                               // one month of model time per second
+      for (let i = 0; i < 4 && h > 0; i++) stepModel(h / 4);
+      if (h > 0) {
+        hist.push({ t: tMonth, D: demand(st), Y: st.Y, E: income(st), p: st.p, dY: deriv(st).Y });
+        while (hist.length && tMonth - hist[0].t > WIN) hist.shift();
+      }
+      // boxes: level, colour, and which one is changing fastest right now
+      const v = values(st);
+      let best = null, bestRate = 0.9;                         // index points per month
+      for (const k in v) {
+        if (prevVals && h > 0) rates[k] = 0.85 * (rates[k] || 0) + 0.15 * Math.abs(v[k] - prevVals[k]) / h;
+        if ((rates[k] || 0) > bestRate) { bestRate = rates[k]; best = k; }
+      }
+      prevVals = v;
+      for (const k in ring.nodes) {
+        const nd = ring.nodes[k];
+        if (k in v) paintNode(nd, v[k]);
+        nd.g.classList.toggle('agora', k === best && !paused);
+      }
+      // arrows: dots move from cause to effect, coloured like the cause
+      ring.links.forEach(l => {
+        const src = ring.nodes[l.a].g.classList;
+        const cls = src.contains('baixo') ? 'baixo' : src.contains('alto') ? 'alto' : '';
+        l.g.setAttribute('class', 'cs-lig' + (l.side ? ' lado' : '') + (l.faint ? ' tenue' : '') + (cls ? ' ' + cls : ''));
+        l.dots.forEach(d => {
+          if (!paused) d.u = (d.u + dt * 0.45) % 1;
+          d.c.setAttribute('cx', (l.x1 + (l.x2 - l.x1) * d.u).toFixed(1));
+          d.c.setAttribute('cy', (l.y1 + (l.y2 - l.y1) * d.u).toFixed(1));
+          d.c.setAttribute('class', 'cs-ponto ' + cls);
         });
+      });
+      // chart
+      const t0 = tMonth - WIN, xOf = t => L + (t - t0) / WIN * (R - L);
+      SERIES.forEach(s => { s.line.setAttribute('points', hist.map(q => xOf(q.t).toFixed(1) + ',' + yOf(q[s.k]).toFixed(1)).join(' ')); });
+      frame.n = (frame.n || 0) + 1;
+      if (frame.n % 6 === 0) {
+        gStrip.replaceChildren();
+        let start = null, kind = null;
+        const flush = endT => {
+          if (start === null || !kind) return;
+          const x0 = xOf(start), w = Math.max(0, xOf(endT) - x0);
+          el('rect', { x: x0, y: STRIP, width: w, height: 28, rx: 6, class: kind === 'd' ? 'cs-depr' : 'cs-expa' }, gStrip);
+          if (w > 190) { const tt = el('text', { x: x0 + w / 2, y: STRIP + 21, 'text-anchor': 'middle', class: 'cs-faixa' }, gStrip); tt.textContent = kind === 'd' ? 'fase depressiva' : 'fase expansiva'; }
+        };
+        hist.forEach(q => { const k = q.dY < -0.25 ? 'd' : q.dY > 0.25 ? 'e' : null; if (k !== kind) { flush(q.t); start = q.t; kind = k; } });
         flush(tMonth);
       }
-      const dY = deriv(st).Y;
-      if (phaseEl) {
-        const txt = dY < -0.15 ? 'Fase depressiva: a produção desce' : dY > 0.15 ? 'Fase expansiva: a produção sobe' : st.Y < 95 ? 'Depressão: a produção ficou em baixo' : st.Y > 105 ? 'Mais produção do que antes da crise' : 'Equilíbrio';
-        if (phaseEl.textContent !== txt) { phaseEl.textContent = txt; phaseEl.className = 'cs-fase ' + (dY < -0.15 || st.Y < 95 ? 'd' : dY > 0.15 || st.Y > 105 ? 'e' : ''); }
-      }
-      // network: coins move along each edge; how many show depends on the flow
-      EDGES.forEach(e => {
-        const ratio = e.f(st) / e.base;
-        const shown = Math.round(clamp(ratio, 0, 2) * 6);
-        e.coins.forEach((c, i) => {
-          c.u = (c.u + dt * 0.18) % 1;
-          if (i >= shown) { c.c.setAttribute('visibility', 'hidden'); return; }
-          const pt = e.path.getPointAtLength(c.u * e.len);
-          c.c.setAttribute('cx', pt.x.toFixed(1)); c.c.setAttribute('cy', pt.y.toFixed(1)); c.c.setAttribute('visibility', 'visible');
-        });
-        const pc = Math.round((ratio - 1) * 100);
-        e.pct.textContent = Math.abs(pc) < 1 ? '' : (pc > 0 ? '+' : '−') + Math.abs(pc) + ' %';
-        e.pct.setAttribute('class', 'cs-pct ' + (pc < 0 ? 'neg' : 'pos'));
-        e.path.setAttribute('class', 'cs-aresta' + (pc <= -5 ? ' cai' : pc >= 5 ? ' sobe' : ''));
-      });
-      const jobs = (arr, v) => arr.forEach((c, i) => c.setAttribute('class', 'cs-pessoa' + (i >= Math.round(v / 10) ? ' sem' : '')));
-      jobs(NODES.fab.people, st.E); jobs(NODES.min.people, st.M);
-      const nb = Math.round(clamp(st.S / P.S0 * 3, 0, 12));
-      NODES.fab.boxes.forEach((b, i) => b.setAttribute('visibility', i < nb ? 'visible' : 'hidden'));
-      priceTag.textContent = 'preços ' + fmt(st.p, 0);
-      const read = root.querySelector('.cs-num');
-      if (read && (!frame.r || now - frame.r > 300)) {
-        frame.r = now;
-        read.innerHTML = `<span>Produção <b>${fmt(st.Y)}</b></span><span>Emprego <b>${fmt(0.5 * st.E + 0.5 * st.M)}</b></span><span>Preços <b>${fmt(st.p)}</b></span><span>Por vender <b>${fmt(stockIdx(st.S))}</b></span>`;
+      if (phaseEl && frame.n % 10 === 0) {
+        const dY = deriv(st).Y;
+        const txt = paused ? 'Em pausa' : dY < -0.25 ? 'Fase depressiva: a produção desce' : dY > 0.25 ? 'Fase expansiva: a produção sobe' : st.Y < 95 ? 'Depressão: a produção ficou em baixo' : st.Y > 105 ? 'Mais produção do que antes da crise' : 'Equilíbrio: tudo no normal';
+        if (phaseEl.textContent !== txt) { phaseEl.textContent = txt; phaseEl.className = 'cs-fase ' + (dY < -0.25 || st.Y < 95 ? 'd' : dY > 0.25 || st.Y > 105 ? 'e' : ''); }
       }
     }
     new MutationObserver(() => {
       if (slide.classList.contains('current') && !running) { running = true; last = performance.now(); requestAnimationFrame(frame); }
     }).observe(slide, { attributes: true, attributeFilter: ['class'] });
     if (slide.classList.contains('current')) { running = true; requestAnimationFrame(frame); }
+  });
+
+  /* ---------- 5. The equations slide: the same loop, lighting up the part each equation describes ---------- */
+  document.querySelectorAll('[data-civ="anel"]').forEach(svg => {
+    const slide = svg.closest('.slide');
+    const ring = buildRing(svg);
+    Object.values(ring.nodes).forEach(nd => { if (nd.val) nd.val.textContent = ''; });
+    // build → boxes and arrows to light up
+    const LIT = [
+      ['ven', 'out', 'com', 'out-ven', 'com-ven'],
+      ['arm', 'ven-arm'],
+      ['pro', 'arm-pro'],
+      ['pro', 'arm-pro'],
+      ['emp', 'pro-emp'],
+      ['sal', 'com', 'ven', 'emp-sal', 'sal-com', 'com-ven'],
+      ['pre', 'arm-pre', 'pre-ven'],
+    ];
+    const stepOf = sl => { let k = 0; while (sl.classList.contains('ge' + (k + 1))) k++; return k; };
+    const paint = () => {
+      const lit = LIT[Math.min(stepOf(slide), LIT.length - 1)];
+      for (const k in ring.nodes) ring.nodes[k].g.classList.toggle('ativo', lit.includes(k));
+      ring.links.forEach(l => l.g.classList.toggle('ativo', lit.includes(l.a + '-' + l.b)));
+    };
+    new MutationObserver(paint).observe(slide, { attributes: true, attributeFilter: ['class'] });
+    paint();
   });
 })();
