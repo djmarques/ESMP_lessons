@@ -55,7 +55,7 @@
 
   /* ---------- Colours: the site's palette ---------- */
   const C = {
-    board: 0x2a3640, edge: 0x1a232b, nao: 0x3d4a55, cand: 0x7a7258, membro: 0x2f6e9e, novo: 0xa44a16, pt: 0xf0a673,
+    board: 0x2a3640, edge: 0x1a232b, mar: 0x1f3443, terra: 0x34404a, nao: 0x5b6773, cand: 0x7a7258, membro: 0x2f6e9e, novo: 0xa44a16, pt: 0xf0a673,
     cream: 0xf6f3ec, apricot: 0xf0a673, sky: 0x7fb0d0, navy: 0x1e2a33, grey: 0x6b7680, gold: 0xd9b24c, plaza: 0xd8d1c2,
   };
 
@@ -107,40 +107,74 @@
   const clamp = (v, a = 0, b = 1) => Math.max(a, Math.min(b, v));
 
   /* ======================================================================
-     The map: one tile per country (a schematic map, not to scale).
-     [name, column, row]: columns run west → east, rows north → south.
+     The map: the real outlines of the countries (europa-mapa.js, from Natural Earth), raised as
+     clay slabs. Same projection as the European Union's own maps (equal-area, centred on 52° N 10° E).
+     Board coordinates: x to the east, z to the south; 1 unit = 190 km.
      ====================================================================== */
+  const MAPA = window.EUROPA_MAPA;
+  const R_EARTH = 6371, LAT0 = 52 * Math.PI / 180, LON0 = 10 * Math.PI / 180, KM = MAPA ? MAPA.scale : 190;
+  /** Longitude and latitude (degrees) → [x, z] on the board (the same formula as tools/build_map.js). */
+  function geo(lon, lat) {
+    const l = lon * Math.PI / 180, p = lat * Math.PI / 180;
+    const k = Math.sqrt(2 / (1 + Math.sin(LAT0) * Math.sin(p) + Math.cos(LAT0) * Math.cos(p) * Math.cos(l - LON0)));
+    return [R_EARTH * k * Math.cos(p) * Math.sin(l - LON0) / KM, -R_EARTH * k * (Math.cos(LAT0) * Math.sin(p) - Math.sin(LAT0) * Math.cos(p) * Math.cos(l - LON0)) / KM];
+  }
+  // name and where its label (and its coins, its leader…) stand: a point well inside each country
   const COUNTRIES = {
-    NO: ["Noruega", 5, 0], SE: ["Suécia", 6, 0], FI: ["Finlândia", 7, 0], EE: ["Estónia", 8, 0],
-    UK: ["Reino Unido", 2, 1], DK: ["Dinamarca", 5, 1], LV: ["Letónia", 8, 1],
-    IE: ["Irlanda", 1, 2], NL: ["Países Baixos", 4, 2], DE: ["Alemanha", 5, 2], PL: ["Polónia", 6, 2], LT: ["Lituânia", 7, 2],
-    BE: ["Bélgica", 4, 3], LU: ["Luxemburgo", 5, 3], CZ: ["Chéquia", 6, 3], SK: ["Eslováquia", 7, 3], UA: ["Ucrânia", 8, 3],
-    FR: ["França", 3, 4], CH: ["Suíça", 4, 4], AT: ["Áustria", 5, 4], HU: ["Hungria", 6, 4], RO: ["Roménia", 7, 4], MD: ["Moldávia", 8, 4],
-    PT: ["Portugal", 1, 5], ES: ["Espanha", 2, 5], IT: ["Itália", 4, 5], SI: ["Eslovénia", 5, 5], HR: ["Croácia", 6, 5], RS: ["Sérvia", 7, 5], BG: ["Bulgária", 8, 5], GE: ["Geórgia", 10, 5],
-    BA: ["Bósnia-Herzegovina", 6, 6], MK: ["Macedónia do Norte", 7, 6], GR: ["Grécia", 8, 6], TR: ["Turquia", 9, 6],
-    MT: ["Malta", 4, 7], ME: ["Montenegro", 6, 7], AL: ["Albânia", 7, 7], CY: ["Chipre", 10, 7],
+    PT: ["Portugal", -8.0, 39.6], ES: ["Espanha", -3.7, 40.2], FR: ["França", 2.4, 46.6], BE: ["Bélgica", 4.6, 50.6], NL: ["Países Baixos", 5.6, 52.3],
+    LU: ["Luxemburgo", 6.1, 49.75], DE: ["Alemanha", 10.3, 51.2], IT: ["Itália", 12.6, 42.8], DK: ["Dinamarca", 9.2, 56.0], IE: ["Irlanda", -8.0, 53.2],
+    UK: ["Reino Unido", -1.8, 52.8], GR: ["Grécia", 22.0, 39.4], AT: ["Áustria", 14.3, 47.6], FI: ["Finlândia", 26.0, 62.5], SE: ["Suécia", 15.5, 62.0],
+    CY: ["Chipre", 33.1, 35.05], CZ: ["Chéquia", 15.4, 49.8], EE: ["Estónia", 25.8, 58.7], HU: ["Hungria", 19.4, 47.2], LV: ["Letónia", 25.0, 56.9],
+    LT: ["Lituânia", 23.9, 55.3], MT: ["Malta", 14.4, 35.9], PL: ["Polónia", 19.3, 52.1], SK: ["Eslováquia", 19.5, 48.7], SI: ["Eslovénia", 14.8, 46.1],
+    BG: ["Bulgária", 25.3, 42.7], RO: ["Roménia", 24.9, 45.9], HR: ["Croácia", 15.6, 45.4], NO: ["Noruega", 9.5, 61.0], CH: ["Suíça", 8.2, 46.8],
+    IS: ["Islândia", -18.5, 64.9], XK: ["Kosovo", 20.9, 42.6], AL: ["Albânia", 20.0, 41.1], BA: ["Bósnia-Herzegovina", 17.8, 44.2], GE: ["Geórgia", 43.5, 42.2],
+    MD: ["Moldávia", 28.5, 47.2], ME: ["Montenegro", 19.3, 42.8], MK: ["Macedónia do Norte", 21.7, 41.6], RS: ["Sérvia", 20.8, 44.0], TR: ["Turquia", 33.0, 39.0],
+    UA: ["Ucrânia", 31.2, 49.0],
   };
   const CANDIDATES = ["AL", "BA", "GE", "MD", "ME", "MK", "RS", "TR", "UA"];
-  const S = 1.75;                                              // distance between tiles
-  const tx = (col) => (col - 5.5) * S, tz = (row) => (row - 3.5) * S;
-  const TOWER = { x: -10.7, z: 1.9 };
-  const DOOR = { x: -8.6, z: tz(1) };
-  const UK_OUT = { x: -10.4, z: tz(1) };
+  const TINY = ["LU", "MT"];                                   // too small to see: they also get a round marker
+  const [towerX, towerZ] = geo(-19, 45);                       // in the Atlantic, west of the Bay of Biscay
+  const TOWER = { x: towerX, z: towerZ };
+  const [doorX, doorZ] = geo(-14, 54.5);                       // west of Ireland
+  const DOOR = { x: doorX, z: doorZ };
+  const LIFT = { NAO: -0.15, MEMBRO: 0.05 };                   // heights of a country slab: outside, member
 
   // the board: the sea, a rim, and (south) the square of the institutions
-  scene.add(box(22.4, 0.5, 17.4, C.board, -1.5, -0.25, 1.2), box(22.9, 0.3, 17.9, C.edge, -1.5, -0.52, 1.2));
-  const PLAZA_Z = 16.2;
+  const BOX = MAPA ? MAPA.box : { x0: -15.2, x1: 16.6, y0: -10.6, y1: 11.6 };
+  const seaW = BOX.x1 - BOX.x0, seaD = BOX.y1 - BOX.y0, seaX = (BOX.x0 + BOX.x1) / 2, seaZ = -(BOX.y0 + BOX.y1) / 2;
+  scene.add(box(seaW, 0.5, seaD, C.mar, seaX, -0.25, seaZ), box(seaW + 0.5, 0.3, seaD + 0.5, C.edge, seaX, -0.52, seaZ));
+  const PLAZA_Z = -BOX.y0 + 7;                                 // a separate platform south of the map
   const plaza = group(box(21, 0.5, 10.4, C.board, 0, -0.25, 0), box(21.5, 0.3, 10.9, C.edge, 0, -0.52, 0), box(19.6, 0.06, 9.2, C.plaza, 0, 0.03, 0));
   plaza.position.set(-1, -3, PLAZA_Z); plaza.visible = false; scene.add(plaza);
   const coeIsland = group(box(5, 0.5, 4.6, C.board, 0, -0.25, 0), box(4.4, 0.06, 4, C.plaza, 0, 0.03, 0));
   coeIsland.position.set(13.6, -3, PLAZA_Z + 0.4); coeIsland.visible = false; scene.add(coeIsland);
 
+  /** Polygons [[outline, holes…], …] in map units → one extruded geometry, lying on y = 0. */
+  function slab(polys, depth) {
+    const shapes = polys.map(([outer, ...holes]) => {
+      const sh = new T.Shape(outer.map(([x, y]) => new T.Vector2(x, y)));
+      holes.forEach((h) => sh.holes.push(new T.Path(h.map(([x, y]) => new T.Vector2(x, y)))));
+      return sh;
+    });
+    const g = new T.ExtrudeGeometry(shapes, { depth, bevelEnabled: false });
+    g.rotateX(-Math.PI / 2);                                   // shape y (north) → board −z; extrusion → up
+    return g;
+  }
+  // land that is not part of the story (Russia, Belarus, North Africa…): low and dark
+  if (MAPA && MAPA.context.length) scene.add(mesh(slab(MAPA.context, 0.08), clay(C.terra, { roughness: 0.9 })));
+
   const tiles = {};
   for (const code in COUNTRIES) {
-    const [name, col, row] = COUNTRIES[code];
-    const m = mesh(new T.BoxGeometry(1.5, 0.5, 1.5), clay(C.nao, { roughness: 0.7 }), tx(col), 0, tz(row));
+    const [name, lon, lat] = COUNTRIES[code];
+    const [x, z] = geo(lon, lat);
+    const mat = clay(C.nao, { roughness: 0.7 });
+    const m = new T.Group();
+    if (MAPA && MAPA.countries[code]) m.add(mesh(slab(MAPA.countries[code], 0.3), mat));
+    if (TINY.includes(code)) m.add(mesh(new T.CylinderGeometry(0.24, 0.24, 0.3, 24), mat, x, 0.15, z));
+    const anchor = new T.Object3D(); anchor.position.set(x, 0.3, z); m.add(anchor);
+    m.position.y = LIFT.NAO;
     scene.add(m);
-    tiles[code] = { m, name, x: tx(col), z: tz(row), y: 0, color: new T.Color(C.nao), hop: 0, glow: 0 };
+    tiles[code] = { m, mat, anchor, name, x, z, y: LIFT.NAO, color: new T.Color(C.nao) };
   }
 
   // the tower: one block per thing the countries started doing together
@@ -158,18 +192,20 @@
 
   // the treaty tablet (it flies onto the tower when the treaty adds a block)
   const tablet = group(box(1.7, 1.1, 0.14, C.cream, 0, 0, 0), box(1.3, 0.08, 0.02, C.apricot, 0, 0.32, 0.08), box(1.3, 0.05, 0.02, C.grey, 0, 0.08, 0.08), box(1.3, 0.05, 0.02, C.grey, 0, -0.1, 0.08), box(0.9, 0.05, 0.02, C.grey, -0.2, -0.28, 0.08));
-  const TABLET_HOME = new T.Vector3(-7.4, 4.4, -3.2);
+  const TABLET_HOME = new T.Vector3(TOWER.x + 3.4, 4.4, TOWER.z - 5);
   tablet.position.copy(TABLET_HOME); tablet.scale.setScalar(0.001); scene.add(tablet);
   const spark = mesh(new T.SphereGeometry(0.28, 16, 12), clay(C.apricot, { emissive: C.apricot, emissiveIntensity: 1 }));
   spark.visible = false; scene.add(spark);
   const SPARK_START = 1.2, SPARK_END = 2.2;                   // seconds after the build: the spark flies, then the block drops
 
   // border barriers on a few internal borders (they open when Schengen starts)
-  const BARRIERS = [["BE", "LU"], ["LU", "DE"], ["NL", "DE"], ["BE", "NL"], ["FR", "BE"], ["FR", "LU"], ["PT", "ES"], ["ES", "FR"]];
-  const barriers = BARRIERS.map(([a, b]) => {
-    const A = tiles[a], B = tiles[b];
-    const g = group(box(0.12, 0.6, 0.12, C.cream, 0, 0.3, 0), box(0.85, 0.09, 0.09, 0xb3261e, 0.4, 0.55, 0));
-    g.position.set((A.x + B.x) / 2, 0.5, (A.z + B.z) / 2);
+  // [country, country, longitude and latitude of a crossing on their border]
+  const BARRIERS = [["BE", "LU", 5.82, 49.68], ["LU", "DE", 6.37, 49.47], ["NL", "DE", 6.17, 51.37], ["BE", "NL", 4.6, 51.45],
+    ["FR", "BE", 3.15, 50.7], ["FR", "LU", 6.1, 49.47], ["PT", "ES", -7.05, 38.88], ["ES", "FR", -1.78, 43.36]];
+  const barriers = BARRIERS.map(([a, b, lon, lat]) => {
+    const A = tiles[a], B = tiles[b], [bx, bz] = geo(lon, lat);
+    const g = group(box(0.1, 0.5, 0.1, C.cream, 0, 0.25, 0), box(0.7, 0.08, 0.08, 0xb3261e, 0.33, 0.46, 0));
+    g.position.set(bx, 0.35, bz);
     g.rotation.y = Math.atan2(B.z - A.z, B.x - A.x) + Math.PI / 2;
     g.scale.setScalar(0.001); scene.add(g);
     return { g, a, b, s: 0, arm: g.children[1] };
@@ -182,7 +218,7 @@
   const coinMat = clay(C.gold, { metalness: 0.6, roughness: 0.35 });
   const coins = EURO_2002.concat(Object.keys(EURO_LATER)).map((code) => {
     const g = group(cyl(0.3, 0.08, coinMat, 0, 0.04, 0, 24), cyl(0.3, 0.08, coinMat, 0.06, 0.13, 0.03, 24), cyl(0.3, 0.08, coinMat, -0.03, 0.22, -0.02, 24));
-    g.position.set(tiles[code].x + 0.35, 0.55, tiles[code].z + 0.35); g.scale.setScalar(0.001); scene.add(g);
+    g.position.set(tiles[code].x + 0.3, 0.36, tiles[code].z + 0.3); g.scale.setScalar(0.001); scene.add(g);
     return { g, code, s: 0, from: EURO_LATER[code] || 2002 };
   });
 
@@ -192,10 +228,11 @@
   const doorLeaf = door.children[3];
 
   // the three gates of the Copenhagen criteria, by the candidates
-  const GATES = [["Critérios políticos", 1.4], ["Critérios económicos", 4.2], ["Critérios jurídicos", 7]];
-  const gates = GATES.map(([, x]) => {
+  const GATES = [["Critérios políticos", 16], ["Critérios económicos", 19.5], ["Critérios jurídicos", 23]];   // in the sea south of Italy and Greece
+  const gates = GATES.map(([, lon]) => {
+    const [x, z] = geo(lon, 34.6);
     const g = group(box(0.25, 1.6, 0.25, C.cream, -0.7, 0.8, 0), box(0.25, 1.6, 0.25, C.cream, 0.7, 0.8, 0), box(1.7, 0.25, 0.3, C.apricot, 0, 1.65, 0));
-    g.position.set(x, 0, 8.6); g.scale.setScalar(0.001); scene.add(g);
+    g.position.set(x, 0, z); g.scale.setScalar(0.001); scene.add(g);
     return g;
   });
 
@@ -242,8 +279,8 @@
   const leaders = MEMBERS_TODAY.map((code, i) => {
     const p = pawn(code === "PT" ? C.pt : C.navy, 0.42);
     const a = (i / 27) * Math.PI * 2;
-    p.position.set(tiles[code].x, 0.55, tiles[code].z); p.scale.setScalar(0.001); scene.add(p);
-    return { p, code, home: new T.Vector3(tiles[code].x, 0.55, tiles[code].z), seat: new T.Vector3(INST.ce.x + Math.cos(a) * 1.6, 0.25, INST.ce.z + Math.sin(a) * 1.6), u: 0 };
+    p.position.set(tiles[code].x, 0.35, tiles[code].z); p.scale.setScalar(0.001); scene.add(p);
+    return { p, code, home: new T.Vector3(tiles[code].x, 0.35, tiles[code].z), seat: new T.Vector3(INST.ce.x + Math.cos(a) * 1.6, 0.25, INST.ce.z + Math.sin(a) * 1.6), u: 0 };
   });
   const president = pawn(C.cream, 0.5); president.position.set(INST.ce.x, 0.25, INST.ce.z + 0.0); president.scale.setScalar(0.001); scene.add(president);
   const deputies = [];
@@ -297,13 +334,13 @@
   }
   for (const code in tiles) {
     const t = tiles[code];
-    label(code === "DE" ? '<span class="de-nome">Alemanha</span>' : t.name, "pais-et eu-pais", t.m, 0.3, (st) =>
+    label(code === "DE" ? '<span class="de-nome">Alemanha</span>' : t.name, "pais-et eu-pais", t.anchor, 0.1, (st) =>
       st.novos.includes(code) || (code === "PT" && st.membros.has("PT") && !st.praca) || (st.cand && CANDIDATES.includes(code) && st.cam === "candidatos") || (code === "UK" && st.ukFora && !st.praca && st.ukLabel));
   }
   BLOCKS.forEach(([name, year], i) => label(`${name} <b>${year}</b>`, "eu-bloco", [TOWER.x - 1.35, 0, TOWER.z], 0, (st) => st.blocos > i && (st.torre || (st.ultimoBloco === i && !st.praca)), "direita"));
   blocks.forEach((b, i) => { labels[labels.length - BLOCKS.length + i].block = b; });
   const tabletLabel = label("", "comum-et eu-tabua", tablet, 0.85, (st) => !!st.tabua && !st.praca);
-  const nameLabel = label("", "eu-nome", [-1.5, 0.05, 8.25], 0, (st) => !!st.nome && !st.praca && !st.cand);
+  const nameLabel = label("", "eu-nome", [seaX, 0.05, -BOX.y0 - 0.5], 0, (st) => !!st.nome && !st.praca && !st.cand);
   label("fronteiras abertas", "nota-et", [tiles.DE.x - 0.9, 1.4, tiles.DE.z + 0.4], 0, (st) => st.schengenAgora);
   label("euro: 12 países", "nota-et", [tiles.FR.x, 1.3, tiles.FR.z], 0, (st) => st.euroAgora);
   label("Saída: artigo 50.º", "nota-et", [DOOR.x, 2.2, DOOR.z], 0, (st) => st.porta && !st.praca && (st.portaAgora || st.ukLabel));
@@ -341,18 +378,18 @@
       { set: TODAY, cam: "mapa" },
       { brilho: "membros", cam: "mapa" },
       { torre: true, cam: "torre" },
-      { set: { membros: [], bloco: 0, nome: "", schengen: false, euro: false, porta: false, ukFora: false, de: "Alemanha Ocidental", ano: "1950" }, cam: "mapa" },
+      { set: { membros: [], bloco: 0, nome: "", schengen: false, euro: false, porta: false, ukFora: false, de: "Alemanha Ocidental", ano: "1950" }, cam: "mapa6" },
     ],
     "dos-seis-aos-doze": [
-      { ano: "1951", entram: ["BE", "FR", "DE", "IT", "LU", "NL"], bloco: 1, tabua: ["Tratado de Paris", "1951"], nome: "Comunidade Europeia do Carvão e do Aço", cam: "mapa" },
-      { ano: "1957", bloco: 2, tabua: ["Tratados de Roma", "1957"], nome: "Comunidade Económica Europeia", cam: "mapa" },
-      { ano: "1973", entram: ["DK", "IE", "UK"], cam: "mapa" },
-      { ano: "1979", bloco: 3, cam: "mapa" },
-      { ano: "1981", entram: ["GR"], cam: "mapa" },
-      { ano: "1986", entram: ["PT", "ES"], tabua: ["Ato Único Europeu", "1986"], cam: "mapa" },
+      { ano: "1951", entram: ["BE", "FR", "DE", "IT", "LU", "NL"], bloco: 1, tabua: ["Tratado de Paris", "1951"], nome: "Comunidade Europeia do Carvão e do Aço", cam: "mapa6" },
+      { ano: "1957", bloco: 2, tabua: ["Tratados de Roma", "1957"], nome: "Comunidade Económica Europeia", cam: "mapa6" },
+      { ano: "1973", entram: ["DK", "IE", "UK"], cam: "mapa6" },
+      { ano: "1979", bloco: 3, cam: "mapa6" },
+      { ano: "1981", entram: ["GR"], cam: "mapa6" },
+      { ano: "1986", entram: ["PT", "ES"], tabua: ["Ato Único Europeu", "1986"], cam: "mapa6" },
     ],
     "da-comunidade-a-uniao": [
-      { ano: "1992", bloco: 4, tabua: ["Tratado de Maastricht", "1992"], nome: "União Europeia", de: "Alemanha", cam: "mapa" },
+      { ano: "1992", bloco: 4, tabua: ["Tratado de Maastricht", "1992"], nome: "União Europeia", de: "Alemanha", cam: "mapa6" },
       { ano: "1995", entram: ["AT", "FI", "SE"], bloco: 5, schengen: true, cam: "mapa" },
       { ano: "1997", tabua: ["Tratado de Amesterdão", "1997"], cam: "mapa" },
       { ano: "2002", bloco: 6, euro: true, cam: "mapa" },
@@ -429,27 +466,30 @@
   }
 
   /* ---------- Camera shots: a box to keep in view, and where to look from ---------- */
+  const N = -BOX.y1, Sth = -BOX.y0;                           // z of the north and south edges of the map
   const SHOTS = {
-    mapa: { box: [-12, 0, -6.6, 9, 3, 8.6], dir: [0, 1.5, 1] },
-    final: { box: [-17, 0, -6.6, 9, 4, 8.6], dir: [0.1, 1.3, 1] },
-    torre: { box: [-16.5, 0, 0, -8.8, 4.4, 3.8], dir: [0.45, 0.45, 1] },
-    oeste: { box: [-12.5, 0, -7, -1, 4, 3.2], dir: [0.1, 1.25, 1] },
-    candidatos: { box: [-1, 0, -2.5, 9.5, 3, 9.6], dir: [0.1, 1.2, 1] },
-    praca: { box: [-12, 0, -2, 16, 4, 21.6], dir: [0, 1.25, 1] },
-    ce: { box: [-12, 0, -6.6, -3.5, 2.4, 15.6], dir: [0.25, 1.5, 1] },
-    pe: { box: [-12, 0, -6.6, 9, 2.4, 15.6], dir: [0, 1.45, 1] },
-    cue: { box: [-0.5, 0, 12.2, 6.2, 2.6, 15.8], dir: [0.1, 1.4, 1] },
-    com: { box: [4.6, 0, 11.6, 10.8, 4.6, 18.6], dir: [-0.15, 1.1, 1] },
-    nomes: { box: [-10, 0, 11, 16.5, 3.5, 19.5], dir: [0, 1.0, 1] },
-    lei: { box: [-5.5, 0, 11.6, 10.5, 4.2, 17.6], dir: [0, 1.35, 1] },
-    tudo: { box: [-12, 0, -6.6, 11, 4, 18], dir: [0, 1.5, 1] },
-    tj: { box: [-9.6, 0, 15.6, -3.8, 3.4, 21], dir: [0.15, 1.1, 1] },
-    tribunais: { box: [-9.6, 0, 15.6, 0.8, 3.4, 21.2], dir: [0.1, 1.1, 1] },
-    bce: { box: [-0.2, 0, 15.6, 6, 4.4, 21], dir: [0.1, 1.0, 1] },
-    org: { box: [4.6, 0, 15.6, 11, 2.6, 21.2], dir: [0, 1.2, 1] },
-    pracafinal: { box: [-11.5, 0, 10.8, 16.5, 4, 21.4], dir: [0, 1.35, 1] },
-    coe: { box: [10.6, 0, 14, 16.6, 3.6, 19.6], dir: [-0.2, 0.6, 1] },
+    mapa6: { box: [-13.6, 0, -6.2, 8, 3, 9], dir: [0, 1.5, 1] },                   // the west: from the six to the twelve
+    mapa: { box: [-13.6, 0, N, 15.5, 3, Sth - 0.4], dir: [0, 1.6, 1] },              // all of Europe
+    final: { box: [-18.5, 0, N, 15.5, 4, Sth - 0.4], dir: [0.05, 1.5, 1] },
+    torre: { box: [TOWER.x - 5.8, 0, TOWER.z - 1.9, TOWER.x + 2, 4.4, TOWER.z + 1.9], dir: [0.45, 0.45, 1] },
+    oeste: { box: [TOWER.x - 2, 0, -5.5, 0.5, 4, TOWER.z + 1.9], dir: [0.1, 1.25, 1] },
+    candidatos: { box: [2.5, 0, -3, 16, 3, Sth], dir: [0.05, 1.3, 1] },
+    praca: { box: [-13.6, 0, 1, 16, 4, PZ + 5.4], dir: [0, 1.25, 1] },
+    ce: { box: [-13.6, 0, -6, -3.5, 2.4, PZ - 0.6], dir: [0.25, 1.5, 1] },
+    pe: { box: [-13.6, 0, N, 11, 2.4, PZ - 0.6], dir: [0, 1.6, 1] },
+    cue: { box: [-0.5, 0, PZ - 4, 6.2, 2.6, PZ - 0.4], dir: [0.1, 1.4, 1] },
+    com: { box: [4.6, 0, PZ - 4.6, 10.8, 4.6, PZ + 2.4], dir: [-0.15, 1.1, 1] },
+    nomes: { box: [-10, 0, PZ - 5.2, 16.5, 3.5, PZ + 3.3], dir: [0, 1.0, 1] },
+    lei: { box: [-5.5, 0, PZ - 4.6, 10.5, 4.2, PZ + 1.4], dir: [0, 1.35, 1] },
+    tudo: { box: [-13.6, 0, N, 13, 4, PZ + 1.8], dir: [0, 1.6, 1] },
+    tj: { box: [-9.6, 0, PZ - 0.6, -3.8, 3.4, PZ + 4.8], dir: [0.15, 1.1, 1] },
+    tribunais: { box: [-9.6, 0, PZ - 0.6, 0.8, 3.4, PZ + 5], dir: [0.1, 1.1, 1] },
+    bce: { box: [-0.2, 0, PZ - 0.6, 6, 4.4, PZ + 4.8], dir: [0.1, 1.0, 1] },
+    org: { box: [4.6, 0, PZ - 0.6, 11, 2.6, PZ + 5], dir: [0, 1.2, 1] },
+    pracafinal: { box: [-11.5, 0, PZ - 5.4, 16.5, 4, PZ + 5.2], dir: [0, 1.35, 1] },
+    coe: { box: [10.6, 0, PZ - 2.2, 16.6, 3.6, PZ + 3.4], dir: [-0.2, 0.6, 1] },
   };
+
 
   /* ---------- Sounds (synthesised; shares the on/off choice of the games, «jogo-som») ---------- */
   const SOM = (() => {
@@ -596,27 +636,27 @@
     if (step !== current.step) { current.step = step; setState(stateAt(current.id, step)); }
     const st = current.st, since = t - current.t0;
 
-    // tiles: height and colour
+    // countries: height and colour
     for (const code in tiles) {
       const tl = tiles[code];
       const member = st.membros.has(code), isNew = st.novos.includes(code) && member;
       const cand = CANDIDATES.includes(code) && st.cand;
-      const goalY = member ? 0.3 : code === "UK" && st.ukFora ? -0.05 : 0;
       const goalC = isNew ? C.novo : member ? (code === "PT" ? C.pt : C.membro) : cand ? C.cand : C.nao;
-      tl.y = ease(tl.y, goalY, dt, 3);
+      tl.y = ease(tl.y, member ? LIFT.MEMBRO : LIFT.NAO, dt, 3);
       tl.color.lerp(colorGoal.setHex(goalC), 1 - Math.exp(-dt * 3));
-      tl.m.material.color.copy(tl.color);
-      const hop = isNew ? Math.max(0, Math.sin(Math.min(since, 1.2) / 1.2 * Math.PI)) * 0.6 : 0;
+      tl.mat.color.copy(tl.color);
+      const hop = isNew ? Math.max(0, Math.sin(Math.min(since, 1.2) / 1.2 * Math.PI)) * 0.5 : 0;
       const pulse = (st.brilho === "membros" && member) || (cand && st.gates) ? 0.25 + 0.2 * Math.sin(t * 3) : 0;
-      tl.m.material.emissive.setHex(isNew || pulse ? (cand ? C.cand : isNew ? C.novo : C.membro) : 0x000000);
-      tl.m.material.emissiveIntensity = isNew ? 0.35 : pulse;
-      let x = tl.x, z = tl.z;
-      if (code === "UK" && st.ukFora) {                       // the UK slides out through the door
-        const u = clamp((since - 0.6) / 2.2);
-        const k = st.cam === "oeste" ? u : 1;
-        x = tl.x + (UK_OUT.x - tl.x) * k; z = tl.z;
+      tl.mat.emissive.setHex(isNew || pulse ? (cand ? C.cand : isNew ? C.novo : C.membro) : 0x000000);
+      tl.mat.emissiveIntensity = isNew ? 0.35 : pulse;
+      let dx = 0, lift = 0;
+      if (code === "UK" && st.ukFora && st.cam === "oeste") {   // 2020: Great Britain lifts, leaves through the door, comes back grey
+        const up = clamp((since - 0.4) / 0.8), out = clamp((since - 1.2) / 1.8), back = clamp((since - 3.6) / 1.4);
+        const k = out * (1 - back);
+        dx = (DOOR.x - 1.2 - tl.x) * k * k * (3 - 2 * k);
+        lift = 1.6 * up * (1 - back);
       }
-      tl.m.position.set(x, tl.y + hop, z);
+      tl.m.position.set(dx, tl.y + hop + lift, 0);
     }
     // the tower
     blocks.forEach((b, i) => {
@@ -767,7 +807,8 @@
       if (!free(py)) {
         best = null;
         // tower labels are placed bottom block first, so they only move up and stay in the tower's order
-        for (let s = 1; s < 60 && best === null; s++) { if (free(py - s * 5)) best = py - s * 5; else if (!item.block && free(py + s * 5)) best = py + s * 5; }
+        const reach = item.block ? 60 : 7;                    // a label pushed far from its place would point at the wrong country
+        for (let s = 1; s < reach && best === null; s++) { if (free(py - s * 5)) best = py - s * 5; else if (!item.block && free(py + s * 5)) best = py + s * 5; }
         if (best === null) { item.el.classList.remove("visivel"); item.el.classList.add("sem-lugar"); item.y = undefined; continue; }   // no room: better hidden than on top of text
       }
       item.el.classList.remove("sem-lugar");
