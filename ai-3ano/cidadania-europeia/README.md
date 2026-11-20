@@ -15,8 +15,9 @@ fonts, icons and QR codes, which load from Google Fonts and cdnjs).
 | `index.html` | All the content: one `<article class="slide">` per slide, grouped by lesson |
 | `style.css` | Appearance: the deck's palette (navy, burnt orange, sand) and typefaces (Cambria, Calibri) |
 | `app.js` | Behaviour: navigation, step-by-step builds, quizzes, research tasks, sorting activity, notes |
-| `fundadores.css`, `fundadores.js` | Lesson 3 only, staged as a film: slides with the class `cine` get a dark screen, a large photograph, a year in the background that follows the builds (`data-ano`), a chapter bar and a Reproduzir button (seconds per build: `SECONDS_PER_BUILD` in `fundadores.js`) |
+| `fundadores.css`, `fundadores.js` | Lessons 3, 4 and 5, staged as films (each lesson is its own film): slides with the class `cine` get a dark screen, a large photograph, a year in the background that follows the builds (`data-ano`), a chapter bar and a Reproduzir button (seconds per build: `SECONDS_PER_BUILD` in `fundadores.js`) |
 | `tabuleiro.js` | Lesson 3, slide `#tabuleiro`: the 3D board animation. `SCRIPT` says where each piece stands at each build and `CAMERA` where the camera is; the captions are in `index.html` |
+| `europa3d.js` | Lessons 4 and 5: one 3D board for seven chapters (slides with the class `eu3d`). A schematic map of Europe (one tile per country), a tower of the things the countries share, and a square where the institutions rise. `FRAMES` lists, build by build, only what changes (countries that join, a block, a treaty, the camera shot); `SHOTS` are the camera shots. The canvas moves from chapter to chapter and the camera glides, so there is no cut. Captions are in `index.html`, one per build. Styles: section 5c of `fundadores.css` |
 | `assets/vendor/three.min.js` | three.js (release 160, MIT licence), the library that draws the 3D board. Kept in the repository so the animation also works without internet |
 | `assets/fundadores/` | The founders' portraits (`monnet.webp`, `schuman.webp`, `adenauer.webp`, `churchill.webp`, `delors.webp`) |
 | `notes.js` | Speaker notes from the PowerPoint deck (generated: do not edit by hand) |

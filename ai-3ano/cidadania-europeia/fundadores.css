@@ -8,7 +8,7 @@
      2. The screen: layout, film grain, photograph ("camera")
      3. Chapter bar, play button, time bar, background year
      4. The usual slide components, recoloured for the dark screen
-     5. Motion: entrances, builds, typed quote
+     5. Motion: entrances, builds, typed quote; 5b and 5c, the 3D boards
      6. Phones
    ========================================================================== */
 
@@ -143,6 +143,48 @@
 .legendas p { font-size: 1.15rem; line-height: 1.35; }
 .legendas time { display: block; margin-bottom: .2rem; font: 700 .8rem ui-monospace, Menlo, Consolas, monospace; letter-spacing: .14em; text-transform: uppercase; color: var(--apricot); }
 
+/* ---------- 5c. The board of the Union (lessons 4 and 5, drawn by europa3d.js) ----------
+   Same layout as 5b (class "tabuleiro"); one canvas moves from chapter to chapter. */
+.eu3d h2, .eu3d .kicker { margin-right: 13rem; }               /* room for the score box */
+.eu-camada { position: absolute; inset: 0; pointer-events: none; }
+.etiqueta.sem-lugar { transition: none; opacity: 0; }         /* hidden at once when there is no free room */
+.eu-placar[hidden] { display: none !important; }
+/* A dark band at the top of the picture keeps the title readable when the board passes under it. */
+.eu3d .palco:not(.sem-3d)::after { content: ""; position: absolute; inset: 0 0 auto; z-index: 1; height: 10rem; pointer-events: none; background: linear-gradient(var(--escuro), rgba(18, 25, 31, .75) 45%, transparent); }
+.eu3d .eu-camada { z-index: 2; }
+/* Score box: year, number of countries and a small step chart of members over time. */
+.eu-placar { position: absolute; top: 0; right: 0; width: 11.5rem; padding: .45rem .8rem .35rem; border: 1px solid rgba(246, 243, 236, .18); border-radius: 6px; background: rgba(18, 25, 31, .82); }
+.eu-placar p { display: flex; align-items: baseline; justify-content: space-between; gap: .6rem; margin: 0; }
+.eu-placar b { font: 700 1.55rem/1 var(--serif); color: var(--apricot); font-variant-numeric: tabular-nums; }
+.eu-placar span { font-size: .9rem; color: var(--tinta); }
+.eu-placar svg { display: block; width: 100%; height: 2.1rem; margin-top: .25rem; }
+.eu-placar .eixo { stroke: rgba(246, 243, 236, .3); stroke-width: 1; }
+.eu-placar .linha { fill: none; stroke: var(--apricot); stroke-width: 2.4; stroke-linejoin: round; vector-effect: non-scaling-stroke; }
+.capitulos .eu-som { margin-left: auto; padding: .2rem .55rem; border-color: rgba(246, 243, 236, .3); color: var(--tinta); font-weight: 400; }
+.capitulos .eu-som + .tocar { margin-left: 0; }
+/* Labels over the board. */
+.eu-pais { font-size: .66rem; letter-spacing: .08em; }
+.eu-bloco { padding: .1rem .55rem; border-right: 3px solid var(--apricot); border-radius: 3px; background: rgba(18, 25, 31, .86); font-size: .78rem; color: var(--tinta); }
+.eu-bloco b { margin-left: .3rem; color: var(--apricot); font-variant-numeric: tabular-nums; }
+.eu-tabua small { margin-left: .3rem; font: 400 .8rem var(--sans); }
+.eu-nome { font: italic 700 1.05rem var(--serif); letter-spacing: .03em; color: var(--tinta); text-shadow: 0 1px 8px #000, 0 0 2px #000; }
+.eu-inst { display: grid; padding: .25rem .75rem .3rem; border-top: 3px solid var(--apricot); border-radius: 4px; background: rgba(18, 25, 31, .88); text-align: center; }
+.eu-inst b { font: 700 .92rem/1.2 var(--serif); color: var(--tinta); }
+.eu-inst span { font-size: .7rem; color: var(--sand); }
+.eu-inst.eu-fora { border-top: 3px dashed var(--sand); }
+.eu-inst em { font-size: .72rem; font-style: normal; color: var(--apricot); }
+.eu-inst em:empty { display: none; }
+/* Chapter list on the openings of lessons 4 and 5. */
+.indice li { margin: 0; }
+.indice { display: grid; grid-template-columns: repeat(auto-fit, minmax(11rem, 1fr)); gap: 1rem; max-width: 62rem; margin-top: 1.2rem; padding: 0; list-style: none; counter-reset: cap; }
+.indice a { display: grid; gap: .2rem; height: 100%; padding: .9rem 1rem 1rem; border: 1px solid rgba(246, 243, 236, .25); border-top: 4px solid var(--apricot); border-radius: 6px; background: rgba(246, 243, 236, .06); color: inherit; text-decoration: none; transition: transform .3s var(--ease), background .3s; }
+.indice a::before { counter-increment: cap; content: counter(cap); font: 700 1.6rem/1 var(--serif); color: var(--apricot); }
+.indice a:hover, .indice a:focus-visible { transform: translateY(-.35rem); background: rgba(246, 243, 236, .12); }
+.indice b { font: 700 1.1rem/1.2 var(--serif); }
+.indice span { font-size: .85rem; color: var(--sand); }
+.abertura .indice { margin-right: 4.5rem; }                   /* clear of the teacher's tools on the right */
+.current .indice li { animation: elenco-entra .9s var(--ease) both; animation-delay: calc(var(--i) * .2s + .9s); }
+
 /* ---------- 6. Phones: photograph on top, content below ---------- */
 @media (max-width: 900px) {
   .elenco { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: .9rem; }
@@ -157,12 +199,26 @@
   .abertura .cine-corpo { padding-top: 6.5rem; }
   .capitulos, .abertura .capitulos { top: .6rem; left: 1.2rem; right: .8rem; overflow-x: auto; scrollbar-width: none; }
   .abertura .capitulos { top: 3.6rem; }
+  .slide.cine:not(.abertura) .capitulos { left: 7rem; }       /* clear of the menu button */
   .cine-corpo > .marca-ano { position: fixed; bottom: 5rem; }
   .slide.cine.tabuleiro.current { grid-template-rows: 1fr; }
-  .tabuleiro .cine-corpo { min-height: 100%; padding: 3.2rem 1rem 7.5rem; }
+  .tabuleiro .cine-corpo { box-sizing: border-box; min-height: 100%; padding: 3.9rem 1rem 7.5rem; }   /* border-box: the padding stays inside the screen, so the caption clears the navigation pill */
   .tabuleiro h2 { font-size: 1.25rem; }
-  .legendas { margin-right: 0; }
+  .legendas { margin-right: 3.6rem; }                          /* clear of the teacher's tools on the right */
   .legendas p { font-size: 1rem; }
   .pessoa-et img { width: 3.1rem; height: 3.1rem; }
   .pais-et { font-size: .62rem; }
+  .eu3d h2, .eu3d .kicker { margin-right: 0; }
+  .eu-placar { position: static; display: flex; align-items: center; gap: .8rem; width: auto; margin-top: .35rem; padding: .25rem .6rem; }
+  .eu-placar b { font-size: 1.15rem; }
+  .eu-placar span { font-size: .8rem; }
+  .eu-placar svg { width: 6rem; height: 1.5rem; margin: 0; }
+  .eu-pais { font-size: .55rem; }
+  .eu-bloco { font-size: .66rem; }
+  .eu-inst b { font-size: .75rem; } .eu-inst span { font-size: .6rem; }
+  .eu-nome { font-size: .85rem; }
+  .comum-et { font-size: .8rem; padding: .15rem .6rem; }
+  .indice { grid-template-columns: 1fr 1fr; gap: .6rem; }
+  .abertura .indice { margin-right: 0; }
+  .indice a { padding: .6rem .7rem; }
 }

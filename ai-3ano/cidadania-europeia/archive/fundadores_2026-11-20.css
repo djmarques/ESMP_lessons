@@ -1,0 +1,168 @@
+/* ==========================================================================
+   Aula 3 · Os fundadores, staged as a film.
+   Loaded after style.css and uses its tokens (--navy, --orange, --cream…).
+   A slide with the class "cine" becomes a dark screen with a large
+   photograph on the left and the slide's usual content on the right.
+
+     1. Portrait frame and the cast row on the opening slide
+     2. The screen: layout, film grain, photograph ("camera")
+     3. Chapter bar, play button, time bar, background year
+     4. The usual slide components, recoloured for the dark screen
+     5. Motion: entrances, builds, typed quote
+     6. Phones
+   ========================================================================== */
+
+/* ---------- 1. Portrait frame and cast row ---------- */
+.retrato { position: relative; overflow: hidden; margin: 0; aspect-ratio: 4 / 5; border-radius: 6px; background: #1E2A33; }
+.retrato img { display: block; width: 100%; height: 100%; object-fit: cover; object-position: 50% 18%; }
+/* No photograph in assets/fundadores/: fundadores.js shows the initials instead. */
+.retrato.sem-foto { display: grid; place-items: center; }
+.retrato.sem-foto::after { content: attr(data-iniciais); font: 700 3rem var(--serif); color: var(--apricot); }
+
+.elenco { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 1.3rem; list-style: none; padding: 0; margin-top: 1rem; max-width: 62rem; }
+.elenco a { display: block; color: inherit; text-decoration: none; }
+.elenco .retrato { border: 3px solid var(--cream); box-shadow: 0 .8rem 1.8rem rgba(0, 0, 0, .5); transition: transform .35s var(--ease); }
+.elenco img { filter: grayscale(1) sepia(.2); transition: filter .4s; }
+.elenco a:hover .retrato, .elenco a:focus-visible .retrato { transform: translateY(-.5rem) scale(1.04); }
+.elenco a:hover img { filter: none; }
+.elenco b { display: block; margin-top: .7rem; font: 700 1.15rem/1.2 var(--serif); }
+.elenco span { font-size: .85rem; color: var(--apricot); }
+.current .elenco li { animation: elenco-entra .9s var(--ease) both; animation-delay: calc(var(--i) * .22s + .9s); }
+@keyframes elenco-entra { from { opacity: 0; transform: translateY(2.5rem) scale(.9) rotate(-2deg); filter: blur(6px); } }
+
+/* ---------- 2. The screen ---------- */
+.slide.cine { --tinta: #F6F3EC; --escuro: #12191F; position: relative; padding: 0; gap: 0; background: var(--escuro); color: var(--tinta); }
+.slide.cine.current { display: grid; grid-template-columns: 24% minmax(0, 1fr); animation: corte .9s ease-out; }
+.slide.cine.abertura.current { grid-template-columns: 1fr; }
+.slide.cine > * { width: auto; max-width: none; margin: 0; }
+@keyframes corte { from { opacity: 0; filter: brightness(.2); } }
+/* Old-film look: a faint grain over everything (it only moves while the film is playing). */
+.slide.cine::after { content: ""; position: absolute; inset: 0; z-index: 3; pointer-events: none; opacity: .08;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2'/%3E%3C/filter%3E%3Crect width='160' height='160' filter='url(%23n)'/%3E%3C/svg%3E"); }
+.a-tocar .slide.cine::after { animation: grao .5s steps(4) infinite; }
+@keyframes grao { 25% { background-position: 30px -20px; } 50% { background-position: -20px 30px; } 75% { background-position: 20px 20px; } }
+
+/* The photograph fills the left of the screen and fades into the dark.
+   --passo is the number of builds shown (set by fundadores.js): the camera moves in a little on each one. */
+.plano { height: 100%; min-height: 0; aspect-ratio: auto; border-radius: 0; -webkit-mask-image: linear-gradient(90deg, #000 70%, transparent); mask-image: linear-gradient(90deg, #000 70%, transparent); }
+.plano img { filter: grayscale(1) sepia(.2) contrast(1.05); transform: scale(calc(1.03 + var(--passo, 0) * .025)); transform-origin: 50% 25%; transition: transform 1.8s var(--ease); }
+.cine.current .plano { animation: abre-plano 1.3s var(--ease) both; }
+@keyframes abre-plano { from { clip-path: inset(0 100% 0 0); transform: scale(1.12); } to { clip-path: inset(0); } }
+/* Two people on one slide: one above the other, and a handshake when the plan is accepted. */
+.plano.duplo { position: relative; display: grid; grid-template-rows: 1fr 1fr; gap: 3px; }
+.plano.duplo .retrato { aspect-ratio: auto; min-height: 0; border-radius: 0; }
+.plano figcaption { position: absolute; left: 0; right: 0; top: 0; padding: .6rem 1rem 1.6rem; background: linear-gradient(rgba(0, 0, 0, .8), transparent); font: 700 1rem var(--serif); color: #fff; }
+.plano .retrato:last-of-type figcaption { top: auto; bottom: 0; padding: 1.6rem 1rem .6rem; background: linear-gradient(transparent, rgba(0, 0, 0, .8)); }
+.plano figcaption span { display: block; font: .75rem var(--sans); color: var(--apricot); }
+.aperto { position: absolute; z-index: 1; top: 50%; left: 44%; display: grid; place-items: center; width: 3.6rem; height: 3.6rem; margin: -1.8rem; border-radius: 50%; background: var(--orange); color: #fff; font-size: 1.6rem; box-shadow: 0 0 0 .4rem rgba(164, 74, 22, .35); }
+.cine .aperto[data-step]:not(.on) { transform: scale(0) rotate(-90deg); filter: none; }
+.cine .aperto.on { animation: pulso 1.2s var(--ease) .5s; }
+
+.cine-corpo { position: relative; display: flex; flex-direction: column; justify-content: center; gap: .65rem; min-width: 0; padding: 3.4rem 2.5rem 4.6rem 1.8rem; }
+.abertura .cine-corpo { padding-left: clamp(1.5rem, 6vw, 5rem); }
+.cine-corpo > * { position: relative; z-index: 1; }
+
+/* ---------- 3. Chapter bar, play button, time bar, background year ---------- */
+.capitulos { position: absolute; z-index: 2; top: 1rem; left: 2rem; right: 1.5rem; display: flex; align-items: center; gap: .4rem; font-size: .8rem; }
+.abertura .capitulos { left: clamp(1.5rem, 6vw, 5rem); }
+.capitulos a, .capitulos button { padding: .2rem .75rem; border: 1px solid rgba(246, 243, 236, .3); border-radius: 99px; background: none; color: var(--sand); text-decoration: none; white-space: nowrap; }
+.capitulos a:hover { border-color: var(--tinta); color: var(--tinta); }
+.capitulos a.visto { border-color: var(--apricot); color: var(--apricot); }
+.capitulos a[aria-current] { background: var(--orange); border-color: var(--orange); color: #fff; font-weight: 700; }
+.capitulos button { margin-left: auto; border-color: var(--apricot); color: var(--apricot); font-weight: 700; }
+.capitulos button:hover, .a-tocar .capitulos button { background: var(--apricot); color: var(--escuro); }
+.tempo { position: absolute; z-index: 4; top: 0; left: 0; right: 0; height: 4px; background: var(--apricot); transform: scaleX(0); transform-origin: left; }
+@keyframes tempo { to { transform: scaleX(1); } }
+.cine-corpo > .marca-ano { position: absolute; z-index: 0; right: 1.5rem; bottom: 3.2rem; font: 700 clamp(6rem, 17vw, 15rem)/.8 var(--serif); color: var(--tinta); opacity: .07; pointer-events: none; font-variant-numeric: tabular-nums; }
+.marca-ano.muda { animation: ano-muda 1s var(--ease); }
+@keyframes ano-muda { from { opacity: .4; transform: translateY(2rem) scale(1.08); filter: blur(8px); } }
+
+/* ---------- 4. The usual components on the dark screen ---------- */
+.cine h2 { color: var(--tinta); }
+.cine .kicker, .cine .take, .cine .tl time, .cine .flow li i, .cine .big-quote::before, .cine .h3 i { color: var(--apricot); }
+.local { font: 700 .8rem/1 ui-monospace, Menlo, Consolas, monospace; letter-spacing: .14em; text-transform: uppercase; color: var(--apricot); }
+.cine .label, .cine cite, .cine .src, .cine .area-row p { color: var(--sand); }
+.cine .area-row b, .cine .tl.icons i { color: var(--tinta); }
+.cine .card { background: rgba(246, 243, 236, .09); }
+.cine .card.sky { background: rgba(72, 140, 190, .26); }
+.cine .card.peach { background: rgba(190, 92, 34, .45); }
+.cine .tl { border-top-color: rgba(246, 243, 236, .3); }
+.cine .tl li::before { background: var(--apricot); }
+.cine .sq { background: rgba(220, 232, 242, .22); border-color: var(--sky); transform-origin: bottom left; transition: transform .9s var(--ease) .15s; }
+.cine .sq.o-fill { background: var(--apricot); border-color: var(--apricot); }
+.cine .answer summary { background: none; border-color: var(--sand); color: var(--tinta); }
+.cine .answer[open] { background: rgba(72, 140, 190, .26); }
+.cine .big-quote { font-size: 1.7rem; }
+/* The photograph takes a quarter of the screen, so the content is set a little tighter than on other slides. */
+.cine .lead { font-size: 1.12rem; }
+.cine .take { font-size: 1.1rem; }
+.cine .tl { margin-top: .8rem; }
+.cine .wide-right { grid-template-columns: 5fr 6fr; }
+.cine .flow { grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 1.2rem; }
+.cine .flow li { font-size: .82rem; }
+
+/* ---------- 5. Motion ---------- */
+/* Arriving on a slide: title, then the rest, one after the other. */
+.cine.current .cine-corpo > :where(:not(.marca-ano):not(.capitulos)) { animation: sobe .8s var(--ease) both; }
+.cine.current .cine-corpo > :nth-child(1) { animation-delay: .35s; }
+.cine.current .cine-corpo > :nth-child(2) { animation-delay: .5s; }
+.cine.current .cine-corpo > :nth-child(3) { animation-delay: .65s; }
+.cine.current .cine-corpo > :nth-child(n + 4) { animation-delay: .85s; }
+@keyframes sobe { from { opacity: 0; transform: translateY(1.4rem); } }
+.cine.current .cine-corpo > .local { animation-name: escreve; animation-duration: 1.1s; animation-timing-function: steps(24); }
+@keyframes escreve { from { clip-path: inset(0 100% 0 0); } to { clip-path: inset(0); } }
+/* Builds come into focus instead of just fading in. */
+.cine [data-step] { transition: opacity .7s var(--ease), transform .7s var(--ease), filter .7s var(--ease); }
+.cine [data-step]:not(.on):not([data-keep]) { transform: translateY(1.3rem) scale(.95); filter: blur(6px); }
+.cine .tl li.on::before { animation: pulso 1.2s var(--ease); }
+@keyframes pulso { 30% { box-shadow: 0 0 0 .9rem rgba(240, 166, 115, .35); } to { box-shadow: 0 0 0 1.6rem rgba(240, 166, 115, 0); } }
+.cine [data-step]:not(.on) .sq, .cine [data-step]:not(.on) > .sq { transform: scale(0); }
+/* The quotation is typed out word by word (fundadores.js wraps each word in .pal). */
+.cine.current .pal { display: inline-block; animation: sobe .5s var(--ease) both; animation-delay: calc(var(--i) * .16s + 1.1s); }
+
+/* ---------- 5b. The board animation (#tabuleiro, drawn by tabuleiro.js) ---------- */
+.slide.cine.tabuleiro.current { grid-template-columns: 1fr; }
+.tabuleiro .cine-corpo { justify-content: space-between; padding: 3.4rem 2.5rem 1.3rem; }
+.tabuleiro h2 { font-size: 1.6rem; text-shadow: 0 2px 12px var(--escuro); }
+.tabuleiro .marca-ano { display: none; }
+.cine-corpo > .palco { position: absolute; inset: 0; z-index: 0; overflow: hidden; background: radial-gradient(ellipse at 50% 45%, #2b3945, var(--escuro) 78%); }
+.palco canvas { display: block; width: 100%; height: 100%; }
+.palco.sem-3d::after { content: "A animação 3D não está disponível neste navegador: as legendas contam a história."; position: absolute; inset: 40% 10% auto; text-align: center; color: var(--sand); }
+/* Labels that follow the pieces. A person's label is the photograph, the name and an arrow pointing at the pawn. */
+.etiqueta { position: absolute; left: 0; top: 0; opacity: 0; transition: opacity .5s; pointer-events: none; white-space: nowrap; will-change: transform; }
+.etiqueta.visivel { opacity: 1; }
+.pessoa-et { display: grid; justify-items: center; padding-bottom: 1.15rem; }
+.pessoa-et img { width: 4.4rem; height: 4.4rem; border-radius: 50%; border: 3px solid var(--tinta); object-fit: cover; object-position: 50% 15%; box-shadow: 0 .3rem 1rem rgba(0, 0, 0, .6); }
+.pessoa-et b { margin-top: -.55rem; padding: .05rem .7rem; border-radius: 99px; background: var(--tinta); color: var(--escuro); font: 700 .85rem var(--serif); }
+.pessoa-et::before { content: ""; position: absolute; bottom: .1rem; left: 50%; width: 3px; height: .75rem; margin-left: -1.5px; background: var(--apricot); }
+.pessoa-et::after { content: ""; position: absolute; bottom: -.35rem; left: 50%; margin-left: -.42rem; border: .42rem solid transparent; border-bottom: 0; border-top: .55rem solid var(--apricot); }
+.pais-et { font: 700 .78rem var(--sans); letter-spacing: .12em; text-transform: uppercase; color: var(--tinta); text-shadow: 0 1px 6px #000, 0 0 2px #000; }
+.nota-et { padding: 0 .45rem; border-radius: 99px; background: rgba(0, 0, 0, .5); font-size: .72rem; color: var(--sand); }
+.comum-et { padding: .2rem .9rem; border-radius: 99px; background: var(--apricot); color: var(--escuro); font: 700 1rem var(--serif); box-shadow: 0 .3rem 1rem rgba(0, 0, 0, .5); }
+.legendas { max-width: 42rem; margin-right: 16rem; padding: .8rem 1.1rem; border-left: 4px solid var(--orange); border-radius: 4px; background: rgba(18, 25, 31, .85); }
+.legendas p { font-size: 1.15rem; line-height: 1.35; }
+.legendas time { display: block; margin-bottom: .2rem; font: 700 .8rem ui-monospace, Menlo, Consolas, monospace; letter-spacing: .14em; text-transform: uppercase; color: var(--apricot); }
+
+/* ---------- 6. Phones: photograph on top, content below ---------- */
+@media (max-width: 900px) {
+  .elenco { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: .9rem; }
+  .slide.cine.current { grid-template-columns: 1fr; grid-template-rows: 32vh auto; align-content: start; }
+  .slide.cine.abertura.current { grid-template-rows: auto; }
+  .plano { -webkit-mask-image: linear-gradient(#000 70%, transparent); mask-image: linear-gradient(#000 70%, transparent); }
+  .plano.duplo { grid-template-rows: 1fr; grid-template-columns: 1fr 1fr; }
+  .aperto { left: 50%; top: 46%; }
+  .cine .wide-right { grid-template-columns: 1fr; }
+  .cine .flow { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .cine-corpo { justify-content: flex-start; padding: 3.2rem 1.2rem 6rem; }
+  .abertura .cine-corpo { padding-top: 6.5rem; }
+  .capitulos, .abertura .capitulos { top: .6rem; left: 1.2rem; right: .8rem; overflow-x: auto; scrollbar-width: none; }
+  .abertura .capitulos { top: 3.6rem; }
+  .cine-corpo > .marca-ano { position: fixed; bottom: 5rem; }
+  .slide.cine.tabuleiro.current { grid-template-rows: 1fr; }
+  .tabuleiro .cine-corpo { min-height: 100%; padding: 3.2rem 1rem 7.5rem; }
+  .tabuleiro h2 { font-size: 1.25rem; }
+  .legendas { margin-right: 0; }
+  .legendas p { font-size: 1rem; }
+  .pessoa-et img { width: 3.1rem; height: 3.1rem; }
+  .pais-et { font-size: .62rem; }
+}

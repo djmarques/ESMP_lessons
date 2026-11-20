@@ -1,6 +1,7 @@
 /* ==========================================================================
-   Aula 3 · Os fundadores, staged as a film. Loaded after app.js.
-   Works on every slide that has the class "cine" (see fundadores.css):
+   Aulas 3, 4 e 5, staged as films. Loaded after app.js.
+   Works on every slide that has the class "cine" (see fundadores.css).
+   Each lesson (<section class="lesson">) is its own film:
 
    1. Portraits: when a photograph is missing from assets/fundadores/, show
       the person's initials instead of a broken image.
@@ -8,7 +9,8 @@
    3. Camera and year: on every build the photograph moves in a little and
       the big year in the background follows the builds (data-ano).
    4. Play: shows the builds and slides by themselves, SECONDS_PER_BUILD
-      seconds each, until the film's last slide. The arrow keys still work.
+      seconds each, until the last film slide of the lesson. The arrow keys
+      still work.
    ========================================================================== */
 
 const SECONDS_PER_BUILD = 7;
@@ -34,14 +36,16 @@ for (const img of document.querySelectorAll(".retrato img")) {
   /* ---------- 2. Chapter bar, time bar and background year on every film slide ---------- */
   for (const slide of film) {
     const body = slide.querySelector(".cine-corpo");
-    const links = film.map((s) => `<a href="#${s.id}">${s.dataset.cap || s.querySelector("h2").textContent}</a>`).join("");
+    // Each lesson is its own film: the chapter bar lists only the film slides of this slide's lesson.
+    const reel = film.filter((s) => s.closest(".lesson") === slide.closest(".lesson"));
+    const links = reel.map((s) => `<a href="#${s.id}">${s.dataset.cap || s.querySelector("h2").textContent}</a>`).join("");
     body.insertAdjacentHTML("afterbegin", `<nav class="capitulos" aria-label="Capítulos do filme">${links}<button type="button" class="tocar"></button></nav>`);
     body.insertAdjacentHTML("beforeend", '<p class="marca-ano" aria-hidden="true"></p>');
     slide.insertAdjacentHTML("beforeend", '<div class="tempo" aria-hidden="true"></div>');
     slide.querySelector(".tocar").addEventListener("click", () => setPlaying(!playing));
     body.querySelectorAll(".capitulos a").forEach((a, i) => {
-      a.classList.toggle("visto", i < film.indexOf(slide));
-      a.toggleAttribute("aria-current", i === film.indexOf(slide));
+      a.classList.toggle("visto", i < reel.indexOf(slide));
+      a.toggleAttribute("aria-current", i === reel.indexOf(slide));
     });
     // The quotation is typed word by word: wrap each word so CSS can delay it.
     const quote = slide.querySelector(".big-quote");

@@ -921,57 +921,83 @@
 <!-- ======================= AULA 4 ======================= -->
 <section class="lesson" data-title="Aula 4 · Os passos da construção">
 
-<article class="slide divider" id="aula-4" data-src="47" data-nav="Abertura da aula 4">
-  <p class="kicker">Aula 4</p>
-  <h2 class="display">Os passos da construção</h2>
-  <p class="lead">Alargar e aprofundar · os tratados · de seis a vinte e sete países · um friso feito pela turma</p>
-</article>
 
-<article class="slide" id="crescer" data-src="48">
-  <p class="kicker">Duas formas de crescer</p>
-  <h2>Alargar e aprofundar</h2>
-  <div class="cols" style="--n:2">
-    <div>
-      <p class="h3 o">Alargar</p><p>mais países</p>
-      <!-- 27 dots fill in from the left; the first 6 (the founders) are darker. -->
-      <p class="dots" aria-label="27 pontos, 6 deles mais escuros"></p>
-      <p><b>de 6 para 27</b></p>
-    </div>
-    <div data-step="1">
-      <p class="h3 b">Aprofundar</p><p>mais coisas em comum</p>
-      <ol class="tower small-tower">
-        <li data-step="1">carvão e aço</li><li data-step="2">mercado comum</li><li data-step="3">cidadania</li><li data-step="4">moeda</li>
-      </ol>
-      <p class="small">↑ os tratados</p>
-    </div>
+<!-- Lesson 4 is staged as a film on a 3D board (europa3d.js, styles in fundadores.css, section 5c): the same board
+     stays on screen from chapter to chapter and the camera glides between them. Each caption is one build; the
+     pieces that move at each build are listed in FRAMES, in europa3d.js. -->
+<article class="slide cine abertura" id="aula-4" data-src="e3d-4 47" data-nav="Abertura da aula 4" data-cap="Abertura">
+  <div class="cine-corpo">
+    <p class="kicker">Aula 4</p>
+    <h2 class="display">Os passos da construção</h2>
+    <p class="lead">Como cresceu a União? Em número de países e no que os países fazem juntos.</p>
+    <ol class="indice">
+      <li style="--i:0"><a href="#alargar-aprofundar"><b>Alargar e aprofundar</b><span>duas formas de crescer</span></a></li>
+      <li style="--i:1"><a href="#dos-seis-aos-doze"><b>Dos seis aos doze</b><span>1951–1986</span></a></li>
+      <li style="--i:2"><a href="#da-comunidade-a-uniao"><b>Da Comunidade à União</b><span>1992–2009</span></a></li>
+      <li style="--i:3"><a href="#entrar-e-sair"><b>Entrar e sair</b><span>2013 até hoje</span></a></li>
+    </ol>
   </div>
 </article>
 
-<article class="slide" id="tratados" data-src="52">
-  <p class="kicker">Os tratados · De Paris a Lisboa</p>
-  <h2>Cada tratado muda as regras do jogo</h2>
-  <!-- Axis 1950–2010; marks sit at (signature year − 1950) / 60. -->
-  <div class="axis">
-    <svg viewBox="0 0 1000 10" preserveAspectRatio="none" aria-hidden="true"><line class="draw" pathLength="1" x1="0" y1="5" x2="1000" y2="5"/></svg>
-    <p class="axis-mark" style="left:1.7%" data-step="1">Paris 1951</p>
-    <p class="axis-mark low" style="left:11.7%" data-step="2">Roma 1957</p>
-    <p class="axis-mark" style="left:60%" data-step="3">Ato Único 1986</p>
-    <p class="axis-mark low" style="left:70%" data-step="4">Maastricht 1992</p>
-    <p class="axis-mark" style="left:78.3%" data-step="5">Amesterdão 1997</p>
-    <p class="axis-mark low" style="left:85%" data-step="6">Nice 2001</p>
-    <p class="axis-mark" style="left:95%" data-step="7">Lisboa 2007</p>
+<article class="slide cine tabuleiro eu3d" id="alargar-aprofundar" data-src="e3d-4a 48" data-nav="Animação: Alargar e aprofundar" data-cap="Alargar e aprofundar">
+  <div class="cine-corpo">
+    <div class="palco"></div>
+    <div><p class="kicker">Aula 4 · Animação</p>
+    <h2>Duas formas de crescer</h2></div>
+    <div class="stack legendas">
+      <p><time>Hoje</time>A União Europeia tem 27 países. Mas nem sempre foi assim.</p>
+      <p data-step="1"><time>Alargar</time><b>Alargar</b> é crescer em número: entram mais países. De 6 para 27.</p>
+      <p data-step="2"><time>Aprofundar</time><b>Aprofundar</b> é pôr mais coisas em comum. Cada bloco da torre é algo que os países passaram a fazer juntos; os tratados mudam as regras do jogo.</p>
+      <p data-step="3"><time>Voltemos ao princípio</time>Esvaziamos o tabuleiro. Vamos ver como tudo se construiu, passo a passo, a partir de 1951.</p>
+    </div>
   </div>
-  <div class="cols" style="--n:4">
-    <div class="card" data-step="1"><p class="h3">Paris <small>1951 (1952)</small></p><p>Comunidade do Carvão e do Aço: 6 países</p></div>
-    <div class="card" data-step="2"><p class="h3">Roma <small>1957 (1958)</small></p><p>Comunidade Económica Europeia: um mercado comum</p></div>
-    <div class="card" data-step="3"><p class="h3">Ato Único <small>1986 (1987)</small></p><p>Prepara o mercado único, sem fronteiras para as mercadorias</p></div>
-    <div class="card" data-step="4"><p class="h3">Maastricht <small>1992 (1993)</small></p><p>Nasce a União Europeia e a cidadania europeia; caminho para o euro</p></div>
-    <div class="card" data-step="5"><p class="h3">Amesterdão <small>1997 (1999)</small></p><p>Schengen entra nos tratados; mais poder ao Parlamento</p></div>
-    <div class="card" data-step="6"><p class="h3">Nice <small>2001 (2003)</small></p><p>Prepara as instituições para o alargamento de 2004</p></div>
-    <div class="card peach" data-step="7"><p class="h3">Lisboa <small>2007 (2009)</small></p><p>Carta dos Direitos obrigatória; regra para sair da União</p></div>
-    <p class="small">Ano de assinatura e, entre parênteses, de entrada em vigor</p>
+</article>
+
+<article class="slide cine tabuleiro eu3d" id="dos-seis-aos-doze" data-src="e3d-4b 52 56" data-nav="Animação: Dos seis aos doze" data-cap="Dos seis aos doze">
+  <div class="cine-corpo">
+    <div class="palco"></div>
+    <div><p class="kicker">Aula 4 · Animação</p>
+    <h2>Dos seis aos doze países</h2></div>
+    <div class="stack legendas">
+      <p><time>1951 · Tratado de Paris</time>Seis países criam a Comunidade Europeia do Carvão e do Aço: Bélgica, França, Alemanha (Ocidental), Itália, Luxemburgo e Países Baixos. Primeiro bloco: carvão e aço, em vigor em 1952.</p>
+      <p data-step="1"><time>1957 · Tratados de Roma</time>Nasce a Comunidade Económica Europeia: um mercado comum, em vigor em 1958.</p>
+      <p data-step="2"><time>1973 · Primeiro alargamento</time>Entram a Dinamarca, a Irlanda e o Reino Unido: 9 países.</p>
+      <p data-step="3"><time>1979</time>Primeiras eleições diretas para o Parlamento Europeu: os cidadãos passam a eleger os deputados europeus.</p>
+      <p data-step="4"><time>1981</time>Entra a Grécia: 10 países.</p>
+      <p data-step="5"><time>1986 · Portugal entra</time>Portugal e Espanha aderem a 1 de janeiro: 12 países. No mesmo ano, o Ato Único Europeu prepara o mercado único.</p>
+    </div>
   </div>
-  <p class="src">Fonte: Parlamento Europeu, fichas temáticas sobre a União Europeia e páginas sobre cada tratado</p>
+</article>
+
+<article class="slide cine tabuleiro eu3d" id="da-comunidade-a-uniao" data-src="e3d-4c 52 53" data-nav="Animação: Da Comunidade à União" data-cap="Da Comunidade à União">
+  <div class="cine-corpo">
+    <div class="palco"></div>
+    <div><p class="kicker">Aula 4 · Animação</p>
+    <h2>Da Comunidade à União</h2></div>
+    <div class="stack legendas">
+      <p><time>1992 · Tratado de Maastricht</time>A Comunidade passa a chamar-se União Europeia. Em vigor em 1993: mercado único e cidadania europeia. A Alemanha já está reunificada, desde 1990.</p>
+      <p data-step="1"><time>1995</time>Entram a Áustria, a Finlândia e a Suécia: 15 países. Começa a aplicar-se o Acordo de Schengen: fim dos controlos nas fronteiras internas, com Portugal entre os primeiros sete países.</p>
+      <p data-step="2"><time>1997 · Tratado de Amesterdão</time>Schengen entra nos tratados; mais poder ao Parlamento. Em vigor em 1999.</p>
+      <p data-step="3"><time>2002</time>Notas e moedas de euro chegam aos bolsos, em 12 países.</p>
+      <p data-step="4"><time>2004 · O maior alargamento</time>Entram 10 países, a maioria do antigo bloco de Leste: 25. O Tratado de Nice (2001) preparou as instituições para este alargamento.</p>
+      <p data-step="5"><time>2007</time>Entram a Bulgária e a Roménia: 27 países.</p>
+      <p data-step="6"><time>2009 · Tratado de Lisboa</time>Em vigor: a Carta dos Direitos Fundamentais passa a ser obrigatória. E, pela primeira vez, há uma regra para sair da União (artigo 50.º).</p>
+    </div>
+  </div>
+</article>
+
+<article class="slide cine tabuleiro eu3d" id="entrar-e-sair" data-src="e3d-4d 61 63" data-nav="Animação: Entrar e sair" data-cap="Entrar e sair">
+  <div class="cine-corpo">
+    <div class="palco"></div>
+    <div><p class="kicker">Aula 4 · Animação</p>
+    <h2>Porque é que uns querem entrar e outros saíram?</h2></div>
+    <div class="stack legendas">
+      <p><time>2013</time>Entra a Croácia: 28 países, o número mais alto até hoje.</p>
+      <p data-step="1"><time>2016 · 2020</time>O Reino Unido vota a saída em referendo, em 2016, e sai a 31 de janeiro de 2020, pela porta do artigo 50.º: 27 países.</p>
+      <p data-step="2"><time>Entrar</time>Só entra quem cumpre os critérios de Copenhaga (1993): políticos, económicos e jurídicos. Candidatos: Albânia, Bósnia-Herzegovina, Geórgia, Macedónia do Norte, Moldávia, Montenegro, Sérvia, Turquia e Ucrânia. O Kosovo é potencial candidato.</p>
+      <p data-step="3"><time>De 6 a 27</time><b>Alargar:</b> de 6 para 27 países. <b>Aprofundar:</b> do carvão e aço à Carta dos Direitos Fundamentais. Quais destes blocos usaste esta semana?</p>
+    </div>
+  </div>
 </article>
 
 <article class="slide" id="momentos-chave" data-src="49 50" data-nav="O que mudou com cada tratado">
@@ -996,108 +1022,6 @@
       <p>Reforça a democracia e torna a União mais eficiente, mais transparente e mais unida. O Parlamento Europeu fica em pé de igualdade com o Conselho da União Europeia na maior parte das decisões.</p></details>
   </div>
   <p class="src">Manual refletE! (Areal Editores), tema-problema 5.2 · Parlamento Europeu, fichas temáticas sobre a União Europeia</p>
-</article>
-
-<article class="slide" id="torre" data-src="53">
-  <p class="kicker">Aprofundar · A torre</p>
-  <h2>O que fomos pondo em comum</h2>
-  <div class="cols wide-left">
-    <!-- Built bottom-up: each block is something the countries started doing together. -->
-    <ol class="tower">
-      <li data-step="1"><span>Carvão e aço</span><time>1952</time></li>
-      <li data-step="2"><span>Mercado comum</span><time>1958</time></li>
-      <li data-step="3"><span>Eleições diretas para o Parlamento Europeu</span><time>1979</time></li>
-      <li data-step="4"><span>Mercado único e cidadania europeia</span><time>1993</time></li>
-      <li data-step="5"><span>Schengen: sem controlos nas fronteiras</span><time>1995</time></li>
-      <li data-step="6"><span>Notas e moedas de euro</span><time>2002</time></li>
-      <li data-step="7"><span>Carta dos Direitos Fundamentais obrigatória</span><time>2009</time></li>
-    </ol>
-    <div>
-      <p class="lead">Cada bloco é algo que os países passaram a fazer juntos.</p>
-      <p class="take" data-step="8">Quais destes blocos usaram esta semana?</p>
-    </div>
-  </div>
-  <p class="src">Ano em que cada medida começou a aplicar-se. Fontes: Parlamento Europeu; Comissão Europeia</p>
-</article>
-
-<article class="slide" id="alargamentos" data-src="56">
-  <p class="kicker">Alargamentos · Um clique por etapa</p>
-  <h2>De seis a vinte e sete</h2>
-  <div class="cols wide-left">
-    <!-- Nine maps stacked; each step reveals the next enlargement on top of the previous one. -->
-    <figure class="stack map">
-      <img src="assets/mapa-1958.webp" alt="Mapa da União em 1958">
-      <img data-step="1" src="assets/mapa-1973.webp" alt="Mapa da União em 1973">
-      <img data-step="2" src="assets/mapa-1981.webp" alt="Mapa da União em 1981">
-      <img data-step="3" src="assets/mapa-1986.webp" alt="Mapa da União em 1986">
-      <img data-step="4" src="assets/mapa-1995.webp" alt="Mapa da União em 1995">
-      <img data-step="5" src="assets/mapa-2004.webp" alt="Mapa da União em 2004">
-      <img data-step="6" src="assets/mapa-2007.webp" alt="Mapa da União em 2007">
-      <img data-step="7" src="assets/mapa-2013.webp" alt="Mapa da União em 2013">
-      <img data-step="8" src="assets/mapa-2020.webp" alt="Mapa da União em 2020">
-    </figure>
-    <div>
-      <div class="cols" style="--n:2">
-        <div><p class="label">Ano</p><p class="stack big navy-text"><span>1958</span><span data-step="1">1973</span><span data-step="2">1981</span><span data-step="3">1986</span><span data-step="4">1995</span><span data-step="5">2004</span><span data-step="6">2007</span><span data-step="7">2013</span><span data-step="8">2020</span></p></div>
-        <div><p class="label">Países</p><p class="stack big"><span>6</span><span data-step="1">9</span><span data-step="2">10</span><span data-step="3">12</span><span data-step="4">15</span><span data-step="5">25</span><span data-step="6">27</span><span data-step="7">28</span><span data-step="8">27</span></p></div>
-      </div>
-      <p class="stack lead"><span>Bélgica, França, Alemanha, Itália, Luxemburgo, Países Baixos</span><span data-step="1">+ Dinamarca, Irlanda, Reino Unido</span><span data-step="2">+ Grécia</span><span data-step="3">+ Portugal e Espanha</span><span data-step="4">+ Áustria, Finlândia, Suécia</span><span data-step="5">+ 10 países, a maioria do antigo bloco de Leste</span><span data-step="6">+ Bulgária e Roménia</span><span data-step="7">+ Croácia</span><span data-step="8">− Reino Unido (sai a 31 de janeiro)</span></p>
-      <ul class="legend"><li class="k-new">entram nesse ano</li><li class="k-old">já eram membros</li><li class="k-pt">Portugal</li></ul>
-      <p class="small">Fronteiras atuais (em 1958 só a Alemanha Ocidental era membro).</p>
-    </div>
-  </div>
-  <p class="src">Mapa base: Wikimedia Commons, CC BY-SA 3.0 · Datas: Parlamento Europeu</p>
-</article>
-
-<article class="slide" id="numeros" data-src="57">
-  <p class="kicker">Alargamentos</p>
-  <h2>Os números do caminho</h2>
-  <div class="cols wide-left">
-    <!-- Members over time: x = (year − 1950) × 8, y = 300 − members × 10. -->
-    <svg class="chart" viewBox="-40 -10 660 340" role="img" aria-label="Gráfico em escada do número de membros, de 6 em 1952 a 27 hoje">
-      <g class="grid"><line x1="0" y1="300" x2="600" y2="300"/><line x1="0" y1="200" x2="600" y2="200"/><line x1="0" y1="100" x2="600" y2="100"/><line x1="0" y1="30" x2="600" y2="30"/></g>
-      <g class="ticks"><text x="-10" y="304">0</text><text x="-10" y="204">10</text><text x="-10" y="104">20</text><text x="-10" y="34">27</text>
-        <text x="0" y="325">1950</text><text x="160" y="325">1970</text><text x="320" y="325">1990</text><text x="480" y="325">2010</text></g>
-      <polyline class="draw" pathLength="1" points="16,240 184,240 184,210 248,210 248,200 288,200 288,180 360,180 360,150 432,150 432,50 456,50 456,30 504,30 504,20 560,20 560,30 600,30"/>
-      <g data-step="2"><circle cx="288" cy="180" r="6"/><text class="tag" x="282" y="166">Portugal, 1986</text></g>
-    </svg>
-    <div class="figures">
-      <p data-step="1"><span class="big"><span data-count="6">6</span></span>fundadores, em 1951</p>
-      <p data-step="2"><span class="big navy-text"><span data-count="12">12</span></span>membros em 1986, com a entrada de Portugal e Espanha</p>
-      <p data-step="3"><span class="big b"><span data-count="27">27</span></span>membros hoje, depois da saída do Reino Unido, em 2020</p>
-    </div>
-  </div>
-</article>
-
-<article class="slide" id="entrar-sair" data-src="61">
-  <p class="kicker">Entrar e sair</p>
-  <h2>Porque é que uns querem entrar e outros saíram?</h2>
-  <div class="cols" style="--n:2">
-    <div class="card sand" data-step="1"><p class="h3 o"><i class="fa-solid fa-door-open"></i> Sair</p>
-      <ul class="facts"><li><b>2009</b> o Tratado de Lisboa cria uma regra para sair (artigo 50.º).</li><li><b>2016</b> o Reino Unido vota a saída em referendo.</li><li><b>2020</b> o Reino Unido sai, a 31 de janeiro.</li></ul></div>
-    <div class="card sky" data-step="2"><p class="h3 b"><i class="fa-solid fa-door-closed"></i> Entrar</p>
-      <p>Condições: democracia, Estado de direito, direitos humanos, economia de mercado e adotar as leis europeias.</p>
-      <p class="small">Candidatos: Albânia, Bósnia-Herzegovina, Geórgia, Moldávia, Montenegro, Macedónia do Norte, Sérvia, Turquia e Ucrânia.</p></div>
-  </div>
-  <p class="src">Fontes: Parlamento Europeu, ficha temática «O alargamento da União»; Tratado da União Europeia, art. 50.º. Situação dos candidatos em 2026: confirmar.</p>
-</article>
-
-<article class="slide" id="copenhaga" data-src="63">
-  <p class="kicker">Entrar na União</p>
-  <h2>Os critérios de Copenhaga</h2>
-  <p class="lead">Só os países que cumprem os critérios de Copenhaga (1993) podem tornar-se membros da União.</p>
-  <div class="cols" style="--n:3">
-    <div class="card peach" data-step="1"><p class="h3"><i class="fa-solid fa-landmark"></i> Políticos</p><p>Instituições estáveis que garantam a democracia, o Estado de direito, os direitos humanos e o respeito e a proteção das minorias.</p></div>
-    <div class="card sky" data-step="2"><p class="h3"><i class="fa-solid fa-chart-line"></i> Económicos</p><p>Uma economia de mercado que funcione e que aguente a concorrência e as forças de mercado da União.</p></div>
-    <div class="card sand" data-step="3"><p class="h3"><i class="fa-solid fa-scale-balanced"></i> Jurídicos</p><p>Capacidade de aplicar as regras, normas e políticas da União e de aderir aos objetivos da união política, económica e monetária.</p></div>
-  </div>
-  <div class="card" data-step="4">
-    <p class="h3">Países candidatos</p>
-    <p>Muitos estão nos Balcãs Ocidentais. Uns já estão a passar as leis europeias para a lei nacional; outros acabaram de pedir a adesão e ainda têm de provar que cumprem as condições.</p>
-    <ul class="chips"><li>Albânia</li><li>Bósnia-Herzegovina</li><li>Geórgia</li><li>Macedónia do Norte</li><li>Moldávia</li><li>Montenegro</li><li>Sérvia</li><li>Turquia</li><li>Ucrânia</li></ul>
-    <p class="small">O Kosovo é potencial candidato.</p>
-  </div>
-  <p class="src">Eurocid, Centro de Informação Europeia Jacques Delors · Manual refletE! (Areal Editores), mapa de 2024 · Situação dos candidatos em 2026: confirmar</p>
 </article>
 
 <article class="slide" id="sete-datas" data-src="62">
@@ -1170,42 +1094,66 @@
 <!-- ======================= AULA 5 ======================= -->
 <section class="lesson" data-title="Aula 5 · Quadro institucional">
 
-<article class="slide divider" id="aula-5" data-src="65" data-nav="Abertura da aula 5">
-  <p class="kicker">Aula 5</p>
-  <h2 class="display">Quadro institucional da União Europeia</h2>
-  <p class="lead">Quem manda na União? · as quatro instituições principais · como nasce uma lei europeia · os outros órgãos</p>
+
+<!-- Lesson 5 continues the film of lesson 4 on the same 3D board: the camera glides south of the map to a square
+     where the institutions rise (europa3d.js). -->
+<article class="slide cine abertura" id="aula-5" data-src="e3d-5" data-nav="Abertura da aula 5" data-cap="Abertura">
+  <div class="cine-corpo">
+    <p class="kicker">Aula 5</p>
+    <h2 class="display">Quadro institucional da União Europeia</h2>
+    <p class="lead">Quem manda na União? Voltamos ao tabuleiro da última aula, agora com 27 países.</p>
+    <ol class="indice">
+      <li style="--i:0"><a href="#quatro-vozes"><b>Quatro instituições</b><span>quatro vozes</span></a></li>
+      <li style="--i:1"><a href="#nasce-uma-lei"><b>Como nasce uma lei</b><span>o carregador comum</span></a></li>
+      <li style="--i:2"><a href="#tribunais-banco"><b>Os tribunais e o banco</b><span>e os outros órgãos</span></a></li>
+    </ol>
+  </div>
 </article>
 
-<article class="slide" id="quatro-instituicoes" data-src="66">
-  <p class="kicker">Quadro institucional</p>
-  <h2>Quatro instituições, quatro vozes</h2>
-  <p class="lead">Os poderes de cada instituição estão definidos nos tratados, nos quais se baseia toda a ação da União.</p>
-  <!-- Who each institution speaks for: citizens, governments, the Union as a whole, the leaders. -->
-  <div class="voices">
-    <div class="card navy" data-step="1"><p class="h3"><i class="fa-solid fa-crown"></i> Conselho Europeu</p><p>Os chefes de Estado ou de Governo e um presidente a tempo inteiro.</p><p class="voice">Dá a direção e as prioridades políticas gerais</p></div>
-    <div class="card sky" data-step="2"><p class="h3"><i class="fa-solid fa-users"></i> Parlamento Europeu</p><p>Deputados eleitos de cinco em cinco anos, por sufrágio universal direto.</p><p class="voice">A voz dos cidadãos</p></div>
-    <div class="card peach" data-step="3"><p class="h3"><i class="fa-solid fa-flag"></i> Conselho da União Europeia</p><p>Um ministro de cada país, conforme o assunto (por exemplo, os ministros do Ambiente).</p><p class="voice">A voz dos governos</p></div>
-    <div class="card sand" data-step="4"><p class="h3"><i class="fa-solid fa-briefcase"></i> Comissão Europeia</p><p>27 comissários, um por país, com um mandato de cinco anos; politicamente independente.</p><p class="voice">O interesse da União no seu conjunto</p></div>
+<article class="slide cine tabuleiro eu3d" id="quatro-vozes" data-src="e3d-5a 66" data-nav="Animação: Quatro vozes" data-cap="Quatro vozes">
+  <div class="cine-corpo">
+    <div class="palco"></div>
+    <div><p class="kicker">Aula 5 · Animação</p>
+    <h2>Quatro instituições, quatro vozes</h2></div>
+    <div class="stack legendas">
+      <p><time>Quem manda na União?</time>Os poderes de cada instituição estão definidos nos tratados, nos quais se baseia toda a ação da União.</p>
+      <p data-step="1"><time>Conselho Europeu</time>Os chefes de Estado ou de Governo dos 27 e um presidente a tempo inteiro. Dá a direção e as prioridades políticas gerais.</p>
+      <p data-step="2"><time>Parlamento Europeu</time>Deputados eleitos de cinco em cinco anos, por sufrágio universal direto: <b>a voz dos cidadãos</b>. São 720 (cada peão representa 12).</p>
+      <p data-step="3"><time>Conselho da União Europeia</time>Um ministro de cada país, conforme o assunto (por exemplo, os ministros do Ambiente): <b>a voz dos governos</b>.</p>
+      <p data-step="4"><time>Comissão Europeia</time>27 comissários, um por país, com um mandato de cinco anos; politicamente independente: <b>o interesse da União no seu conjunto</b>.</p>
+      <p data-step="5"><time>Atenção aos nomes parecidos</time>O <b>Conselho Europeu</b> (os líderes) e o <b>Conselho da União Europeia</b> (os ministros) são instituições da União; o <b>Conselho da Europa</b> é outra organização, que não pertence à União.</p>
+    </div>
   </div>
-  <p class="small" data-step="5">Atenção aos nomes parecidos: o <b>Conselho Europeu</b> (os líderes) e o <b>Conselho da União Europeia</b> (os ministros) são instituições da União; o <b>Conselho da Europa</b> é outra organização, que não pertence à União.</p>
-  <p class="src">Manual refletE! (Areal Editores), tema-problema 5.2 · Tratado da União Europeia, art. 13.º</p>
 </article>
 
-<article class="slide" id="lei-europeia" data-src="66">
-  <p class="kicker">Quadro institucional</p>
-  <h2>Como nasce uma lei europeia?</h2>
-  <!-- The ordinary legislative procedure as a three-stage flow, plus who checks afterwards. -->
-  <ol class="flow">
-    <li class="card sand" data-step="1"><i class="fa-solid fa-lightbulb"></i><b>A Comissão propõe</b>Prepara a proposta de lei. Só ela pode propor.</li>
-    <li class="card sky" data-step="2"><i class="fa-solid fa-users"></i><b>O Parlamento debate e vota</b>Pode aprovar, alterar ou rejeitar.</li>
-    <li class="card peach" data-step="3"><i class="fa-solid fa-flag"></i><b>O Conselho debate e vota</b>Os ministros dos 27 negoceiam com o Parlamento até chegarem a um texto comum.</li>
-    <li class="card navy" data-step="4"><i class="fa-solid fa-stamp"></i><b>A lei é aprovada</b>Aplica-se em todos os países (regulamento) ou é passada para a lei de cada país (diretiva).</li>
-  </ol>
-  <div class="cols" style="--n:2">
-    <div class="card" data-step="5"><p class="h3"><i class="fa-solid fa-gavel"></i> Depois: o Tribunal de Justiça</p><p>Interpreta o direito da União e garante que é aplicado da mesma forma em todos os países.</p></div>
-    <div class="card" data-step="6"><p class="h3"><i class="fa-solid fa-bolt"></i> Um exemplo que já conhecem</p><p>O carregador comum USB-C: proposto pela Comissão, aprovado pelo Parlamento e pelo Conselho em 2022 (Diretiva (UE) 2022/2380).</p></div>
+<article class="slide cine tabuleiro eu3d" id="nasce-uma-lei" data-src="e3d-5b 66" data-nav="Animação: Como nasce uma lei" data-cap="Como nasce uma lei">
+  <div class="cine-corpo">
+    <div class="palco"></div>
+    <div><p class="kicker">Aula 5 · Animação</p>
+    <h2>Como nasce uma lei europeia?</h2></div>
+    <div class="stack legendas">
+      <p><time>1 · A Comissão propõe</time>Prepara a proposta de lei. Só ela pode propor. Exemplo: um carregador comum para telemóveis, o USB-C.</p>
+      <p data-step="1"><time>2 · O Parlamento debate e vota</time>Pode aprovar, alterar ou rejeitar.</p>
+      <p data-step="2"><time>3 · O Conselho debate e vota</time>Os ministros dos 27 negoceiam com o Parlamento até chegarem a um texto comum.</p>
+      <p data-step="3"><time>4 · A lei é aprovada</time>Aplica-se em todos os países (regulamento) ou é passada para a lei de cada país (diretiva). O carregador comum foi aprovado em 2022: Diretiva (UE) 2022/2380.</p>
+      <p data-step="4"><time>Depois · Tribunal de Justiça</time>No Luxemburgo, com um juiz por país. Interpreta o direito da União e garante que é aplicado da mesma forma em todos os países.</p>
+    </div>
   </div>
-  <p class="src">Tratado sobre o Funcionamento da União Europeia, art. 294.º (processo legislativo ordinário) · Diretiva (UE) 2022/2380</p>
+</article>
+
+<article class="slide cine tabuleiro eu3d" id="tribunais-banco" data-src="e3d-5c 67" data-nav="Animação: Os tribunais e o banco" data-cap="Os tribunais e o banco">
+  <div class="cine-corpo">
+    <div class="palco"></div>
+    <div><p class="kicker">Aula 5 · Animação</p>
+    <h2>Os tribunais, o banco e os outros órgãos</h2></div>
+    <div class="stack legendas">
+      <p><time>Tribunal de Contas Europeu · Luxemburgo</time>Desde 1977, 27 membros. Controla a execução do orçamento e verifica, com auditorias, se os fundos são bem usados. Não julga: avisa o organismo antifraude (OLAF).</p>
+      <p data-step="1"><time>Banco Central Europeu · Frankfurt</time>Desde 1998. Gere o euro, emite as notas, decide as taxas de juro e mantém a inflação controlada.</p>
+      <p data-step="2"><time>Outros órgãos</time>Comité Económico e Social Europeu (empregadores, trabalhadores e sociedade civil), Comité das Regiões (autoridades locais e regionais), Provedor de Justiça Europeu (queixas de má administração) e Banco Europeu de Investimento (financia projetos).</p>
+      <p data-step="3"><time>Estrasburgo · fora da União</time>E o Tribunal Europeu dos Direitos Humanos? Faz cumprir a Convenção Europeia dos Direitos Humanos, mas pertence ao Conselho da Europa, não à União.</p>
+      <p data-step="4"><time>O quadro completo</time>Instituições que decidem, tribunais que controlam, um banco que gere o euro: todos com poderes definidos nos tratados.</p>
+    </div>
+  </div>
 </article>
 
 <article class="slide" id="instituicoes-funcoes" data-src="66">
@@ -1228,24 +1176,6 @@
       <ul><li>propor legislação ao Parlamento e ao Conselho;</li><li>gerir as políticas e distribuir os fundos da União;</li><li>representar a União no mundo, por exemplo negociando acordos.</li></ul></details>
   </div>
   <p class="src">Manual refletE! (Areal Editores), tema-problema 5.2</p>
-</article>
-
-<article class="slide" id="outros-orgaos" data-src="67">
-  <p class="kicker">Quadro institucional</p>
-  <h2>Os tribunais, o banco e os outros órgãos</h2>
-  <div class="cols" style="--n:3">
-    <div class="card" data-step="1"><p class="h3"><i class="fa-solid fa-gavel"></i> Tribunal de Justiça da União Europeia</p><p class="small">Luxemburgo · um juiz por país no Tribunal de Justiça, dois no Tribunal Geral</p><p>Interpreta o direito da União, garante que é cumprido e resolve conflitos entre instituições, países e particulares.</p></div>
-    <div class="card" data-step="2"><p class="h3"><i class="fa-solid fa-magnifying-glass-dollar"></i> Tribunal de Contas Europeu</p><p class="small">Luxemburgo · desde 1977 · 27 membros</p><p>Controla a execução do orçamento e verifica, com auditorias, se os fundos são bem usados. Não julga: avisa o organismo antifraude (OLAF).</p></div>
-    <div class="card" data-step="3"><p class="h3"><i class="fa-solid fa-euro-sign"></i> Banco Central Europeu</p><p class="small">Frankfurt · desde 1998</p><p>Gere o euro, emite as notas, decide as taxas de juro e mantém a inflação controlada.</p></div>
-  </div>
-  <ul class="facts organs" data-step="4">
-    <li><b>Comité Económico e Social Europeu</b> representa empregadores, trabalhadores e sociedade civil; dá pareceres.</li>
-    <li><b>Comité das Regiões</b> representa as autoridades locais e regionais.</li>
-    <li><b>Provedor de Justiça Europeu</b> investiga queixas de má administração das instituições.</li>
-    <li><b>Banco Europeu de Investimento</b> financia projetos: transportes, ambiente, energia, pequenas e médias empresas.</li>
-  </ul>
-  <p class="note" data-step="5">E o Tribunal Europeu dos Direitos Humanos, em Estrasburgo? Faz cumprir a Convenção Europeia dos Direitos Humanos, mas pertence ao Conselho da Europa, não à União.</p>
-  <p class="src">Manual refletE! (Areal Editores), tema-problema 5.2 · Conselho da Europa (Tribunal Europeu dos Direitos Humanos)</p>
 </article>
 
 <article class="slide" id="quem-faz-o-que" data-nav="Atividade: quem faz o quê?">
@@ -1871,6 +1801,7 @@
 <script src="fundadores.js"></script>
 <script src="assets/vendor/three.min.js"></script>
 <script src="tabuleiro.js"></script>
+<script src="europa3d.js"></script>
 <!-- ferramentas comuns a todas as aulas: telemóvel em todos os questionários, respostas da turma, quadro, grafo, pergunta rápida (ver comum/LEIA-ME.md) -->
 <script src="../../comum/partilhado.js"></script>
 <script src="../../comum/aula.js"></script>
