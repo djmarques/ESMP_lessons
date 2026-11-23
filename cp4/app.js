@@ -31,6 +31,58 @@
       .reduce((m, el) => Math.max(m, Number(el.dataset.step)), Number(slide.dataset.steps || 0));   // data-steps: steps that only move things
   }
 
+  /* DR tags. Each slide lists the Domínios de Referência it mobilises in
+     data-dr="1,3". They show as coloured dots in the index, as a bar of four
+     chips for the current slide, as index filters and in the lesson × DR
+     chart (.drmatrix). */
+  const DR_NAMES = { 1: 'contexto privado', 2: 'contexto profissional', 3: 'contexto institucional', 4: 'contexto macroestrutural' };
+  const drOf = s => (s.dataset.dr || '').split(',').map(x => x.trim()).filter(Boolean);
+  const drBar = document.createElement('div');
+  drBar.className = 'drbar'; drBar.setAttribute('aria-label', 'Domínios de Referência mobilizados neste slide');
+  drBar.innerHTML = [1, 2, 3, 4].map(k => '<span class="d' + k + '" title="DR' + k + ' · ' + DR_NAMES[k] + '">DR' + k + '</span>').join('') + '<small></small>';
+  document.body.appendChild(drBar);
+  function paintDrBar(slide) {
+    const drs = drOf(slide);
+    drBar.hidden = !drs.length;
+    drBar.querySelectorAll('span').forEach((el, k) => el.classList.toggle('on', drs.includes(String(k + 1))));
+    drBar.querySelector('small').textContent = drs.map(k => DR_NAMES[k].replace('contexto ', '')).join(' · ');
+  }
+  let drFilter = '';                   // '' = all slides; '1'…'4' = only that DR in the index
+  function buildDrFilter() {
+    const box = document.createElement('div');
+    box.className = 'drfilter'; box.setAttribute('role', 'group'); box.setAttribute('aria-label', 'Mostrar no índice só um DR');
+    box.innerHTML = '<button data-dr="" aria-pressed="true">Todos</button>' + [1, 2, 3, 4].map(k => '<button class="d' + k + '" data-dr="' + k + '" aria-pressed="false" title="' + DR_NAMES[k] + '">DR' + k + '</button>').join('');
+    document.querySelector('.sidebar header').appendChild(box);
+    box.addEventListener('click', e => {
+      const b = e.target.closest('button'); if (!b) return;
+      drFilter = b.dataset.dr;
+      box.querySelectorAll('button').forEach(x => x.setAttribute('aria-pressed', String(x === b)));
+      let head = null, any = false;
+      const close = () => { if (head) head.hidden = !any; };
+      Array.from(toc.children).forEach(el => {
+        if (el.tagName === 'H2') { close(); head = el; any = false; return; }
+        const ok = !drFilter || (el.dataset.dr || '').split(',').includes(drFilter);
+        el.hidden = !ok; if (ok) any = true;
+      });
+      close();
+    });
+  }
+  /** Lesson × DR chart: one row per lesson, one circle per DR, sized by the
+      number of slides of that lesson tagged with the DR. */
+  function buildDrMatrix() {
+    const boxes = document.querySelectorAll('.drmatrix'); if (!boxes.length) return;
+    const rows = []; let cur = null;
+    slides.forEach(s => {
+      if (!cur || cur.name !== s.dataset.lesson) { cur = { name: s.dataset.lesson, id: s.id, n: [0, 0, 0, 0, 0] }; rows.push(cur); }
+      drOf(s).forEach(k => { cur.n[k]++; });
+    });
+    const max = Math.max.apply(null, rows.map(r => Math.max.apply(null, r.n)));
+    const html = '<div class="dm-head">' + [1, 2, 3, 4].map(k => '<b><u class="d' + k + '"></u>DR' + k + ' · ' + DR_NAMES[k].replace('contexto ', '') + '</b>').join('') + '</div>' +
+      rows.filter(r => !/^Programa/.test(r.name)).map(r => '<a class="dm-row" href="#' + r.id + '"><span>' + r.name.replace(/^(DR\d\.\d|Projeto) · /, '<i>$1</i> ') + '</span>' +
+        [1, 2, 3, 4].map(k => '<em>' + (r.n[k] ? '<u class="d' + k + '" style="--s:' + (10 + 18 * Math.sqrt(r.n[k] / max)).toFixed(1) + 'px" title="' + r.n[k] + ' slides"></u>' : '') + '</em>').join('') + '</a>').join('');
+    boxes.forEach(b => { b.innerHTML = html; });
+  }
+
   /** Build the sidebar: one heading per data-lesson, one link per slide. */
   function buildToc() {
     let lesson = null;
@@ -45,6 +97,14 @@
       a.href = '#' + s.id;
       a.innerHTML = '<span class="n">' + (i + 1) + '</span><span></span>';
       a.lastChild.textContent = s.dataset.title || s.id;
+      const drs = drOf(s);
+      if (drs.length) {
+        a.dataset.dr = drs.join(',');
+        const d = document.createElement('span');
+        d.className = 'drdots'; d.title = drs.map(k => 'DR' + k).join(' · ');
+        d.innerHTML = drs.map(k => '<i class="d' + k + '"></i>').join('');
+        a.appendChild(d);
+      }
       a.addEventListener('click', () => document.body.classList.remove('menu-open'));
       toc.appendChild(a);
     });
@@ -79,6 +139,7 @@
     if (cur) cur.scrollIntoView({ block: 'nearest' });   // keep the current slide visible in a long index
     progress.style.width = ((index + 1) / slides.length * 100) + '%';
     counter.textContent = (index + 1) + ' / ' + slides.length;
+    paintDrBar(slide);
     notesBody.textContent = (window.NOTES && window.NOTES[slide.id]) || 'Sem notas para este slide.';
     if (location.hash !== '#' + slide.id) history.replaceState(null, '', '#' + slide.id);
     // slides with no builds have nothing hidden, so counters start at once
@@ -469,5 +530,7 @@
   });
 
   buildToc();
+  buildDrFilter();
+  buildDrMatrix();
   show(fromHash());
 })();

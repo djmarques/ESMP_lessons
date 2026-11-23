@@ -632,5 +632,511 @@ window.ATIVIDADES = {
    "Dá um exemplo de equidade no teu local de trabalho (ou num sítio onde trabalhaste).",
    "Que «tijolo» de intolerância já viste? O que se podia ter feito?"
   ]
+ },
+ "grupo": {
+  "disciplina": "CP 4",
+  "titulo": "Projeto: o nosso grupo",
+  "passos": [
+   {
+    "tipo": "escrita",
+    "perguntas": [
+     "Nomes dos elementos do grupo.",
+     "Que caso ou tema querem trabalhar? Porquê?"
+    ],
+    "intro": "Responde só um elemento por grupo."
+   }
+  ]
+ },
+ "codigo": {
+  "disciplina": "CP 4",
+  "titulo": "O código da nossa equipa",
+  "passos": [
+   {
+    "tipo": "escrita",
+    "perguntas": [
+     "Nomes do grupo e equipa escolhida.",
+     "As cinco regras (cada uma começa por «Nós…»).",
+     "Qual foi a regra mais difícil de escrever? Porquê?"
+    ],
+    "intro": "Responde só um elemento por grupo."
+   }
+  ]
+ },
+ "meta": {
+  "disciplina": "CP 4",
+  "titulo": "A minha meta SMART",
+  "passos": [
+   {
+    "tipo": "escrita",
+    "perguntas": [
+     "A minha meta, numa frase (o quê, quanto, até quando).",
+     "O primeiro passo, para fazer esta semana.",
+     "Esta meta também interessa à minha empresa (ou a uma empresa onde quero trabalhar)? Porquê?"
+    ]
+   }
+  ]
+ },
+ "motivacao": {
+  "disciplina": "CP 4",
+  "titulo": "Códigos, motivação e metas",
+  "jogo": [
+   {
+    "p": "Um código de conduta é…",
+    "o": [
+     "uma lei da Assembleia da República",
+     "o conjunto de regras escritas de uma organização",
+     "a lista dos salários"
+    ],
+    "c": 1,
+    "f": "Diz o que se espera de quem lá trabalha."
+   },
+   {
+    "p": "O código deontológico vale para…",
+    "o": [
+     "uma profissão",
+     "uma só empresa",
+     "todos os cidadãos"
+    ],
+    "c": 0,
+    "f": "Por exemplo, médicos, jornalistas ou advogados."
+   },
+   {
+    "p": "Um código de conduta pode contrariar a lei?",
+    "o": [
+     "Sim, se a empresa quiser",
+     "Só nas empresas grandes",
+     "Não: a lei está por baixo"
+    ],
+    "c": 2,
+    "f": "Cada andar assenta no de baixo."
+   },
+   {
+    "p": "O dever de lealdade ao empregador inclui…",
+    "o": [
+     "encobrir ilegalidades",
+     "não lhe fazer concorrência nem divulgar segredos",
+     "concordar sempre com o chefe"
+    ],
+    "c": 1,
+    "f": "Código do Trabalho, artigo 128.º."
+   },
+   {
+    "p": "Lógica inclusiva numa equipa é…",
+    "o": [
+     "tratar todos exatamente da mesma maneira",
+     "baixar a exigência para alguns",
+     "adaptar a forma de trabalhar, mantendo a exigência"
+    ],
+    "c": 2,
+    "f": "É a equidade aplicada à equipa."
+   },
+   {
+    "p": "Para Herzberg, um salário pago a horas é…",
+    "o": [
+     "um fator de higiene",
+     "um fator motivador",
+     "irrelevante"
+    ],
+    "c": 0,
+    "f": "Tira a insatisfação, não cria entusiasmo."
+   },
+   {
+    "p": "No topo da pirâmide de Maslow está…",
+    "o": [
+     "a segurança",
+     "a pertença",
+     "a realização"
+    ],
+    "c": 2,
+    "f": "Fazer aquilo em que sou bom."
+   },
+   {
+    "p": "Qual é uma meta SMART?",
+    "o": [
+     "«Quero ser melhor»",
+     "«Até março, tiro a carta de empilhador»",
+     "«Um dia mudo de vida»"
+    ],
+    "c": 1,
+    "f": "Específica, mensurável e com data."
+   }
+  ],
+  "escrita": [
+   "No caso do supermercado (o colega que leva produtos), o que fazias? A quem estavas a ser leal?",
+   "Dá um exemplo de um fator de higiene e de um fator motivador no teu trabalho (ou num sítio onde trabalhaste).",
+   "Em que é que os teus objetivos e os da tua empresa se tocam?"
+  ]
+ },
+ "concertacao": {
+  "disciplina": "CP 4",
+  "titulo": "O nosso acordo de concertação",
+  "passos": [
+   {
+    "tipo": "escrita",
+    "perguntas": [
+     "Que lado representaram e quem estava no grupo?",
+     "O acordo, em três linhas (ou porque não assinaram).",
+     "Em que cederam? O que conseguiram em troca?"
+    ],
+    "intro": "Responde só um elemento por grupo."
+   }
+  ]
+ },
+ "incluir": {
+  "disciplina": "CP 4",
+  "titulo": "Incluir quem chega: a minha posição",
+  "passos": [
+   {
+    "tipo": "opiniao",
+    "p": "O que é mais importante para incluir quem chega?",
+    "o": [
+     "Aprender a língua",
+     "Trabalho com contrato",
+     "Uma casa digna",
+     "Documentos tratados a tempo",
+     "Conhecer vizinhos e colegas",
+     "Conhecer e cumprir as regras do país"
+    ],
+    "porque": "Escreve o teu argumento: «Defendo que… porque… Por exemplo… Há quem pense que…, mas…»"
+   }
+  ]
+ },
+ "inclusao": {
+  "disciplina": "CP 4",
+  "titulo": "Políticas públicas de inclusão",
+  "jogo": [
+   {
+    "p": "Na concertação social sentam-se à mesa…",
+    "o": [
+     "só o Governo e os sindicatos",
+     "o Governo, os patrões e os sindicatos",
+     "os partidos políticos"
+    ],
+    "c": 1,
+    "f": "Três lados: Governo, confederações patronais e centrais sindicais."
+   },
+   {
+    "p": "O salário mínimo em Portugal, em 2026, é de…",
+    "o": [
+     "920 euros",
+     "760 euros",
+     "1 200 euros"
+    ],
+    "c": 0,
+    "f": "Fixado pelo Governo depois de ouvir os parceiros sociais."
+   },
+   {
+    "p": "Um serviço público não te responde há um ano. Recorres…",
+    "o": [
+     "à Autoridade para as Condições do Trabalho",
+     "ao Tribunal Europeu",
+     "ao Provedor de Justiça"
+    ],
+    "c": 2,
+    "f": "Queixas contra a administração pública, sem custos."
+   },
+   {
+    "p": "Criar um sindicato ou uma associação é um direito…",
+    "o": [
+     "associativo",
+     "de propriedade",
+     "só dos portugueses"
+    ],
+    "c": 0,
+    "f": "E dá força aos direitos políticos."
+   },
+   {
+    "p": "Reservar uma parte dos empregos para pessoas com deficiência é uma política de…",
+    "o": [
+     "proibição",
+     "quotas",
+     "campanha"
+    ],
+    "c": 1,
+    "f": "Lei n.º 4/2019."
+   },
+   {
+    "p": "Em 2025, os trabalhadores estrangeiros pagaram cerca de … das contribuições para a Segurança Social.",
+    "o": [
+     "2%",
+     "50%",
+     "14%"
+    ],
+    "c": 2,
+    "f": "Cerca de 4 150 milhões de euros."
+   },
+   {
+    "p": "«Unidade na diversidade» quer dizer…",
+    "o": [
+     "todos iguais em tudo",
+     "regras comuns e modos de vida diferentes",
+     "cada grupo com as suas leis"
+    ],
+    "c": 1,
+    "f": "O que nos une e o que nos distingue."
+   },
+   {
+    "p": "O Tribunal Europeu dos Direitos Humanos pertence…",
+    "o": [
+     "ao Conselho da Europa",
+     "à União Europeia",
+     "às Nações Unidas"
+    ],
+    "c": 0,
+    "f": "Recorre-se a ele depois de esgotar os tribunais do país."
+   }
+  ],
+  "escrita": [
+   "Escolhe uma política pública que conheças (um apoio, uma lei, um serviço). A quem serve? Funciona bem? Porquê?",
+   "Conta uma situação em que tu, ou alguém que conheces, podia ter recorrido a um dos organismos da aula.",
+   "De que associação, sindicato ou grupo fazes parte, ou gostavas de fazer? Para quê?"
+  ]
+ },
+ "patrimonio": {
+  "disciplina": "CP 4",
+  "titulo": "Um património da humanidade perto de mim",
+  "passos": [
+   {
+    "tipo": "escrita",
+    "perguntas": [
+     "Que bem escolheste e desde que ano está na lista?",
+     "Que empregos cria?",
+     "Que risco corre? O que pode fazer um cidadão para o proteger?"
+    ]
+   }
+  ]
+ },
+ "europa": {
+  "disciplina": "CP 4",
+  "titulo": "Europa e património comum",
+  "jogo": [
+   {
+    "p": "Uma decisão supranacional…",
+    "o": [
+     "só vale para quem votou a favor",
+     "obriga todos os Estados que fazem parte",
+     "é tomada por um só país"
+    ],
+    "c": 1,
+    "f": "Decide-se em conjunto e todos ficam obrigados."
+   },
+   {
+    "p": "Portugal entrou nas Comunidades Europeias em…",
+    "o": [
+     "1957",
+     "2002",
+     "1986"
+    ],
+    "c": 2,
+    "f": "A 1 de janeiro, com Espanha."
+   },
+   {
+    "p": "A cidadania europeia…",
+    "o": [
+     "junta-se à nacional",
+     "substitui a nacional",
+     "é só para quem vive em Bruxelas"
+    ],
+    "c": 0,
+    "f": "Acresce, não substitui."
+   },
+   {
+    "p": "O tratado que define as regras atuais da União Europeia foi assinado em…",
+    "o": [
+     "Roma",
+     "Maastricht",
+     "Lisboa"
+    ],
+    "c": 2,
+    "f": "Em 2007, no Mosteiro dos Jerónimos."
+   },
+   {
+    "p": "Uma iniciativa de cidadania europeia precisa de…",
+    "o": [
+     "um milhão de assinaturas",
+     "cem assinaturas",
+     "autorização do Governo"
+    ],
+    "c": 0,
+    "f": "De cidadãos de pelo menos sete países."
+   },
+   {
+    "p": "O fundo do mar alto pertence…",
+    "o": [
+     "ao país mais próximo",
+     "a ninguém: é património comum da humanidade",
+     "a quem lá chegar primeiro"
+    ],
+    "c": 1,
+    "f": "Convenção do Direito do Mar, 1982."
+   },
+   {
+    "p": "Portugal tem na Lista do Património Mundial…",
+    "o": [
+     "3 bens",
+     "50 bens",
+     "17 bens"
+    ],
+    "c": 2,
+    "f": "Os primeiros entraram em 1983."
+   },
+   {
+    "p": "Ser solidário com outra cultura é…",
+    "o": [
+     "aguentá-la em silêncio",
+     "agir quando ela é atacada",
+     "copiá-la"
+    ],
+    "c": 1,
+    "f": "Um degrau acima do respeito."
+   }
+  ],
+  "escrita": [
+   "Dá um exemplo de uma regra europeia que mexe com a tua vida. Achas bem que seja decidida em conjunto? Porquê?",
+   "Em que degrau (ignorar, tolerar, respeitar, ser solidário) está a tua equipa de trabalho? Dá um exemplo.",
+   "O que pode um cidadão fazer por um património que é de todos?"
+  ]
+ },
+ "proj1": {
+  "disciplina": "CP 4",
+  "titulo": "Projeto: ponto da situação (DR1)",
+  "passos": [
+   {
+    "tipo": "escrita",
+    "perguntas": [
+     "Nomes do grupo e caso (ou tema) do trabalho.",
+     "Slide «uma ideia» do DR1: qual é?",
+     "Slide «um caso real» do DR1: qual é?",
+     "Slide «o que faço» do DR1: qual é?",
+     "O que falta fazer?"
+    ],
+    "intro": "Responde só um elemento por grupo, no fim da oficina."
+   }
+  ]
+ },
+ "proj2": {
+  "disciplina": "CP 4",
+  "titulo": "Projeto: ponto da situação (DR2)",
+  "passos": [
+   {
+    "tipo": "escrita",
+    "perguntas": [
+     "Nomes do grupo e caso (ou tema) do trabalho.",
+     "Slide «uma ideia» do DR2: qual é?",
+     "Slide «um caso real» do DR2: qual é?",
+     "Slide «o que faço» do DR2: qual é?",
+     "O que falta fazer?"
+    ],
+    "intro": "Responde só um elemento por grupo, no fim da oficina."
+   }
+  ]
+ },
+ "proj3": {
+  "disciplina": "CP 4",
+  "titulo": "Projeto: ponto da situação (DR3)",
+  "passos": [
+   {
+    "tipo": "escrita",
+    "perguntas": [
+     "Nomes do grupo e caso (ou tema) do trabalho.",
+     "Slide «uma ideia» do DR3: qual é?",
+     "Slide «um caso real» do DR3: qual é?",
+     "Slide «o que faço» do DR3: qual é?",
+     "O que falta fazer?"
+    ],
+    "intro": "Responde só um elemento por grupo, no fim da oficina."
+   }
+  ]
+ },
+ "proj4": {
+  "disciplina": "CP 4",
+  "titulo": "Projeto: ponto da situação (DR4)",
+  "passos": [
+   {
+    "tipo": "escrita",
+    "perguntas": [
+     "Nomes do grupo e caso (ou tema) do trabalho.",
+     "Slide «uma ideia» do DR4: qual é?",
+     "Slide «um caso real» do DR4: qual é?",
+     "Slide «o que faço» do DR4: qual é?",
+     "O que falta fazer?"
+    ],
+    "intro": "Responde só um elemento por grupo, no fim da oficina."
+   }
+  ]
+ },
+ "pares": {
+  "disciplina": "CP 4",
+  "titulo": "Avaliar outro grupo (apresentação final)",
+  "passos": [
+   {
+    "tipo": "escrita",
+    "perguntas": [
+     "Grupo que apresentou (nomes) e tema."
+    ]
+   },
+   {
+    "tipo": "classificar",
+    "titulo": "De 1 a 5",
+    "intro": "1 = muito fraco · 5 = muito bom",
+    "categorias": [
+     "1",
+     "2",
+     "3",
+     "4",
+     "5"
+    ],
+    "itens": [
+     {
+      "t": "Clareza: percebi o que explicaram"
+     },
+     {
+      "t": "Os quatro DR estão lá, com conceitos bem usados"
+     },
+     {
+      "t": "Casos concretos, do trabalho ou da vida"
+     },
+     {
+      "t": "Respeito na forma de falar do outro"
+     },
+     {
+      "t": "Tempo: cerca de 15 minutos"
+     }
+    ]
+   },
+   {
+    "tipo": "escrita",
+    "perguntas": [
+     "Uma coisa que fizeram muito bem.",
+     "Uma sugestão."
+    ]
+   }
+  ]
+ },
+ "fecho": {
+  "disciplina": "CP 4",
+  "titulo": "Fecho de CP 4: do eu ao mundo",
+  "passos": [
+   {
+    "tipo": "escrita",
+    "titulo": "O que levo de CP 4",
+    "perguntas": [
+     "Uma ideia que mudou a forma como tratas os outros.",
+     "Uma coisa que já usaste, ou vais usar, no trabalho.",
+     "Uma dúvida que ficou."
+    ]
+   },
+   {
+    "tipo": "opiniao",
+    "p": "Que DR te interessou mais?",
+    "o": [
+     "DR1 · Eu e o outro",
+     "DR2 · O trabalho",
+     "DR3 · As instituições",
+     "DR4 · A Europa e o mundo"
+    ],
+    "porque": "Porquê?"
+   }
+  ]
  }
 };

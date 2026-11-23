@@ -51,7 +51,7 @@ window.CATALOGO = [
     nivel: 'Formação de adultos',
     publico: 'adultos',
     temas: [
-      { unidade: 'CP 4', titulo: 'Processos identitários', descricao: 'O nome e o reconhecimento · o navio de Teseu · Phineas Gage e o outro · identidade pessoal e social.', pasta: 'cp4/' },
+      { unidade: 'CP 4', titulo: 'Processos identitários', descricao: 'DR1 identidade e alteridade (o nome, o navio de Teseu, Phineas Gage, como tratar o outro) · DR2 deontologia, organizações, códigos de conduta, motivação · DR3 políticas públicas de inclusão · DR4 identidade europeia e património comum · projeto de grupo.', pasta: 'cp4/' },
       { unidade: 'CP 2 · trabalho autónomo', titulo: 'Processos sociais de mudança', descricao: 'Portefólio em PowerPoint · DR1 aprendizagem ao longo da vida · DR2 novos processos de trabalho · DR3 movimentos associativos · DR4 instâncias supranacionais.', pasta: 'cp2/' },
     ],
   },

@@ -1,8 +1,32 @@
 # CP 4 · Processos identitários
 
-Site interativo da unidade Cidadania e Profissionalidade 4 (formação de adultos), para projetar na sala. Tem o programa e os blocos de dois Domínios de Referência (DR). DR1 · Da identidade à alteridade: 1. o nome e o reconhecimento; 2. o navio de Teseu; 3. Phineas Gage e o outro; 4. identidade pessoal e social; 5. como tratar o outro (empatia, igualdade e equidade, diversidade, intolerância). DR2 · Deontologia na construção da cultura organizacional: 1. ética do dever e das consequências (Kant e Mill); 2. organizações verticais e horizontais.
+Site interativo da unidade Cidadania e Profissionalidade 4 (formação de adultos), para projetar na sala. Tem 178 slides: o programa e os blocos dos quatro Domínios de Referência (DR), mais o projeto de grupo.
 
-Os blocos DR1.2 a DR2.2 estão orientados para a prática e para o mundo do trabalho: cada exercício tem uma etiqueta que diz como se faz (folha em branco, computador ou telemóvel, em pares, em grupos), e cada bloco fecha com um slide «Para que serve?». As versões anteriores estão em `archive/`.
+- **DR1 · Da identidade à alteridade**: 1. o nome e o reconhecimento; 2. o navio de Teseu; 3. Phineas Gage e o outro; 4. identidade pessoal e social; 5. como tratar o outro (empatia, igualdade e equidade, diversidade, intolerância).
+- **DR2 · Deontologia na construção da cultura organizacional**: 1. ética do dever e das consequências (Kant e Mill); 2. organizações verticais e horizontais; 3. códigos de conduta, pertença e lealdade, equipas multiculturais; 4. motivação (Maslow, Herzberg), convergência de objetivos, metas SMART.
+- **DR3 · Políticas públicas de inclusão**: 1. concertação social, tipos de políticas públicas, organismos de combate à discriminação, direitos políticos e associativos; 2. impactos das migrações, unidade na diversidade, educação para a cidadania.
+- **DR4 · Uma nova identidade europeia**: 1. dimensão supranacional, documentos da construção europeia, governos e sociedade civil, cidadania europeia; 2. património comum da humanidade, respeito e solidariedade, cidadania mundial.
+- **Projeto de grupo**: quatro oficinas, uma por DR, e as apresentações finais. Substitui a apresentação oral no fim de cada DR (o slide da apresentação do DR1 foi mantido e adaptado, na oficina do DR1).
+
+Os blocos estão orientados para a prática e para o mundo do trabalho: cada exercício tem uma etiqueta que diz como se faz (folha em branco, computador ou telemóvel, em pares, em grupos), e cada bloco fecha com um slide «Para que serve?». As versões anteriores estão em `archive/`.
+
+## Etiquetas DR
+
+Cada slide diz que Domínios de Referência mobiliza: `<section class="slide" … data-dr="1,3">`. A partir daí, o `app.js` mostra: em baixo, à esquerda, as quatro etiquetas DR1 a DR4, com as do slide atual a cores; no índice, um ponto de cor por DR ao lado de cada slide e os botões **Todos · DR1 · DR2 · DR3 · DR4**, que mostram só os slides de um domínio; no slide «Onde está cada DR?» (`<div class="drmatrix">`), um quadro blocos × DR, gerado sozinho. Para mudar uma etiqueta, edita o `data-dr` do slide.
+
+## Projeto de grupo
+
+Um PowerPoint por grupo sobre um caso ou um tema, com os quatro DR: em cada DR, pelo menos um slide com uma ideia, um com um caso real e um com o que se faz. O slide «O trabalho de grupo: quatro DR» (programa) apresenta-o. Cada oficina tem a abertura e o slide «O que o DR pede» (os três critérios de evidência do referencial, em linguagem simples). Atividades no telemóvel: `grupo`, `proj1` a `proj4`, `pares`, `fecho`.
+
+## Atividades novas (novembro de 2026)
+
+As atividades `grupo`, `codigo`, `meta`, `motivacao`, `concertacao`, `incluir`, `inclusao`, `patrimonio`, `europa`, `proj1` a `proj4`, `pares` e `fecho` foram acrescentadas à mão no fim do `atividades.js`: se voltares a gerar esse ficheiro a partir dos jogos, guarda-as antes.
+
+## Atualizar os números
+
+- Salário mínimo (bloco DR3.1): 920 euros em 2026; 970 previstos para 2027.
+- Segurança Social e estrangeiros (bloco DR3.2): dados de 2025 (cerca de 4 150 milhões de euros de contribuições, 820 milhões de prestações, 14% das contribuições, cerca de 20% dos contribuintes); 1 597 530 estrangeiros residentes no fim de 2025.
+- Património Mundial (bloco DR4.2): 17 bens em Portugal. Zona euro (bloco DR4.1): 21 países.
 
 A seguir a cada jogo há um slide «No telemóvel»: os formandos jogam no seu telemóvel e as respostas chegam-te por email. Ver `LEIA-ME-telemovel.md`.
 
