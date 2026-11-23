@@ -160,6 +160,15 @@
 .eu-placar svg { display: block; width: 100%; height: 2.1rem; margin-top: .25rem; }
 .eu-placar .eixo { stroke: rgba(246, 243, 236, .3); stroke-width: 1; }
 .eu-placar .linha { fill: none; stroke: var(--apricot); stroke-width: 2.4; stroke-linejoin: round; vector-effect: non-scaling-stroke; }
+/* The key of the enlargements: one shade of blue per enlargement, darkest = oldest. */
+.eu-ondas { display: grid; gap: .1rem; margin: .35rem 0 0; padding: .35rem 0 0; border-top: 1px solid rgba(246, 243, 236, .15); list-style: none; font-size: .78rem; color: var(--sand); font-variant-numeric: tabular-nums; }
+.eu-ondas li { display: flex; align-items: center; gap: .45rem; margin: 0; }
+.eu-ondas i { flex: none; width: .8rem; height: .8rem; border-radius: 2px; }
+.eu-ondas span { margin-left: auto; }
+.eu-ondas .agora { color: var(--tinta); font-weight: 700; }
+.eu-pais.eu-novo { padding: .05rem .4rem; border-radius: 3px; background: rgba(164, 74, 22, .92); font-size: .74rem; text-shadow: none; }
+.eu-pais.eu-saiu { padding: .05rem .4rem; border-radius: 3px; background: rgba(58, 53, 50, .95); border: 1px solid var(--sand); font-size: .74rem; text-shadow: none; }
+.eu-cortina-et { color: #f3b2a8; }
 .capitulos .eu-som { margin-left: auto; padding: .2rem .55rem; border-color: rgba(246, 243, 236, .3); color: var(--tinta); font-weight: 400; }
 .capitulos .eu-som + .tocar { margin-left: 0; }
 /* Labels over the board. */
@@ -214,6 +223,7 @@
   .eu-placar span { font-size: .8rem; }
   .eu-placar svg { width: 6rem; height: 1.5rem; margin: 0; }
   .eu-pais { font-size: .55rem; }
+  .eu-ondas { display: none; }                                   /* on a phone the map's colours and names carry it */
   .eu-bloco { font-size: .66rem; }
   .eu-inst b { font-size: .75rem; } .eu-inst span { font-size: .6rem; }
   .eu-nome { font-size: .85rem; }
