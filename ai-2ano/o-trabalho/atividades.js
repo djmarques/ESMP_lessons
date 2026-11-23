@@ -1321,5 +1321,151 @@ window.ATIVIDADES = {
     ]
    }
   ]
+ },
+ "ci-sem-luz": {
+  "disciplina": "AI 11.º",
+  "titulo": "Nuvem: uma semana sem eletricidade",
+  "passos": [
+   {
+    "tipo": "nuvem",
+    "titulo": "Uma semana sem eletricidade",
+    "p": "Uma semana sem eletricidade: o que deixavas de conseguir fazer?",
+    "max": 3
+   }
+  ]
+ },
+ "ci-inducao": {
+  "disciplina": "AI 11.º",
+  "titulo": "Como se faz eletricidade?",
+  "passos": [
+   {
+    "tipo": "jogo",
+    "segundos": 30,
+    "perguntas": [
+     {
+      "p": "Uma bobina está parada entre os polos de um íman forte, com todas as linhas do campo a atravessá-la. A lâmpada…",
+      "o": [
+       "acende no máximo",
+       "fica apagada",
+       "acende um pouco"
+      ],
+      "c": 1,
+      "f": "Só há tensão enquanto o número de linhas que atravessam a bobina está a mudar."
+     },
+     {
+      "p": "O que é o fluxo magnético?",
+      "o": [
+       "A rapidez da turbina",
+       "A corrente que chega à lâmpada",
+       "As linhas do campo que atravessam a bobina"
+      ],
+      "c": 2,
+      "f": "Fluxo = força do íman × área da «janela» da bobina."
+     },
+     {
+      "p": "Qual destas mudanças dá mais tensão?",
+      "o": [
+       "Rodar a bobina mais depressa",
+       "Parar a turbina",
+       "Tirar voltas de fio à bobina"
+      ],
+      "c": 0,
+      "f": "Também serve um íman mais forte ou uma bobina com mais voltas de fio."
+     },
+     {
+      "p": "Porque é que a corrente deste gerador «vai e vem»?",
+      "o": [
+       "Porque a lâmpada a devolve",
+       "Porque o fluxo ora aumenta, ora diminui, à medida que a bobina roda",
+       "Porque o íman se vai gastando"
+      ],
+      "c": 1,
+      "f": "É corrente alternada: muda de sentido a cada meia volta da bobina."
+     }
+    ]
+   }
+  ]
+ },
+ "ci-mariposas": {
+  "disciplina": "AI 11.º",
+  "titulo": "A mariposa de Manchester",
+  "passos": [
+   {
+    "tipo": "opiniao",
+    "p": "Previsão: num tronco coberto de fuligem, que mariposas apanham os pássaros com mais facilidade?",
+    "o": [
+     "As claras",
+     "As escuras",
+     "Tanto faz"
+    ]
+   },
+   {
+    "tipo": "vf",
+    "titulo": "Depois do jogo: verdadeiro ou falso?",
+    "afirmacoes": [
+     {
+      "t": "As mariposas ficaram escuras porque a fuligem lhes sujou as asas.",
+      "c": false,
+      "f": "A cor é herdada dos pais. A fuligem mudou a cor dos troncos, não a das mariposas."
+     },
+     {
+      "t": "Cada mariposa foi escurecendo ao longo da vida para se esconder melhor.",
+      "c": false,
+      "f": "Nenhuma mariposa muda de cor. As escuras foram menos comidas e deixaram mais filhas."
+     },
+     {
+      "t": "Em Manchester, a primeira mariposa escura foi registada em 1848; em 1895, cerca de 98 % eram escuras.",
+      "c": true,
+      "f": "Menos de cinquenta anos, isto é, menos de cinquenta gerações."
+     },
+     {
+      "t": "Num bosque limpo, com líquenes nos troncos, os pássaros apanham mais as mariposas escuras.",
+      "c": true,
+      "f": "Foi o que mediram Kettlewell (Dorset, 1955) e Majerus (Cambridge, 2002–2007)."
+     },
+     {
+      "t": "Depois de o ar ficar mais limpo, as mariposas escuras continuaram a ser a maioria.",
+      "c": false,
+      "f": "Perto de Cambridge, as escuras passaram de 12 % em 2001 para 1 % em 2007."
+     }
+    ]
+   }
+  ]
+ },
+ "ci-direitos": {
+  "disciplina": "AI 11.º",
+  "titulo": "Da proibição à lei: adivinha o ano",
+  "passos": [
+   {
+    "tipo": "escala",
+    "titulo": "Adivinha o ano",
+    "itens": [
+     {
+      "p": "Em que ano deixou de ser crime formar um sindicato na Grã-Bretanha?",
+      "min": 1750,
+      "max": 1950,
+      "c": 1824,
+      "tolerancia": 15,
+      "f": "1824: as Leis de Associação são revogadas."
+     },
+     {
+      "p": "Em que ano foi proibido o trabalho de crianças com menos de 9 anos nas fábricas têxteis britânicas?",
+      "min": 1750,
+      "max": 1950,
+      "c": 1833,
+      "tolerancia": 15,
+      "f": "1833: Lei das Fábricas."
+     },
+     {
+      "p": "Em que ano a Constituição portuguesa consagrou o direito à greve?",
+      "min": 1850,
+      "max": 2000,
+      "c": 1976,
+      "tolerancia": 5,
+      "f": "1976, dois anos depois do 25 de Abril."
+     }
+    ]
+   }
+  ]
  }
 };

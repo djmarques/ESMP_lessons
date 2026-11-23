@@ -1,6 +1,6 @@
 # Área de Integração 11.º · O trabalho
 
-Site interativo do tema-problema 6.1, para projetar na sala e para os alunos estudarem em casa. Tem 176 slides em 9 lições, pela ordem em que são dadas, mais uma lição extra:
+Site interativo do tema-problema 6.1, para projetar na sala e para os alunos estudarem em casa. Tem 180 slides em 9 lições, pela ordem em que são dadas, mais uma lição extra:
 
 1. O que é trabalhar? (física, economia, filosofia, Organização Internacional do Trabalho)
 2. Do ócio ao dever (Aristóteles, São Bento, Lutero, Calvino, Weber)
@@ -93,3 +93,11 @@ Bloco novo de 19 slides, entre a revisão da história do trabalho e «5 · Orga
 - Som: o botão do altifalante, no canto das animações, liga e desliga o som de todo o site (o mesmo dos jogos).
 - Atividades no telemóvel: `ci-oficina` (oficina ou fábrica), `ci-ia` (debate sobre a inteligência artificial generativa) e `ci-cascata` (fase depressiva ou expansiva), no `atividades.js`.
 - Sem WebGL (computadores muito antigos), as animações não aparecem, mas as legendas contam a história.
+
+## Civilização industrial: indução, mariposas e previsões (23 de novembro de 2026)
+
+- **«Animação: turbina e dínamo»** (`s-ci-dinamo`): a animação 3D está dentro do quadro escuro, ao lado de um osciloscópio (fluxo e tensão) e de uma equação de cada vez. A cena está em `industria3d.js` (secção 3); os textos e as equações estão no `index.html`. Os números que mudam têm `data-ind="…"` e são preenchidos pela cena.
+- **Mariposas** (`s-ci-mariposa-caca`, `s-ci-mariposa-dados`, `s-ci-mariposa-geracoes`): o jogo e o modelo estão em `civind.js` (secções 7 e 8). Os números das experiências reais estão escritos no `index.html` (cartões `md-grelha`).
+- **Previsões** (`ci-prev`): a turma vota antes de ver a resposta. Para criar outra, copia o bloco `<div class="ci-prev" data-certa="c">` (acrescenta a classe `claro` num slide de fundo branco) e muda as opções; `data-certa` diz qual é a certa.
+- **Colunas lado a lado dentro de um slide 3D**: a classe `lado-a-lado` na grelha diz ao `industria3d.js` que a coluna vizinha não fica por baixo da animação (para calcular a altura).
+- A versão anterior destes ficheiros está em `archive/`, com a data 2026-11-23.

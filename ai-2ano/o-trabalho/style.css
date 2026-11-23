@@ -1116,3 +1116,148 @@ html:not(.i3d-ok) .i3d-leg > [data-step].on { display: block; }   /* no 3D: ever
   .procon li { font-size: 16px; margin-bottom: 3px; }
   #s-ci-ia .split { gap: 16px; } #s-ci-ia .card p { font-size: 17px; }
 }
+
+/* ---------- 20. Civilização industrial: indução, previsões, mariposas (novembro de 2026) ----------
+   The induction slide puts the 3D picture INSIDE a dark board, next to a small
+   oscilloscope and one equation at a time (same structure as the steam physics).
+   .lado-a-lado tells industria3d.js that the columns sit side by side. */
+.civ-ind { padding: 12px 18px 14px; }
+.ind-corpo { display: grid; grid-template-columns: minmax(0, 1.12fr) minmax(0, 1fr); gap: 10px 24px; align-items: start; }
+.civ-ind .i3d-palco { height: 420px; }
+.civ-ind .i3d-barra { padding-right: 0; margin-top: 8px; }
+.civ-ind .i3d-ctl { display: grid; gap: 0; width: 100%; }
+.civ-ind .i3d-rng { grid-template-columns: 150px 1fr 190px; font-size: 17px; }
+.civ-ind .i3d-rng span { color: var(--cream); } .civ-ind .i3d-rng input { accent-color: var(--accent); }
+.civ-ind .i3d-rng output { color: var(--accent); min-width: 0; }
+.civ-ind .i3d-nota .v { font-size: .95em; }
+.ind-graf { width: 100%; height: auto; display: block; background: rgba(0, 0, 0, .2); border-radius: 10px; margin-bottom: 10px; }
+.ig-rot { fill: rgba(246, 243, 236, .88); font: 17px var(--body); }
+.ig-phi, .ig-v { font: italic 700 21px var(--head); } .ig-phi { fill: #8FB8DA; } .ig-v { fill: #F0A673; }
+.ig-zero { stroke: rgba(246, 243, 236, .3); stroke-dasharray: 5 4; }
+.ig-linha { fill: none; stroke-width: 3.5; stroke-linejoin: round; stroke-linecap: round; }
+.ig-phi-l { stroke: #8FB8DA; } .ig-v-l { stroke: #F0A673; }
+.ig-phi-p { fill: #8FB8DA; } .ig-v-p { fill: #F0A673; }
+.ig-eixo { fill: rgba(246, 243, 236, .6); font: italic 14px var(--body); }
+.cf-eq small { font: 400 .46em var(--body); color: rgba(246, 243, 236, .8); vertical-align: middle; margin-left: .3em; }
+.civ-ind .cf-eq { font-size: 42px; white-space: normal; }
+.civ-ind .cf-q { font-size: 24px; margin-bottom: 6px !important; } .civ-ind .cf-pal { font-size: 21px; margin-bottom: 8px !important; }
+.civ-ind .cf-det { font-size: 19px; } .civ-ind .cf-num { font-size: 20px !important; } .civ-ind .cf-sig, .civ-ind .cf-liga { font-size: 19px !important; }
+.civ-ind .cf-liga { margin-top: 6px !important; }
+.ind-datas { display: grid; grid-template-columns: auto 1fr; gap: 6px 14px; margin: 4px 0 10px; font-size: 19px; }
+.ind-datas b { font-family: var(--head); color: var(--accent); white-space: nowrap; }
+/* a prediction before the answer: the class votes, the teacher marks the choice, then «Ver a resposta» */
+.ci-prev { display: grid; gap: 7px; margin: 4px 0 10px; }
+.ci-prev > button[data-o] { text-align: left; font: 20px/1.3 var(--body); padding: 8px 14px; border-radius: 10px; border: 2px solid rgba(246, 243, 236, .35); background: rgba(246, 243, 236, .06); color: var(--cream); cursor: pointer; }
+.ci-prev > button[data-o] b { font-family: var(--head); color: var(--accent); margin-right: 8px; }
+.ci-prev > button.esc { border-color: var(--accent); background: rgba(240, 166, 115, .22); }
+.ci-prev.rev > button.certa { border-color: #C7D59F; background: rgba(199, 213, 159, .28); }
+.ci-prev.rev > button.certa::after { content: " ✓"; color: #C7D59F; font-weight: 700; }
+.ci-prev.rev > button:not(.certa) { opacity: .55; }
+.ci-prev-exp { display: none; margin: 0 !important; padding: 8px 12px; border-radius: 8px; background: rgba(199, 213, 159, .16); }
+.ci-prev.rev .ci-prev-exp { display: block; }
+.ci-prev-ver { justify-self: start; font: 700 16px var(--body); padding: 6px 14px; border-radius: 99px; border: 1px solid rgba(246, 243, 236, .6); background: none; color: var(--cream); cursor: pointer; }
+.ci-prev.rev .ci-prev-ver { display: none; }
+@media (max-width: 1100px) {
+  .ind-corpo { grid-template-columns: 1fr; }
+  .civ-ind .i3d-rng { grid-template-columns: 1fr auto; } .civ-ind .i3d-rng input { grid-column: 1 / -1; grid-row: 2; }
+}
+@media (min-width: 1101px) and (max-height: 800px) {
+  .civ-ind .cf-eq { font-size: 34px; margin: 2px 0 6px !important; } .civ-ind .cf-q { font-size: 21px; } .civ-ind .cf-pal { font-size: 18px; padding: 4px 10px; }
+  .civ-ind .cf-det { font-size: 17px; } .civ-ind .cf-num { font-size: 18px !important; padding: 6px 10px; } .civ-ind .cf-sig, .civ-ind .cf-liga { font-size: 17px !important; }
+  .civ-ind .cf-det p { margin-bottom: 5px; } .civ-ind .cf-cadeia { margin-bottom: 6px; font-size: 17px; }
+  .ci-prev > button[data-o] { font-size: 18px; padding: 6px 12px; }
+  .ind-graf { margin-bottom: 6px; max-height: 150px; }
+}
+
+/* predictions on a light slide */
+.ci-prev.claro { grid-template-columns: repeat(3, 1fr) auto; align-items: center; margin: 0 0 14px; }
+.ci-prev.claro .ci-prev-q { grid-column: 1 / -1; margin: 0; font: 700 22px var(--head); color: var(--navy); }
+.ci-prev.claro > button[data-o] { border-color: var(--line); background: var(--cream); color: var(--navy); }
+.ci-prev.claro > button[data-o] b { color: var(--orange); }
+.ci-prev.claro > button.esc { border-color: var(--orange); background: var(--orange-light); }
+.ci-prev.claro.rev > button.certa { border-color: var(--green); background: var(--green-light); }
+.ci-prev.claro.rev > button.certa::after { color: var(--green); }
+.ci-prev.claro .ci-prev-exp { grid-column: 1 / -1; background: var(--green-light); color: var(--navy); }
+.ci-prev.claro .ci-prev-ver { border-color: var(--navy); color: var(--navy); }
+/* the moths (game, data, generations) */
+.mar-asa { stroke-width: 1; } .mar.cl .mar-asa { fill: #DEDDCC; stroke: #C2BFAE; } .mar.es .mar-asa { fill: #2F2E2B; stroke: #262523; }
+.cg-pop .mar.cl .mar-asa { fill: #EDEADC; stroke: #A9A696; } .cg-pop .mar.es .mar-asa { fill: #1F1E1D; stroke: #6B6860; }   /* in the model the moths must be easy to count */
+.mar.cl .mar-pinta { fill: #5E5C52; } .mar.es .mar-pinta { fill: #4A4741; }
+.mar.cl .mar-corpo { fill: #CFCCBA; } .mar.es .mar-corpo { fill: #262523; }
+.cc-tronco .mar { cursor: pointer; } .cc-tronco .mar.apanhada { opacity: 0; transition: opacity .2s; }
+.mar-anel { fill: none; stroke: var(--accent); stroke-width: 4; stroke-dasharray: 9 7; }
+.civ-caca { padding: 12px 18px 12px; }
+.cc-topo { display: flex; flex-wrap: wrap; align-items: center; gap: 10px 14px; margin-bottom: 10px; }
+.cc-modos { display: flex; border-radius: 99px; overflow: hidden; border: 1px solid rgba(246, 243, 236, .5); }
+.cc-modos button { font: 700 17px var(--body); padding: 7px 16px; border: 0; background: none; color: var(--cream); cursor: pointer; }
+.cc-modos button.sel { background: var(--cream); color: var(--navy); }
+.cc-go { font: 700 19px var(--body); padding: 8px 22px; border-radius: 99px; border: 0; background: var(--accent); color: var(--navy); cursor: pointer; }
+.a-jogar .cc-go, .a-jogar .cc-modos { opacity: .4; pointer-events: none; }
+.cc-tempo { flex: 1 1 160px; height: 12px; border-radius: 6px; background: rgba(246, 243, 236, .15); overflow: hidden; }
+.cc-tempo span { display: block; height: 100%; width: 0; background: var(--accent); }
+.cc-corpo { display: grid; grid-template-columns: minmax(0, 2.5fr) minmax(230px, 1fr); gap: 18px; align-items: start; }
+.cc-tronco { display: block; width: 100%; height: auto; max-height: calc(100vh - 400px); border-radius: 12px; background: #CFCBBB; touch-action: manipulation; }
+.cc-tronco.fuligem { background: #34322F; }
+.cc-lado .cf-q { font-size: 22px; }
+.cc-conta { display: grid; grid-template-columns: 34px 1fr auto; gap: 6px 10px; align-items: center; padding: 8px 10px; border-radius: 10px; margin-bottom: 8px; border: 2px solid transparent; }
+.cc-conta.agora { border-color: rgba(240, 166, 115, .7); background: rgba(246, 243, 236, .06); }
+.cc-conta p { grid-column: 1 / -1; margin: 0; font: 700 18px var(--head); color: var(--cream); }
+.cc-conta i { display: block; height: 16px; border-radius: 4px; background: rgba(246, 243, 236, .14); overflow: hidden; }
+.cc-conta i b { display: block; height: 100%; width: 0; background: var(--accent); transition: width .4s var(--ease); }
+.cc-conta output { font: 700 19px var(--head); color: var(--accent); white-space: nowrap; }
+.cc-m { display: inline-block; width: 30px; height: 18px; border-radius: 50% 50% 46% 46%; vertical-align: -3px; border: 1.5px solid #B5B2A2; background: #E6E3D4; }
+.cc-m.es { background: #2B2A28; border-color: #8C8980; }
+.cc-msg { margin: 6px 0 8px !important; }
+.cc-limpar { font: 15px var(--body); padding: 4px 12px; border-radius: 99px; border: 1px solid rgba(246, 243, 236, .4); background: none; color: rgba(246, 243, 236, .8); cursor: pointer; }
+.civ-caca .quadro-def { font-size: 21px; margin-top: 8px; padding-top: 8px; }
+/* real experiments, as bars on the same scale */
+.md-grelha { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+.md-grelha .card { padding: 14px 16px; } .md-grelha .card p { margin: 0 0 8px; }
+.md-o-que { font-size: 17px; line-height: 1.3; min-height: 4.2em; }
+.md-barras { display: grid; grid-template-columns: 34px 1fr; gap: 2px 10px; align-items: center; margin: 4px 0 10px; }
+.md-barras i { display: block; height: 20px; width: calc(var(--w) * 3); background: var(--orange); border-radius: 4px; }
+.card.dark .md-barras i { background: var(--accent); }
+.md-barras b { grid-column: 2; font: 700 18px var(--head); color: var(--navy); margin-bottom: 6px; }
+.card.dark .md-barras b, .card.dark .md-le { color: #fff; }
+.md-le { font-size: 19px; color: var(--navy); }
+/* generation after generation */
+.civ-ger { padding: 12px 18px 14px; }
+.cg-corpo { display: grid; grid-template-columns: minmax(0, .82fr) minmax(0, 1fr); gap: 10px 26px; align-items: start; }
+.cg-pop { display: block; width: 100%; height: auto; max-height: calc(100vh - 420px); }
+.cg-pop rect { transition: fill .5s; }
+.cg-pop .mar { transition: opacity .25s; } .cg-pop .mar.comida { opacity: .12; }
+.cg-ctl .rng { grid-template-columns: 170px 1fr 70px; margin: 8px 0 6px; }
+.cg-ctl .rng span { color: var(--cream); font-size: 17px; } .cg-ctl .rng input { accent-color: var(--accent); } .cg-ctl .rng output { color: var(--accent); font-size: 20px; }
+.cg-graf { display: block; width: 100%; height: auto; background: rgba(0, 0, 0, .2); border-radius: 10px; margin-bottom: 10px; }
+.cg-grelha { stroke: rgba(246, 243, 236, .22); } .cg-eixo { fill: rgba(246, 243, 236, .78); font: 15px var(--body); }
+.cg-rot { fill: #C7D59F; font-weight: 700; } .cg-linha { fill: none; stroke: var(--accent); stroke-width: 4; stroke-linejoin: round; }
+.cg-ponto { fill: var(--accent); } .cg-real { fill: #C7D59F; stroke: var(--navy); stroke-width: 1.5; }
+.civ-ger .cf-q { font-size: 23px; margin-bottom: 6px !important; } .civ-ger .cf-pal { font-size: 20px; margin-bottom: 8px !important; }
+.civ-ger .cf-eq { font-size: 38px; } .civ-ger .cf-det { font-size: 19px; } .civ-ger .cf-num { font-size: 20px !important; line-height: 1.6; }
+.civ-ger .cf-sig, .civ-ger .cf-liga { font-size: 18px !important; } .civ-ger .cf-liga { margin-top: 6px !important; }
+@media (max-width: 1100px) {
+  .cc-corpo, .cg-corpo, .md-grelha { grid-template-columns: 1fr; }
+  .ci-prev.claro { grid-template-columns: 1fr; }
+  .cc-tronco, .cg-pop { max-height: none; }
+  .md-o-que { min-height: 0; }
+}
+@media (min-width: 1101px) and (max-height: 800px) {
+  .civ-caca .quadro-def { font-size: 18px; } .cc-conta p { font-size: 16px; } .cc-lado .cf-q { font-size: 19px; margin-bottom: 4px !important; }
+  .civ-ger .cf-eq { font-size: 32px; } .civ-ger .cf-det { font-size: 17px; } .civ-ger .cf-num { font-size: 18px !important; } .civ-ger .cf-q { font-size: 21px; } .civ-ger .cf-pal { font-size: 18px; }
+  .civ-ger .cf-sig, .civ-ger .cf-liga { font-size: 16px !important; } .cg-graf { max-height: 190px; } .civ-ger .cf-det p { margin-bottom: 5px; }
+  .md-o-que { font-size: 16px; } #s-ci-mariposa-dados .ci-lead { margin-bottom: 8px; }
+}
+.ci-ondas { align-items: center; margin-top: 8px; } .ci-ondas span { font-size: 19px; color: var(--cream); margin-right: 6px; }
+.ci-ondas .btn { font-size: 17px; } .ci-ondas .btn:not(.sel) { text-decoration: line-through; opacity: .7; }
+#s-ci-nuvem-luz h2 { font-size: 36px; }
+@media (min-width: 1101px) and (max-height: 740px) {   /* 720 px projectors: the induction board must end above the navigation pill */
+  .ind-graf { max-height: 122px; margin-bottom: 4px; }
+  .civ-ind .cf-eq { font-size: 30px; margin: 0 0 4px !important; } .civ-ind .cf-q { font-size: 20px; margin-bottom: 3px !important; }
+  .civ-ind .cf-pal { font-size: 17px; margin-bottom: 5px !important; } .civ-ind .cf-det { font-size: 16px; line-height: 1.3; }
+  .civ-ind .cf-num { font-size: 17px !important; padding: 4px 10px; } .civ-ind .cf-sig, .civ-ind .cf-liga { font-size: 16px !important; }
+  .civ-ind .cf-sm { font-size: 14px !important; } .civ-ind .cf-det p { margin-bottom: 4px; } .civ-ind .cf-liga { margin-top: 2px !important; }
+  .civ-ind { padding: 8px 16px 10px; } .civ-ind .i3d-rng { font-size: 15px; } .civ-ind .i3d-rng input { height: 22px; }
+  .ci-prev > button[data-o] { font-size: 16px; padding: 4px 12px; } .ci-prev { gap: 5px; }
+  .cc-tronco { max-height: calc(100vh - 380px); } .civ-caca .quadro-def { font-size: 17px; margin-top: 6px; padding-top: 6px; }
+  #s-ci-mariposa-caca h2 { font-size: 28px; }
+}

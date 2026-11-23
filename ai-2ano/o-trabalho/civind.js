@@ -5,6 +5,9 @@
      3. The loop of the crisis: six boxes in a ring (shared by 4 and 5)
      4. The crisis cascade: the loop driven by a small model, and a live chart (s-ci-cascata)
      5. The equations of the cascade, lighting up the loop one part at a time (s-ci-modelo)
+     6. Predictions: the class votes before the answer is shown (.ci-prev)
+     7. The peppered moth: «be the bird» (s-ci-mariposa-caca)
+     8. The peppered moth, generation after generation (s-ci-mariposa-geracoes)
    Each piece looks for its own element and does nothing if it is absent.
    Code comments in English; every text students read in European Portuguese.
    ========================================================================== */
@@ -70,7 +73,18 @@
     const total = t => trend(t) + waves.reduce((s, w) => s + w.amp * Math.sin(2 * Math.PI * t / w.per), 0) * 0.55;
     // top panel: the trend and what actually happened
     el('path', { d: pathOf(trend, 150, 50), class: 'draw mn-linha', pathLength: 1, stroke: '#F6F3EC', 'stroke-width': 3, fill: 'none' }, svg.querySelector('[data-k="trend"]'));
-    el('path', { d: pathOf(total, 150, 50), class: 'draw', pathLength: 1, stroke: '#F0A673', 'stroke-width': 4, fill: 'none' }, svg.querySelector('[data-k="real"]'));
+    const real = el('path', { d: pathOf(total, 150, 50), class: 'draw', pathLength: 1, stroke: '#F0A673', 'stroke-width': 4, fill: 'none' }, svg.querySelector('[data-k="real"]'));
+    // buttons (last build): switch each wave off and on; the orange line is the trend plus the waves that are on
+    const quadro = svg.closest('.quadro');
+    if (quadro) quadro.querySelectorAll('[data-onda]').forEach(b => {
+      stopNav(b);
+      b.addEventListener('click', () => {
+        const w = waves.find(x => x.k === b.dataset.onda); w.off = !w.off; b.classList.toggle('sel', !w.off);
+        const sum = t => trend(t) + waves.reduce((acc, x) => acc + (x.off ? 0 : x.amp * Math.sin(2 * Math.PI * t / x.per)), 0) * 0.55;
+        real.setAttribute('d', pathOf(sum, 150, 50));
+        const lane = svg.querySelector('[data-k="' + w.k + '"]'); if (lane) lane.style.opacity = w.off ? 0.25 : 1;
+      });
+    });
     // three lanes below, one per cycle (labels in a column on the left)
     waves.forEach((w, i) => {
       const y0 = 318 + i * 80;
@@ -338,5 +352,244 @@
     };
     new MutationObserver(paint).observe(slide, { attributes: true, attributeFilter: ['class'] });
     paint();
+  });
+  /* ---------- 6. Predictions: the class votes before the answer is shown ----------
+     <div class="ci-prev" data-certa="c"> buttons with data-o … <p class="ci-prev-exp"> <button class="ci-prev-ver">
+     A click on an option marks it (what the class chose); «Ver a resposta» shows the right one. */
+  document.querySelectorAll('.ci-prev').forEach(box => {
+    const opts = Array.from(box.querySelectorAll('button[data-o]'));
+    opts.forEach(b => {
+      stopNav(b);
+      b.classList.toggle('certa', b.dataset.o === box.dataset.certa);
+      b.addEventListener('click', () => { if (box.classList.contains('rev')) return; opts.forEach(o => o.classList.toggle('esc', o === b && !b.classList.contains('esc'))); });
+    });
+    const ver = box.querySelector('.ci-prev-ver');
+    if (ver) { stopNav(ver); ver.addEventListener('click', () => box.classList.add('rev')); }
+    // leaving the slide puts the question back, so it can be asked again to another class
+    const slide = box.closest('.slide');
+    if (slide) new MutationObserver(() => { if (!slide.classList.contains('current')) { box.classList.remove('rev'); opts.forEach(o => o.classList.remove('esc')); } }).observe(slide, { attributes: true, attributeFilter: ['class'] });
+  });
+  /* ---------- 7. The peppered moth: «be the bird» (s-ci-mariposa-caca) ----------
+     A tree trunk seen from close up, clean (pale lichens) or covered in soot. In each round
+     12 pale and 12 dark moths land on it and the player has 10 seconds to catch as many as
+     possible. The moths are the same on both trunks; only the background changes. The count
+     adds up over several rounds, so several students can play and the class reads the totals. */
+  const MOTH = 'M0,-13 C-7,-15 -24,-9 -35,11 C-26,17 -9,15 0,10 C9,15 26,17 35,11 C24,-9 7,-15 0,-13 Z';   // wings open, head at the top
+  const rand = (a, b) => a + Math.random() * (b - a);
+  /** One moth, drawn around (0,0), about 66 units wide. kind: 'c' pale, 'e' dark. */
+  function drawMoth(parent, kind) {
+    const g = el('g', { class: 'mar ' + (kind === 'c' ? 'cl' : 'es') }, parent);
+    el('path', { d: MOTH, class: 'mar-asa' }, g);
+    for (let i = 0; i < (kind === 'c' ? 16 : 7); i++) {                 // the «pepper» on the wings
+      const y = rand(-8, 11), x = rand(-1, 1) * (y + 14) * 1.25;       // inside the triangle of the wings
+      el('circle', { cx: x.toFixed(1), cy: y.toFixed(1), r: rand(0.9, 2).toFixed(1), class: 'mar-pinta' }, g);
+    }
+    el('ellipse', { cx: 0, cy: 0, rx: 3.4, ry: 12, class: 'mar-corpo' }, g);
+    return g;
+  }
+  let audio = null;
+  function blip(freq) {                                                  // a short sound for each catch
+    try {
+      audio = audio || new (window.AudioContext || window.webkitAudioContext)();
+      const o = audio.createOscillator(), g = audio.createGain();
+      o.frequency.value = freq; o.type = 'triangle'; g.gain.setValueAtTime(0.07, audio.currentTime); g.gain.exponentialRampToValueAtTime(0.001, audio.currentTime + 0.12);
+      o.connect(g).connect(audio.destination); o.start(); o.stop(audio.currentTime + 0.13);
+    } catch (e) { /* no sound: the game still works */ }
+  }
+  document.querySelectorAll('[data-civ="caca"]').forEach(root => {
+    const slide = root.closest('.slide'), svg = root.querySelector('.cc-tronco');
+    const W = 900, H = 430, PER = 12, SECONDS = 10;
+    const gBark = el('g', {}, svg), gMoths = el('g', {}, svg);
+    const tally = { limpo: { c: 0, e: 0, n: 0 }, fuligem: { c: 0, e: 0, n: 0 } };
+    let bark = 'limpo', playing = false, endAt = 0, left = { c: 0, e: 0 }, caught = { c: 0, e: 0 };
+    const go = root.querySelector('.cc-go'), bar = root.querySelector('.cc-tempo span'), msg = root.querySelector('.cc-msg');
+    const TONES = {
+      limpo: { base: ['#CFCBBB', '#BEB9A8'], crack: '#8E8A79', blobs: ['#E4E6D6', '#D9DEC4', '#EEEBDD', '#C9CCB8'], dots: '#5E5C52' },
+      fuligem: { base: ['#3B3935', '#2C2B28'], crack: '#1C1B19', blobs: ['#45423D', '#33312E', '#4A4741', '#2A2927'], dots: '#565249' },
+    };
+    function paintBark() {
+      const tn = TONES[bark];
+      gBark.replaceChildren();
+      el('rect', { width: W, height: H, fill: tn.base[0] }, gBark);
+      for (let i = 0; i < 16; i++) {                                     // vertical cracks of the bark
+        const x = (i + rand(0.2, 0.8)) * W / 16; let d = `M${x.toFixed(0)},0`;
+        for (let y = 60; y <= H + 30; y += 60) d += ` Q${(x + rand(-16, 16)).toFixed(0)},${y - 30} ${(x + rand(-8, 8)).toFixed(0)},${y}`;
+        el('path', { d, fill: 'none', stroke: tn.crack, 'stroke-width': rand(2, 6).toFixed(1), opacity: 0.45 }, gBark);
+      }
+      for (let i = 0; i < 110; i++) el('ellipse', { cx: rand(0, W).toFixed(0), cy: rand(0, H).toFixed(0), rx: rand(10, 42).toFixed(0), ry: rand(8, 26).toFixed(0), fill: tn.blobs[i % tn.blobs.length], opacity: rand(0.45, 0.9).toFixed(2), transform: `rotate(${rand(0, 180).toFixed(0)} ${rand(0, W).toFixed(0)} ${rand(0, H).toFixed(0)})` }, gBark);
+      for (let i = 0; i < 420; i++) el('circle', { cx: rand(0, W).toFixed(0), cy: rand(0, H).toFixed(0), r: rand(0.8, 2.2).toFixed(1), fill: tn.dots, opacity: 0.7 }, gBark);
+      svg.classList.toggle('fuligem', bark === 'fuligem');
+    }
+    function paintTally() {
+      for (const b in tally) for (const k of ['c', 'e']) {
+        const t = tally[b], total = t.n * PER;
+        root.querySelector(`[data-out="${b}-${k}"]`).textContent = t[k] + ' de ' + total;
+        root.querySelector(`[data-barra="${b}-${k}"]`).style.width = (total ? t[k] / total * 100 : 0) + '%';
+      }
+      root.querySelectorAll('.cc-conta').forEach(c => c.classList.toggle('agora', c.dataset.conta === bark));
+    }
+    function setBark(b) {
+      if (playing) return;
+      bark = b;
+      root.querySelectorAll('[data-tronco]').forEach(x => x.classList.toggle('sel', x.dataset.tronco === b));
+      gMoths.replaceChildren(); paintBark(); paintTally();
+      go.textContent = 'Começar · ' + SECONDS + ' segundos';
+    }
+    function finish() {
+      playing = false; root.classList.remove('a-jogar');
+      const t = tally[bark]; t.c += caught.c; t.e += caught.e; t.n += 1;
+      gMoths.querySelectorAll('.mar').forEach(m => { m.classList.add('ficou'); el('circle', { r: 40, class: 'mar-anel' }, m); });
+      bar.style.width = '0%';
+      msg.textContent = `Nesta jogada apanhaste ${caught.c} claras e ${caught.e} escuras. As do círculo escaparam.`;
+      go.textContent = 'Jogar outra vez';
+      paintTally();
+    }
+    function tick(now) {
+      if (!playing) return;
+      const rest = Math.max(0, endAt - now);
+      bar.style.width = (rest / (SECONDS * 1000) * 100) + '%';
+      if (rest <= 0 || left.c + left.e === 0 || !slide.classList.contains('current')) { finish(); return; }
+      requestAnimationFrame(tick);
+    }
+    function start() {
+      if (playing) return;
+      gMoths.replaceChildren();
+      const big = svg.getBoundingClientRect().width < 520 ? 1.45 : 1;    // larger moths on a phone
+      const pts = [];
+      const kinds = [];
+      for (let i = 0; i < PER; i++) kinds.push('c', 'e');
+      kinds.sort(() => Math.random() - 0.5);
+      kinds.forEach(kind => {
+        let x, y, tries = 0;
+        do { x = rand(50, W - 50); y = rand(40, H - 40); tries++; } while (tries < 200 && pts.some(p => Math.hypot(p[0] - x, p[1] - y) < 74 * big));
+        pts.push([x, y]);
+        const m = drawMoth(gMoths, kind);
+        m.setAttribute('transform', `translate(${x.toFixed(0)},${y.toFixed(0)}) rotate(${rand(-70, 70).toFixed(0)}) scale(${(0.86 * big).toFixed(2)})`);
+        m.addEventListener('pointerdown', e => {
+          e.stopPropagation();
+          if (!playing || m.dataset.fora) return;
+          m.dataset.fora = '1'; m.classList.add('apanhada');
+          caught[kind]++; left[kind]--; blip(kind === 'c' ? 880 : 660);
+          setTimeout(() => m.remove(), 220);
+        });
+      });
+      caught = { c: 0, e: 0 }; left = { c: PER, e: PER };
+      playing = true; root.classList.add('a-jogar');
+      msg.textContent = 'Toca nas mariposas que vires!';
+      endAt = performance.now() + SECONDS * 1000;
+      requestAnimationFrame(tick);
+    }
+    [go, ...root.querySelectorAll('[data-tronco]'), root.querySelector('.cc-limpar'), svg].forEach(stopNav);
+    go.addEventListener('click', start);
+    root.querySelectorAll('[data-tronco]').forEach(b => b.addEventListener('click', () => setBark(b.dataset.tronco)));
+    root.querySelector('.cc-limpar').addEventListener('click', () => { for (const b in tally) tally[b] = { c: 0, e: 0, n: 0 }; paintTally(); });
+    // the builds choose the trunk: clean first, then soot
+    const stepOf = sl => { let k = 0; while (sl.classList.contains('ge' + (k + 1))) k++; return k; };
+    let lastStep = -1;
+    new MutationObserver(() => {
+      if (!slide.classList.contains('current')) { lastStep = -1; return; }
+      const st = stepOf(slide);
+      if (st !== lastStep) { const was = lastStep; lastStep = st; if (playing) finish(); if (st === 0 && was !== 0) setBark('limpo'); if (st === 1 && was < 1) setBark('fuligem'); }
+    }).observe(slide, { attributes: true, attributeFilter: ['class'] });
+    setBark('limpo');
+  });
+
+  /* ---------- 8. The peppered moth, generation after generation (s-ci-mariposa-geracoes) ----------
+     A teaching model. One generation per year. Each year the birds eat 30 % of the moths that are
+     easy to see and 15 % of those that are hard to see; «soot» (0 to 1) says which is which:
+       eaten(pale) = 0,15 + 0,15 × soot      eaten(dark) = 0,15 + 0,15 × (1 − soot)
+       p' = p × s_dark ÷ (p × s_dark + (1 − p) × s_pale)        (daughters keep the parents' colour)
+     Real records are drawn as diamonds: Manchester 1848 (first dark moth recorded) and 1895 (98 %);
+     near Cambridge 2001–2007 (12 % → 1 %; Cook and others, 2012). */
+  document.querySelectorAll('[data-civ="geracoes"]').forEach(root => {
+    const slide = root.closest('.slide');
+    const pop = root.querySelector('.cg-pop'), graf = root.querySelector('.cg-graf'), soot = root.querySelector('[name="fuligem"]');
+    const SCEN = {
+      manchester: { y0: 1848, p0: 0.01, soot: 100, span: 52, real: [[1848, 1, '1848: a primeira escura'], [1895, 98, '1895: 98 %']] },
+      cambridge: { y0: 2001, p0: 0.12, soot: 0, span: 12, real: [[2001, 12], [2002, 10], [2003, 6], [2004, 7], [2005, 4], [2006, 2], [2007, 1, '2007: 1 %']] },
+    };
+    let sc, year, p, hist, auto = null, busy = false;
+    // the trunk and its hundred moths (a fixed random order decides which ones are dark)
+    const order = Array.from({ length: 100 }, (_, i) => i).sort(() => Math.random() - 0.5);
+    const rank = []; order.forEach((cell, r) => { rank[cell] = r; });
+    const bg = el('rect', { width: 440, height: 440, rx: 14 }, pop);
+    const cells = [];
+    for (let i = 0; i < 100; i++) {
+      const g = el('g', { transform: `translate(${(24 + (i % 10) * 43.5).toFixed(1)},${(26 + Math.floor(i / 10) * 43).toFixed(1)}) rotate(${rand(-40, 40).toFixed(0)}) scale(0.5)` }, pop);
+      el('path', { d: MOTH, class: 'mar-asa' }, g); el('ellipse', { cx: 0, cy: 0, rx: 3.4, ry: 12, class: 'mar-corpo' }, g);
+      cells.push(g);
+    }
+    const mix = (a, b, t) => '#' + [0, 2, 4].map(i => Math.round(parseInt(a.slice(1 + i, 3 + i), 16) * (1 - t) + parseInt(b.slice(1 + i, 3 + i), 16) * t).toString(16).padStart(2, '0')).join('');
+    const f = () => Number(soot.value) / 100;
+    const surv = () => ({ c: 1 - (0.15 + 0.15 * f()), e: 1 - (0.15 + 0.15 * (1 - f())) });
+    const nDark = q => (q <= 0.004 ? 0 : q >= 0.996 ? 100 : clamp(Math.round(q * 100), 1, 99));
+    const pct = q => (q < 0.1 && q > 0 ? fmt(q * 100, 1) : fmt(q * 100)) + ' %';
+    const next = q => { const s = surv(); return q * s.e / (q * s.e + (1 - q) * s.c); };
+    function paintPop(eaten) {
+      const d = nDark(p);
+      bg.setAttribute('fill', mix('#CFCBBB', '#34322F', f()));
+      cells.forEach((g, i) => {
+        const dark = rank[i] < d;
+        g.setAttribute('class', 'mar ' + (dark ? 'es' : 'cl') + (eaten && eaten.has(i) ? ' comida' : ''));
+      });
+    }
+    // chart
+    const X0 = 58, X1 = 540, Y0 = 196, Y1 = 22;
+    function paintChart() {
+      const span = Math.max(sc.span, year - sc.y0 + 2), xOf = y => X0 + (y - sc.y0) / span * (X1 - X0), yOf = v => Y0 - v / 100 * (Y0 - Y1);
+      graf.replaceChildren();
+      [0, 50, 100].forEach(v => { el('line', { x1: X0, x2: X1, y1: yOf(v), y2: yOf(v), class: 'cg-grelha' }, graf); const t = el('text', { x: X0 - 8, y: yOf(v) + 6, 'text-anchor': 'end', class: 'cg-eixo' }, graf); t.textContent = v + ' %'; });
+      const stepY = span > 30 ? 10 : span > 14 ? 5 : 2;
+      for (let y = Math.ceil(sc.y0 / stepY) * stepY; y <= sc.y0 + span; y += stepY) { const t = el('text', { x: xOf(y), y: Y0 + 22, 'text-anchor': 'middle', class: 'cg-eixo' }, graf); t.textContent = y; el('line', { x1: xOf(y), x2: xOf(y), y1: Y0, y2: Y0 + 5, class: 'cg-grelha' }, graf); }
+      const tt = el('text', { x: X0, y: 14, class: 'cg-eixo cg-tit' }, graf); tt.textContent = 'mariposas escuras, em cada 100';
+      el('polyline', { points: hist.map(h => xOf(h[0]).toFixed(1) + ',' + yOf(h[1] * 100).toFixed(1)).join(' '), class: 'cg-linha' }, graf);
+      el('circle', { cx: xOf(year), cy: yOf(p * 100), r: 6, class: 'cg-ponto' }, graf);
+      sc.real.forEach(([y, v, label]) => {
+        const x = xOf(y), yy = yOf(v);
+        el('path', { d: `M${x},${yy - 9} L${x + 8},${yy} L${x},${yy + 9} L${x - 8},${yy} Z`, class: 'cg-real' }, graf);
+        if (label) { const t = el('text', { x: v > 50 ? x - 12 : x + 12, y: v > 50 ? yy + 24 : yy - 12, 'text-anchor': v > 50 ? 'end' : 'start', class: 'cg-eixo cg-rot' }, graf); t.textContent = label; }
+      });
+      const lg = el('text', { x: X1, y: 14, 'text-anchor': 'end', class: 'cg-eixo' }, graf); lg.textContent = '— modelo   ◆ registos reais';
+    }
+    function paintNumbers() {
+      const s = surv(), d = p * 100, nC = 100 - d, eC = nC * s.c, eE = d * s.e;   // per 100 moths, on average
+      const vals = {
+        fuligem: soot.value + ' %', nC: fmt(nC, 1), nE: fmt(d, 1), sC: fmt(s.c, 2), sE: fmt(s.e, 2), eC: fmt(eC, eC < 10 ? 2 : 1), eE: fmt(eE, eE < 10 ? 2 : 1),
+        p: pct(p), pNovo: pct(eE + eC > 0 ? eE / (eE + eC) : 0), ano: String(year),
+      };
+      for (const k in vals) root.querySelectorAll('[data-out="' + k + '"]').forEach(o => { o.textContent = vals[k]; });
+    }
+    function paint(eaten) { paintPop(eaten); paintChart(); paintNumbers(); }
+    function load(name) {
+      stop(); sc = SCEN[name]; year = sc.y0; p = sc.p0; hist = [[year, p]]; soot.value = sc.soot; paint();
+    }
+    function generation(fast) {
+      if (busy) return;
+      busy = true;
+      // who is eaten this year (shown for a moment), then the next generation takes its place
+      const s = surv(), d = nDark(p), eaten = new Set();
+      const pick = (dark, n) => { const ids = cells.map((_, i) => i).filter(i => (rank[i] < d) === dark).sort(() => Math.random() - 0.5); ids.slice(0, n).forEach(i => eaten.add(i)); };
+      pick(false, Math.round((100 - d) * (1 - s.c))); pick(true, Math.round(d * (1 - s.e)));
+      paintPop(eaten);
+      setTimeout(() => {
+        p = next(p); year += 1; hist.push([year, p]);
+        busy = false; paint();
+        if (auto && (year - sc.y0 >= 160 || p > 0.9995 || p < 0.0005)) stop();
+      }, fast ? 170 : 650);
+    }
+    function stop() { if (auto) { clearInterval(auto); auto = null; } const b = root.querySelector('[data-acao="auto"]'); b.textContent = 'Avançar'; b.classList.remove('sel'); }
+    root.querySelectorAll('[data-acao]').forEach(b => {
+      stopNav(b);
+      b.addEventListener('click', () => {
+        const a = b.dataset.acao;
+        if (a === 'uma') { stop(); generation(false); }
+        if (a === 'auto') { if (auto) stop(); else { auto = setInterval(() => { if (!slide.classList.contains('current')) stop(); else generation(true); }, 260); b.textContent = 'Pausa'; b.classList.add('sel'); } }
+        if (a === 'repor') load('manchester');
+        if (a === 'limpo') load('cambridge');
+      });
+    });
+    stopNav(soot);
+    soot.addEventListener('input', () => paint());
+    load('manchester');
   });
 })();

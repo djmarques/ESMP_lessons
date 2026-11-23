@@ -5,7 +5,7 @@
    Scenes (one per slide, see SCENES below):
      s-ci-vapor    a steam locomotive, cut open: fire, boiler, piston, wheels
      s-ci-motor    a four-stroke engine, cut open (and the Diesel variant)
-     s-ci-dinamo   a turbine turns a coil between two magnets: electricity
+     s-ci-dinamo   induction, one idea at a time: field lines, flux, voltage; then a turbine and a town
      s-ci-fabrica  a cotton mill by day and by night: shifts, the overlooker
      s-ci-cidade   an industrial city: the river, the sewers, the moths
 
@@ -551,7 +551,17 @@
     },
   };
 
-  /* ---------- 3. Turbine and dynamo ---------- */
+  /* ---------- 3. Turbine and dynamo: electromagnetic induction, one idea at a time ----------
+     The idea the slide builds, in this order:
+       B   the magnet's field, drawn as lines (a stronger magnet = more lines)
+       Φ   the flux: how many lines pass THROUGH the coil (it depends on how the coil is turned)
+       V   the voltage appears only while that number is changing (Faraday, 1831): V = ΔΦ ÷ Δt
+       N   each turn of wire is one more «window»: the voltages add up
+       ω   a turbine does the turning: the flux goes up and down like a wave, and so does the voltage
+     Builds 1 to 4: the teacher turns the coil by hand, with a slider (the lamp lights only while it moves).
+     Builds 5 to 7: the turbine turns it. The board on the right of the picture (in the HTML) shows
+     a small oscilloscope (flux and voltage against time) and one equation at a time; this scene
+     draws the traces and fills in the numbers (elements with data-ind). */
   SCENES['s-ci-dinamo'] = {
     bg: 'dia',
     build(S) {
@@ -559,20 +569,27 @@
       lights(sc, 12);
       sc.add(box(24, 0.2, 8, C.slab, 3, -0.1, 0));
       const CY = 1.8;
+      S.CY = CY;
       // the magnet: a C shape with the north pole above and the south pole below
       const nTex = textTexture('N', hex(C.orange), '#ffffff'), sTex = textTexture('S', hex(C.blue), '#ffffff');
       const poleMat = (c, tex) => [clay(c), clay(c), clay(c), clay(c), new T.MeshStandardMaterial({ map: tex, roughness: 0.8 }), clay(c)];
       sc.add(mesh(new T.BoxGeometry(2.2, 0.8, 2.0), poleMat(C.orange, nTex), 0, CY + 1.5, 0));
       sc.add(mesh(new T.BoxGeometry(2.2, 0.8, 2.0), poleMat(C.blue, sTex), 0, CY - 1.5, 0));
       sc.add(box(2.2, 3.8, 0.5, C.grey, 0, CY, -1.25));
-      // field lines from N to S
-      S.field = [];
-      for (const x of [-0.75, 0, 0.75]) for (const z of [-0.8]) {
-        const l = group(cyl(0.015, 2.2, glow(C.apricot, 0.3), 0, 0, 0, 6), mesh(new T.ConeGeometry(0.07, 0.18, 8), glow(C.apricot, 0.3), 0, -1.1, 0));
-        l.children[1].rotation.x = Math.PI;
-        l.position.set(x, CY, z); sc.add(l); S.field.push(l);
+      // field lines from N to S. Three sets, one per magnet strength (6, 12 or 18 lines):
+      // a stronger magnet is drawn with more lines. A line lights up while it passes through the coil.
+      S.matOff = clay(0xA9B0B6, { roughness: 0.6 });
+      S.matOn = glow(C.blue, 0.9);
+      S.lines = [];
+      const COLS = { 1: [0], 2: [-0.3, 0.3], 3: [-0.45, 0, 0.45] }, ROWS = [-0.36, -0.22, -0.08, 0.08, 0.22, 0.36];
+      for (const level of [1, 2, 3]) for (const x of COLS[level]) for (const z of ROWS) {
+        const rod = cyl(0.016, 2.2, S.matOff, 0, 0, 0, 6), tip = mesh(new T.ConeGeometry(0.06, 0.16, 8), S.matOff, 0, -0.55, 0);
+        tip.rotation.x = Math.PI;
+        rod.castShadow = tip.castShadow = false;
+        const g = group(rod, tip); g.position.set(x, CY, z); sc.add(g);
+        S.lines.push({ g, rod, tip, z, level, lit: false });
       }
-      // the coil on a shaft along x
+      // the coil on a shaft along x, with a see-through «window» (the area the lines can cross)
       S.coilGroup = new T.Group(); S.coilGroup.position.set(0, CY, 0); sc.add(S.coilGroup);
       S.loops = [];
       const cu = clay(0xD08A4A, { metalness: 0.5, roughness: 0.35, emissive: 0x3A1A00 });
@@ -581,11 +598,13 @@
         const g = group(mesh(new T.BoxGeometry(w, r * 2, r * 2), cu, 0, h / 2, 0), mesh(new T.BoxGeometry(w, r * 2, r * 2), cu, 0, -h / 2, 0), mesh(new T.BoxGeometry(r * 2, h, r * 2), cu, -w / 2, 0, 0), mesh(new T.BoxGeometry(r * 2, h, r * 2), cu, w / 2, 0, 0));
         g.position.x = n * 0.04; S.coilGroup.add(g); S.loops.push(g);
       }
+      S.window = mesh(new T.PlaneGeometry(1.36, 0.96), glass(C.peach, 0.42));
+      S.coilGroup.add(S.window);
       const shaft = cyl(0.06, 7.2, C.steel, -1.5, CY, 0, 12); shaft.rotation.z = Math.PI / 2; sc.add(shaft); S.shaft = shaft;
       // slip rings and brushes
       for (const x of [1.3, 1.6]) { const r = mesh(new T.TorusGeometry(0.16, 0.05, 8, 24), cu, x, CY, 0); r.rotation.y = Math.PI / 2; sc.add(r); }
       sc.add(box(0.12, 0.5, 0.12, C.coal, 1.3, CY - 0.42, 0), box(0.12, 0.5, 0.12, C.coal, 1.6, CY - 0.42, 0));
-      // turbine wheel with blades, and the jet that turns it
+      // turbine wheel with blades, and the jet that turns it (from build 5)
       S.turb = new T.Group(); S.turb.position.set(-4.4, CY, 0); sc.add(S.turb);
       S.turb.add(mesh(new T.CylinderGeometry(0.35, 0.35, 0.4, 20), clay(C.navy), 0, 0, 0)); S.turb.children[0].rotation.z = Math.PI / 2;
       for (let b = 0; b < 12; b++) { const bl = box(0.32, 1.1, 0.12, C.blue, 0, 0, 0); bl.position.set(0, Math.cos(b * Math.PI / 6) * 0.8, Math.sin(b * Math.PI / 6) * 0.8); bl.rotation.x = b * Math.PI / 6; bl.rotation.y = 0.5; S.turb.add(bl); }
@@ -611,74 +630,130 @@
       }
       sc.add(tube([[4.9, 0.1, -0.4], [6.2, 0.1, -0.4], [6.4, 1.6, 0], [12.4, 1.6, 0]], 0.03, C.coal));
       for (const x of [6.4, 9.4, 12.4]) sc.add(cyl(0.05, 1.6, 0x7A5C3E, x, 0.8, 0, 8));
-      S.angle = 0; S.omega = 0;
-      S.label('Íman: polo norte', 'i3d-nota', [1.4, CY + 1.9, 0.9], 0, st => st >= 0);
-      S.label('Íman: polo sul', 'i3d-nota', [1.4, CY - 1.95, 0.9], 0, st => st >= 0);
-      S.label('Campo magnético', 'i3d-nota', [-0.9, CY + 0.95, 0.6], 0, st => st === 0);
-      S.label('Bobina (fio de cobre enrolado)', 'i3d-nota i3d-forte', [0, CY - 0.75, 0.9], 0, st => st <= 2);
-      S.label('Turbina: a água ou o vapor fazem-na girar', 'i3d-nota i3d-forte', [-4.4, CY + 1.4, 0.4], 0, st => st >= 1 && st <= 3);
-      S.label('Lâmpada', 'i3d-nota', [4.75, 2.15, 0], 0, st => st >= 2 && st <= 3);
-      S.label('Corrente elétrica: vai e vem', 'i3d-nota', [3.0, 0.35, 0.7], 0, st => st >= 2 && st <= 3);
-      S.label('A cidade iluminada', 'i3d-nota i3d-forte', [9.7, 2.3, 0], 0, st => st >= 4);
+      S.angle = 0; S.omega = 0; S.rate = 0; S.Vabs = 0; S.Vnow = 0; S.hist = []; S.clock = 0; S.manual = true;
+      // the board next to the picture: traces of the oscilloscope and live numbers
+      S.ui = {
+        phi: S.el.querySelector('.ig-phi-l'), v: S.el.querySelector('.ig-v-l'),
+        phiDot: S.el.querySelector('.ig-phi-p'), vDot: S.el.querySelector('.ig-v-p'),
+        out: {},
+      };
+      S.el.querySelectorAll('[data-ind]').forEach(n => { (S.ui.out[n.dataset.ind] = S.ui.out[n.dataset.ind] || []).push(n); });
+      S.label('Polo norte', 'i3d-nota', [1.4, CY + 1.9, 0.9], 0, st => st <= 1);
+      S.label('Polo sul', 'i3d-nota', [1.4, CY - 1.95, 0.9], 0, st => st <= 1);
+      S.label('<span class="v c3">B</span> linhas do campo magnético', 'i3d-nota i3d-forte', [-0.75, CY + 0.8, 0.5], 0, st => st === 0);
+      S.label('Bobina: uma volta de fio de cobre', 'i3d-nota', [0.3, CY - 0.8, 0.9], 0, st => st === 0);
+      S.label('<span class="v c5">A</span> a «janela» da bobina', 'i3d-nota i3d-forte', [0.2, CY - 0.75, 0.9], 0, st => st === 1);
+      S.label('Lâmpada', 'i3d-nota', [4.75, 2.15, 0], 0, st => st >= 2 && st <= 6);
+      S.label('Corrente elétrica', 'i3d-nota', [3.0, 0.35, 0.7], 0, st => st >= 3 && st <= 6);
+      S.label('Turbina', 'i3d-nota i3d-forte', [-4.4, CY + 1.4, 0.4], 0, st => st >= 5 && st <= 6);
+      S.label('A cidade iluminada', 'i3d-nota i3d-forte', [9.7, 2.3, 0], 0, st => st >= 7);
     },
     controls: [
-      { type: 'slider', key: 'voltas', label: 'Rapidez da turbina', min: 0, max: 10, step: 0.5, value: 3, from: 3, fmt: v => String(v).replace('.', ',') + ' voltas por segundo' },
-      { type: 'slider', key: 'espiras', label: 'Voltas de fio na bobina', min: 1, max: 3, step: 1, value: 3, from: 3, fmt: v => v + (v === 1 ? ' volta' : ' voltas') },
+      { type: 'slider', key: 'iman', label: 'Força do íman', min: 1, max: 3, step: 1, value: 3, from: 0, fmt: v => ['', 'fraco', 'médio', 'forte'][v] },
+      { type: 'slider', key: 'angulo', label: 'Roda a bobina', min: 0, max: 360, step: 2, value: 90, from: 1, to: 4, fmt: v => v + '°' },
+      { type: 'slider', key: 'espiras', label: 'Voltas de fio', min: 1, max: 3, step: 1, value: 1, from: 4, fmt: v => v + (v === 1 ? ' volta' : ' voltas') },
+      { type: 'slider', key: 'voltas', label: 'Rapidez da turbina', min: 0, max: 2, step: 0.25, value: 1, from: 5, fmt: v => String(v).replace('.', ',') + (v === 1 ? ' volta por segundo' : ' voltas por segundo') },
     ],
     cam(step) {
-      if (step === 0) return { box: [-1.6, 0, -1.5, 1.8, 3.8, 1.2], dir: [0.5, 0.35, 1] };
-      if (step === 1) return { box: [-5.6, 0, -1.5, 1.8, 5.4, 1.6], dir: [0.3, 0.3, 1] };
-      if (step <= 3) return { box: [-5.6, 0, -1.5, 5.4, 4.6, 1.6], dir: [0.2, 0.35, 1] };
+      if (step <= 1) return { box: [-1.5, 0.2, -1.3, 1.7, 3.8, 1.2], dir: [0.55, 0.5, 1] };
+      if (step <= 4) return { box: [-1.6, 0, -1.4, 5.4, 3.9, 1.4], dir: [0.3, 0.45, 1] };
+      if (step <= 6) return { box: [-5.6, 0, -1.5, 5.4, 4.6, 1.6], dir: [0.2, 0.4, 1] };
       return { box: [-5.6, 0, -2.4, 12.6, 4.6, 2.2], dir: [0.15, 0.55, 1] };
     },
     frame(S, dt, t, step) {
-      const turns = step >= 3 ? (S.user.voltas ?? 3) : step >= 1 ? (step === 1 ? 1 : 2.5) : 0;    // turns per second
-      const loops = step >= 3 ? (S.user.espiras ?? 3) : 3;
-      S.omega = ease(S.omega, turns * 2 * Math.PI, dt, 1.6);
-      S.angle += S.omega * dt;
+      const TAU = 2 * Math.PI;
+      const B = S.user.iman ?? 3;                                  // 1, 2 or 3: six lines each
+      const N = step >= 4 ? (S.user.espiras ?? 1) : 1;
+      const manual = step <= 4;
+      if (manual !== S.manual) { S.manual = manual; S.angle = ((S.angle % TAU) + TAU) % TAU; S.omega = 0; }
+      const before = S.angle;
+      if (manual) {
+        // the coil follows the slider (edge-on in build 0), never faster than a hand could turn it
+        const goal = step === 0 ? 0 : (S.user.angulo ?? 90) * Math.PI / 180;
+        S.angle = toward(S.angle, goal, step === 1 && S.stepTime < 1.5 ? 1.6 : 10, dt);
+      } else {
+        S.omega = ease(S.omega, (S.user.voltas ?? 1) * TAU, dt, 1.6);
+        S.angle += S.omega * dt;
+      }
+      const rate = dt > 0 ? (S.angle - before) / dt : 0;           // radians per second, right now
       S.coilGroup.rotation.x = S.angle;
-      S.turb.rotation.x = S.angle;
       S.shaft.rotation.x = S.angle;
-      S.loops.forEach((l, i) => { l.visible = i < loops; });
-      // voltage amplitude ∝ N·ω (B and A fixed); brightness ∝ voltage²
-      const V = (S.omega / (2 * Math.PI)) * loops / 30;           // 1 at 10 turns/s and 3 loops
+      S.turb.rotation.x = S.angle;
+      S.loops.forEach((l, i) => { l.visible = i < N; });
+      // flux: the coil's window, seen by the lines, is as wide as |sin(angle)|
+      const s = Math.sin(S.angle), half = 0.45 * Math.abs(s);
+      let count = 0;
+      for (const ln of S.lines) {
+        const shown = ln.level === B;
+        ln.g.visible = shown;
+        const lit = shown && step >= 1 && Math.abs(ln.z) < half;
+        if (lit) count++;
+        if (lit !== ln.lit) { ln.lit = lit; ln.rod.material = ln.tip.material = lit ? S.matOn : S.matOff; ln.g.scale.set(lit ? 2 : 1, 1, lit ? 2 : 1); }
+      }
+      S.window.material.opacity = step >= 1 ? 0.42 : 0.18;
+      // voltage = turns × how fast the flux changes; 1 = the most this machine gives (3 turns, strong magnet, 2 turns per second)
+      const fluxRate = 6 * B * Math.cos(S.angle) * rate;          // lines per second (signed)
+      const V = (N / 3) * (B / 3) * Math.cos(S.angle) * rate / (2 * TAU);
+      S.rate = ease(S.rate, Math.abs(fluxRate), dt, 6);
+      S.Vabs = ease(S.Vabs, Math.abs(V), dt, 7);
+      S.Vnow = manual ? ease(S.Vnow, V, dt, 14) : V; S.count = count; S.N = N; S.B = B;
       const on = step >= 2 ? 1 : 0;
-      const bright = on * clamp(V * V * 4, 0, 1.6);
+      const bright = on * 1.6 * (1 - Math.exp(-9 * S.Vabs));       // the lamp answers even to a slow hand
       S.bulb.material.emissiveIntensity = bright * 2.2;
       S.lampLight.intensity = bright * 6;
-      S.windows.forEach(w => { w.material.emissiveIntensity = step >= 4 ? bright * 1.6 : 0; });
-      S.field.forEach(f => { f.children.forEach(c => { c.material.emissiveIntensity = 0.3 + 0.2 * Math.sin(t * 3); }); });
-      // jet of water/steam hitting the blades
+      S.windows.forEach(w => { w.material.emissiveIntensity = step >= 7 ? bright * 1.6 : 0; });
+      // jet of water or steam on the blades
       for (let i = 0; i < S.jet.n; i++) {
         const sd = S.seeds[i], ph = (t * 1.6 + sd[0]) % 1;
-        if (step < 1) { S.jet.hide(i); continue; }
+        if (step < 5) { S.jet.hide(i); continue; }
         const y = 1.8 + 1.6 - ph * 2.6, z = 1.0 - ph * 1.1 + (sd[1] - 0.5) * 0.15;
         S.jet.set(i, -4.4 + (sd[2] - 0.5) * 0.25, y, z, 1 - ph * 0.4);
       }
       S.jet.done();
-      // alternating current: the dots swing along the wires
-      const swing = Math.sin(S.angle) * 0.06 * clamp(V * 3);
+      // the current: the charge that has passed is proportional to the change of flux, so the dots follow sin(angle)
+      const swing = s * 0.05 * (B / 3) * (0.6 + 0.4 * N / 3);
       for (let i = 0; i < S.dots.n; i++) {
-        if (!on || V < 0.01) { S.dots.hide(i); continue; }
+        if (step < 3) { S.dots.hide(i); continue; }
         const w = S.wires[i % 2], u = clamp(((Math.floor(i / 2) + 0.5) / (S.dots.n / 2)) + (i % 2 ? -swing : swing), 0, 1);
         const p = w.getPoint(u);
         S.dots.set(i, p.x, p.y, p.z, 1);
       }
       S.dots.done();
-      S.V = V; S.bright = bright;
-      if (S.omega > 2 && Math.floor(t * 1.2) !== S.lastHum) { S.lastHum = Math.floor(t * 1.2); if (step >= 1) SOM.play('zumbido'); }
-    },
-    onStep(S, step, prev) { if (step === 2 && prev < 2) SOM.play('luz'); if (step === 4 && prev < 4) SOM.play('sobe'); },
-    readout(S, step) {
-      if (step < 2) return '';
-      const pct = Math.round(clamp(S.V) * 100);
-      const din = S.el.querySelector('[data-din]');
-      if (din && step >= 3) {                                // the equation under the picture, with today's numbers
-        const n = S.user.espiras ?? 3, w = S.user.voltas ?? 3;
-        const html = `Agora: <span class="v c2">N</span> = ${n} ${n === 1 ? 'volta' : 'voltas'} de fio, <span class="v c5">ω</span> = ${String(w).replace('.', ',')} voltas por segundo → tensão a <b>${pct} %</b> da máxima.`;
-        if (din._h !== html) { din.innerHTML = html; din._h = html; }
+      // the oscilloscope: flux (as a share of the strongest magnet's) and voltage, over the last 5 seconds
+      S.clock += dt;
+      S.hist.push({ t: S.clock, phi: step >= 1 ? s * B / 3 : 0, v: clamp(S.Vnow, -1.05, 1.05) });
+      while (S.hist.length && S.clock - S.hist[0].t > 5) S.hist.shift();
+      const ui = S.ui;
+      if (ui.phi) {
+        const xOf = q => 16 + (1 - (S.clock - q.t) / 5) * 520;
+        let a = '', b = '';
+        for (const q of S.hist) { const x = xOf(q).toFixed(1); a += x + ',' + (60 - q.phi * 24).toFixed(1) + ' '; b += x + ',' + (154 - q.v * 42).toFixed(1) + ' '; }
+        ui.phi.setAttribute('points', a); ui.v.setAttribute('points', b);
+        const last = S.hist[S.hist.length - 1];
+        ui.phiDot.setAttribute('cy', (60 - last.phi * 24).toFixed(1)); ui.vDot.setAttribute('cy', (154 - last.v * 42).toFixed(1));
       }
-      return `<span>Tensão (em relação ao máximo) <i class="i3d-barra-mini"><b style="width:${pct}%"></b></i> <b>${pct} %</b></span>`;
+      if (!manual && S.omega > 2 && Math.floor(t * 1.2) !== S.lastHum) { S.lastHum = Math.floor(t * 1.2); SOM.play('zumbido'); }
+      if (on && S.Vabs > 0.02 && !S.wasLit && S.clock - (S.lastLuz || -9) > 2) { S.lastLuz = S.clock; SOM.play('luz'); }
+      S.wasLit = on && S.Vabs > 0.01;
+    },
+    onStep(S, step, prev) { if (step === 7 && prev < 7) SOM.play('sobe'); },
+    readout(S, step) {
+      // numbers on the board (four times a second)
+      const pt = (v, d = 0) => v.toFixed(d).replace('.', ',');
+      const w = S.user.voltas ?? 1;
+      const vals = {
+        total: String(6 * S.B),
+        linhas: S.count + ' de ' + 6 * S.B,
+        taxa: pt(S.rate < 0.5 ? 0 : S.rate),
+        tensao: Math.round(clamp(S.Vabs) * 100) + ' %',
+        N: S.N + (S.N === 1 ? ' volta' : ' voltas'),
+        Nfrase: ['', 'a tensão de uma volta só', 'o dobro da tensão de uma volta', 'o triplo da tensão de uma volta'][S.N],
+        B: ['', 'fraco', 'médio', 'forte'][S.B],
+        w: pt(w, w % 1 ? 2 : 0) + (w === 1 ? ' volta por segundo' : ' voltas por segundo'),
+        max: Math.round((S.N / 3) * (S.B / 3) * (w / 2) * 100) + ' %',
+      };
+      for (const k in vals) (S.ui.out[k] || []).forEach(n => { if (n.textContent !== vals[k]) n.textContent = vals[k]; });
+      return '';
     },
   };
 
@@ -939,7 +1014,10 @@
       S.flow = swarm(sc, 40, C.dirty, 0.06);
       // trees on the south bank, with moths on the trunks
       S.trunks = []; S.moths = [];
-      const mothGeo = new T.CircleGeometry(0.15, 3);
+      const wing = new T.Shape();                              // a moth seen from above: wings open, head at the top
+      wing.moveTo(0, 0.065); wing.bezierCurveTo(-0.035, 0.075, -0.12, 0.045, -0.175, -0.055); wing.bezierCurveTo(-0.13, -0.085, -0.045, -0.075, 0, -0.05);
+      wing.bezierCurveTo(0.045, -0.075, 0.13, -0.085, 0.175, -0.055); wing.bezierCurveTo(0.12, 0.045, 0.035, 0.075, 0, 0.065);
+      const mothGeo = new T.ShapeGeometry(wing);
       for (let i = 0; i < 8; i++) {
         const x = -7.9 + i * 2.25, z = 5.0;
         const trunk = cyl(0.2, 1.7, 0xC3C6B8, x, 0.85, z, 14); sc.add(trunk);
@@ -947,7 +1025,7 @@
         S.trunks.push(trunk);
         for (let k = 0; k < 3; k++) {
           const m = mesh(mothGeo, new T.MeshStandardMaterial({ color: 0xE6E2D6, roughness: 0.8, side: T.DoubleSide }), x + (k - 1) * 0.08, 0.45 + k * 0.42, z + 0.21);
-          m.rotation.z = Math.PI / 2; m.scale.set(1, 1.6, 1); sc.add(m);
+          m.rotation.z = (rnd() - 0.5) * 1.2; m.scale.setScalar(1.15); sc.add(m);
           S.moths.push({ m, r: rnd(), seen: 0 });
         }
       }
@@ -1116,9 +1194,16 @@
     }
     if (matchMedia('(max-width: 860px)').matches) { palco.style.height = ''; return; }
     let below = 0;
-    for (let n = palco.nextElementSibling; n; n = n.nextElementSibling) {
-      if (n.offsetParent === null || getComputedStyle(n).visibility === 'hidden') continue;   // builds not shown yet take no room
-      below += n.offsetHeight + 8;
+    // what sits under the picture: its own next siblings and, when the picture is inside a box
+    // (a board, a column), what comes after each box. Columns side by side (.lado-a-lado) are
+    // next to the picture, not under it.
+    for (let node = palco; node && node !== el; node = node.parentElement) {
+      if (node !== palco) below += parseFloat(getComputedStyle(node).paddingBottom) || 0;
+      if (node.parentElement && node.parentElement.classList.contains('lado-a-lado')) continue;
+      for (let n = node.nextElementSibling; n; n = n.nextElementSibling) {
+        if (n.offsetParent === null || getComputedStyle(n).visibility === 'hidden') continue;   // builds not shown yet take no room
+        below += n.offsetHeight + 8;
+      }
     }
     const top = palco.getBoundingClientRect().top - (el.closest('.stage') || document.body).getBoundingClientRect().top;
     palco.style.height = Math.max(260, Math.min(780, window.innerHeight - top - below - 84)) + 'px';   // 84: room for the navigation pill
