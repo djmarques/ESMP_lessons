@@ -1,6 +1,6 @@
 # CLC 6 · Culturas de urbanismo e mobilidade
 
-Site interativo das aulas de Cultura, Língua e Comunicação 6 (formação de adultos), para projetar na sala. Tem 267 slides:
+Site interativo das aulas de Cultura, Língua e Comunicação 6 (formação de adultos), para projetar na sala. Tem 278 slides:
 
 - o **programa** (núcleo gerador, os quatro DR e o percurso da casa ao mundo, avaliação);
 - **DR1 · A casa** (aulas 1 a 8). Revisto em novembro de 2026 com Geografia A: na aula 3, quem decide o preço de uma casa, oferta e procura (simulação), o contágio dos preços (simulação) e a onda que chega à periferia (dados do INE); ainda na aula 3 (18 de novembro), uma nuvem de palavras de aquecimento e quatro jogos rápidos ao longo da aula, cada um logo a seguir ao tema; na aula 5, povoamento disperso e concentrado;
@@ -22,6 +22,7 @@ Os slides com o botão **Responder no telemóvel** mostram um código QR: os for
 | `widgets.js` | Simulações e animações interativas (ver abaixo) |
 | `notes.js` | Notas do formador, uma por slide |
 | `bairro3d.js` | Aula 3 · o bairro da D. Rosa em 3D (ver abaixo) |
+| `crise2008.js` | Aula 3 · a crise de 2008 em animações (ver abaixo) |
 | `assets/vendor/three.min.js` | three.js, versão 160 (desenho 3D; licença MIT), guardado aqui para funcionar sem internet |
 
 ## Publicar no GitHub Pages
@@ -121,6 +122,26 @@ O slide «Uma casa fria… e quente» usa o mesmo motor 3D para mostrar a casa d
 Os números do slide da crise da habitação estão em `NUM`, perto do início do `bairro3d.js` (fontes no próprio slide e nas notas). Clicar numa casa vende-a por mais 40%. Sons gerados no navegador (botão 🔊 no canto, partilhado com os jogos).
 
 Para mudar a história, edita a função `layout` de cada slide em `SLIDES`, no início do ficheiro. Se o navegador não tiver 3D, os slides mostram o desenho 2D antigo.
+
+## A crise de 2008 em animações (`crise2008.js`)
+
+Onze slides na Aula 3, entre «Jogo rápido: o preço» e «Esta semana: a habitação no Parlamento», para explicar as ideias do filme «A Queda de Wall Street» (*The Big Short*, 2015): abertura (com os dois excertos do filme), nove animações e um jogo rápido de seis perguntas (atividade «j3crise» no telemóvel).
+
+| Slide | Cena (`data-cena`) | O que mostra |
+| --- | --- | --- |
+| O que é uma ação? | `acao` | uma padaria dividida em 100 cubos; a altura dos cubos é o preço |
+| Longo ou curto? | `longo` | gráfico 2D do preço e do que ganha ou perde cada posição; barra para o preço final |
+| Vender o que não se tem | `short` | a Ana pede uma ação emprestada à D. Rosa, vende-a ao Tiago, recompra-a e devolve-a |
+| O que é uma obrigação? | `obrigacao` | empréstimo, juros, vender a dívida; duas padarias: mais juro, mais risco |
+| Hipotecas em pacote | `hipotecaria` | a prestação da família, o pacote, os investidores |
+| Fatias | `tranches` | três fatias que enchem de cima para baixo; barra «famílias que deixam de pagar» |
+| CDO | `cdo` | as fatias BBB viram um pacote novo (CDO) e um CDO de CDO; a mesma barra |
+| Apostas sobre apostas | `apostas` | o seguro contra o incumprimento e as apostas à volta |
+| A bolha rebenta | `bolha` | crédito fácil, preços a subir, a bolha, o dominó de 2008 |
+
+Cada clique (→) é um passo da história; a faixa por baixo do quadro mostra a legenda desse passo e, no fim, a definição. As peças andam sempre para o sítio que o passo atual lhes dá, por isso andar para trás (←) também funciona. Para mudar a história de uma cena, edita a função `pose` dessa cena em `SCENES`, no `crise2008.js`; para mudar as legendas, edita os `<p>` dentro de `.c08-leg` no `index.html`. Os sons usam o mesmo botão 🔊 dos jogos.
+
+Os números das cenas são ilustrativos (padaria de 10 000 €; fatias de 70%, 20% e 10%; juros de 4%, 8% e 15%). Os factos históricos têm fonte no próprio slide e nas notas: índice S&P/Case-Shiller (preços das casas nos Estados Unidos), Federal Reserve History e FDIC. O «20 vezes» das apostas é o número dito no filme. Se o navegador não tiver 3D, o quadro avisa e as legendas contam a história.
 
 ## Simulações e animações (`widgets.js`)
 

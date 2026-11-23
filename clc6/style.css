@@ -867,3 +867,98 @@ html:not(.b3d-ok) .b3d-som { display: none; }
   .calc { grid-template-areas: "im" "conta" "mk" "ctr"; }
   #a3-clima .mn-svg .mn-nome { font-size: 30px; } #a3-clima .mn-svg .mn-s { font-size: 24px; } #a3-clima .mn-svg .mn-grande { font-size: 34px; }
 }
+
+/* ---------- 20. A crise de 2008 (crise2008.js) ------------------------
+   Dark stage in the style of the «quadro» slides: a 3D board (or a 2D
+   graph) on top, sliders when the scene has them, and one caption strip
+   below that shows only the latest revealed caption. Labels over the 3D
+   picture are HTML (.c08-et), placed by crise2008.js. */
+.c08-slide { max-width: 1400px; }
+.c08-slide h2 { font-size: 34px; margin-bottom: 10px; }
+.c08-slide .kicker { margin-bottom: 2px; }
+.c08 { background: var(--navy); border-radius: 16px; overflow: hidden; color: var(--cream); }
+.c08-palco { position: relative; height: 480px; overflow: hidden; background: radial-gradient(ellipse at 50% 42%, #33434F, #151D24 80%); }
+.c08-palco canvas { position: absolute; inset: 0; display: block; width: 100%; height: 100%; }
+.c08-camada { position: absolute; inset: 0; pointer-events: none; overflow: hidden; }
+.c08-palco.sem-3d::after { content: "A animação 3D não está disponível neste navegador: as legendas contam a história."; position: absolute; inset: 40% 10% auto; text-align: center; color: var(--peach); font-size: 22px; }
+/* labels over the 3D picture */
+.c08-et { position: absolute; left: 0; top: 0; opacity: 0; transition: opacity .45s; white-space: nowrap; will-change: transform; text-align: center; font: 700 19px/1.15 var(--body); color: var(--cream); text-shadow: 0 1px 6px #000, 0 0 2px #000; }
+.c08-et.visivel { opacity: 1; }
+.c08-et small { display: block; font-weight: 400; font-size: 16px; }
+.c08-et b { color: var(--accent); }
+.c08-et.nome { padding: 2px 12px 3px; border-radius: 99px; background: var(--cream); color: var(--navy); font-family: var(--head); text-shadow: none; }
+.c08-et.nome small { color: var(--text); font-size: 14px; }
+.c08-et.valor { padding: 4px 14px 5px; border-radius: 10px; background: var(--accent); color: var(--navy); font: 700 21px/1.15 var(--head); text-shadow: none; }
+.c08-et.valor small { font: 700 19px var(--body); }
+.c08-et.euro { padding: 1px 10px 2px; border-radius: 8px; background: rgba(232, 184, 74, .95); color: var(--navy); font-size: 20px; text-shadow: none; }
+.c08-et.nota { padding: 2px 10px 3px; border-radius: 8px; background: rgba(0, 0, 0, .5); text-shadow: none; }
+.c08-et.bom { padding: 2px 12px 3px; border-radius: 8px; background: #DDEBCB; color: #2E4A14; text-shadow: none; }
+.c08-et.bom b { color: #2E4A14; }
+.c08-et.mau { padding: 2px 12px 3px; border-radius: 8px; background: #F6D2C8; color: #7A2413; text-shadow: none; }
+.c08-et.mau b, .c08-et.mau small { color: #7A2413; }
+.c08-et.dom { font: 700 17px var(--head); padding: 1px 9px 2px; border-radius: 8px; background: rgba(0, 0, 0, .55); text-shadow: none; }
+.c08-et.selo { font: 700 30px var(--head); color: #B5321B; padding: 0 12px; border: 4px solid #B5321B; border-radius: 8px; background: rgba(246, 243, 236, .92); text-shadow: none; rotate: -12deg; }
+.c08-et.fatia { text-align: left; translate: 50% 50%; padding: 2px 10px 3px; border-radius: 8px; background: rgba(0, 0, 0, .5); text-shadow: none; font-weight: 400; }
+.c08-et.fatia b { font: 700 21px var(--head); color: var(--cream); }
+.c08-et.fatia small { display: inline; color: #CFE3B8; font-weight: 700; font-size: 18px; }
+.c08-et.euro b { color: var(--navy); }
+.c08-et.fatia.falha small { color: #FFB4A2; }
+/* readout in the top right corner */
+.c08-read { position: absolute; left: 14px; top: 12px; display: grid; gap: 2px; padding: 8px 14px 10px; border-radius: 12px; background: rgba(0, 0, 0, .55); font-size: 20px; text-align: left; pointer-events: none; }
+.c08-read small { font-size: 15px; color: var(--peach); }
+.c08-read b { font: 700 26px var(--head); color: #CFE3B8; }
+.c08-read .falha b { color: #FFB4A2; }
+/* sliders */
+.c08-read[hidden], .c08-ctr[hidden], .c08-ctr .rng[hidden] { display: none; }
+.c08-ctr { padding: 6px 22px 0; }
+.c08-ctr .rng { grid-template-columns: 300px 1fr 190px; margin: 2px 0; }
+.c08-ctr .rng span { color: var(--cream); font-size: 20px; }
+.c08-ctr .rng input { accent-color: var(--accent); height: 30px; }
+.c08-ctr .rng output { color: var(--accent); font-size: 23px; }
+/* caption strip: only the latest revealed caption shows */
+.c08-leg { padding: 12px 22px 14px; border-top: 1px solid rgba(246, 243, 236, .16); min-height: 112px; display: grid; align-items: center; }
+.c08-leg > * { margin: 0; font-size: 25px; line-height: 1.3; }
+.c08-leg > [data-step]:not(.on), .c08-leg > :has(~ [data-step].on) { display: none; }
+.c08-leg b { color: var(--accent); }
+.c08-leg time { display: block; font: 700 14px var(--body); letter-spacing: .12em; text-transform: uppercase; color: var(--peach); margin-bottom: 2px; }
+.c08-leg .quadro-def { margin: 0; padding: 0; border: 0; }
+.slide.current .c08-leg > .on, .slide.current .c08-leg > :not([data-step]) { animation: mnwrite .5s var(--ease) both; }
+/* the 2D graph (long and short positions) */
+.c08-2d { display: grid; place-items: center; }
+.c08-2d svg { width: 100%; height: 100%; }
+.c08-2d .eixos line { stroke: var(--cream); stroke-width: 3; }
+.c08-2d .eixos .grade { stroke-width: 1; stroke-opacity: .16; }
+.c08-2d text { fill: var(--cream); font-family: var(--body); }
+.c08-2d .tick { font-size: 24px; fill-opacity: .8; }
+.c08-2d .eixo { font-size: 25px; font-style: italic; fill-opacity: .85; }
+.c08-2d .linha { stroke: var(--accent); stroke-width: 6; stroke-linejoin: round; stroke-linecap: round; }
+.c08-2d .hoje, .c08-2d .fim { fill: var(--cream); stroke: var(--navy); stroke-width: 4; transition: opacity .4s; }
+.c08-2d .pfim { font: 700 34px var(--head); fill: var(--accent); }
+.c08-2d .zero { stroke: var(--cream); stroke-width: 2; stroke-opacity: .6; }
+.c08-2d .b { transition: opacity .5s; }
+.c08-2d .b rect { fill: var(--line); }
+.c08-2d .b.ganha rect { fill: #9CC26F; }
+.c08-2d .b.perde rect { fill: #E0705A; }
+.c08-2d .b .nome { font: 700 30px var(--head); }
+.c08-2d .b .sub { font-size: 22px; fill-opacity: .8; }
+.c08-2d .b .val { font: 700 38px var(--head); }
+.c08-2d .b.ganha .val { fill: #CFE3B8; }
+.c08-2d .b.perde .val { fill: #FFB4A2; }
+/* opening slide: the road map and the film */
+.c08-mapa { display: flex; flex-wrap: wrap; gap: 10px 8px; align-items: center; margin: 18px 0; }
+.c08-mapa span { background: var(--cream); border: 1px solid var(--line); border-radius: 10px; padding: 8px 14px; font: 700 21px var(--head); color: var(--navy); }
+.c08-mapa i { font-style: normal; color: var(--orange); font-weight: 700; font-size: 24px; }
+.c08-filme { display: flex; flex-wrap: wrap; gap: 12px; align-items: center; margin-top: 10px; }
+@media (max-width: 900px) {
+  .c08-slide h2 { font-size: 22px; }
+  .c08-palco { height: 52vh; }
+  .c08-et { font-size: 12.5px; } .c08-et small { font-size: 11px; } .c08-et.nome small { font-size: 10.5px; }
+  .c08-et.valor { font-size: 14px; padding: 2px 8px; } .c08-et.valor small { font-size: 13px; }
+  .c08-et.euro { font-size: 13px; } .c08-et.dom { font-size: 11px; } .c08-et.selo { font-size: 18px; border-width: 3px; }
+  .c08-et.fatia b { font-size: 14px; }
+  .c08-read { font-size: 13px; padding: 5px 9px; left: 8px; top: 8px; } .c08-read small { font-size: 11px; } .c08-read b { font-size: 17px; }
+  .c08-ctr { padding: 6px 12px 0; } .c08-ctr .rng { grid-template-columns: 1fr 130px; } .c08-ctr .rng span { grid-column: 1 / -1; font-size: 16px; } .c08-ctr .rng output { font-size: 17px; }
+  .c08-leg { padding: 10px 12px 12px; min-height: 0; } .c08-leg > * { font-size: 17px; }
+  .c08-mapa span { font-size: 16px; padding: 5px 9px; }
+}
+@media (prefers-reduced-motion: reduce) { .slide.current .c08-leg > * { animation: none; } }

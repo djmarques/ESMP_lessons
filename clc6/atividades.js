@@ -342,6 +342,86 @@ window.ATIVIDADES = {
    }
   ]
  },
+ "j3crise": {
+  "disciplina": "CLC 6",
+  "titulo": "Jogo rápido: a crise de 2008",
+  "passos": [
+   {
+    "tipo": "jogo",
+    "segundos": 25,
+    "perguntas": [
+     {
+      "p": "Ter uma posição curta é apostar que o preço…",
+      "o": [
+       "vai subir",
+       "vai descer",
+       "fica igual"
+      ],
+      "c": 1,
+      "f": "Vende-se agora, para comprar mais barato depois."
+     },
+     {
+      "p": "Uma obrigação é…",
+      "o": [
+       "uma parte de uma empresa",
+       "um empréstimo que paga juros",
+       "um seguro de incêndio"
+      ],
+      "c": 1,
+      "f": "Quem a compra empresta dinheiro e recebe juros."
+     },
+     {
+      "p": "Porque é que uma obrigação mais arriscada paga mais juro?",
+      "o": [
+       "para compensar o risco de não se receber",
+       "porque dura menos tempo",
+       "porque é maior"
+      ],
+      "c": 0,
+      "f": "Mais juro quer dizer mais risco."
+     },
+     {
+      "p": "Num pacote cortado em fatias, quem perde primeiro quando as famílias deixam de pagar?",
+      "o": [
+       "a fatia AAA",
+       "todas ao mesmo tempo",
+       "a fatia de baixo, a do juro mais alto"
+      ],
+      "c": 2,
+      "f": "O dinheiro entra por cima: a de baixo é a última a receber."
+     },
+     {
+      "p": "De que era feito um CDO?",
+      "o": [
+       "de ações de bancos",
+       "de fatias arriscadas de outros pacotes",
+       "de casas novas"
+      ],
+      "c": 1,
+      "f": "Por isso falhava todo ao mesmo tempo."
+     },
+     {
+      "p": "O que fez rebentar a bolha?",
+      "o": [
+       "muitas famílias deixaram de pagar e os preços caíram",
+       "construíram-se casas a mais em Lisboa",
+       "a bolsa fechou"
+      ],
+      "c": 0,
+      "f": "Mais casas à venda e menos compradores: os preços caíram."
+     }
+    ]
+   },
+   {
+    "tipo": "escrita",
+    "titulo": "Agora, por palavras tuas",
+    "intro": "Três ou quatro frases.",
+    "perguntas": [
+     "Explica a um amigo, por palavras tuas: porque é que o preço das casas subiu tanto nos Estados Unidos e depois caiu? Usa as palavras «procura», «oferta» e «crédito»."
+    ]
+   }
+  ]
+ },
  "j3frio": {
   "disciplina": "CLC 6",
   "titulo": "Jogo rápido: uma casa fria… e quente",
