@@ -962,3 +962,65 @@ html:not(.b3d-ok) .b3d-som { display: none; }
   .c08-mapa span { font-size: 16px; padding: 5px 9px; }
 }
 @media (prefers-reduced-motion: reduce) { .slide.current .c08-leg > * { animation: none; } }
+
+
+/* ---------- Etiquetas DR (novembro de 2026) ------------------------------
+   Cada slide diz que Domínios de Referência mobiliza em data-dr="1,3".
+   Cores: DR1 laranja queimado, DR2 pêssego, DR3 azul-escuro, DR4 azul. */
+.d1 { --dr: #A44A16; --dr-ink: #fff; } .d2 { --dr: #F0A673; --dr-ink: #1E2A33; } .d3 { --dr: #1E2A33; --dr-ink: #fff; } .d4 { --dr: #2F6E9E; --dr-ink: #fff; }
+.drbar { position: fixed; left: calc(var(--sidebar) + 24px); bottom: 20px; z-index: 15; display: flex; gap: 6px; align-items: center; background: rgba(255,255,255,.94); border: 1px solid var(--line); border-radius: 999px; padding: 6px 12px 6px 8px; }
+.drbar[hidden] { display: none; }
+.drbar span { font-size: 14px; font-weight: 700; letter-spacing: .04em; padding: 5px 10px; border-radius: 999px; color: var(--muted); background: transparent; border: 1px dashed var(--line); opacity: .55; transition: background .3s, color .3s, opacity .3s; }
+.drbar span.on { background: var(--dr); color: var(--dr-ink); border: 1px solid var(--dr); opacity: 1; }
+.drbar small { font-size: 13px; color: var(--muted); margin-left: 4px; }
+.drfilter { display: flex; gap: 5px; margin-top: 12px; flex-wrap: wrap; }
+.drfilter button { font: inherit; font-size: 13px; font-weight: 700; padding: 4px 9px; border-radius: 999px; border: 1px solid var(--line); background: var(--white); color: var(--navy); cursor: pointer; }
+.drfilter button[aria-pressed="true"] { background: var(--dr, var(--navy)); color: var(--dr-ink, #fff); border-color: var(--dr, var(--navy)); }
+.toc a[hidden], .toc h2[hidden] { display: none; }
+.toc a .drdots { margin-left: auto; display: inline-flex; gap: 3px; align-self: center; flex: none; padding-left: 6px; }
+.toc a .drdots i { width: 7px; height: 7px; border-radius: 50%; background: var(--dr); box-shadow: 0 0 0 1px rgba(255,255,255,.7); }
+.drmatrix { columns: 2; column-gap: 36px; }
+.drmatrix .dm-row { display: grid; grid-template-columns: 1fr repeat(4, 46px); align-items: center; break-inside: avoid; }
+.drmatrix .dm-head { column-span: all; display: flex; flex-wrap: wrap; gap: 6px 22px; margin-bottom: 10px; }
+.drmatrix .dm-head b { display: inline-flex; align-items: center; gap: 7px; font-size: 16px; color: var(--navy); }
+.drmatrix .dm-head u { --s: 16px; }
+.drmatrix .dm-row { text-decoration: none; color: var(--navy); font-size: 17px; line-height: 1.2; padding: 3px 6px; border-bottom: 1px solid var(--line); min-height: 34px; }
+.drmatrix .dm-row:hover { background: var(--cream); }
+.drmatrix .dm-row i { font-style: normal; font-weight: 700; color: var(--orange); display: inline-block; min-width: 26px; }
+.drmatrix em { display: grid; place-items: center; }
+.drmatrix u { width: var(--s); height: var(--s); border-radius: 50%; background: var(--dr); display: block; text-decoration: none; }
+.slide.current .drmatrix u { animation: wgpop .6s var(--ease) both; }
+@media (max-width: 1100px) { .drmatrix { columns: 1; } }
+@media (max-width: 860px) { .drbar { left: 12px; bottom: 76px; } .drbar small { display: none; } }
+@media print { .drbar { display: none; } }
+
+/* Projeto de grupo: grelha DR × Cultura, Língua, Comunicação */
+.pj { display: grid; grid-template-columns: minmax(150px, 1.5fr) repeat(3, 1fr); gap: 8px; align-items: stretch; }
+.pj > b { font-size: 13px; letter-spacing: .08em; text-transform: uppercase; color: var(--orange); text-align: center; align-self: end; }
+.pj > i { font-style: normal; background: var(--cream); border-radius: 8px; display: grid; place-items: center; font-size: 16px; color: var(--navy); padding: 10px 4px; }
+.pj .drc { background: var(--dr); color: var(--dr-ink); border-radius: 8px; padding: 10px 12px; font-weight: 700; font-size: 17px; line-height: 1.2; display: flex; align-items: center; }
+
+/* Slides novos: planta do lazer, redes culturais, sinais, faixas de limpeza */
+.planta, .mato { width: 100%; height: auto; display: block; }
+.planta [data-step] { transform: none; }
+.redes { display: grid; gap: 8px; }
+.redes .rd-head { font-size: 14px; color: var(--muted); margin: 0; }
+.rd { display: grid; grid-template-columns: minmax(300px, 1.5fr) 1.6fr 150px; gap: 14px; align-items: center; }
+.rd b { display: block; font-family: var(--head); font-size: 21px; color: var(--navy); line-height: 1.15; }
+.rd small { font-size: 14px; color: var(--muted); }
+.rd .tr { height: 22px; background: var(--cream); border-radius: 11px; overflow: hidden; }
+.rd .tr span { display: block; height: 100%; width: 0; background: var(--orange); border-radius: 11px; transition: width 1.2s var(--ease) .15s; }
+.rd:nth-child(odd) .tr span { background: var(--blue); }
+.rd.on .tr span { width: var(--w); }
+.rd output { font-family: var(--head); font-weight: 700; font-size: 20px; color: var(--navy); white-space: nowrap; }
+.card.sinal { text-align: center; padding: 14px 10px; }
+.card.sinal svg { width: 92px; height: 92px; display: block; margin: 0 auto 8px; }
+.card.sinal b { display: block; font-family: var(--head); color: var(--navy); font-size: 18px; line-height: 1.2; }
+.card.sinal small { display: block; font-size: 16px; color: var(--orange); font-weight: 700; margin-top: 4px; }
+.mato circle { transition: opacity .9s var(--ease); }
+.mato .faixa { fill: #F6F3EC; fill-opacity: 0; stroke: #A44A16; stroke-width: 3; stroke-dasharray: 8 6; stroke-opacity: 0; }
+.mato text { font-family: Cambria, Caladea, serif; font-weight: 700; font-size: 19px; fill: #A44A16; paint-order: stroke; stroke: #F6F3EC; stroke-width: 6px; stroke-linejoin: round; opacity: 0; transition: opacity .6s var(--ease); }
+#a19-territorio.ge1 .t50, #a19-territorio.ge2 .t100 { opacity: 0; }
+#a19-territorio.ge1 .faixa.f50, #a19-territorio.ge2 .faixa.f100 { fill-opacity: .55; stroke-opacity: 1; }
+#a19-territorio.ge1 text.f50, #a19-territorio.ge2 text.f100 { opacity: 1; }
+@media (max-width: 860px) { .rd { grid-template-columns: 1fr; gap: 4px; } .pj { grid-template-columns: 1fr 1fr 1fr; } .pj > span { grid-column: 1 / -1; } .pj > span:first-child { display: none; } }

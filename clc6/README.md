@@ -1,12 +1,27 @@
 # CLC 6 · Culturas de urbanismo e mobilidade
 
-Site interativo das aulas de Cultura, Língua e Comunicação 6 (formação de adultos), para projetar na sala. Tem 278 slides:
+Site interativo das aulas de Cultura, Língua e Comunicação 6 (formação de adultos), para projetar na sala. Tem 294 slides:
 
-- o **programa** (núcleo gerador, os quatro DR e o percurso da casa ao mundo, avaliação);
-- **DR1 · A casa** (aulas 1 a 8). Revisto em novembro de 2026 com Geografia A: na aula 3, quem decide o preço de uma casa, oferta e procura (simulação), o contágio dos preços (simulação) e a onda que chega à periferia (dados do INE); ainda na aula 3 (18 de novembro), uma nuvem de palavras de aquecimento e quatro jogos rápidos ao longo da aula, cada um logo a seguir ao tema; na aula 5, povoamento disperso e concentrado;
-- **DR2 · Vizinhança e trabalho** (aulas 9 a 15): equipamentos e cidade dos 15 minutos, Jane Jacobs, área central e renda locativa; Cesário Verde, Caeiro, Campos e Simmel; memória dos lugares, gentrificação, relato e crónica; suburbanização, modelos de Burgess, Hoyt e Harris-Ullman, integrar ou romper, Hume; movimentos pendulares, distância-tempo, turismo e alojamento local; sotaques e dialetos (Lindley Cintra); apresentações;
-- **DR3 · Instituições** (aulas 16 a 22): a polissemia da Polis, Aristóteles, a lei das vilas e cidades, rede urbana, Lefebvre; o PDM e a classificação do solo (simulação «Planeia o teu concelho»); lei, decreto-lei, portaria, despacho e o Regulamento Geral do Ruído; prevenção rodoviária (simulação da distância de paragem) e campanhas; quem trata de quê, pesquisa e resumo; consulta pública simulada (Vale Novo) com Rawls; apresentações;
-- **DR4 · Mobilidades** (aulas 23 a 28): migrações, fluxos e números (INE, AIMA, Observatório da Emigração), repulsão e atração (Lee), Kant e Arendt; a cidade que muda, arte e equipamentos culturais; Camões, Cesário, Campos e Soeiro Pereira Gomes, o relato de vivências; o português no mundo, apreciação crítica, Acordo Ortográfico; integrar (serviços, Português Língua de Acolhimento, vocabulário do trabalho); apresentações e fecho.
+- o **programa** (núcleo gerador, os quatro DR e o percurso da casa ao mundo, avaliação, o trabalho de grupo e o quadro «Onde está cada DR?»);
+- **DR1 · A casa** (aulas 1 a 7): casa e lar; arquitetura hostil; o que faz uma casa boa (critérios, preço, oferta e procura, crise de 2008, conforto térmico, anúncio); o Ramalhete; a casa dos avós; obras em casa (com «Planear a casa para o lazer»); reclamar e requerer;
+- **DR2 · Vizinhança e trabalho** (aulas 8 a 13): equipamentos e cidade dos 15 minutos, área central e renda locativa; Cesário Verde, Caeiro, Campos e Simmel; memória dos lugares, história oral e socialização, relato e crónica, texto informativo e literário, debate «preservar ou dinamizar»; suburbanização, integrar ou romper; movimentos pendulares, património e mobilidade laboral, turismo e alojamento local; sotaques, dialetos e «Atender em duas línguas»;
+- **DR3 · Instituições** (aulas 14 a 19): a polissemia da Polis, rede urbana e redes nacionais de equipamentos culturais; o PDM; lei, decreto-lei, portaria, despacho; prevenção rodoviária, sinais e iconografia, campanhas (rodoviárias e do território); quem trata de quê, como o Estado comunica, pesquisa e resumo; consulta pública simulada;
+- **DR4 · Mobilidades** (aulas 20 a 24): migrações, a cidade que muda, contar a migração, o português no mundo, integrar;
+- **Projeto de grupo** (aulas 25 a 29): quatro oficinas, uma por DR, e as apresentações finais. Substitui as apresentações individuais no fim de cada DR (os slides dessas aulas foram mantidos e adaptados).
+
+## Etiquetas DR
+
+Cada slide diz que Domínios de Referência mobiliza: `<section class="slide" … data-dr="1,3">`. A partir daí, o `app.js` mostra:
+
+- em baixo, à esquerda, as quatro etiquetas DR1 a DR4, com as do slide atual a cores (DR1 laranja queimado, DR2 pêssego, DR3 azul-escuro, DR4 azul);
+- no índice, um ponto de cor por DR ao lado de cada slide, e os botões **Todos · DR1 · DR2 · DR3 · DR4**, que mostram só os slides de um domínio (útil nas oficinas do projeto);
+- no slide «Onde está cada DR?» (`<div class="drmatrix">`), um quadro aulas × DR, gerado sozinho a partir das etiquetas.
+
+Para mudar uma etiqueta, edita o `data-dr` do slide. Um slide novo sem `data-dr` fica sem etiqueta.
+
+## Projeto de grupo
+
+Um PowerPoint por grupo sobre um lugar ou um tema, com os quatro DR: em cada DR, pelo menos um slide de Cultura, um de Língua e um de Comunicação. O slide «O trabalho de grupo: quatro DR» (programa) apresenta-o. Cada oficina (aulas 25 a 28) tem: abertura, «O que o DR pede» (os três critérios de evidência do referencial, em linguagem simples, e ideias para os três slides), temas e estrutura, avaliação entre grupos e autoavaliação. Atividades no telemóvel: `grupo`, `proj1` a `proj4` (ponto da situação), `pares` a `pares4`, `auto1` a `auto3`, `fecho`.
 
 Os slides com o botão **Responder no telemóvel** mostram um código QR: os formandos respondem no telemóvel e as respostas ficam na folha de cálculo «Avaliação contínua» (ver `../respostas/LEIA-ME.md`). Num slide também pode estar o código QR com as respostas da turma ao lado, ao vivo: `<div class="esmp-ao-vivo" data-path="../respostas/?f=clc6&a=ideal"></div>` (é assim a nuvem de palavras da aula 3; ver `../comum/LEIA-ME.md`). As atividades estão em `atividades.js`. As versões anteriores dos ficheiros estão em `archive/`.
 
@@ -155,22 +170,22 @@ Cada simulação é um `<div class="wg" data-widget="nome"></div>` no `index.htm
 | `calcpreco` | Aula 3 · Quanto pedir? | método da comparação para o preço e a renda dos três imóveis da atividade de escrita |
 | `oferta` | Aula 3 · Oferta e procura no bairro | só aparece se o navegador não tiver 3D (substitui o tabuleiro) |
 | `contagio` | Aula 3 · Uma venda cara sobe a rua toda | só aparece se o navegador não tiver 3D (substitui o tabuleiro) |
-| `quinze` | Aula 9 · A cidade dos 15 minutos | o que se alcança a pé, de bicicleta ou de carro |
-| `renda` | Aula 9 · A renda locativa | as curvas aparecem a cada clique (→); no fim, a estação de metro |
-| `ruralurb` | Aula 10 · De aldeia a cidade | barra que transforma a paisagem |
-| `rua` | Aula 11 · Uma rua no tempo | a mesma rua em 1975, 1995, 2012 e 2025 |
-| `crescimento` | Aula 12 · Uma cidade a crescer | área metropolitana de 1900 a 2025 |
-| `tabs` | Aula 12 · Três modelos de cidade | separadores Burgess, Hoyt, Harris e Ullman |
-| `pendular` | Aula 13 · Movimentos pendulares | um dia de movimentos casa-trabalho |
-| `elastico` | Aula 13 · Distância-tempo | os lugares mudam de posição em km, minutos e euros |
-| `turismo` | Aula 13 · Alojamento local | modelo ilustrativo: residentes, renda, comércio, empregos |
-| `dialetos` | Aula 14 · O mapa dos dialetos | clica numa zona do mapa |
-| `pdm` | Aula 17 · Planeia o teu concelho | escolhe um uso e clica nos quadrados |
-| `decibeis` | Aula 18 · A lei do ruído | escala de decibéis com os limites da lei |
-| `travagem` | Aula 19 · A distância de paragem | velocidade, atenção, piso; botão «Travar!» |
-| `fluxos` | Aula 23 · Quem sai, quem chega | anos 60, saídas de 2024, estrangeiros em 2025 |
-| `pushpull` | Aula 23 · Porque se parte? | balança entre ficar e partir |
-| `falantes` | Aula 26 · Uma língua, nove países | bolhas com a população dos países |
+| `quinze` | Aula 8 · A cidade dos 15 minutos | o que se alcança a pé, de bicicleta ou de carro |
+| `renda` | Aula 8 · A renda locativa | as curvas aparecem a cada clique (→); no fim, a estação de metro |
+| `ruralurb` | Aula 9 · De aldeia a cidade | barra que transforma a paisagem |
+| `rua` | Aula 10 · Uma rua no tempo | a mesma rua em 1975, 1995, 2012 e 2025 |
+| `crescimento` | Aula 11 · Uma cidade a crescer | área metropolitana de 1900 a 2025 |
+| `tabs` | Aula 11 · Três modelos de cidade | separadores Burgess, Hoyt, Harris e Ullman |
+| `pendular` | Aula 12 · Movimentos pendulares | um dia de movimentos casa-trabalho |
+| `elastico` | Aula 12 · Distância-tempo | os lugares mudam de posição em km, minutos e euros |
+| `turismo` | Aula 12 · Alojamento local | modelo ilustrativo: residentes, renda, comércio, empregos |
+| `dialetos` | Aula 13 · O mapa dos dialetos | clica numa zona do mapa |
+| `pdm` | Aula 15 · Planeia o teu concelho | escolhe um uso e clica nos quadrados |
+| `decibeis` | Aula 16 · A lei do ruído | escala de decibéis com os limites da lei |
+| `travagem` | Aula 17 · A distância de paragem | velocidade, atenção, piso; botão «Travar!» |
+| `fluxos` | Aula 20 · Quem sai, quem chega | anos 60, saídas de 2024, estrangeiros em 2025 |
+| `pushpull` | Aula 20 · Porque se parte? | balança entre ficar e partir |
+| `falantes` | Aula 23 · Uma língua, nove países | bolhas com a população dos países |
 
 As cenas desenhadas (área central de dia e de noite, Atenas, integrar ou romper, o bairro da Ana, o primeiro mês da Amina) usam as classes `ge1`, `ge2`… que o `app.js` põe no slide («o passo é pelo menos n»); as regras de cada cena estão no fim do `style.css`. A Ana (laranja, com um ponto branco) é a personagem que aparece nos DR2 a DR4.
 
@@ -178,8 +193,10 @@ As cenas desenhadas (área central de dia e de noite, Atenas, integrar ou romper
 
 Dados com data, para atualizar quando saírem novos:
 
-- **Preço das casas** (aula 3, «A crise da habitação em números», «A onda chega à periferia»; aula 9, «A teoria e a realidade»): INE, 2.º trimestre de 2026 (2 445 €/m² no país; Lisboa 5 299; Cascais 5 200; Oeiras 4 704; Grande Lisboa 4 030; Loures +29%, Lisboa +8,9%).
-- **Turismo** (aula 13): INE, Estatísticas do Turismo 2025 (29,9 milhões de turistas, 34,8 milhões de hóspedes, 89,7 milhões de dormidas). **Alojamento local em Lisboa**: 6 765 registos cancelados em fevereiro de 2026.
-- **Sinistralidade** (aula 19): ANSR, 618 mortos a 30 dias em 2024; 58,1 por milhão (UE 45,0); 55% em zonas urbanas.
-- **Migrações** (aulas 23, 24, 27): INE (1 597 530 estrangeiros, 14%, fim de 2025); AIMA, Relatório de Migrações e Asilo 2025 (1 585 854; nacionalidades; 70,3% em Lisboa, Setúbal, Faro e Porto; 194 703 processos pendentes); Observatório da Emigração (65 mil saídas em 2024). O esquema `fluxos` tem os números dentro do `widgets.js` (procura `sets = {`).
-- **Censos 2021** (aula 13, movimentos pendulares; aula 16, áreas metropolitanas): só mudam com os Censos 2031.
+- **Preço das casas** (aula 3, «A crise da habitação em números», «A onda chega à periferia»; aula 8, «A teoria e a realidade»): INE, 2.º trimestre de 2026 (2 445 €/m² no país; Lisboa 5 299; Cascais 5 200; Oeiras 4 704; Grande Lisboa 4 030; Loures +29%, Lisboa +8,9%).
+- **Turismo** (aula 12): INE, Estatísticas do Turismo 2025 (29,9 milhões de turistas, 34,8 milhões de hóspedes, 89,7 milhões de dormidas). **Alojamento local em Lisboa**: 6 765 registos cancelados em fevereiro de 2026.
+- **Sinistralidade** (aula 17): ANSR, 618 mortos a 30 dias em 2024; 58,1 por milhão (UE 45,0); 55% em zonas urbanas.
+- **Migrações** (aulas 20, 21, 24): INE (1 597 530 estrangeiros, 14%, fim de 2025); AIMA, Relatório de Migrações e Asilo 2025 (1 585 854; nacionalidades; 70,3% em Lisboa, Setúbal, Faro e Porto; 194 703 processos pendentes); Observatório da Emigração (65 mil saídas em 2024). O esquema `fluxos` tem os números dentro do `widgets.js` (procura `sets = {`).
+- **Censos 2021** (aula 12, movimentos pendulares; aula 14, áreas metropolitanas): só mudam com os Censos 2031.
+
+- **Redes culturais** (aula 14, «Redes de equipamentos culturais»): Observatório Português das Atividades Culturais, indicadores de monitorização 2025 (262, 96, 40, 93 e 47 concelhos; 30 concelhos sem equipamentos).

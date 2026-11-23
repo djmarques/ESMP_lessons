@@ -1,5 +1,133 @@
 /* atividades.js — atividades de CLC 6 para responder no telemóvel (página ../respostas/). Ver respostas/LEIA-ME.md. */
 window.ATIVIDADES = {
+ "grupo": {
+  "disciplina": "CLC 6",
+  "titulo": "Projeto: o nosso grupo",
+  "passos": [
+   {
+    "tipo": "escrita",
+    "titulo": "Um PowerPoint, quatro DR",
+    "intro": "Responde só um elemento por grupo.",
+    "perguntas": [
+     "Nomes dos elementos do grupo.",
+     "Que lugar ou tema querem trabalhar? Porquê?"
+    ]
+   }
+  ]
+ },
+ "lazer": {
+  "disciplina": "CLC 6",
+  "titulo": "Planear a casa para o lazer",
+  "passos": [
+   {
+    "tipo": "escrita",
+    "perguntas": [
+     "Na tua casa, que espaço falta para o teu tempo livre?",
+     "Que obra pequena o criava?"
+    ]
+   }
+  ]
+ },
+ "debate11": {
+  "disciplina": "CLC 6",
+  "titulo": "Debate: preservar ou dinamizar?",
+  "passos": [
+   {
+    "tipo": "opiniao",
+    "p": "Depois do debate: o que fazias com a aldeia de Vale Novo?",
+    "o": [
+     "Preservar",
+     "Dinamizar",
+     "Equilibrar"
+    ],
+    "porque": "Escreve o teu melhor argumento e diz em que texto te apoias (um dado ou um texto literário)."
+   }
+  ]
+ },
+ "redes": {
+  "disciplina": "CLC 6",
+  "titulo": "Nuvem: o equipamento que falta",
+  "passos": [
+   {
+    "tipo": "nuvem",
+    "titulo": "Na minha terra falta…",
+    "p": "Que equipamento cultural falta na tua terra (ou na dos teus pais)?",
+    "max": 2
+   }
+  ]
+ },
+ "proj1": {
+  "disciplina": "CLC 6",
+  "titulo": "Projeto: ponto da situação (DR1)",
+  "passos": [
+   {
+    "tipo": "escrita",
+    "titulo": "Oficina do DR1",
+    "intro": "Responde só um elemento por grupo, no fim da oficina.",
+    "perguntas": [
+     "Nomes do grupo e tema (ou lugar) do trabalho.",
+     "Título do slide de Cultura do DR1.",
+     "Título do slide de Língua do DR1.",
+     "Título do slide de Comunicação do DR1.",
+     "O que falta fazer?"
+    ]
+   }
+  ]
+ },
+ "proj2": {
+  "disciplina": "CLC 6",
+  "titulo": "Projeto: ponto da situação (DR2)",
+  "passos": [
+   {
+    "tipo": "escrita",
+    "titulo": "Oficina do DR2",
+    "intro": "Responde só um elemento por grupo, no fim da oficina.",
+    "perguntas": [
+     "Nomes do grupo e tema (ou lugar) do trabalho.",
+     "Título do slide de Cultura do DR2.",
+     "Título do slide de Língua do DR2.",
+     "Título do slide de Comunicação do DR2.",
+     "O que falta fazer?"
+    ]
+   }
+  ]
+ },
+ "proj3": {
+  "disciplina": "CLC 6",
+  "titulo": "Projeto: ponto da situação (DR3)",
+  "passos": [
+   {
+    "tipo": "escrita",
+    "titulo": "Oficina do DR3",
+    "intro": "Responde só um elemento por grupo, no fim da oficina.",
+    "perguntas": [
+     "Nomes do grupo e tema (ou lugar) do trabalho.",
+     "Título do slide de Cultura do DR3.",
+     "Título do slide de Língua do DR3.",
+     "Título do slide de Comunicação do DR3.",
+     "O que falta fazer?"
+    ]
+   }
+  ]
+ },
+ "proj4": {
+  "disciplina": "CLC 6",
+  "titulo": "Projeto: ponto da situação (DR4)",
+  "passos": [
+   {
+    "tipo": "escrita",
+    "titulo": "Oficina do DR4",
+    "intro": "Responde só um elemento por grupo, no fim da oficina.",
+    "perguntas": [
+     "Nomes do grupo e tema (ou lugar) do trabalho.",
+     "Título do slide de Cultura do DR4.",
+     "Título do slide de Língua do DR4.",
+     "Título do slide de Comunicação do DR4.",
+     "O que falta fazer?"
+    ]
+   }
+  ]
+ },
  "ideal": {
   "disciplina": "CLC 6",
   "titulo": "Nuvem: uma casa boa",
@@ -1219,12 +1347,12 @@ window.ATIVIDADES = {
  },
  "pares": {
   "disciplina": "CLC 6",
-  "titulo": "Avaliar o colega (DR1)",
+  "titulo": "Avaliar outro grupo (DR1)",
   "passos": [
    {
     "tipo": "escrita",
     "perguntas": [
-     "Nome do colega que apresentou."
+     "Grupo que mostrou os slides (nomes)."
     ]
    },
    {
@@ -1252,7 +1380,7 @@ window.ATIVIDADES = {
       "t": "Língua: frases completas, vocabulário certo"
      },
      {
-      "t": "Tempo: cerca de 10 minutos"
+      "t": "Tempo: cerca de 3 minutos"
      }
     ]
    },
@@ -2041,12 +2169,12 @@ window.ATIVIDADES = {
 },
  "pares2": {
  "disciplina": "CLC 6",
- "titulo": "Avaliar o colega (DR2)",
+ "titulo": "Avaliar outro grupo (DR2)",
  "passos": [
   {
    "tipo": "escrita",
    "perguntas": [
-    "Nome do colega que apresentou e tema."
+    "Grupo que apresentou (nomes) e tema."
    ],
    "titulo": "Quem apresentou"
   },
@@ -2074,7 +2202,7 @@ window.ATIVIDADES = {
      "t": "Língua: frases completas, registo adequado"
     },
     {
-     "t": "Tempo: cerca de 10 minutos"
+     "t": "Tempo: cerca de 3 minutos"
     }
    ]
   },
@@ -2667,12 +2795,12 @@ window.ATIVIDADES = {
 },
  "pares3": {
  "disciplina": "CLC 6",
- "titulo": "Avaliar o colega (DR3)",
+ "titulo": "Avaliar outro grupo (DR3)",
  "passos": [
   {
    "tipo": "escrita",
    "perguntas": [
-    "Nome do colega que apresentou e tema."
+    "Grupo que apresentou (nomes) e tema."
    ],
    "titulo": "Quem apresentou"
   },
@@ -2700,7 +2828,7 @@ window.ATIVIDADES = {
      "t": "Língua: frases completas, registo adequado"
     },
     {
-     "t": "Tempo: cerca de 10 minutos"
+     "t": "Tempo: cerca de 3 minutos"
     }
    ]
   },
@@ -3293,12 +3421,12 @@ window.ATIVIDADES = {
 },
  "pares4": {
  "disciplina": "CLC 6",
- "titulo": "Avaliar o colega (DR4)",
+ "titulo": "Avaliar outro grupo (apresentação final)",
  "passos": [
   {
    "tipo": "escrita",
    "perguntas": [
-    "Nome do colega que apresentou e tema."
+    "Grupo que apresentou (nomes) e tema."
    ],
    "titulo": "Quem apresentou"
   },
@@ -3317,7 +3445,7 @@ window.ATIVIDADES = {
      "t": "Clareza: percebi o que explicou"
     },
     {
-     "t": "Conceitos do DR4 bem usados"
+     "t": "Os quatro DR estão lá, com conceitos bem usados"
     },
     {
      "t": "Exemplos concretos ou pessoais"
@@ -3326,7 +3454,7 @@ window.ATIVIDADES = {
      "t": "Língua: frases completas, registo adequado"
     },
     {
-     "t": "Tempo: cerca de 10 minutos"
+     "t": "Tempo: cerca de 15 minutos"
     }
    ]
   },
