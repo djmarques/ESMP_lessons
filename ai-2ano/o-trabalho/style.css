@@ -1261,3 +1261,32 @@ html:not(.i3d-ok) .i3d-leg > [data-step].on { display: block; }   /* no 3D: ever
   .cc-tronco { max-height: calc(100vh - 380px); } .civ-caca .quadro-def { font-size: 17px; margin-top: 6px; padding-top: 6px; }
   #s-ci-mariposa-caca h2 { font-size: 28px; }
 }
+
+/* ---------- 21. Steam physics: a drawing that answers the sliders (novembro de 2026) ---------- */
+.vp { display: inline-block; padding: 0 .45em; border-radius: 6px; font-weight: 700; }   /* a word of the formula, in the colour of its letter */
+.vp.c1 { background: #2F6E9E; color: #fff; } .vp.c2 { background: #A44A16; color: #fff; } .vp.c3 { background: #556B3C; color: #fff; }
+.vp.c4 { background: #F0A673; color: #1E2A33; } .vp.c5 { background: #F1CDB0; color: #1E2A33; } .vp.c6 { background: #DCE8F2; color: #1E2A33; }
+.vp.c7 { background: #C9D1D8; color: #1E2A33; } .vp.c8 { background: #FBE3D2; color: #1E2A33; }
+.vf-svg { width: 100%; height: auto; max-height: calc(100vh - 400px); display: block; }
+.vf-caldeira { fill: rgba(220, 232, 242, .1); stroke: rgba(246, 243, 236, .55); stroke-width: 2; }
+.vf-vapor { fill: rgba(220, 232, 242, .14); }
+.vf-cilindro { fill: none; stroke: var(--cream); stroke-width: 3; }
+.vf-embolo { fill: #B87333; } .vf-haste { fill: #8C959D; }
+.vf-face { fill: #556B3C; stroke: #C7D59F; stroke-width: 2; } .vf-face.agora { animation: cfpulso 1.2s ease-in-out infinite; }
+.vf-pontos circle { fill: #DCE8F2; opacity: .8; }
+.vf-setas path { stroke: #8FB8DA; stroke-width: 3; fill: none; marker-end: url(#vf-ponta); }
+.vf-setas.agora path { stroke-width: 4.5; }
+.vf-F { fill: #F0A673; stroke: none; }
+.agora > .vf-F { animation: cfpulso 1.4s ease-in-out infinite; }
+.vf-rot { fill: rgba(246, 243, 236, .8); font: 19px var(--body); }
+.vf-letra { font: italic 700 27px var(--head); } .vf-letra.peq { font-size: 22px; } .vf-letra-in { font: italic 700 20px var(--head); fill: #fff; }
+.vf-letra.c1 { fill: #8FB8DA; } .vf-letra.c2 { fill: #F0A673; } .vf-letra.c3 { fill: #C7D59F; } .vf-letra.c4 { fill: #F0A673; } .vf-letra.c5 { fill: #F1CDB0; } .vf-letra.c6 { fill: #DCE8F2; } .vf-letra.c7 { fill: #C9D1D8; }
+.vf-mano { fill: #1E2A33; stroke: #8FB8DA; stroke-width: 3; } .vf-agulha { stroke: #8FB8DA; stroke-width: 3.5; stroke-linecap: round; } .vf-agulha.t { stroke: #C9D1D8; }
+.vf-relogio { fill: none; stroke: #C9D1D8; stroke-width: 3; }
+.vf-cota { stroke: #F1CDB0; stroke-width: 3; fill: none; }
+.vf-total { fill: rgba(240, 166, 115, .35); } .vf-util { fill: var(--accent); }
+.civ-fis .cf-cadeia { font-size: 17px; gap: 5px 7px; } .civ-fis .cf-cadeia span { padding: 3px 10px 3px 5px; }
+.civ-fis .cf-pal { line-height: 1.5; }
+@media (max-width: 1100px) { .vf-svg { max-height: 300px; } }
+@media (min-width: 861px) and (max-height: 760px) { .vf-svg { max-height: calc(100vh - 430px); } .civ-fis .cf-cadeia { font-size: 15px; margin-bottom: 6px; } }
+@media (min-width: 1101px) { .civ-fis .cf-corpo { grid-template-columns: minmax(300px, 1.2fr) 1fr; } }

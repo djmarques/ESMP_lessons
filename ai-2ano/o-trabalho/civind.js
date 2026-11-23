@@ -1,6 +1,6 @@
 /* ==========================================================================
    civind.js — «A civilização industrial»: the 2D pieces (no 3D needed).
-     1. Steam physics, one equation at a time, with sliders (s-ci-vapor-fisica)
+     1. Steam physics, one idea at a time; the drawing answers the sliders (s-ci-vapor-fisica)
      2. The three economic cycles, drawn in Manim style (s-ci-ciclos)
      3. The loop of the crisis: six boxes in a ring (shared by 4 and 5)
      4. The crisis cascade: the loop driven by a small model, and a live chart (s-ci-cascata)
@@ -27,31 +27,157 @@
     if (node.matches('input')) node.addEventListener('change', () => node.blur());
   };
 
-  /* ---------- 1. Steam physics, one equation at a time ----------
-     p (pressure) → F = p × A (force) → W = F × d (work) → P = W ÷ t (power) → η (efficiency).
-     Every result is computed from the two sliders, so each equation uses the number
-     the one before it produced. */
+  /* ---------- 1. Steam physics, one idea at a time, with a drawing that answers the sliders ----------
+     Each build introduces ONE term, in the order the next one needs it:
+       0 F force → 1 A area → 2 p pressure (p = F ÷ A) → 3 F = p × A → 4 d distance → 5 W = F × d
+       → 6 t time → 7 P = W ÷ t → 8 η efficiency.
+     The drawing is made here (not in the HTML) so that it can change:
+       pressure  → more steam particles, moving faster; longer blue arrows; the needle of the gauge
+       diameter  → a taller cylinder and piston face; more blue arrows on the face
+       force     → the orange arrow: its length is F (= length of the blue arrows × how many there are)
+       from build 4 the piston travels the stroke d; from build 6 it pushes four times a second.
+     Every number comes from the two sliders, so each equation uses the result of the one before. */
   document.querySelectorAll('[data-civ="forca"]').forEach(box => {
+    const slide = box.closest('.slide'), svg = box.querySelector('.vf-svg');
     const p = box.querySelector('[name="p"]'), d = box.querySelector('[name="d"]');
     const round = (v, step) => Math.round(v / step) * step;
-    function paint() {
+    const stepOf = sl => { let k = 0; while (sl.classList.contains('ge' + (k + 1))) k++; return k; };
+    const CY = 150, X0 = 222, PX = 300, STROKE = 80;        // cylinder axis; left end of the cylinder; piston at rest; stroke in drawing units
+    // --- fixed parts and the groups that change ---
+    el('defs', {}, svg).innerHTML = '<marker id="vf-ponta" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="5" markerHeight="5" orient="auto"><path d="M0,0 L10,5 L0,10 Z" fill="context-stroke"/></marker>';
+    el('rect', { x: 20, y: 60, width: 170, height: 180, rx: 22, class: 'vf-caldeira' }, svg);
+    const tCal = el('text', { x: 105, y: 262, 'text-anchor': 'middle', class: 'vf-rot' }, svg); tCal.textContent = 'caldeira';
+    el('rect', { x: 190, y: CY - 11, width: 32, height: 22, class: 'vf-caldeira' }, svg);
+    const steamCyl = el('rect', { x: X0, class: 'vf-vapor' }, svg);
+    const gDots = el('g', { class: 'vf-pontos' }, svg);                       // steam particles (from build 2)
+    const gWall = el('g', { class: 'vf-setas' }, svg);                        // arrows on the boiler walls
+    const cyl = el('rect', { x: 220, width: 262, rx: 4, class: 'vf-cilindro' }, svg);
+    const tCil = el('text', { 'text-anchor': 'middle', class: 'vf-rot' }, svg); tCil.textContent = 'cilindro';
+    const gPist = el('g', {}, svg);                                           // everything that moves with the piston
+    const rod = el('rect', { y: CY - 7, height: 14, class: 'vf-haste' }, gPist);
+    const head = el('rect', { width: 24, class: 'vf-embolo' }, gPist);
+    const gFace = el('g', { class: 'vf-setas' }, gPist);                      // blue arrows on the piston face
+    const face = el('ellipse', { rx: 11, class: 'vf-face' }, gPist);
+    const tA = el('text', { 'text-anchor': 'middle', class: 'vf-letra-in' }, gPist); tA.textContent = 'A';
+    const gF = el('g', { transform: 'translate(300,0)' }, svg);            // the force arrow stays in place while the piston moves
+    const arrowF = el('path', { class: 'vf-F' }, gF), tF = el('text', { class: 'vf-letra c2' }, gF);
+    const tArea = el('text', { x: 226, class: 'vf-letra c3 peq' }, svg);
+    // gauge on the boiler
+    const gGauge = el('g', { transform: 'translate(105,34)' }, svg);
+    el('line', { x1: 0, y1: 14, x2: 0, y2: 26, class: 'vf-relogio' }, gGauge);
+    el('circle', { r: 24, class: 'vf-mano' }, gGauge);
+    const needle = el('line', { x1: 0, y1: 0, x2: 0, y2: -18, class: 'vf-agulha' }, gGauge);
+    const tGauge = el('text', { x: 34, y: 7, class: 'vf-letra c1 peq' }, gGauge);
+    // stroke, clock, efficiency
+    const gD = el('g', {}, svg);
+    const cota = el('path', { class: 'vf-cota' }, gD), tD = el('text', { 'text-anchor': 'middle', class: 'vf-letra c5 peq' }, gD); tD.textContent = 'd = 0,43 m';
+    const tW = el('text', { x: 400, 'text-anchor': 'start', class: 'vf-letra c4 peq' }, svg);
+    const gT = el('g', { transform: 'translate(60,318)' }, svg);
+    el('circle', { r: 24, class: 'vf-relogio' }, gT);
+    const hand = el('line', { x1: 0, y1: 0, x2: 0, y2: -18, class: 'vf-agulha t' }, gT);
+    const tT = el('text', { x: 36, y: -4, class: 'vf-letra c7 peq' }, gT); tT.textContent = 't = 1 s';
+    const tN = el('text', { x: 36, y: 20, class: 'vf-rot' }, gT);
+    const tP = el('text', { x: 300, y: 326, class: 'vf-letra c6 peq' }, svg);
+    const gN = el('g', {}, svg);
+    const tTot = el('text', { x: 20, y: 364, class: 'vf-rot' }, gN); tTot.textContent = 'energia do carvão: 100 %';
+    el('rect', { x: 20, y: 372, width: 520, height: 12, rx: 4, class: 'vf-total' }, gN);
+    el('rect', { x: 20, y: 372, width: 16, height: 12, rx: 3, class: 'vf-util' }, gN);
+    const tUtil = el('text', { x: 540, y: 364, 'text-anchor': 'end', class: 'vf-rot c8t' }, gN); tUtil.textContent = 'útil: cerca de 3 %';
+
+    // --- steam particles: a fixed pool; how many are shown, and how fast they go, depends on the pressure ---
+    const mk = (n, zone) => Array.from({ length: n }, () => ({ zone, u: Math.random(), v: Math.random(), a: Math.random() * 6.283, c: el('circle', { r: 3.2 }, gDots) }));
+    const dots = mk(40, 'b').concat(mk(26, 'c'));
+    let S = {};                                              // the numbers of the moment (see compute)
+    function compute() {
       const bar = Number(p.value), cm = Number(d.value);
       const Pa = bar * 100000, r = cm / 200, A = Math.PI * r * r, F = Pa * A;
       const W = F * 0.432;                                   // stroke of 0,432 m (Rocket, 1829)
       const P = W * 4;                                       // 4 pushes per second (a round number for the sums)
+      S = { bar, cm, Pa, A, F, W, P, H: 60 + cm * 3 };
+      const sheets = A / 0.0624;                             // an A4 sheet is 0,0624 m²
       const vals = {
         p: fmt(bar, 1) + ' bar', pa: fmt(Pa) + ' Pa', d: fmt(cm) + ' cm', A: fmt(A, 3) + ' m²',
+        folhas: sheets < 0.4 ? 'um quarto de uma folha A4' : sheets < 0.75 ? 'meia folha A4' : sheets < 1.25 ? 'uma folha A4' : sheets < 1.75 ? 'uma folha A4 e meia' : 'duas folhas A4',
         F: fmt(round(F, 10)) + ' N', kg: fmt(round(F / 9.8, 10)) + ' kg',
         W: fmt(round(W, 10)) + ' J', alt: fmt(W / (70 * 9.8), 1) + ' m',
         P: fmt(round(P, 100)) + ' W', kW: fmt(P / 1000, 0) + ' kW', cv: fmt(P / 735.5, 0),
         fogo: fmt(round(P / 0.03 / 1000, 10)) + ' kW',
       };
       for (const k in vals) box.querySelectorAll('[data-out="' + k + '"]').forEach(o => { o.textContent = vals[k]; });
-      const face = box.querySelector('.pz-face');            // the piston face grows with the diameter
-      if (face) face.setAttribute('ry', (30 + cm * 1.6).toFixed(1));
     }
-    [p, d].forEach(i => { stopNav(i); i.addEventListener('input', paint); });
-    paint();
+    const show = (node, on) => { node.style.display = on ? '' : 'none'; };
+    function layout(step) {                                  // what depends on the sliders and on the build, not on time
+      const H = S.H, top = CY - H / 2;
+      cyl.setAttribute('y', top); cyl.setAttribute('height', H);
+      steamCyl.setAttribute('y', top + 2); steamCyl.setAttribute('height', H - 4);
+      tCil.setAttribute('x', 430); tCil.setAttribute('y', top + H + 20);
+      head.setAttribute('y', top + 2); head.setAttribute('height', H - 4);
+      face.setAttribute('ry', H / 2 - 8); face.setAttribute('cy', CY); tA.setAttribute('y', CY + 7);
+      // blue arrows: one for every 5 cm of diameter (the area), as long as the pressure
+      const n = Math.max(2, Math.round(S.cm / 5)), len = 12 + S.bar * 11;
+      gFace.replaceChildren();
+      for (let i = 0; i < n; i++) { const y = top + 10 + (H - 20) * (n === 1 ? 0.5 : i / (n - 1)); el('path', { d: `M${-14 - len},${y.toFixed(1)} L${-14},${y.toFixed(1)}` }, gFace); }
+      gWall.replaceChildren();
+      [[105, 60, 0, -1], [105, 240, 0, 1], [20, 150, -1, 0], [60, 60, 0, -1], [150, 240, 0, 1], [20, 105, -1, 0], [20, 195, -1, 0], [150, 60, 0, -1], [60, 240, 0, 1]].forEach(([x, y, dx, dy]) => {
+        const l = len * 0.8;
+        el('path', { d: `M${x - dx * (l + 6)},${y - dy * (l + 6)} L${x - dx * 6},${y - dy * 6}` }, gWall);
+      });
+      // the orange arrow: its length is the force (50 000 N would take the whole width)
+      const lf = 10 + S.F / 50265 * 190, yF = top - 18;
+      arrowF.setAttribute('d', `M40,${yF - 4} L${40 + lf},${yF - 4} L${40 + lf},${yF - 11} L${58 + lf},${yF} L${40 + lf},${yF + 11} L${40 + lf},${yF + 4} L40,${yF + 4} Z`);
+      tF.setAttribute('x', 40); tF.setAttribute('y', yF - 18); tF.textContent = 'F = ' + fmt(round(S.F, 10)) + ' N';
+      tArea.setAttribute('y', top + H + 20); tArea.textContent = 'A = ' + fmt(S.A, 3) + ' m²';
+      needle.setAttribute('transform', `rotate(${(-120 + (S.bar - 1) / 3 * 240).toFixed(0)})`);
+      tGauge.textContent = fmt(S.bar, 1) + ' bar';
+      const yD = top + H + 38;
+      cota.setAttribute('d', `M${PX},${yD} L${PX + STROKE},${yD} M${PX},${yD - 8} L${PX},${yD + 8} M${PX + STROKE},${yD - 8} L${PX + STROKE},${yD + 8}`);
+      tD.setAttribute('x', PX + STROKE / 2); tD.setAttribute('y', yD + 24);
+      tW.setAttribute('y', yD + 24);
+      tP.textContent = 'P = 4 × W ÷ t = ' + fmt(S.P / 1000, 0) + ' kW';
+      // which parts exist at this build
+      show(face, step >= 1); show(tA, step >= 1); show(tArea, step >= 1);
+      show(gDots, step >= 2); show(gFace, step >= 2); show(gWall, step >= 2); show(gGauge, step >= 2);
+      show(gD, step >= 4); show(tW, step === 5); show(gT, step >= 6); show(tP, step >= 7); show(gN, step >= 8);
+      face.classList.toggle('agora', step === 1); gFace.classList.toggle('agora', step === 2 || step === 3);
+      gF.classList.toggle('agora', step === 0 || step === 3);
+    }
+    let lastStep = -1, last = 0, running = false, clock = 0;
+    function frame(now) {
+      if (!slide.classList.contains('current')) { running = false; return; }
+      requestAnimationFrame(frame);
+      const dt = Math.min((now - last) / 1000 || 0.016, 0.05); last = now; clock += dt;
+      const step = stepOf(slide);
+      if (step !== lastStep) { lastStep = step; clock = 0; layout(step); }
+      // the piston: at rest; then one slow push at a time (builds 4 and 5); then four pushes a second
+      let x = 0, pushes = 0, part = 0;
+      if (step >= 6) { const u = clock * 4; pushes = Math.floor(u) % 4 + 1; const f = u % 1; x = Math.floor(u) % 2 ? 1 - f : f; }
+      else if (step >= 4) { const u = clock % 3.2; part = clamp(u / 1.6, 0, 1); x = u < 1.6 ? part : u < 2.2 ? 1 : 1 - (u - 2.2); }
+      const px = PX + x * STROKE;
+      gPist.setAttribute('transform', `translate(${px.toFixed(1)},0)`);
+      rod.setAttribute('x', 24); rod.setAttribute('width', 540 - px - 24);
+      steamCyl.setAttribute('width', Math.max(0, px - X0));
+      if (step === 5) tW.textContent = 'W = ' + fmt(round(S.W * part, 10)) + ' J';
+      if (step >= 6) { hand.setAttribute('transform', `rotate(${((clock % 1) * 360).toFixed(0)})`); tN.textContent = 'empurrão ' + pushes + ' de 4'; }
+      // steam: the particles wander inside the boiler and inside the cylinder, faster when the pressure is higher
+      const nb = Math.round(S.bar * 10), nc = Math.round(S.bar * 6.5), sp = 0.25 + S.bar * 0.22, H = S.H;
+      let ib = 0, ic = 0;
+      for (const q of dots) {
+        const on = q.zone === 'b' ? ib++ < nb : ic++ < nc;
+        q.c.style.display = on ? '' : 'none';
+        if (!on) continue;
+        q.u += Math.cos(q.a) * sp * dt; q.v += Math.sin(q.a) * sp * dt;
+        if (q.u < 0 || q.u > 1) { q.a = Math.PI - q.a; q.u = clamp(q.u, 0, 1); }
+        if (q.v < 0 || q.v > 1) { q.a = -q.a; q.v = clamp(q.v, 0, 1); }
+        const cx = q.zone === 'b' ? 32 + q.u * 146 : X0 + 6 + q.u * Math.max(4, px - X0 - 14);
+        const cy = q.zone === 'b' ? 72 + q.v * 156 : CY - H / 2 + 8 + q.v * (H - 16);
+        q.c.setAttribute('cx', cx.toFixed(1)); q.c.setAttribute('cy', cy.toFixed(1));
+      }
+    }
+    const start = () => { if (!running) { running = true; last = performance.now(); lastStep = -1; requestAnimationFrame(frame); } };
+    [p, d].forEach(i => { stopNav(i); i.addEventListener('input', () => { compute(); layout(stepOf(slide)); }); });
+    new MutationObserver(() => { if (slide.classList.contains('current')) start(); }).observe(slide, { attributes: true, attributeFilter: ['class'] });
+    compute(); layout(0);
+    if (slide.classList.contains('current')) start();
   });
 
   /* ---------- 2. The three economic cycles ---------- */

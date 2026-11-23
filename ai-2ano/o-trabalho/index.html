@@ -448,94 +448,86 @@
 <div class="i3d-barra"><div class="i3d-read" hidden></div><div class="i3d-ctl"></div></div>
 <p class="source">Fontes: Britannica, «Energy conversion: developments of the Industrial Revolution»; Science Museum Group (Rocket, 1829). Animação original, simplificada.</p>
 </section>
-<section class="slide ci manim-slide" id="s-ci-vapor-fisica" data-lesson="4 · Civilização industrial" data-title="A física da máquina a vapor" data-steps="4">
-<p class="kicker">1.1 · A física da máquina a vapor · uma equação de cada vez</p><h2>Porque é que o vapor empurra com tanta força?</h2>
+<section class="slide ci manim-slide" id="s-ci-vapor-fisica" data-lesson="4 · Civilização industrial" data-title="A física da máquina a vapor" data-steps="8">
+<p class="kicker">1.1 · A física da máquina a vapor · uma ideia de cada vez</p><h2>Porque é que o vapor empurra com tanta força?</h2>
 <div class="quadro civ-fis" data-civ="forca">
  <div class="cf-cadeia">
-  <span><span class="v c1">p</span> pressão</span><i data-step="1">→</i><span data-step="1"><span class="v c2">F</span> força</span><i data-step="2">→</i><span data-step="2"><span class="v c4">W</span> trabalho</span><i data-step="3">→</i><span data-step="3"><span class="v c6">P</span> potência</span><i data-step="4">→</i><span data-step="4"><span class="v c8">η</span> rendimento</span>
+  <span><span class="v c2">F</span> força</span><i data-step="1">→</i><span data-step="1"><span class="v c3">A</span> área</span><i data-step="2">→</i><span data-step="2"><span class="v c1">p</span> pressão</span><i data-step="3">→</i><span data-step="3"><span class="v c2">F</span> = <span class="v c1">p</span> × <span class="v c3">A</span></span><i data-step="4">→</i><span data-step="4"><span class="v c5">d</span> distância</span><i data-step="5">→</i><span data-step="5"><span class="v c4">W</span> trabalho</span><i data-step="6">→</i><span data-step="6"><span class="v c7">t</span> tempo</span><i data-step="7">→</i><span data-step="7"><span class="v c6">P</span> potência</span><i data-step="8">→</i><span data-step="8"><span class="v c8">η</span> rendimento</span>
  </div>
  <div class="cf-corpo">
   <div class="cf-esq">
-   <svg class="cf-pistao" viewBox="0 0 560 384" role="img" aria-label="Caldeira com vapor, cilindro e pistão; setas mostram a pressão, a força, a distância percorrida e a parte da energia do carvão que é aproveitada">
-    <defs><marker id="cf-ponta" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M0,0 L10,5 L0,10 Z" fill="context-stroke"/></marker></defs>
-    <rect x="20" y="50" width="170" height="190" rx="22" class="cf-caldeira"/>
-    <text x="105" y="40" text-anchor="middle" class="cf-rot">caldeira</text>
-    <rect x="190" y="143" width="32" height="24" class="cf-cano"/>
-    <rect x="222" y="82" width="78" height="146" class="cf-vapor-cil"/>
-    <rect x="220" y="80" width="262" height="150" rx="4" class="cf-cilindro"/>
-    <text x="350" y="252" text-anchor="middle" class="cf-rot cf-rot-cil">cilindro</text>
-    <g class="pz pz-p">
-     <path d="M105,145 L105,80" class="cf-seta c1"/><path d="M105,145 L105,212" class="cf-seta c1"/><path d="M105,145 L40,145" class="cf-seta c1"/><path d="M105,145 L170,145" class="cf-seta c1"/>
-     <path d="M105,145 L60,100" class="cf-seta c1"/><path d="M105,145 L150,190" class="cf-seta c1"/><path d="M105,145 L60,190" class="cf-seta c1"/><path d="M105,145 L150,100" class="cf-seta c1"/>
-     <path d="M240,115 L290,115" class="cf-seta c1"/><path d="M240,155 L290,155" class="cf-seta c1"/><path d="M240,195 L290,195" class="cf-seta c1"/>
-     <text x="105" y="275" text-anchor="middle" class="cf-letra c1">p</text>
-    </g>
-    <g class="pistao">
-     <rect x="324" y="148" width="210" height="14" class="cf-haste"/>
-     <rect x="300" y="82" width="24" height="146" class="cf-embolo"/>
-     <g class="pz pz-A"><ellipse class="pz-face" cx="300" cy="155" rx="12" ry="62"/><text x="300" y="164" text-anchor="middle" class="cf-letra-in">A</text></g>
-     <g class="pz pz-F"><path d="M335,60 L445,60" class="cf-seta grossa c2"/><text x="390" y="46" text-anchor="middle" class="cf-letra c2">F</text></g>
-    </g>
-    <g class="pz pz-d"><path d="M300,262 L380,262 M300,252 L300,272 M380,252 L380,272" class="cf-cota"/><text x="340" y="296" text-anchor="middle" class="cf-letra c5">d = 0,43 m</text></g>
-    <g class="pz pz-t"><circle cx="525" cy="262" r="22" class="cf-relogio"/><path d="M525,262 L525,246 M525,262 L537,266" class="cf-ponteiros"/><text x="495" y="270" text-anchor="end" class="cf-letra c7">t = 1 s</text></g>
-    <g class="pz pz-n">
-     <text x="20" y="328" class="cf-rot">energia do carvão: 100 %</text><rect x="20" y="336" width="520" height="14" rx="4" class="cf-total"/>
-     <rect x="20" y="358" width="16" height="14" rx="3" class="cf-util"/><text x="44" y="371" class="cf-rot c8t">útil: cerca de 3 %; o resto perde-se em calor</text>
-    </g>
-   </svg>
-   <div class="cf-ctl" data-step="1">
-    <label class="rng"><span><span class="v c1">p</span> pressão do vapor</span><input type="range" name="p" min="1" max="4" step="0.1" value="3.4"><output data-out="p"></output></label>
-    <label class="rng"><span><span class="v c3">A</span> diâmetro do pistão</span><input type="range" name="d" min="10" max="40" step="1" value="20"><output data-out="d"></output></label>
+   <svg class="vf-svg" viewBox="0 0 560 400" role="img" aria-label="Caldeira com vapor, cilindro e pistão. O desenho muda com as barras: mais pressão, mais vapor e setas mais compridas; pistão mais largo, mais setas; a seta grande é a força"></svg>
+   <div class="cf-ctl">
+    <label class="rng" data-step="1"><span><span class="v c3">A</span> diâmetro do pistão</span><input type="range" name="d" min="10" max="40" step="1" value="20"><output data-out="d"></output></label>
+    <label class="rng" data-step="2"><span><span class="v c1">p</span> pressão do vapor</span><input type="range" name="p" min="1" max="4" step="0.1" value="3.4"><output data-out="p"></output></label>
    </div>
   </div>
   <div class="cf-det pilha">
    <div class="cf-bloco">
-    <p class="cf-q">O que é a pressão?</p>
-    <p class="cf-pal">pressão = força ÷ área</p>
-    <p class="cf-eq"><span class="v c1">p</span> = <span class="v c2">F</span> ÷ <span class="v c3">A</span></p>
-    <p>É a força que cai em cada metro quadrado. Fechado na caldeira, o vapor empurra todas as paredes, e também o pistão.</p>
-    <p class="cf-num">Caldeira do Rocket (1829): <span class="v c1">p</span> ≈ 3,4 bar = 340&nbsp;000 Pa</p>
-    <p class="cf-sm">1 bar = 100&nbsp;000 pascal (Pa): mais ou menos a pressão do ar à nossa volta.</p>
-    <p class="cf-liga">Sabemos a pressão. Com que força é empurrado o pistão?</p>
+    <p class="cf-q">O que é uma força?</p>
+    <p class="cf-pal"><span class="vp c2">força</span> = um empurrão</p>
+    <p class="cf-eq"><span class="v c2">F</span> <small>em newton (N)</small></p>
+    <p class="cf-num">O vapor empurra o pistão com <b data-out="F"></b>.</p>
+    <p class="cf-sig">É como levantar <b data-out="kg"></b>.</p>
    </div>
    <div class="cf-bloco" data-step="1">
-    <p class="cf-q">Com que força empurra o vapor?</p>
-    <p class="cf-pal">se pressão = força ÷ área, então força = pressão × área</p>
-    <p class="cf-eq"><span class="v c2">F</span> = <span class="v c1">p</span> × <span class="v c3">A</span></p>
-    <p class="cf-sm">O que estava a dividir passa para o outro lado a multiplicar. Mexe nas barras.</p>
-    <p class="cf-num"><span class="v c2">F</span> = <b data-out="pa"></b> × <b data-out="A"></b> = <b data-out="F"></b></p>
-    <p class="cf-sig">É como levantar <b data-out="kg"></b>.</p>
-    <p class="cf-liga">Esta força empurra o pistão ao longo do cilindro. Quanta energia gasta em cada empurrão?</p>
+    <p class="cf-q">Onde empurra o vapor?</p>
+    <p class="cf-pal"><span class="vp c3">área</span> = a face do pistão</p>
+    <p class="cf-eq"><span class="v c3">A</span> <small>em metros quadrados (m²)</small></p>
+    <p class="cf-num">Diâmetro de <b data-out="d"></b> → <span class="v c3">A</span> = <b data-out="A"></b></p>
+    <p class="cf-sig">O tamanho de <b data-out="folhas"></b>.</p>
    </div>
    <div class="cf-bloco" data-step="2">
-    <p class="cf-q">Quanta energia gasta um empurrão?</p>
-    <p class="cf-pal">trabalho = força × distância</p>
-    <p class="cf-eq"><span class="v c4">W</span> = <span class="v c2">F</span> × <span class="v c5">d</span></p>
-    <p class="cf-sm">É o W = F × d da primeira aula: o trabalho, em física, medido em joule (J).</p>
-    <p class="cf-num"><span class="v c4">W</span> = <b data-out="F"></b> × 0,43 m = <b data-out="W"></b></p>
-    <p class="cf-sig">Chegava para levantar uma pessoa de 70 kg a <b data-out="alt"></b> de altura.</p>
-    <p class="cf-liga">Mas o pistão não empurra uma vez só: empurra várias vezes por segundo.</p>
+    <p class="cf-q">O que é a pressão?</p>
+    <p class="cf-pal"><span class="vp c1">pressão</span> = <span class="vp c2">força</span> ÷ <span class="vp c3">área</span></p>
+    <p class="cf-eq"><span class="v c1">p</span> = <span class="v c2">F</span> ÷ <span class="v c3">A</span></p>
+    <p class="cf-num">Agora: <span class="v c1">p</span> = <b data-out="p"></b> = <b data-out="pa"></b></p>
+    <p class="cf-sig">Locomotiva Rocket (1829): 3,4 bar. O ar à nossa volta: 1 bar.</p>
    </div>
    <div class="cf-bloco" data-step="3">
-    <p class="cf-q">Quanta energia em cada segundo?</p>
-    <p class="cf-pal">potência = trabalho ÷ tempo</p>
-    <p class="cf-eq"><span class="v c6">P</span> = <span class="v c4">W</span> ÷ <span class="v c7">t</span></p>
-    <p class="cf-sm">Medida em watt (W): um watt é um joule por segundo. Para as contas serem fáceis: 4 empurrões por segundo.</p>
-    <p class="cf-num"><span class="v c6">P</span> = 4 × <b data-out="W"></b> ÷ 1 s = <b data-out="P"></b></p>
-    <p class="cf-sig">Cerca de <b data-out="kW"></b>, ou <b data-out="cv"></b> cavalos-vapor.</p>
-    <p class="cf-liga">E quanta energia teve o carvão de dar para isto?</p>
+    <p class="cf-q">Com que força empurra o vapor?</p>
+    <p class="cf-pal"><span class="vp c2">força</span> = <span class="vp c1">pressão</span> × <span class="vp c3">área</span></p>
+    <p class="cf-eq"><span class="v c2">F</span> = <span class="v c1">p</span> × <span class="v c3">A</span></p>
+    <p class="cf-num"><span class="v c2">F</span> = <b data-out="pa"></b> × <b data-out="A"></b> = <b data-out="F"></b></p>
+    <p class="cf-sig">Setas azuis: o comprimento é a pressão; quantas são, a área.</p>
    </div>
    <div class="cf-bloco" data-step="4">
+    <p class="cf-q">Até onde vai o pistão?</p>
+    <p class="cf-pal"><span class="vp c5">distância</span> = o caminho do pistão em cada empurrão</p>
+    <p class="cf-eq"><span class="v c5">d</span> <small>em metros (m)</small></p>
+    <p class="cf-num">Na Rocket: <span class="v c5">d</span> = 0,43 m</p>
+   </div>
+   <div class="cf-bloco" data-step="5">
+    <p class="cf-q">Quanta energia gasta um empurrão?</p>
+    <p class="cf-pal"><span class="vp c4">trabalho</span> = <span class="vp c2">força</span> × <span class="vp c5">distância</span></p>
+    <p class="cf-eq"><span class="v c4">W</span> = <span class="v c2">F</span> × <span class="v c5">d</span> <small>em joule (J)</small></p>
+    <p class="cf-num"><span class="v c4">W</span> = <b data-out="F"></b> × 0,43 m = <b data-out="W"></b></p>
+    <p class="cf-sig">Levantava uma pessoa de 70 kg a <b data-out="alt"></b>.</p>
+   </div>
+   <div class="cf-bloco" data-step="6">
+    <p class="cf-q">Quantos empurrões por segundo?</p>
+    <p class="cf-pal"><span class="vp c7">tempo</span> = quanto demora</p>
+    <p class="cf-eq"><span class="v c7">t</span> <small>em segundos (s)</small></p>
+    <p class="cf-num">4 empurrões em cada segundo: <span class="v c7">t</span> = 1 s</p>
+   </div>
+   <div class="cf-bloco" data-step="7">
+    <p class="cf-q">Quanta energia por segundo?</p>
+    <p class="cf-pal"><span class="vp c6">potência</span> = <span class="vp c4">trabalho</span> ÷ <span class="vp c7">tempo</span></p>
+    <p class="cf-eq"><span class="v c6">P</span> = <span class="v c4">W</span> ÷ <span class="v c7">t</span> <small>em watt (W)</small></p>
+    <p class="cf-num"><span class="v c6">P</span> = 4 × <b data-out="W"></b> ÷ 1 s = <b data-out="P"></b></p>
+    <p class="cf-sig">Cerca de <b data-out="kW"></b>, ou <b data-out="cv"></b> cavalos-vapor.</p>
+   </div>
+   <div class="cf-bloco" data-step="8">
     <p class="cf-q">Que parte do carvão vira trabalho?</p>
-    <p class="cf-pal">rendimento = energia útil ÷ energia do carvão</p>
+    <p class="cf-pal"><span class="vp c8">rendimento</span> = energia útil ÷ energia do carvão</p>
     <p class="cf-eq"><span class="v c8">η</span> = útil ÷ total</p>
     <div class="cf-barras">
      <span>Newcomen, 1712</span><i style="--w:2%"></i><b>0,5 a 1 %</b>
      <span>Watt, c. 1780</span><i style="--w:6%"></i><b>2 a 3 %</b>
      <span>Central elétrica atual</span><i style="--w:80%"></i><b>cerca de 40 %</b>
     </div>
-    <p class="cf-num">Com <span class="v c8">η</span> = 3 %, para dar <b data-out="kW"></b> o fogo tinha de dar cerca de <b data-out="fogo"></b>.</p>
-    <p class="cf-sig">O resto perdia-se em calor: por isso a máquina gastava tanto carvão.</p>
+    <p class="cf-num">Para dar <b data-out="kW"></b>, o fogo dava <b data-out="fogo"></b>.</p>
+    <p class="cf-sig">O resto perdia-se em calor.</p>
    </div>
   </div>
  </div>
@@ -598,20 +590,16 @@
    <div class="cf-det pilha">
     <div class="cf-bloco">
      <p class="cf-q">O que há à volta de um íman?</p>
-     <p class="cf-pal">campo magnético = a zona onde o íman faz força</p>
+     <p class="cf-pal">campo magnético = onde o íman faz força (as linhas)</p>
      <p class="cf-eq"><span class="v c3">B</span> <small>força do íman</small></p>
-     <p>Desenha-se com linhas, do polo norte para o polo sul. Íman mais forte: mais linhas.</p>
-     <p class="cf-num">Agora: <b data-ind="total">18</b> linhas entre os polos. Muda a força do íman na barra.</p>
-     <p class="cf-liga">No meio do íman está uma bobina: uma volta de fio de cobre.</p>
+     <p class="cf-num">Íman mais forte, mais linhas. Agora: <b data-ind="total">18</b>.</p>
     </div>
     <div class="cf-bloco" data-step="1">
      <p class="cf-q">Quantas linhas atravessam a bobina?</p>
-     <p class="cf-pal">fluxo = força do íman × área da «janela» da bobina</p>
+     <p class="cf-pal">fluxo = as linhas que atravessam a bobina</p>
      <p class="cf-eq"><span class="v c1">Φ</span> = <span class="v c3">B</span> × <span class="v c5">A</span></p>
-     <p class="cf-sm"><span class="v c1">Φ</span> lê-se «fi». É o fluxo magnético: conta as linhas que passam por dentro da bobina.</p>
-     <p class="cf-num">Agora atravessam a bobina <b data-ind="linhas">18 de 18</b> linhas (as azuis).</p>
-     <p class="cf-sig">Roda a bobina com a barra. De frente para as linhas, passam todas; de lado, nenhuma.</p>
-     <p class="cf-liga">A bobina está ligada a uma lâmpada. Quando é que ela acende?</p>
+     <p class="cf-num">Agora: <b data-ind="linhas">18 de 18</b> linhas (as azuis).</p>
+     <p class="cf-sig">Roda a bobina: de frente passam todas; de lado, nenhuma.</p>
     </div>
     <div class="cf-bloco" data-step="2">
      <p class="cf-q">Previsão: quando é que a lâmpada acende?</p>
@@ -622,40 +610,36 @@
       <p class="ci-prev-exp">Parada, a lâmpada fica apagada, mesmo com todas as linhas a atravessar a bobina. Só acende enquanto a bobina roda.</p>
       <button type="button" class="ci-prev-ver">Ver a resposta</button>
      </div>
-     <p class="cf-sig">Votem de braço no ar. Depois experimentem: rodem a bobina devagar, depressa, e parem.</p>
+     <p class="cf-sig">Votem. Depois rodem a bobina: devagar, depressa, parada.</p>
     </div>
     <div class="cf-bloco" data-step="3">
      <p class="cf-q">O que faz acender a lâmpada?</p>
      <p class="cf-pal">tensão = rapidez com que o fluxo muda</p>
      <p class="cf-eq"><span class="v c4">V</span> = Δ<span class="v c1">Φ</span> ÷ Δ<span class="v c7">t</span></p>
-     <p class="cf-sm"><b>Δ</b> (delta) quer dizer «variação»: quanto mudou o fluxo, a dividir pelo tempo que demorou. É a <b>indução eletromagnética</b>, descoberta por Michael Faraday em 1831.</p>
-     <p class="cf-num">Agora o fluxo muda <b data-ind="taxa">0</b> linhas por segundo → tensão: <b data-ind="tensao">0 %</b></p>
-     <p class="cf-sig">A tensão empurra a corrente pelo fio até à lâmpada. Fluxo parado: tensão zero.</p>
-     <p class="cf-liga">Como ter mais tensão sem rodar mais depressa?</p>
+     <p class="cf-sm"><b>Δ</b> (delta) = «quanto mudou». Indução eletromagnética: Michael Faraday, 1831.</p>
+     <p class="cf-num">Agora: <b data-ind="taxa">0</b> linhas por segundo → tensão <b data-ind="tensao">0 %</b></p>
+     <p class="cf-sig">Fluxo parado: tensão zero, lâmpada apagada.</p>
     </div>
     <div class="cf-bloco" data-step="4">
      <p class="cf-q">E se o fio der mais voltas?</p>
-     <p class="cf-pal">cada volta de fio é mais uma janela: as tensões somam-se</p>
+     <p class="cf-pal">cada volta de fio soma a sua tensão</p>
      <p class="cf-eq"><span class="v c4">V</span> = <span class="v c2">N</span> × Δ<span class="v c1">Φ</span> ÷ Δ<span class="v c7">t</span></p>
      <p class="cf-num">Agora: <span class="v c2">N</span> = <b data-ind="N">1 volta</b> → <b data-ind="Nfrase">a tensão de uma volta só</b>.</p>
-     <p class="cf-sig">Sobe a barra das voltas de fio e roda a bobina como antes: a lâmpada brilha mais.</p>
-     <p class="cf-liga">Rodar à mão cansa. Numa central elétrica, quem roda a bobina?</p>
     </div>
     <div class="cf-bloco" data-step="5">
      <p class="cf-q">Quem roda a bobina sem parar?</p>
-     <p class="cf-pal">a turbina: água a cair ou vapor sob pressão batem nas pás e fazem-na girar</p>
+     <p class="cf-pal">a turbina, empurrada por água ou por vapor</p>
      <p class="cf-eq"><span class="v c6">ω</span> <small>rapidez da rotação</small></p>
-     <p>O fluxo sobe e desce como uma onda. A tensão é maior quando o fluxo muda mais depressa, e é zero no instante em que o fluxo está no máximo.</p>
+     <p>O fluxo sobe e desce como uma onda; a tensão também.</p>
      <p class="cf-num">Agora: <span class="v c6">ω</span> = <b data-ind="w">1 volta por segundo</b>.</p>
-     <p class="cf-sig">A corrente vai e vem: é <b>corrente alternada</b>, como a das tomadas (50 vezes por segundo).</p>
+     <p class="cf-sig">A corrente vai e vem: <b>corrente alternada</b>, como nas tomadas.</p>
     </div>
     <div class="cf-bloco" data-step="6">
      <p class="cf-q">De que depende a tensão?</p>
-     <p class="cf-pal">tensão máxima = voltas de fio × força do íman × área da bobina × rapidez da rotação</p>
+     <p class="cf-pal">tensão = voltas × íman × área × rapidez</p>
      <p class="cf-eq"><span class="v c4">V</span> = <span class="v c2">N</span> × <span class="v c3">B</span> × <span class="v c5">A</span> × <span class="v c6">ω</span></p>
-     <p class="cf-num">Agora: <span class="v c2">N</span> = <b data-ind="N">1 volta</b>, <span class="v c3">B</span> = <b data-ind="B">forte</b>, <span class="v c6">ω</span> = <b data-ind="w">1 volta por segundo</b> → <b data-ind="max">17 %</b> do máximo desta máquina.</p>
-     <p class="cf-sig">Desafio: ponham a lâmpada no máximo. E o que acontece se a turbina parar?</p>
-     <p class="cf-liga">Duplica uma das letras e a tensão duplica.</p>
+     <p class="cf-num">Agora: <b data-ind="max">17 %</b> do máximo desta máquina.</p>
+     <p class="cf-sig">Desafio: lâmpada no máximo. E se a turbina parar?</p>
     </div>
     <div class="cf-bloco" data-step="7">
      <p class="cf-q">Da bancada à cidade</p>
@@ -794,32 +778,28 @@
    <div class="cf-det pilha">
     <div class="cf-bloco">
      <p class="cf-q">Quem escapa aos pássaros?</p>
-     <p class="cf-pal">as que escapam = as que há × a parte que os pássaros não comem</p>
+     <p class="cf-pal">escapam = as que há × a parte que não é comida</p>
      <p class="cf-num"><span class="cc-m cl"></span> Claras: <b data-out="nC"></b> × <b data-out="sC"></b> = <b data-out="eC"></b> escapam<br><span class="cc-m es"></span> Escuras: <b data-out="nE"></b> × <b data-out="sE"></b> = <b data-out="eE"></b> escapam</p>
-     <p class="cf-sm">Valores do modelo: num ano, os pássaros comem 30 % das mariposas que se veem bem e 15 % das que se veem mal. Com a barra da fuligem mudas quem se vê bem.</p>
-     <p class="cf-liga">De todas as que escaparam, que parte é escura?</p>
+     <p class="cf-sm">Modelo: os pássaros comem 30 % das que se veem bem e 15 % das que se veem mal.</p>
     </div>
     <div class="cf-bloco" data-step="1">
      <p class="cf-q">Que parte das sobreviventes é escura?</p>
      <p class="cf-pal">parte escura = escuras que escapam ÷ todas as que escapam</p>
      <p class="cf-eq"><span class="v c4">p</span> = <span class="v c7">E</span> ÷ (<span class="v c7">E</span> + <span class="v c8">C</span>)</p>
      <p class="cf-num"><span class="v c4">p</span> = <b data-out="eE"></b> ÷ (<b data-out="eE"></b> + <b data-out="eC"></b>) = <b data-out="pNovo"></b></p>
-     <p class="cf-sig">Antes dos pássaros eram <b data-out="p"></b>. As filhas herdam a cor dos pais: a geração seguinte começa com <b data-out="pNovo"></b>.</p>
-     <p class="cf-liga">A diferença é pequena. E se se repetir todos os anos?</p>
+     <p class="cf-sig">Antes: <b data-out="p"></b>. As filhas herdam a cor: a geração seguinte começa com <b data-out="pNovo"></b>.</p>
     </div>
     <div class="cf-bloco" data-step="2">
      <p class="cf-q">E ao fim de muitas gerações?</p>
-     <p class="cf-pal">uma pequena vantagem, repetida todos os anos, muda a população inteira</p>
+     <p class="cf-pal">uma pequena vantagem, repetida todos os anos</p>
      <p class="cf-num">Ano <b data-out="ano"></b>: <b data-out="p"></b> das mariposas são escuras.</p>
-     <p class="cf-sig">Carrega em «Avançar» e compara com os registos de Manchester (os losangos): 1848, a primeira escura; 1895, cerca de 98 %.</p>
-     <p class="cf-liga">Nenhuma mariposa mudou de cor. Mudou a população.</p>
+     <p class="cf-sig">Carrega em «Avançar». Losangos: registos de Manchester. Nenhuma mariposa mudou de cor.</p>
     </div>
     <div class="cf-bloco" data-step="3">
      <p class="cf-q">E quando o ar fica limpo?</p>
-     <p class="cf-pal">1956: a Lei do Ar Limpo reduz o fumo; os troncos voltam a clarear</p>
+     <p class="cf-pal">1956, Lei do Ar Limpo: os troncos voltam a clarear</p>
      <p class="cf-num">Ano <b data-out="ano"></b>: <b data-out="p"></b> das mariposas são escuras.</p>
-     <p class="cf-sig">Carrega no botão do cenário e em «Avançar». Os losangos são mariposas contadas perto de Cambridge: 12 % de escuras em 2001, 1 % em 2007.</p>
-     <p class="cf-liga">Agora são as escuras que se veem melhor: a seleção natural inverte-se.</p>
+     <p class="cf-sig">Botão do cenário e «Avançar». Losangos: contagens perto de Cambridge, 2001–2007.</p>
     </div>
    </div>
   </div>
