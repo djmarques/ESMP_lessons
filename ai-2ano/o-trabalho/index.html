@@ -9,6 +9,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Caladea:ital,wght@0,400;0,700;1,400&family=Carlito:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="style.css">
+<link rel="stylesheet" href="vapor.css">
 </head>
 <body>
 <!--
@@ -448,91 +449,146 @@
 <div class="i3d-barra"><div class="i3d-read" hidden></div><div class="i3d-ctl"></div></div>
 <p class="source">Fontes: Britannica, «Energy conversion: developments of the Industrial Revolution»; Science Museum Group (Rocket, 1829). Animação original, simplificada.</p>
 </section>
-<section class="slide ci manim-slide" id="s-ci-vapor-fisica" data-lesson="4 · Civilização industrial" data-title="A física da máquina a vapor" data-steps="8">
-<p class="kicker">1.1 · A física da máquina a vapor · uma ideia de cada vez</p><h2>Porque é que o vapor empurra com tanta força?</h2>
-<div class="quadro civ-fis" data-civ="forca">
- <div class="cf-cadeia">
-  <span><span class="v c2">F</span> força</span><i data-step="1">→</i><span data-step="1"><span class="v c3">A</span> área</span><i data-step="2">→</i><span data-step="2"><span class="v c1">p</span> pressão</span><i data-step="3">→</i><span data-step="3"><span class="v c2">F</span> = <span class="v c1">p</span> × <span class="v c3">A</span></span><i data-step="4">→</i><span data-step="4"><span class="v c5">d</span> distância</span><i data-step="5">→</i><span data-step="5"><span class="v c4">W</span> trabalho</span><i data-step="6">→</i><span data-step="6"><span class="v c7">t</span> tempo</span><i data-step="7">→</i><span data-step="7"><span class="v c6">P</span> potência</span><i data-step="8">→</i><span data-step="8"><span class="v c8">η</span> rendimento</span>
- </div>
- <div class="cf-corpo">
-  <div class="cf-esq">
-   <svg class="vf-svg" viewBox="0 0 560 400" role="img" aria-label="Caldeira com vapor, cilindro e pistão. O desenho muda com as barras: mais pressão, mais vapor e setas mais compridas; pistão mais largo, mais setas; a seta grande é a força"></svg>
-   <div class="cf-ctl">
-    <label class="rng" data-step="1"><span><span class="v c3">A</span> diâmetro do pistão</span><input type="range" name="d" min="10" max="40" step="1" value="20"><output data-out="d"></output></label>
-    <label class="rng" data-step="2"><span><span class="v c1">p</span> pressão do vapor</span><input type="range" name="p" min="1" max="4" step="0.1" value="3.4"><output data-out="p"></output></label>
-   </div>
-  </div>
-  <div class="cf-det pilha">
-   <div class="cf-bloco">
-    <p class="cf-q">O que é uma força?</p>
-    <p class="cf-pal"><span class="vp c2">força</span> = um empurrão</p>
-    <p class="cf-eq"><span class="v c2">F</span> <small>em newton (N)</small></p>
-    <p class="cf-num">O vapor empurra o pistão com <b data-out="F"></b>.</p>
-    <p class="cf-sig">É como levantar <b data-out="kg"></b>.</p>
-   </div>
-   <div class="cf-bloco" data-step="1">
-    <p class="cf-q">Onde empurra o vapor?</p>
-    <p class="cf-pal"><span class="vp c3">área</span> = a face do pistão</p>
-    <p class="cf-eq"><span class="v c3">A</span> <small>em metros quadrados (m²)</small></p>
-    <p class="cf-num">Diâmetro de <b data-out="d"></b> → <span class="v c3">A</span> = <b data-out="A"></b></p>
-    <p class="cf-sig">O tamanho de <b data-out="folhas"></b>.</p>
-   </div>
-   <div class="cf-bloco" data-step="2">
-    <p class="cf-q">O que é a pressão?</p>
-    <p class="cf-pal"><span class="vp c1">pressão</span> = <span class="vp c2">força</span> ÷ <span class="vp c3">área</span></p>
-    <p class="cf-eq"><span class="v c1">p</span> = <span class="v c2">F</span> ÷ <span class="v c3">A</span></p>
-    <p class="cf-num">Agora: <span class="v c1">p</span> = <b data-out="p"></b> = <b data-out="pa"></b></p>
-    <p class="cf-sig">Locomotiva Rocket (1829): 3,4 bar. O ar à nossa volta: 1 bar.</p>
-   </div>
-   <div class="cf-bloco" data-step="3">
-    <p class="cf-q">Com que força empurra o vapor?</p>
-    <p class="cf-pal"><span class="vp c2">força</span> = <span class="vp c1">pressão</span> × <span class="vp c3">área</span></p>
-    <p class="cf-eq"><span class="v c2">F</span> = <span class="v c1">p</span> × <span class="v c3">A</span></p>
-    <p class="cf-num"><span class="v c2">F</span> = <b data-out="pa"></b> × <b data-out="A"></b> = <b data-out="F"></b></p>
-    <p class="cf-sig">Setas azuis: o comprimento é a pressão; quantas são, a área.</p>
-   </div>
-   <div class="cf-bloco" data-step="4">
-    <p class="cf-q">Até onde vai o pistão?</p>
-    <p class="cf-pal"><span class="vp c5">distância</span> = o caminho do pistão em cada empurrão</p>
-    <p class="cf-eq"><span class="v c5">d</span> <small>em metros (m)</small></p>
-    <p class="cf-num">Na Rocket: <span class="v c5">d</span> = 0,43 m</p>
-   </div>
-   <div class="cf-bloco" data-step="5">
-    <p class="cf-q">Quanta energia gasta um empurrão?</p>
-    <p class="cf-pal"><span class="vp c4">trabalho</span> = <span class="vp c2">força</span> × <span class="vp c5">distância</span></p>
-    <p class="cf-eq"><span class="v c4">W</span> = <span class="v c2">F</span> × <span class="v c5">d</span> <small>em joule (J)</small></p>
-    <p class="cf-num"><span class="v c4">W</span> = <b data-out="F"></b> × 0,43 m = <b data-out="W"></b></p>
-    <p class="cf-sig">Levantava uma pessoa de 70 kg a <b data-out="alt"></b>.</p>
-   </div>
-   <div class="cf-bloco" data-step="6">
-    <p class="cf-q">Quantos empurrões por segundo?</p>
-    <p class="cf-pal"><span class="vp c7">tempo</span> = quanto demora</p>
-    <p class="cf-eq"><span class="v c7">t</span> <small>em segundos (s)</small></p>
-    <p class="cf-num">4 empurrões em cada segundo: <span class="v c7">t</span> = 1 s</p>
-   </div>
-   <div class="cf-bloco" data-step="7">
-    <p class="cf-q">Quanta energia por segundo?</p>
-    <p class="cf-pal"><span class="vp c6">potência</span> = <span class="vp c4">trabalho</span> ÷ <span class="vp c7">tempo</span></p>
-    <p class="cf-eq"><span class="v c6">P</span> = <span class="v c4">W</span> ÷ <span class="v c7">t</span> <small>em watt (W)</small></p>
-    <p class="cf-num"><span class="v c6">P</span> = 4 × <b data-out="W"></b> ÷ 1 s = <b data-out="P"></b></p>
-    <p class="cf-sig">Cerca de <b data-out="kW"></b>, ou <b data-out="cv"></b> cavalos-vapor.</p>
-   </div>
-   <div class="cf-bloco" data-step="8">
-    <p class="cf-q">Que parte do carvão vira trabalho?</p>
-    <p class="cf-pal"><span class="vp c8">rendimento</span> = energia útil ÷ energia do carvão</p>
-    <p class="cf-eq"><span class="v c8">η</span> = útil ÷ total</p>
-    <div class="cf-barras">
-     <span>Newcomen, 1712</span><i style="--w:2%"></i><b>0,5 a 1 %</b>
-     <span>Watt, c. 1780</span><i style="--w:6%"></i><b>2 a 3 %</b>
-     <span>Central elétrica atual</span><i style="--w:80%"></i><b>cerca de 40 %</b>
-    </div>
-    <p class="cf-num">Para dar <b data-out="kW"></b>, o fogo dava <b data-out="fogo"></b>.</p>
-    <p class="cf-sig">O resto perdia-se em calor.</p>
-   </div>
-  </div>
- </div>
+<section class="slide ci manim-slide fv" id="s-fv-ponte" data-lesson="4 · Civilização industrial" data-title="Do comboio ao esquema" data-steps="3">
+<p class="kicker">1.1 · A física da máquina a vapor · do comboio ao esquema</p><h2>O que interessa dentro do comboio?</h2>
+<div class="quadro fv-q">
+ <svg class="fv-svg larga" viewBox="0 0 980 400" data-fv-ponte role="img" aria-label="Uma locomotiva a vapor. Clique a clique, apagam-se as peças que não interessam e ficam a fornalha, a caldeira, o cilindro com o pistão e a roda, que se arrumam em fila"></svg>
+ <div class="fv-leg pilha"><p>Um comboio a vapor tem centenas de peças.</p><p data-step="1">Para perceber porque anda, bastam <b>quatro</b>.</p><p data-step="2">Arrumadas em fila: este é o nosso <b>esquema</b>.</p><p data-step="3">Cada peça responde a uma pergunta. Vamos uma de cada vez.</p></div>
+ <div class="fv-mapa" data-step="3"><div><small>caldeira</small><b>pressão</b><span class="d">Quanto empurra o vapor em cada cm²?</span></div><div><small>pistão</small><b>força</b><span class="d">Com que força o vapor empurra o pistão?</span></div><div><small>curso do pistão</small><b>trabalho</b><span class="d">Quanta energia passa num empurrão?</span></div><div><small>roda</small><b>potência</b><span class="d">Quanta energia por segundo?</span></div><div><small>do carvão à roda</small><b>rendimento</b><span class="d">Que parte do carvão se aproveita?</span></div></div>
 </div>
-<p class="source">Rocket: 50 libras por polegada quadrada (cerca de 3,4 bar), cilindros de 203 × 432 mm (Science Museum Group). Rendimentos: Britannica; Visualizing Energy, «Maximum efficiencies of engines and turbines, 1700–2000». Valores aproximados.</p>
+<p class="source">Desenho original e simplificado, inspirado na locomotiva Rocket (1829, Science Museum Group). Na locomotiva verdadeira os cilindros estão inclinados.</p>
+</section>
+<section class="slide ci manim-slide fv" id="s-fv-pressao" data-lesson="4 · Civilização industrial" data-title="Caldeira: temperatura e pressão" data-steps="3">
+<p class="kicker">1.1 · A física da máquina a vapor · 1 de 5 · a caldeira</p><h2>Porque é que aquecer a água dá pressão?</h2>
+<div class="quadro fv-q">
+ <div class="fv-onde"><span class="aqui">fornalha</span><i>→</i><span class="aqui">caldeira</span><i>→</i><span>cilindro e pistão</span><i>→</i><span>roda</span></div>
+ <div class="fv-cima">
+  <div class="fv-esq"><svg class="fv-svg" viewBox="0 0 640 400" data-fv-cena="caldeira" data-mano-x="470" data-mano-y="112" data-mano-r="62" data-mostra="zoom" data-passo-zoom="3" data-zoom-x="380" data-zoom-y="2" role="img" aria-label="Caldeira fechada com água e vapor, por cima de uma fornalha. As bolinhas são moléculas de água: com mais temperatura mexem-se mais, passam mais para o vapor e batem mais nas paredes; o manómetro sobe"></svg></div>
+  <div class="fv-lado"><h3>As bolinhas são moléculas de água. Mexe na temperatura.</h3><div class="fv-ctl"><label class="rng"><span>temperatura da água</span><input type="range" data-fv-in="T" min="20" max="180" step="1" value="147"><output data-fv="T"></output></label><div class="fv-botoes"><button type="button" data-fv-set="T:20">20 °C · água fria</button><button type="button" data-fv-set="T:100">100 °C · a ferver</button><button type="button" data-fv-set="T:147">147 °C · Rocket</button></div></div><p class="fv-zero" data-fv-zero>Até aos 100 °C, o vapor não empurra mais do que o ar cá fora: o manómetro marca 0.</p></div>
+ </div>
+ <div class="fv-linha"><p class="fv-eq" data-step="2"><span class="v c1">p</span> = <span class="v c2">F</span> ÷ <span class="v c3">A</span><small>pressão = força ÷ área</small></p><p class="fv-conta" data-step="3">1 bar = <b>10 N</b> em cada cm² → agora: <b data-fv="pn"></b> em cada cm²</p></div>
+ <div class="fv-termos n3"><div class="fv-termo"><div class="t"><span class="v c2">T</span><b>temperatura</b><output><span data-fv="T"></span></output></div><span class="d">quanto se agitam as moléculas</span></div><div class="fv-termo" data-step="1"><div class="t"><span class="v c4">✹</span><b>pancadas</b><output></output></div><span class="d">cada molécula que bate na parede dá-lhe um empurrão (clarões laranja)</span></div><div class="fv-termo" data-step="2"><div class="t"><span class="v c1">p</span><b>pressão</b><output><span data-fv="p"></span></output></div><span class="d">a força das pancadas em cada cm² de parede</span></div></div>
+ <p class="fv-sig" data-step="3">10 N é o peso de 1 kg. 1 bar é como ter <b>1 kg em cima de cada unha</b>.</p>
+</div>
+<p class="source">Pressão do vapor de água saturado (tabelas de vapor), descontada a pressão do ar, como num manómetro. Rocket: 50 libras por polegada quadrada, cerca de 3,4 bar (Science Museum Group). Desenho simplificado: a velocidade das moléculas está exagerada para se ver.</p>
+</section>
+<section class="slide ci manim-slide fv" id="s-fv-forca" data-lesson="4 · Civilização industrial" data-title="Pistão: da pressão à força" data-steps="3">
+<p class="kicker">1.1 · A física da máquina a vapor · 2 de 5 · o pistão</p><h2>Com que força o vapor empurra o pistão?</h2>
+<div class="quadro fv-q">
+ <div class="fv-onde"><span>fornalha</span><i>→</i><span>caldeira</span><i>→</i><span class="aqui">cilindro e pistão</span><i>→</i><span>roda</span></div>
+ <div class="fv-cima">
+  <div class="fv-esq"><svg class="fv-svg" viewBox="0 0 770 400" data-fv-cena="pistao" data-mostra="face forca" data-passo-face="2" data-passo-forca="3" role="img" aria-label="A caldeira manda vapor para o cilindro. O vapor empurra a face do pistão. Em baixo, a face do pistão vista de frente, dividida em quadradinhos de 1 centímetro quadrado"></svg></div>
+  <div class="fv-lado"><h3>O vapor empurra cada cm² da face do pistão.</h3><div class="fv-ctl"><label class="rng"><span>temperatura da água</span><input type="range" data-fv-in="T" min="20" max="180" step="1" value="147"><output data-fv="T"></output></label><label class="rng"><span><span class="v c3">A</span> diâmetro do pistão</span><input type="range" data-fv-in="d" min="10" max="40" step="1" value="20"><output data-fv="d"></output></label></div><p class="fv-zero" data-fv-zero>Sem pressão acima da do ar, o vapor não empurra: o pistão fica parado.</p></div>
+ </div>
+ <div class="fv-linha"><p class="fv-eq"><span class="v c2" data-step="3">F</span> = <span class="v c1" data-step="1">p</span> × <span class="v c3" data-step="2">A</span></p><p class="fv-conta" data-step="3"><span class="v c2">F</span> = <span data-fv="pnum"></span> × <span data-fv="Anum"></span> = <b data-fv="F"></b></p></div>
+ <div class="fv-termos n3"><div class="fv-termo" data-step="1"><div class="t"><span class="v c1">p</span><b>pressão</b><output><span data-fv="pn"></span></output></div><span class="d">newtons que empurram cada cm²</span></div><div class="fv-termo" data-step="2"><div class="t"><span class="v c3">A</span><b>área</b><output><span data-fv="A"></span></output></div><span class="d">quantos cm² tem a face do pistão</span></div><div class="fv-termo" data-step="3"><div class="t"><span class="v c2">F</span><b>força</b><output><span data-fv="F"></span></output></div><span class="d">o empurrão total: todos os cm² juntos</span></div></div>
+ <p class="fv-sig" data-step="3">É como pôr <b data-fv="kg"></b> em cima do pistão. Mais pressão: mais força, e o pistão anda mais depressa.</p>
+</div>
+<p class="source">Rocket (1829): cilindros de 203 mm de diâmetro (Science Museum Group). Modelo simplificado: num motor verdadeiro a pressão no cilindro é um pouco menor do que na caldeira.</p>
+</section>
+<section class="slide ci manim-slide fv" id="s-fv-trabalho" data-lesson="4 · Civilização industrial" data-title="Curso do pistão: da força ao trabalho" data-steps="3">
+<p class="kicker">1.1 · A física da máquina a vapor · 3 de 5 · o curso do pistão</p><h2>Quanta energia passa em cada empurrão?</h2>
+<div class="quadro fv-q">
+ <div class="fv-onde"><span>fornalha</span><i>→</i><span>caldeira</span><i>→</i><span class="aqui">cilindro e pistão</span><i>→</i><span class="aqui">roda</span></div>
+ <div class="fv-cima larga">
+  <div class="fv-esq"><svg class="fv-svg" viewBox="0 0 980 400" data-fv-cena="tudo" data-mostra="forca curso energia" data-passo-forca="1" data-passo-curso="2" data-passo-energia="3" role="img" aria-label="O esquema completo. O pistão percorre o curso d e, em cada empurrão, passa energia à roda"></svg></div>
+  <div class="fv-lado"><h3>Empurrar ao longo de um caminho gasta energia.</h3><div class="fv-ctl"><label class="rng"><span>temperatura da água</span><input type="range" data-fv-in="T" min="20" max="180" step="1" value="147"><output data-fv="T"></output></label><label class="rng"><span><span class="v c3">A</span> diâmetro do pistão</span><input type="range" data-fv-in="d" min="10" max="40" step="1" value="20"><output data-fv="d"></output></label></div><p class="fv-zero" data-fv-zero>Pistão parado: não há caminho, não há trabalho.</p></div>
+ </div>
+ <div class="fv-linha"><p class="fv-eq"><span class="v c4" data-step="3">W</span> = <span class="v c2" data-step="1">F</span> × <span class="v c5" data-step="2">d</span></p><p class="fv-conta" data-step="3"><span class="v c4">W</span> = <span data-fv="Fnum"></span> × 0,43 = <b data-fv="W"></b></p></div>
+ <div class="fv-termos n3"><div class="fv-termo" data-step="1"><div class="t"><span class="v c2">F</span><b>força</b><output><span data-fv="F"></span></output></div><span class="d">o empurrão do vapor no pistão</span></div><div class="fv-termo" data-step="2"><div class="t"><span class="v c5">d</span><b>distância</b><output>0,43 m</output></div><span class="d">o caminho do pistão num empurrão: o curso</span></div><div class="fv-termo" data-step="3"><div class="t"><span class="v c4">W</span><b>trabalho</b><output><span data-fv="W"></span></output></div><span class="d">a energia que um empurrão passa à roda («work»)</span></div></div>
+ <p class="fv-sig" data-step="3"><b>1 joule (J)</b> é a energia para levantar uma maçã (100 g) a 1 metro.</p>
+</div>
+<p class="source">Rocket (1829): curso do pistão de 432 mm (Science Museum Group). Modelo simplificado: força constante ao longo de todo o curso.</p>
+</section>
+<section class="slide ci manim-slide fv" id="s-fv-potencia" data-lesson="4 · Civilização industrial" data-title="Roda: do trabalho à potência" data-steps="3">
+<p class="kicker">1.1 · A física da máquina a vapor · 4 de 5 · a roda</p><h2>Quanta energia por segundo?</h2>
+<div class="quadro fv-q">
+ <div class="fv-onde"><span>fornalha</span><i>→</i><span>caldeira</span><i>→</i><span>cilindro e pistão</span><i>→</i><span class="aqui">roda</span></div>
+ <div class="fv-cima larga">
+  <div class="fv-esq"><svg class="fv-svg" viewBox="0 0 980 400" data-fv-cena="tudo" data-mostra="energia relogio" data-passo-energia="1" data-passo-relogio="2" role="img" aria-label="O esquema completo com um cronómetro: contam-se os empurrões em cada segundo. Com mais pressão, o pistão e a roda andam mais depressa"></svg></div>
+  <div class="fv-lado"><h3>A mesma energia em menos tempo é mais potência.</h3><div class="fv-ctl"><label class="rng"><span>temperatura da água</span><input type="range" data-fv-in="T" min="20" max="180" step="1" value="147"><output data-fv="T"></output></label><label class="rng"><span><span class="v c3">A</span> diâmetro do pistão</span><input type="range" data-fv-in="d" min="10" max="40" step="1" value="20"><output data-fv="d"></output></label></div><p class="fv-zero" data-fv-zero>Pistão parado: não há trabalho, não há potência.</p></div>
+ </div>
+ <div class="fv-linha"><p class="fv-eq"><span class="v c6" data-step="3">P</span> = <span class="v c4" data-step="1">W</span> ÷ <span class="v c7" data-step="2">t</span></p><p class="fv-conta" data-step="3"><span class="v c6">P</span> = <span data-fv="Wtnum"></span> ÷ 1 = <b data-fv="P"></b> ≈ <b data-fv="kW"></b></p></div>
+ <div class="fv-termos n3"><div class="fv-termo" data-step="1"><div class="t"><span class="v c4">W</span><b>trabalho</b><output><span data-fv="Wt"></span></output></div><span class="d">a energia de todos os empurrões: <span data-fv="n"></span> × <span data-fv="W"></span></span></div><div class="fv-termo" data-step="2"><div class="t"><span class="v c7">t</span><b>tempo</b><output>1 s</output></div><span class="d">quanto tempo demoraram esses empurrões</span></div><div class="fv-termo" data-step="3"><div class="t"><span class="v c6">P</span><b>potência</b><output><span data-fv="P"></span></output></div><span class="d">energia por segundo: 1 watt (W) = 1 joule por segundo</span></div></div>
+ <p class="fv-sig" data-step="3">Cerca de <b><span data-fv="cv"></span> cavalos-vapor</b> (1 cv ≈ 735 W): James Watt comparava as máquinas com cavalos para as vender.</p>
+</div>
+<p class="source">Modelo simplificado: 4 empurrões por segundo à pressão da Rocket (dois cilindros, dois empurrões por volta da roda), e proporcionais à pressão. Com a mesma carga, mais pressão dá mais força e o pistão anda mais depressa.</p>
+</section>
+<section class="slide ci manim-slide fv" id="s-fv-rendimento" data-lesson="4 · Civilização industrial" data-title="Do carvão à roda: o rendimento" data-steps="3">
+<p class="kicker">1.1 · A física da máquina a vapor · 5 de 5 · do carvão à roda</p><h2>Que parte do combustível chega à roda?</h2>
+<div class="quadro fv-q">
+ <div class="fv-onde"><span class="aqui">fornalha</span><i>→</i><span class="aqui">caldeira</span><i>→</i><span class="aqui">cilindro e pistão</span><i>→</i><span class="aqui">roda</span></div>
+ <div class="fv-cima">
+  <div class="fv-esq"><div class="fv-eta"><div class="fv-eta-grelha" role="img" aria-label="Cem quadradinhos: a energia do combustível. Os laranja chegam à roda; os cinzentos perdem-se em calor"></div><div class="fv-eta-leg"><p><b>100 J</b> de combustível queimado<br>(cada quadradinho: 1 J)</p><p class="u" data-step="2"><span class="q"></span><b data-eta="u">3</b> J chegam à roda</p><p class="p" data-step="2"><span class="q"></span><b data-eta="p">97</b> J perdem-se em calor: chaminé, paredes, atrito</p></div></div></div>
+  <div class="fv-lado"><h3 data-eta="n">Máquina de Watt</h3><p class="fv-pal">Escolhe a máquina:</p><div class="fv-botoes col"><button type="button" data-fv-eta="1" data-nome="Máquina de Newcomen, 1712">Newcomen · 1712</button><button type="button" data-fv-eta="3" data-nome="Máquina de Watt, c. 1780">Watt · c. 1780</button><button type="button" data-fv-eta="4" data-nome="Motor a gás de Lenoir, 1860">Lenoir · 1860</button><button type="button" data-fv-eta="26" data-nome="Motor de Diesel, 1897">Diesel · 1897</button><button type="button" data-fv-eta="40" data-nome="Central elétrica atual">central elétrica atual</button></div></div>
+ </div>
+ <div class="fv-linha"><p class="fv-eq"><span class="v c8" data-step="3">η</span> = <span class="v c4" data-step="2">útil</span> ÷ <span class="v c5" data-step="1">total</span></p><p class="fv-conta" data-step="3"><span class="v c8">η</span> = <span data-eta="u"></span> ÷ 100 = <b data-eta="pc"></b></p></div>
+ <div class="fv-termos n3"><div class="fv-termo" data-step="1"><div class="t"><span class="v c5">total</span><b>do combustível</b><output>100 J</output></div><span class="d">toda a energia do combustível queimado</span></div><div class="fv-termo" data-step="2"><div class="t"><span class="v c4">útil</span><b>na roda</b><output><span data-eta="u"></span> J</output></div><span class="d">a parte que chega à roda como trabalho</span></div><div class="fv-termo" data-step="3"><div class="t"><span class="v c8">η</span><b>rendimento</b><output><span data-eta="pc"></span></output></div><span class="d">a parte aproveitada, em % (η lê-se «eta»)</span></div></div>
+ <p class="fv-sig" data-step="3">Nenhuma máquina aproveita tudo: há sempre calor que se perde.</p>
+</div>
+<p class="source">Rendimentos aproximados. Newcomen (0,5 a 1 %) e Watt (2 a 3 %): Britannica; Visualizing Energy, «Maximum efficiencies of engines and turbines, 1700–2000». Lenoir, cerca de 4 %: Britannica, «gasoline engine». Diesel, ensaio de 1897, cerca de 26 %: IEEE Spectrum, «The Diesel Engine at 120».</p>
+</section>
+<section class="slide ci manim-slide fv" id="s-fv-mapa" data-lesson="4 · Civilização industrial" data-title="Formulário: tudo no esquema">
+<p class="kicker">1.1 · A física da máquina a vapor · formulário</p><h2>Cinco fórmulas, uma por peça</h2>
+<div class="quadro fv-q">
+ <svg class="fv-svg larga" viewBox="0 0 980 400" data-fv-cena="tudo" data-mostra="" role="img" aria-label="O esquema completo a funcionar: fornalha, caldeira, cilindro com pistão e roda"></svg>
+ <div class="fv-mapa"><div><small>caldeira</small><b>pressão</b><span class="f"><span class="v c1">p</span></span><span class="d">em bar · 1 bar = 10 N em cada cm²</span></div><div><small>pistão</small><b>força</b><span class="f"><span class="v c2">F</span> = <span class="v c1">p</span> × <span class="v c3">A</span></span><span class="d">em newton (N)</span></div><div><small>curso do pistão</small><b>trabalho</b><span class="f"><span class="v c4">W</span> = <span class="v c2">F</span> × <span class="v c5">d</span></span><span class="d">em joule (J)</span></div><div><small>roda</small><b>potência</b><span class="f"><span class="v c6">P</span> = <span class="v c4">W</span> ÷ <span class="v c7">t</span></span><span class="d">em watt (W) · 1 cv ≈ 735 W</span></div><div><small>do carvão à roda</small><b>rendimento</b><span class="f"><span class="v c8">η</span> = útil ÷ total</span><span class="d">em percentagem (%)</span></div></div>
+ <p class="fv-leg">O resultado de uma fórmula entra na seguinte: <b>p → F → W → P</b>.</p>
+</div>
+</section>
+<section class="slide ci fv-prob" id="s-fv-p1" data-lesson="4 · Civilização industrial" data-title="Problema 1: a força do vapor">
+<p class="kicker">Problema 1 · a força do vapor · primeiro no caderno, depois no quadro</p><h2>1829: a Rocket ganha o concurso</h2>
+<div class="fp">
+ <div class="fp-enun">
+  <p class="fp-hist"><time>1829</time>Em Rainhill, Inglaterra, um concurso escolhe a locomotiva da linha Liverpool–Manchester. Ganha a <b>Rocket</b>, de Robert Stephenson. O segredo: vapor a alta pressão.</p>
+  <div class="fp-dados"><b class="t">Dados</b><ul><li>pressão do vapor (acima da do ar): <b>3,4 bar</b></li><li>1 bar = 10 N em cada cm²</li><li>pistão redondo com <b>10 cm de raio</b></li><li>área de um círculo = 3,14 × raio × raio</li></ul></div>
+  <span class="fp-perg-t">Perguntas</span>
+  <ol class="fp-perg" type="a"><li>Quantos newtons empurram cada cm² do pistão?</li><li>Qual é a área da face do pistão?</li><li>Com que força o vapor empurra o pistão?</li></ol>
+  <p class="fp-link"><a href="ficha-vapor.html" target="_blank" rel="noopener">Ficha para imprimir (uma página)</a></p>
+ </div>
+ <div class="fp-quadro"><span>Espaço para resolver no quadro</span><div class="fp-form"><em><span class="v c2">F</span> = <span class="v c1">p</span> × <span class="v c3">A</span></em></div></div>
+</div>
+</section>
+<section class="slide ci fv-res" id="s-fv-r1" data-lesson="4 · Civilização industrial" data-title="Resolução do problema 1">
+<p class="kicker">Problema 1 · resolução passo a passo · um clique, um passo</p><h2>1829: a Rocket ganha o concurso</h2>
+<div class="fr c3"><div class="fr-al"><h3><i>a)</i>Pressão em N por cm²</h3><div class="fr-p" data-step="1"><b>Dados</b><span>3,4 bar · 1 bar = 10 N em cada cm²</span></div><div class="fr-p" data-step="2"><b>Conta</b><span><span class="eq">3,4 × 10</span></span></div><div class="fr-p" data-step="3"><b>Resultado</b><span><span class="res">34 N em cada cm²</span></span></div></div><div class="fr-al"><h3><i>b)</i>Área do pistão</h3><div class="fr-p" data-step="4"><b>Fórmula</b><span><span class="eq">A = 3,14 × raio × raio</span></span></div><div class="fr-p" data-step="5"><b>Substituir</b><span><span class="eq">A = 3,14 × 10 × 10</span></span></div><div class="fr-p" data-step="6"><b>Resultado</b><span><span class="res">A = 314 cm²</span></span></div></div><div class="fr-al"><h3><i>c)</i>Força</h3><div class="fr-p" data-step="7"><b>Fórmula</b><span><span class="eq"><span class="v c2">F</span> = <span class="v c1">p</span> × <span class="v c3">A</span></span></span></div><div class="fr-p" data-step="8"><b>Substituir</b><span><span class="eq">F = 34 × 314</span></span></div><div class="fr-p" data-step="9"><b>Resultado</b><span><span class="res">F = 10 676 N ≈ 10 700 N</span></span></div><div class="fr-p sig" data-step="10"><b>Sentido</b><span>10 N é o peso de 1 kg: é como pôr mais de uma tonelada (um carro pequeno) em cima do pistão.</span></div></div></div>
+<p class="fr-fim" data-step="11">Para mais força: mais pressão (caldeira mais quente e mais resistente) ou um pistão maior.</p>
+</section>
+<section class="slide ci fv-prob" id="s-fv-p2" data-lesson="4 · Civilização industrial" data-title="Problema 2: trabalho e potência">
+<p class="kicker">Problema 2 · trabalho e potência · primeiro no caderno, depois no quadro</p><h2>Quantos cavalos tem a Rocket?</h2>
+<div class="fp">
+ <div class="fp-enun">
+  <p class="fp-hist"><time>c. 1780</time>As primeiras máquinas a vapor substituíam cavalos nas minas e nos moinhos. Para as vender, <b>James Watt</b> dizia quantos cavalos cada máquina valia. Daí vem o cavalo-vapor.</p>
+  <div class="fp-dados"><b class="t">Dados</b><ul><li>força em cada empurrão: <b>10 700 N</b> (problema 1)</li><li>curso do pistão: <b>0,43 m</b></li><li>a máquina dá <b>4 empurrões por segundo</b></li><li>1 cavalo-vapor (cv) ≈ 735 W</li></ul></div>
+  <span class="fp-perg-t">Perguntas</span>
+  <ol class="fp-perg" type="a"><li>Que trabalho faz um empurrão?</li><li>Que trabalho faz a máquina num segundo?</li><li>Qual é a potência da máquina?</li><li>Quantos cavalos-vapor são?</li></ol>
+  <p class="fp-link"><a href="ficha-vapor.html" target="_blank" rel="noopener">Ficha para imprimir (uma página)</a></p>
+ </div>
+ <div class="fp-quadro"><span>Espaço para resolver no quadro</span><div class="fp-form"><em><span class="v c4">W</span> = <span class="v c2">F</span> × <span class="v c5">d</span></em><em><span class="v c6">P</span> = <span class="v c4">W</span> ÷ <span class="v c7">t</span></em></div></div>
+</div>
+</section>
+<section class="slide ci fv-res" id="s-fv-r2" data-lesson="4 · Civilização industrial" data-title="Resolução do problema 2">
+<p class="kicker">Problema 2 · resolução passo a passo · um clique, um passo</p><h2>Quantos cavalos tem a Rocket?</h2>
+<div class="fr c2"><div class="fr-al"><h3><i>a)</i>Trabalho de um empurrão</h3><div class="fr-p" data-step="1"><b>Fórmula</b><span><span class="eq"><span class="v c4">W</span> = <span class="v c2">F</span> × <span class="v c5">d</span></span></span></div><div class="fr-p" data-step="2"><b>Substituir</b><span><span class="eq">W = 10 700 × 0,43</span></span></div><div class="fr-p" data-step="3"><b>Resultado</b><span><span class="res">W = 4 601 J</span></span></div></div><div class="fr-al"><h3><i>b)</i>Trabalho num segundo</h3><div class="fr-p" data-step="4"><b>Conta</b><span><span class="eq">4 empurrões × 4 601 J</span></span></div><div class="fr-p" data-step="5"><b>Resultado</b><span><span class="res">18 404 J</span></span></div></div><div class="fr-al"><h3><i>c)</i>Potência</h3><div class="fr-p" data-step="6"><b>Fórmula</b><span><span class="eq"><span class="v c6">P</span> = <span class="v c4">W</span> ÷ <span class="v c7">t</span></span></span></div><div class="fr-p" data-step="7"><b>Substituir</b><span><span class="eq">P = 18 404 ÷ 1</span></span></div><div class="fr-p" data-step="8"><b>Resultado</b><span><span class="res">P = 18 404 W ≈ 18,4 kW</span></span></div></div><div class="fr-al"><h3><i>d)</i>Em cavalos-vapor</h3><div class="fr-p" data-step="9"><b>Conta</b><span><span class="eq">18 404 ÷ 735</span></span></div><div class="fr-p" data-step="10"><b>Resultado</b><span><span class="res">≈ 25 cv</span></span></div><div class="fr-p sig" data-step="11"><b>Sentido</b><span>A Rocket fazia o trabalho de cerca de 25 cavalos, sem se cansar.</span></div></div></div>
+<p class="fr-fim" data-step="12">Repara na cadeia: a força do problema 1 deu o trabalho, e o trabalho deu a potência.</p>
+</section>
+<section class="slide ci fv-prob" id="s-fv-p3" data-lesson="4 · Civilização industrial" data-title="Problema 3: o rendimento">
+<p class="kicker">Problema 3 · o rendimento · primeiro no caderno, depois no quadro</p><h2>1776: vale a pena trocar de máquina?</h2>
+<div class="fp">
+ <div class="fp-enun">
+  <p class="fp-hist"><time>1776</time>Nas minas da Cornualha, o carvão vem de longe e é caro. As bombas de <b>Newcomen</b> gastam muito. <b>Boulton e Watt</b> propõem uma máquina nova: o dono da mina paga-lhes <b>um terço do carvão que poupar</b>.</p>
+  <div class="fp-dados"><b class="t">Dados</b><ul><li>1 kg de carvão liberta cerca de <b>30 000 kJ</b></li><li>Newcomen: de cada kg, só <b>300 kJ</b> viram trabalho</li><li>Watt: rendimento de <b>3 %</b></li><li>com a Newcomen, a mina gasta <b>900 kg</b> de carvão por dia</li></ul></div>
+  <span class="fp-perg-t">Perguntas</span>
+  <ol class="fp-perg" type="a"><li>Qual é o rendimento da máquina de Newcomen?</li><li>Com a máquina de Watt, quanta energia útil dá 1 kg de carvão?</li><li>Para o mesmo trabalho, quanto carvão gasta a mina por dia com a máquina de Watt? Quanto paga a Boulton e Watt?</li></ol>
+  <p class="fp-link"><a href="ficha-vapor.html" target="_blank" rel="noopener">Ficha para imprimir (uma página)</a></p>
+ </div>
+ <div class="fp-quadro"><span>Espaço para resolver no quadro</span><div class="fp-form"><em><span class="v c8">η</span> = útil ÷ total</em></div></div>
+</div>
+</section>
+<section class="slide ci fv-res" id="s-fv-r3" data-lesson="4 · Civilização industrial" data-title="Resolução do problema 3">
+<p class="kicker">Problema 3 · resolução passo a passo · um clique, um passo</p><h2>1776: vale a pena trocar de máquina?</h2>
+<div class="fr c3"><div class="fr-al"><h3><i>a)</i>Rendimento da Newcomen</h3><div class="fr-p" data-step="1"><b>Fórmula</b><span><span class="eq"><span class="v c8">η</span> = útil ÷ total</span></span></div><div class="fr-p" data-step="2"><b>Substituir</b><span><span class="eq">η = 300 ÷ 30 000</span></span></div><div class="fr-p" data-step="3"><b>Resultado</b><span><span class="res">η = 0,01 = 1 %</span></span></div></div><div class="fr-al"><h3><i>b)</i>Energia útil com Watt</h3><div class="fr-p" data-step="4"><b>Fórmula</b><span><span class="eq">útil = η × total</span></span></div><div class="fr-p" data-step="5"><b>Substituir</b><span><span class="eq">útil = 0,03 × 30 000</span></span></div><div class="fr-p" data-step="6"><b>Resultado</b><span><span class="res">900 kJ por kg</span></span></div><div class="fr-p sig" data-step="7"><b>Sentido</b><span>Três vezes mais do que a Newcomen (300 kJ).</span></div></div><div class="fr-al"><h3><i>c)</i>Carvão por dia</h3><div class="fr-p" data-step="8"><b>Trabalho</b><span><span class="eq">900 kg × 300 kJ = 270 000 kJ</span></span></div><div class="fr-p" data-step="9"><b>Com Watt</b><span><span class="eq">270 000 ÷ 900</span></span></div><div class="fr-p" data-step="10"><b>Resultado</b><span><span class="res">300 kg por dia</span></span></div><div class="fr-p sig" data-step="11"><b>Paga</b><span>Poupa 600 kg; um terço são <b>200 kg</b> de carvão (em dinheiro). Ainda fica a ganhar 400 kg por dia.</span></div></div></div>
+<p class="fr-fim" data-step="12">Rendimento maior: o mesmo trabalho com menos combustível. Foi isso que Watt vendeu.</p>
 </section>
 <section class="slide ci" id="s-ci-energias" data-lesson="4 · Civilização industrial" data-title="Novas fontes de energia">
 <p class="kicker">1.2 · Novas fontes de energia</p><h2>Do carvão ao petróleo e à eletricidade</h2>
@@ -563,6 +619,38 @@
 <div class="i3d-leg"><p><time>1860 · 1876 · 1885–1886</time>Os primeiros motores de combustão interna aparecem por volta de 1860; Nicolaus Otto cria o motor de quatro tempos em 1876. Gottlieb Daimler e Karl Benz fazem motores a gasolina leves e os primeiros automóveis. O combustível arde <b>dentro</b> do cilindro.</p><p data-step="1"><time>1 · Admissão</time>O pistão desce e puxa para dentro do cilindro uma mistura de ar e gasolina.</p><p data-step="2"><time>2 · Compressão</time>As válvulas fecham. O pistão sobe e aperta a mistura num espaço pequeno.</p><p data-step="3"><time>3 · Explosão</time>A vela faz uma faísca: a mistura arde de repente, os gases quentes expandem-se e empurram o pistão para baixo. É o único tempo que dá força.</p><p data-step="4"><time>4 · Escape</time>O pistão sobe e empurra os gases queimados para fora. A cambota transforma o vaivém do pistão em rotação.</p><p data-step="5"><time>Diesel · 1893–1897</time>Rudolf Diesel: um motor sem vela. O ar é tão comprimido que aquece, e o gasóleo pega fogo sozinho. Experimenta os dois.</p></div>
 <div class="i3d-barra"><div class="i3d-read" hidden></div><div class="i3d-ctl"></div></div>
 <p class="source">Fontes: Britannica, «internal-combustion engine»; Deutsches Museum. Animação original, simplificada (válvulas e tempos sem os ajustes dos motores reais).</p>
+</section>
+<section class="slide ci fv-prob" id="s-fv-p4" data-lesson="4 · Civilização industrial" data-title="Problema 4: o motor de explosão">
+<p class="kicker">Problema 4 · o motor de explosão · primeiro no caderno, depois no quadro</p><h2>1886: o primeiro automóvel</h2>
+<div class="fp">
+ <div class="fp-enun">
+  <p class="fp-hist"><time>1886</time><b>Karl Benz</b> regista a patente de um triciclo com motor a gasolina: o combustível arde <b>dentro</b> do cilindro. Em 1888, <b>Bertha Benz</b> faz com ele a primeira viagem longa, cerca de 100 km.</p>
+  <div class="fp-dados"><b class="t">Dados</b><ul><li>potência do motor de Benz: <b>550 W</b> (0,75 cv)</li><li>motor de Lenoir (1860): rendimento de <b>4 %</b></li><li>motor de Diesel (1897): rendimento de <b>26 %</b></li><li>locomotiva Rocket: 18 400 W</li></ul></div>
+  <span class="fp-perg-t">Perguntas</span>
+  <ol class="fp-perg" type="a"><li>Que trabalho faz o motor de Benz num minuto?</li><li>Para dar esse trabalho, que energia de combustível gasta um motor com o rendimento do de Lenoir?</li><li>E um motor com o rendimento do de Diesel?</li><li class="des">Desafio: quantos motores de Benz valem uma Rocket? Porque ganhou o automóvel?</li></ol>
+  <p class="fp-link"><a href="ficha-vapor.html" target="_blank" rel="noopener">Ficha para imprimir (uma página)</a></p>
+ </div>
+ <div class="fp-quadro"><span>Espaço para resolver no quadro</span><div class="fp-form"><em><span class="v c6">P</span> = <span class="v c4">W</span> ÷ <span class="v c7">t</span></em><em><span class="v c8">η</span> = útil ÷ total</em></div></div>
+</div>
+</section>
+<section class="slide ci fv-res" id="s-fv-r4" data-lesson="4 · Civilização industrial" data-title="Resolução do problema 4">
+<p class="kicker">Problema 4 · resolução passo a passo · um clique, um passo</p><h2>1886: o primeiro automóvel</h2>
+<div class="fr c2"><div class="fr-al"><h3><i>a)</i>Trabalho num minuto</h3><div class="fr-p" data-step="1"><b>Fórmula</b><span><span class="eq">W = P × t</span></span></div><div class="fr-p" data-step="2"><b>Substituir</b><span><span class="eq">W = 550 × 60</span></span></div><div class="fr-p" data-step="3"><b>Resultado</b><span><span class="res">W = 33 000 J = 33 kJ</span></span></div></div><div class="fr-al"><h3><i>b)</i>Com 4 % (Lenoir)</h3><div class="fr-p" data-step="4"><b>Fórmula</b><span><span class="eq">total = útil ÷ η</span></span></div><div class="fr-p" data-step="5"><b>Substituir</b><span><span class="eq">total = 33 ÷ 0,04</span></span></div><div class="fr-p" data-step="6"><b>Resultado</b><span><span class="res">825 kJ</span></span></div></div><div class="fr-al"><h3><i>c)</i>Com 26 % (Diesel)</h3><div class="fr-p" data-step="7"><b>Substituir</b><span><span class="eq">total = 33 ÷ 0,26</span></span></div><div class="fr-p" data-step="8"><b>Resultado</b><span><span class="res">≈ 127 kJ</span></span></div><div class="fr-p sig" data-step="9"><b>Sentido</b><span>Cerca de 6,5 vezes menos combustível para o mesmo trabalho.</span></div></div><div class="fr-al"><h3><i>d)</i>Desafio</h3><div class="fr-p" data-step="10"><b>Conta</b><span><span class="eq">18 400 ÷ 550 ≈ 33</span></span></div><div class="fr-p sig" data-step="11"><b>Sentido</b><span>Fraco, mas leve: sem caldeira, sem fornalha, sem esperar que a água aqueça. Cabe num veículo pequeno.</span></div></div></div>
+<p class="fr-fim" data-step="12">A fórmula do rendimento serve nos dois sentidos: η = útil ÷ total, total = útil ÷ η.</p>
+</section>
+<section class="slide ci manim-slide fv" id="s-fv-inducao" data-lesson="4 · Civilização industrial" data-title="Indução: um íman e uma bobina" data-steps="4">
+<p class="kicker">1.2 · Eletricidade · a descoberta de Faraday (1831)</p><h2>Como é que um íman faz eletricidade?</h2>
+<div class="quadro fv-q">
+ 
+ <div class="fv-cima larga">
+  <div class="fv-esq"><svg class="fv-svg" viewBox="0 0 900 400" data-fv-inducao role="img" aria-label="Um íman entra e sai de uma bobina de fio ligada a um voltímetro e a uma lâmpada. Só há tensão enquanto o íman se mexe; mais depressa ou com mais voltas, mais tensão"></svg></div>
+  <div class="fv-lado"><h3>Só há tensão enquanto o íman se mexe.</h3><div class="fv-ctl"><label class="rng"><span>rapidez do íman</span><input type="range" data-ind-in="f" min="0" max="2" step="0.1" value="0.5"><output data-ind="f"></output></label><label class="rng"><span><span class="v c2">N</span> voltas da bobina</span><input type="range" data-ind-in="N" min="50" max="500" step="50" value="200"><output data-ind="N"></output></label></div></div>
+ </div>
+ <div class="fv-linha"><p class="fv-eq"><span class="v c4" data-step="4">V</span> = <span class="v c2" data-step="3">N</span> × <span class="v c1" data-step="1">ΔΦ</span> ÷ <span class="v c7" data-step="2">Δt</span></p></div>
+ <div class="fv-termos n4"><div class="fv-termo" data-step="1"><div class="t"><span class="v c1">ΔΦ</span><b>variação do fluxo</b><output></output></div><span class="d">quanto mudou o campo do íman que atravessa a bobina, em weber (Δ: «quanto mudou»)</span></div><div class="fv-termo" data-step="2"><div class="t"><span class="v c7">Δt</span><b>tempo</b><output></output></div><span class="d">quanto tempo demorou essa mudança, em segundos</span></div><div class="fv-termo" data-step="3"><div class="t"><span class="v c2">N</span><b>voltas</b><output></output></div><span class="d">quantas voltas dá o fio: cada volta soma a sua parte</span></div><div class="fv-termo" data-step="4"><div class="t"><span class="v c4">V</span><b>tensão</b><output></output></div><span class="d">o «empurrão» que põe a corrente a andar, em volts</span></div></div>
+ <p class="fv-sig" data-step="4">Íman parado: <b>ΔΦ = 0</b>, tensão zero. Mais depressa (<b>Δt</b> menor) ou mais voltas (<b>N</b> maior): mais tensão.</p>
+</div>
+<p class="source">Lei da indução de Faraday (Britannica, «Faraday's law of induction»). Desenho simplificado: fluxo máximo de 0,01 weber em cada volta (valor de exercício); o sinal da tensão muda quando o íman sai.</p>
 </section>
 <section class="slide ci i3d-slide manim-slide" id="s-ci-dinamo" data-lesson="4 · Civilização industrial" data-title="Animação: turbina e dínamo" data-steps="7">
 <button class="phone-btn" data-path="../../respostas/?f=ai-2ano/o-trabalho&a=ci-inducao">Responder no telemóvel</button><p class="kicker">1.2 · Turbina e dínamo · animação 3D</p><h2>Como se faz eletricidade?</h2>
@@ -656,6 +744,24 @@
  </div>
 </div>
 <p class="source">Fontes: Britannica, «electromagnetic induction», «Faraday's law of induction», «dynamo», «turbine». Animação original, simplificada: as linhas são uma maneira de desenhar o campo, e a tensão aparece em percentagem do máximo desta máquina.</p>
+</section>
+<section class="slide ci fv-prob" id="s-fv-p5" data-lesson="4 · Civilização industrial" data-title="Problema 5: a indução">
+<p class="kicker">Problema 5 · a indução · primeiro no caderno, depois no quadro</p><h2>1831: Faraday, um íman e uma bobina</h2>
+<div class="fp">
+ <div class="fp-enun">
+  <p class="fp-hist"><time>1831</time><b>Michael Faraday</b> descobre que mexer um íman junto de uma bobina de fio cria tensão. Cinquenta anos depois, em 1882, as centrais de Edison acendem lâmpadas a cerca de 110 V.</p>
+  <div class="fp-dados"><b class="t">Dados</b><ul><li>bobina com <b>N = 200 voltas</b></li><li>ao entrar o íman, o fluxo em cada volta muda <b>ΔΦ = 0,01 Wb</b> (weber)</li></ul></div>
+  <span class="fp-perg-t">Perguntas</span>
+  <ol class="fp-perg" type="a"><li>O íman entra em 0,5 s. Que tensão aparece?</li><li>E se entrar em 0,1 s?</li><li>E com o íman parado dentro da bobina?</li><li class="des">Desafio: quantas voltas são precisas para 110 V, com o íman a entrar em 0,1 s?</li></ol>
+  <p class="fp-link"><a href="ficha-vapor.html" target="_blank" rel="noopener">Ficha para imprimir (uma página)</a></p>
+ </div>
+ <div class="fp-quadro"><span>Espaço para resolver no quadro</span><div class="fp-form"><em><span class="v c4">V</span> = <span class="v c2">N</span> × <span class="v c1">ΔΦ</span> ÷ <span class="v c7">Δt</span></em></div></div>
+</div>
+</section>
+<section class="slide ci fv-res" id="s-fv-r5" data-lesson="4 · Civilização industrial" data-title="Resolução do problema 5">
+<p class="kicker">Problema 5 · resolução passo a passo · um clique, um passo</p><h2>1831: Faraday, um íman e uma bobina</h2>
+<div class="fr c2"><div class="fr-al"><h3><i>a)</i>Em 0,5 s</h3><div class="fr-p" data-step="1"><b>Fórmula</b><span><span class="eq"><span class="v c4">V</span> = <span class="v c2">N</span> × <span class="v c1">ΔΦ</span> ÷ <span class="v c7">Δt</span></span></span></div><div class="fr-p" data-step="2"><b>Substituir</b><span><span class="eq">V = 200 × 0,01 ÷ 0,5</span></span></div><div class="fr-p" data-step="3"><b>Resultado</b><span><span class="res">V = 4 V</span></span></div></div><div class="fr-al"><h3><i>b)</i>Em 0,1 s</h3><div class="fr-p" data-step="4"><b>Substituir</b><span><span class="eq">V = 200 × 0,01 ÷ 0,1</span></span></div><div class="fr-p" data-step="5"><b>Resultado</b><span><span class="res">V = 20 V</span></span></div><div class="fr-p sig" data-step="6"><b>Sentido</b><span>Cinco vezes mais depressa: cinco vezes mais tensão.</span></div></div><div class="fr-al"><h3><i>c)</i>Íman parado</h3><div class="fr-p" data-step="7"><b>Dados</b><span>o fluxo não muda: ΔΦ = 0</span></div><div class="fr-p" data-step="8"><b>Resultado</b><span><span class="res">V = 0 V</span></span></div></div><div class="fr-al"><h3><i>d)</i>Desafio</h3><div class="fr-p" data-step="9"><b>Fórmula</b><span><span class="eq">N = V × Δt ÷ ΔΦ</span></span></div><div class="fr-p" data-step="10"><b>Substituir</b><span><span class="eq">N = 110 × 0,1 ÷ 0,01</span></span></div><div class="fr-p" data-step="11"><b>Resultado</b><span><span class="res">N = 1 100 voltas</span></span></div></div></div>
+<p class="fr-fim" data-step="12">Para ter sempre tensão, o campo tem de estar sempre a mudar: é para isso que serve a turbina.</p>
 </section>
 <section class="slide ci" id="s-ci-oficina" data-lesson="4 · Civilização industrial" data-title="Oficina ou fábrica: quem põe o quê?">
 <button class="phone-btn" data-path="../../respostas/?f=ai-2ano/o-trabalho&a=ci-oficina">Responder no telemóvel</button><p class="kicker">1.3 · Das oficinas às fábricas</p><h2>Quem põe o quê?</h2>
@@ -1386,6 +1492,7 @@
 <script src="assets/vendor/three.min.js"></script>
 <script src="industria3d.js"></script>
 <script src="civind.js"></script>
+<script src="vapor.js"></script>
 <!-- ferramentas comuns a todas as aulas: telemóvel em todos os questionários, respostas da turma, quadro, grafo, pergunta rápida (ver comum/LEIA-ME.md) -->
 <script src="../../comum/partilhado.js"></script>
 <script src="../../comum/aula.js"></script>

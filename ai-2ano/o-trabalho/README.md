@@ -88,6 +88,8 @@ Bloco novo de 19 slides, entre a revisão da história do trabalho e «5 · Orga
 | --- | --- |
 | `industria3d.js` | Cinco animações 3D (comboio a vapor, motor de quatro tempos, turbina e dínamo, fiação de algodão dia e noite, cidade industrial). Um só desenhador 3D para todas; cada animação é uma tabela de passos, por isso a seta para trás funciona. Precisa de `assets/vendor/three.min.js` (three.js 160, guardado no site para funcionar sem internet) |
 | `civind.js` | As peças 2D: a calculadora da força do vapor (F = p × A), os três ciclos económicos e o modelo animado da cascata da crise (equações diferenciais resolvidas no navegador) |
+| `vapor.js`, `vapor.css` | A física da máquina a vapor, uma ideia por slide (slides `s-fv-*`, novembro de 2026): o comboio que se desfaz no esquema fornalha → caldeira → cilindro e pistão → roda; a caldeira com moléculas e barra da temperatura; F = p × A; W = F × d; P = W ÷ t; rendimento; indução (íman e bobina). As barras são partilhadas entre slides. Inclui o estilo dos slides «Problema» (com espaço em branco para resolver no quadro) e «Resolução» (um passo por clique) |
+| `ficha-vapor.html` | Ficha para imprimir: página 1 com os cinco problemas (uma folha), página 2 com as resoluções |
 
 - As legendas das animações estão no `index.html` (um `<p>` por passo, dentro de `.i3d-leg`); os textos das etiquetas sobre a imagem estão no `industria3d.js`, procurando por `S.label(`.
 - Som: o botão do altifalante, no canto das animações, liga e desliga o som de todo o site (o mesmo dos jogos).
@@ -101,3 +103,8 @@ Bloco novo de 19 slides, entre a revisão da história do trabalho e «5 · Orga
 - **Previsões** (`ci-prev`): a turma vota antes de ver a resposta. Para criar outra, copia o bloco `<div class="ci-prev" data-certa="c">` (acrescenta a classe `claro` num slide de fundo branco) e muda as opções; `data-certa` diz qual é a certa.
 - **Colunas lado a lado dentro de um slide 3D**: a classe `lado-a-lado` na grelha diz ao `industria3d.js` que a coluna vizinha não fica por baixo da animação (para calcular a altura).
 - A versão anterior destes ficheiros está em `archive/`, com a data 2026-11-23.
+
+
+## 24 de novembro de 2026: física da máquina a vapor refeita
+
+O slide `s-ci-vapor-fisica` (oito fórmulas num só slide) foi substituído por sete slides `s-fv-ponte`, `s-fv-pressao`, `s-fv-forca`, `s-fv-trabalho`, `s-fv-potencia`, `s-fv-rendimento`, `s-fv-mapa`, mais `s-fv-inducao` antes da animação do dínamo, e por cinco problemas com resolução (`s-fv-p1` a `s-fv-p5`, `s-fv-r1` a `s-fv-r5`). A versão anterior está em `archive/index_2026-11-24.html`; o código do slide antigo continua em `civind.js` (sem efeito enquanto o slide não existir).
