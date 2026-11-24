@@ -20,7 +20,12 @@
           G  grafo de vocabulário (palavras = nós, ligações = arestas)
           P  pergunta rápida (nuvem de palavras, verdadeiro/falso, escala,
              escolha múltipla), respondida no telemóvel
+          J  ao vivo: a turma toda ao mesmo tempo (questionário do slide com
+             classificação, mariposas, fábrica de sapatos): comum/aovivo.js
         Esc fecha qualquer uma.
+     4. Na janela «Respostas da turma»: «Jogar ao vivo» (uma pergunta de cada
+        vez, o professor avança) e «Classificação» (com nomes, só com a
+        chave do professor).
    ===================================================================== */
 (function () {
   'use strict';
@@ -64,9 +69,14 @@
     }
     if (campo || e.altKey || e.ctrlKey || e.metaKey) return;
     const k = e.key.toLowerCase();
-    const f = { d: () => quadro(true), q: () => quadro(false), g: () => grafo({ id: 'livre', titulo: 'Grafo de vocabulário' }), p: rapida }[k];
+    const f = { d: () => quadro(true), q: () => quadro(false), g: () => grafo({ id: 'livre', titulo: 'Grafo de vocabulário' }), p: rapida, j: aoVivo }[k];
     if (f) { e.preventDefault(); e.stopPropagation(); f(); }
   }, true);
+
+  /* ---------- jogos ao vivo (comum/vivo.js, comum/jogos.js, comum/aovivo.js) ---------- */
+  window.ESMP_CTX = { RAIZ: RAIZ, PASTA: PASTA, PUBLICADO: PUBLICADO, el: el, abrir: abrir, fechar: fechar, isolar: isolar, abertas: abertas, config: config, cfg: cfg, disciplina: disciplina };
+  const vivo = carregar(RAIZ + 'comum/vivo.js').then(() => carregar(RAIZ + 'comum/jogos.js')).then(() => carregar(RAIZ + 'comum/aovivo.js')).catch(() => {});
+  const aoVivo = () => vivo.then(() => window.ESMP_VIVO && window.ESMP_VIVO.menu());
 
   /* =====================================================================
      1 e 2. Telemóvel em todos os questionários + respostas da turma
@@ -77,7 +87,7 @@
     const ov = el('<div class="esmp-ov esmp-sessao"><div class="es-caixa">' +
       '<header><div><p class="es-k">Responder no telemóvel · ' + esc(def.disciplina || '') + '</p><h3>' + esc(def.titulo) + '</h3></div><button type="button" class="es-x">Fechar ✕</button></header>' +
       '<div class="es-cols"><div class="es-qr"><div class="code"></div><a target="_blank" rel="noopener"></a><p>Lê o código com a câmara · escreve o teu nome · responde</p><p class="es-sm">Quem não tem telemóvel responde com um colega: no primeiro ecrã, «Responder com um colega».</p></div>' +
-      '<div class="es-res"><label class="es-rev"><input type="checkbox"> Mostrar as respostas certas</label><div class="es-painel"></div></div></div></div></div>');
+      '<div class="es-res"><div class="es-vivo"><button type="button" data-v="quiz" title="Uma pergunta de cada vez para a turma toda: tu avanças, os telemóveis seguem">▶ Jogar ao vivo</button><button type="button" data-v="ranking" title="Quem teve mais pontos (com nomes; pede a chave do professor)">🏆 Classificação</button></div><label class="es-rev"><input type="checkbox"> Mostrar as respostas certas</label><div class="es-painel"></div></div></div></div></div>');
     const link = ov.querySelector('.es-qr a'); link.href = url;
     if (!PUBLICADO) link.textContent = 'O código QR aparece quando o site estiver publicado (GitHub Pages).';
     else { link.textContent = url.replace(/^https?:\/\/(www\.)?/, '').slice(0, 70) + (url.length > 80 ? '…' : ''); E.qr(ov.querySelector('.code'), url, 520); }
@@ -92,6 +102,15 @@
     });
     const temCertas = E.passos(def).some(p => (p.tipo === 'jogo') || (p.tipo === 'classificar' && p.itens.some(i => typeof i.c === 'number')) || (p.tipo === 'escala' && E.itensEscala(p).some(i => i.c != null)));
     ov.querySelector('.es-rev').hidden = !temCertas;
+    // ao vivo e classificação só fazem sentido quando há perguntas com resposta certa (pontos)
+    ov.querySelector('.es-vivo').hidden = !temCertas;
+    ov.querySelector('.es-vivo').addEventListener('click', e => {
+      const b = e.target.closest('button'); if (!b) return;
+      vivo.then(() => {
+        if (!window.ESMP_VIVO) return;
+        if (b.dataset.v === 'quiz') { fechar(ov); window.ESMP_VIVO.quiz(def); } else window.ESMP_VIVO.ranking(def);
+      });
+    });
     ov.querySelector('.es-rev input').addEventListener('change', e => painel && painel.revelar(e.target.checked));
     ov.querySelector('.es-x').addEventListener('click', () => fechar(ov));
     ov.addEventListener('click', e => { if (e.target === ov) fechar(ov); });
@@ -476,10 +495,11 @@
     '<button type="button" data-f="d" title="Desenhar por cima do slide (D)">' + ic('<path d="M4 20l1-5L16 4l4 4L9 19z"/><path d="M14 6l4 4"/>') + '<span>Desenhar</span></button>' +
     '<button type="button" data-f="q" title="Quadro em branco (Q)">' + ic('<rect x="3" y="4" width="18" height="13" rx="1.5"/><path d="M8 21l4-4 4 4"/>') + '<span>Quadro</span></button>' +
     '<button type="button" data-f="g" title="Grafo de vocabulário (G)">' + ic('<circle cx="5" cy="6" r="2.5"/><circle cx="19" cy="8" r="2.5"/><circle cx="11" cy="18" r="2.5"/><path d="M7.3 7l9.3 .7M6.2 8.2l3.7 7.6M17.6 10l-5 6"/>') + '<span>Grafo</span></button>' +
-    '<button type="button" data-f="p" title="Pergunta rápida no telemóvel (P)">' + ic('<path d="M9 9a3 3 0 1 1 4.5 2.6c-.9.5-1.5 1.2-1.5 2.4"/><circle cx="12" cy="18" r=".6" fill="currentColor"/><rect x="5" y="2" width="14" height="20" rx="2.5"/>') + '<span>Pergunta</span></button></div>');
+    '<button type="button" data-f="p" title="Pergunta rápida no telemóvel (P)">' + ic('<path d="M9 9a3 3 0 1 1 4.5 2.6c-.9.5-1.5 1.2-1.5 2.4"/><circle cx="12" cy="18" r=".6" fill="currentColor"/><rect x="5" y="2" width="14" height="20" rx="2.5"/>') + '<span>Pergunta</span></button>' +
+    '<button type="button" data-f="j" title="Ao vivo: a turma toda ao mesmo tempo (J)">' + ic('<path d="M5 12.5a7 7 0 0 1 14 0"/><path d="M2 9.5a11 11 0 0 1 20 0"/><circle cx="12" cy="15" r="2" fill="currentColor"/><path d="M12 17v4"/>') + '<span>Ao vivo</span></button></div>');
   doca.addEventListener('click', e => {
     const b = e.target.closest('button'); if (!b) return;
-    ({ d: () => quadro(true), q: () => quadro(false), g: () => grafo({ id: 'livre', titulo: 'Grafo de vocabulário' }), p: rapida })[b.dataset.f]();
+    ({ d: () => quadro(true), q: () => quadro(false), g: () => grafo({ id: 'livre', titulo: 'Grafo de vocabulário' }), p: rapida, j: aoVivo })[b.dataset.f]();
   });
   isolar(doca);
   document.body.appendChild(doca);

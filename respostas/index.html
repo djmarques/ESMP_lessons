@@ -15,7 +15,8 @@
   disciplinas. Abre-se pelo código QR dos slides «No telemóvel»:
     respostas/?f=ai-2ano/o-trabalho&a=labor
   f = pasta do site da aula; a = chave da atividade em atividades.js
-  (ou q = número do questionário nos slides, ou x = pergunta rápida).
+  (ou q = número do questionário nos slides, ou x = pergunta rápida,
+  ou s = sala de um jogo ao vivo aberta pelo professor).
   O endereço de envio está em config.js. Ver LEIA-ME.md.
 -->
 <main id="app">
@@ -51,5 +52,9 @@
 <script src="config.js"></script>
 <script src="../comum/partilhado.js"></script>
 <script src="aluno.js"></script>
+<!-- jogos ao vivo (respostas/?f=…&s=<sala>): o professor avança no projetor e o telemóvel segue -->
+<script src="../comum/vivo.js"></script>
+<script src="../comum/jogos.js"></script>
+<script src="vivo.js"></script>
 </body>
 </html>

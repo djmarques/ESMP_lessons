@@ -99,3 +99,119 @@
 .eq-esp button { width: 34px; height: 30px; padding: 0 6px; display: grid; place-items: center; }
 .eq-esp i { display: block; width: 100%; background: #1E2A33; border-radius: 9px; }
 .eq-barra button.on { background: #F0A673; }
+
+/* =====================================================================
+   Ao vivo (comum/aovivo.js): sala a toda a largura do projetor
+   ===================================================================== */
+.es-vivo { display: flex; gap: 8px; flex-wrap: wrap; margin: 0 0 12px; }
+.es-vivo[hidden] { display: none; }
+.es-vivo button { font: 700 16px Carlito, Calibri, Arial, sans-serif; border: 0; border-radius: 999px; padding: 8px 16px; cursor: pointer; background: #A44A16; color: #fff; }
+.es-vivo button[data-v="ranking"] { background: #1E2A33; }
+.ev-menu { display: grid; gap: 10px; }
+.ev-menu > button[data-j] { text-align: left; font: inherit; border: 2px solid #E2DED7; background: #fff; border-radius: 12px; padding: 12px 16px; cursor: pointer; display: grid; gap: 2px; color: #1E2A33; }
+.ev-menu > button[data-j]:hover:not(:disabled) { border-color: #A44A16; }
+.ev-menu > button[data-j]:disabled { opacity: .45; cursor: default; }
+.ev-menu > button b { font: 700 21px Caladea, Cambria, Georgia, serif; }
+.ev-menu > button span { font-size: 16px; color: #5B6670; }
+
+.esmp-vivo { position: fixed; inset: 0; z-index: 1200; background: #1E2A33; color: #F6F3EC; display: grid; grid-template-rows: auto 1fr; font-family: Carlito, Calibri, Arial, sans-serif; overflow: hidden; }
+.esmp-vivo * { box-sizing: border-box; }
+.ev-topo { display: grid; grid-template-columns: 1fr auto auto auto; gap: 22px; align-items: center; padding: 14px 26px; border-bottom: 1px solid rgba(246,243,236,.15); }
+.ev-topo h3 { font: 700 28px Caladea, Cambria, Georgia, serif; margin: 0; color: #fff; line-height: 1.15; }
+.ev-k { font-size: 13px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; color: #F0A673; margin: 0 0 4px; }
+.ev-sala, .ev-gente { text-align: center; line-height: 1.05; }
+.ev-sala span, .ev-gente span { display: block; font-size: 12px; text-transform: uppercase; letter-spacing: .1em; color: rgba(246,243,236,.6); }
+.ev-sala b { font: 700 30px ui-monospace, Menlo, Consolas, monospace; letter-spacing: .12em; color: #F0A673; }
+.ev-gente b { font: 700 34px Caladea, Cambria, Georgia, serif; }
+.ev-x { font: 700 15px Carlito, Calibri, sans-serif; background: none; color: #F6F3EC; border: 1px solid rgba(246,243,236,.4); border-radius: 999px; padding: 8px 14px; cursor: pointer; }
+.ev-corpo { padding: 22px 26px 26px; overflow: auto; min-height: 0; }
+.ev-aviso { max-width: 780px; margin: 8vh auto; font-size: 22px; line-height: 1.45; background: rgba(246,243,236,.08); border-radius: 14px; padding: 22px 26px; }
+.ev-aviso code { background: rgba(0,0,0,.3); padding: 1px 6px; border-radius: 4px; } .ev-aviso span { font-size: 17px; opacity: .75; }
+.ev-ir { font: 700 22px Carlito, Calibri, sans-serif; border: 0; border-radius: 999px; padding: 12px 26px; background: #F0A673; color: #1E2A33; cursor: pointer; }
+.ev-ir:hover { filter: brightness(1.08); }
+
+.ev-espera { display: grid; grid-template-columns: minmax(280px, 34vw) 1fr; gap: 34px; align-items: start; }
+.ev-qr { background: #fff; border-radius: 16px; padding: 18px; text-align: center; color: #1E2A33; }
+.ev-qr .code canvas, .ev-qr .code img, .ev-qr .code svg { width: 100% !important; height: auto !important; display: block; }
+.ev-qr p { margin: 10px 0 0; font-size: 17px; font-weight: 700; } .ev-qr .ev-url { font: 13px ui-monospace, Menlo, monospace; font-weight: 400; word-break: break-all; color: #5B6670; }
+.ev-nomes { display: flex; flex-wrap: wrap; gap: 8px; min-height: 120px; align-content: flex-start; margin-bottom: 18px; }
+.ev-nomes button { font: 700 19px Carlito, Calibri, sans-serif; background: rgba(246,243,236,.12); color: #fff; border: 0; border-radius: 999px; padding: 7px 16px; cursor: pointer; animation: evpop .35s ease-out; }
+.ev-nomes button:hover { background: #A44A16; text-decoration: line-through; }
+.ev-vazio { font-size: 20px; opacity: .6; margin: 0; }
+.ev-info { font-size: 19px; line-height: 1.4; margin: 0 0 14px; color: rgba(246,243,236,.85); max-width: 760px; }
+.ev-controlos { display: flex; flex-wrap: wrap; gap: 12px 16px; align-items: center; }
+.ev-controlos .ev-info { flex: 1 1 100%; }
+.ev-modos { display: flex; flex-wrap: wrap; border-radius: 14px; overflow: hidden; border: 1px solid rgba(246,243,236,.45); }
+.ev-modos button { font: 700 17px Carlito, Calibri, sans-serif; padding: 9px 16px; border: 0; background: none; color: #F6F3EC; cursor: pointer; }
+.ev-modos button.sel { background: #F6F3EC; color: #1E2A33; }
+@keyframes evpop { from { transform: scale(.5); opacity: 0; } to { transform: none; opacity: 1; } }
+
+/* pergunta e resposta */
+.ev-perg { max-width: 1280px; margin: 0 auto; }
+.ev-linha { display: flex; align-items: center; gap: 18px; margin-bottom: 12px; min-height: 34px; }
+.ev-num { font-size: 15px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; color: #F0A673; white-space: nowrap; }
+.ev-tempo { flex: 1; height: 14px; border-radius: 7px; background: rgba(246,243,236,.15); overflow: hidden; }
+.ev-tempo span { display: block; height: 100%; width: 100%; background: #F0A673; }
+.ev-seg { font: 700 30px Caladea, Cambria, Georgia, serif; min-width: 2ch; text-align: right; white-space: nowrap; }
+.ev-fb { font-size: 21px; color: rgba(246,243,236,.9); }
+.ev-perg h2 { font: 700 clamp(28px, 3.6vw, 50px) Caladea, Cambria, Georgia, serif; color: #fff; margin: 0 0 22px; line-height: 1.15; }
+.ev-ops { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+.ev-op { position: relative; display: grid; grid-template-columns: auto 1fr auto; align-items: center; gap: 14px; min-height: 92px; padding: 14px 20px; border-radius: 14px; background: var(--c); color: #fff; overflow: hidden; transition: opacity .4s, filter .4s; }
+.ev-ops .ev-op:nth-child(4) { box-shadow: inset 0 0 0 2px rgba(246,243,236,.5); }
+.ev-forma { font-size: 26px; opacity: .85; } .ev-tx { font: 700 clamp(20px, 2.2vw, 30px) Caladea, Cambria, Georgia, serif; line-height: 1.2; position: relative; z-index: 1; }
+.ev-cont { font: 700 34px Caladea, Cambria, Georgia, serif; position: relative; z-index: 1; }
+.ev-barra { position: absolute; left: 0; bottom: 0; height: 8px; width: 0; background: rgba(255,255,255,.75); transition: width .8s cubic-bezier(.2,.7,.2,1); }
+.ev-op.errada { opacity: .38; filter: saturate(.5); }
+.ev-op.certa { outline: 5px solid #F0A673; outline-offset: 2px; }
+.ev-op.certa .ev-tx::after { content: "  ✓"; color: #F0A673; }
+.ev-pe { display: flex; justify-content: space-between; align-items: flex-end; gap: 24px; margin-top: 20px; flex-wrap: wrap; }
+.ev-resp { font-size: 24px; } .ev-resp b { font: 700 34px Caladea, Cambria, Georgia, serif; color: #F0A673; }
+.ev-top5 { flex: 1 1 420px; max-width: 640px; }
+.ev-rank { list-style: none; margin: 0; padding: 0; display: grid; gap: 6px; }
+.ev-rank li { display: grid; grid-template-columns: 40px 1fr auto 76px; gap: 12px; align-items: center; background: rgba(246,243,236,.09); border-radius: 10px; padding: 7px 14px; font-size: 21px; animation: evpop .4s ease-out both; }
+.ev-rank li.p1 { background: #F0A673; color: #1E2A33; } .ev-rank li.p2 { background: rgba(246,243,236,.28); } .ev-rank li.p3 { background: rgba(164,74,22,.75); }
+.ev-pos { font: 700 22px Caladea, Cambria, Georgia, serif; text-align: center; } .ev-nome { font-weight: 700; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.ev-ganho { font-size: 16px; font-weight: 700; opacity: .8; } .ev-rank b { text-align: right; font: 700 24px Caladea, Cambria, Georgia, serif; font-variant-numeric: tabular-nums; }
+
+/* pódio */
+.ev-fim { display: grid; grid-template-columns: minmax(300px, 1fr) minmax(320px, 1fr); gap: 36px; align-items: end; max-width: 1280px; margin: 0 auto; }
+.ev-podio { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; align-items: end; min-height: 46vh; }
+.ev-degrau { border-radius: 14px 14px 0 0; padding: 14px 10px; text-align: center; display: grid; gap: 4px; align-content: start; animation: evsobe .9s cubic-bezier(.2,.7,.2,1) both; }
+.ev-degrau span { font: 700 clamp(17px, 1.7vw, 24px) Caladea, Cambria, Georgia, serif; line-height: 1.15; } .ev-degrau b { font: 700 30px Caladea, Cambria, Georgia, serif; } .ev-degrau i { font-style: normal; font: 700 44px Caladea, Cambria, Georgia, serif; opacity: .55; margin-top: auto; }
+.ev-degrau.d1 { height: 44vh; background: #F0A673; color: #1E2A33; animation-delay: .9s; } .ev-degrau.d2 { height: 33vh; background: rgba(246,243,236,.3); animation-delay: .45s; } .ev-degrau.d3 { height: 24vh; background: #A44A16; }
+@keyframes evsobe { from { transform: translateY(100%); opacity: 0; } to { transform: none; opacity: 1; } }
+.ev-todos { align-self: stretch; overflow: auto; max-height: 70vh; } .ev-guardar { font-size: 16px; opacity: .8; margin: 12px 0 0; } .ev-guardar button { font: inherit; font-weight: 700; border-radius: 99px; border: 0; padding: 4px 12px; cursor: pointer; }
+.ev-chave { max-width: 520px; margin: 8vh auto; display: grid; gap: 14px; font-size: 21px; } .ev-chave input { font: inherit; padding: 12px 14px; border-radius: 10px; border: 0; } .ev-sm { font-size: 15px; opacity: .7; margin: 0; }
+
+/* jogos de turma */
+.ev-jogo { display: grid; grid-template-columns: minmax(0, 2.6fr) minmax(260px, 1fr); gap: 22px; align-items: start; }
+.ev-palco { position: relative; } .ev-tronco .jg-tronco { display: block; width: 100%; height: auto; max-height: calc(100vh - 150px); border-radius: 14px; }
+.ev-grande { position: absolute; inset: 0; display: grid; place-items: center; font: 700 22vh Caladea, Cambria, Georgia, serif; color: #fff; text-shadow: 0 4px 30px rgba(0,0,0,.6); pointer-events: none; }
+.ev-estado { font-size: 22px; line-height: 1.3; margin: 0 0 10px; min-height: 2.6em; } .ev-estado b { color: #F0A673; }
+.ev-lado2 .ev-tempo { flex: none; margin-bottom: 14px; }
+.ev-conta { display: grid; grid-template-columns: 34px 1fr; gap: 4px 10px; align-items: center; padding: 8px 10px; border-radius: 10px; margin-bottom: 8px; border: 2px solid transparent; }
+.ev-conta.agora { border-color: rgba(240,166,115,.7); background: rgba(246,243,236,.06); }
+.ev-conta p { grid-column: 1 / -1; margin: 0; font: 700 18px Caladea, Cambria, Georgia, serif; }
+.ev-conta i { display: block; height: 16px; border-radius: 4px; background: rgba(246,243,236,.14); overflow: hidden; } .ev-conta i b { display: block; height: 100%; background: #F0A673; transition: width .6s; }
+.ev-conta output { grid-column: 2; font: 700 17px Caladea, Cambria, Georgia, serif; color: #F0A673; margin-bottom: 4px; }
+.ev-m { display: inline-block; width: 30px; height: 18px; border-radius: 50% 50% 46% 46%; border: 1.5px solid #B5B2A2; background: #E6E3D4; } .ev-m.e { background: #2B2A28; border-color: #8C8980; }
+.ev-lado2 .ev-controlos { margin-top: 14px; } .ev-lado2 .ev-modos button { font-size: 15px; padding: 8px 12px; } .ev-lado2 .ev-ir { font-size: 19px; }
+
+.ev-fab { max-width: 1280px; margin: 0 auto; }
+.ev-fab2 { display: grid; grid-template-columns: repeat(auto-fit, minmax(340px, 1fr)); gap: 22px; margin: 6px 0 18px; }
+.ev-oficina, .ev-linha-m { background: rgba(246,243,236,.07); border-radius: 16px; padding: 18px 22px; }
+.ev-n { display: block; font: 700 clamp(60px, 9vw, 120px) Caladea, Cambria, Georgia, serif; color: #F0A673; line-height: 1; } .ev-n + span { font-size: 19px; opacity: .8; }
+.ev-sapatos { font-size: 30px; line-height: 1.25; margin-top: 10px; min-height: 40px; word-break: break-all; }
+.ev-postos { display: grid; gap: 8px; margin-bottom: 12px; }
+.ev-posto { display: grid; grid-template-columns: minmax(170px, 1fr) 2fr 50px; gap: 12px; align-items: center; font-size: 19px; font-weight: 700; padding: 4px 8px; border-radius: 8px; }
+.ev-posto i { display: block; height: 20px; border-radius: 5px; background: rgba(246,243,236,.14); overflow: hidden; } .ev-posto i b { display: block; height: 100%; width: 0; background: #2F6E9E; transition: width .6s; }
+.ev-posto output { font: 700 24px Caladea, Cambria, Georgia, serif; text-align: right; }
+.ev-posto.gargalo { background: rgba(164,74,22,.45); } .ev-posto.gargalo i b { background: #F0A673; } .ev-posto.gargalo span::after { content: " · o mais lento"; font-weight: 400; color: #F0A673; }
+.ev-turnos { border-collapse: collapse; font-size: 19px; } .ev-turnos th, .ev-turnos td { padding: 6px 14px; text-align: left; border-bottom: 1px solid rgba(246,243,236,.2); } .ev-turnos th { font-size: 13px; text-transform: uppercase; letter-spacing: .08em; color: #F0A673; } .ev-turnos td b { font-size: 24px; color: #F0A673; }
+.ev-hist { flex: 1 1 380px; }
+@media (max-width: 900px) { .ev-espera, .ev-fim, .ev-jogo { grid-template-columns: 1fr; } .ev-ops { grid-template-columns: 1fr; } .ev-topo { grid-template-columns: 1fr auto auto; } .ev-topo h3 { font-size: 21px; } }
+
+/* botão «Jogar com a turma» dentro de um slide */
+[data-esmp-jogo] { font: 700 17px Carlito, Calibri, Arial, sans-serif; border: 0; border-radius: 999px; padding: 9px 20px; background: #F0A673; color: #1E2A33; cursor: pointer; }
+[data-esmp-jogo]::before { content: "◉ "; }
+@media print { [data-esmp-jogo] { display: none !important; } }

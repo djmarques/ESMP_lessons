@@ -26,6 +26,7 @@
   'use strict';
   const $ = id => document.getElementById(id);
   const params = new URLSearchParams(location.search);
+  if (params.get('s')) return;        // jogo ao vivo (sala aberta pelo professor): trata disso o vivo.js
   const pasta = params.get('f') || '';
   const pA = params.get('a') || '', pQ = params.get('q'), pX = params.get('x');
   // nome da atividade para guardar no telemóvel (cada pergunta rápida tem o seu)
@@ -393,6 +394,16 @@
     const box = $('turma'); if (!box || painelTurma) return;
     box.hidden = false;
     painelTurma = E.painel($('turma-painel'), { disciplina: payload.disciplina, titulo: payload.atividade, passos: act.passos || passos }, { url: url, meu: registo, revelar: true, auto: 15000 });
+    // o lugar na turma, sem nomes (precisa do script na versão 4; se não houver, não aparece nada)
+    if (registo.total && E.sala) {
+      const lugar = () => E.sala(url).posicao(payload.disciplina, payload.atividade, registo.pontos).then(j => {
+        if (!j || !j.ok || !j.pos) return;
+        let p = $('meu-lugar');
+        if (!p) { p = document.createElement('p'); p.id = 'meu-lugar'; p.className = 'resultado'; box.insertBefore(p, box.firstChild); }
+        p.textContent = registo.pontos + ' pontos · ' + j.pos + '.º lugar em ' + j.n + (j.n === 1 ? ' resposta' : ' respostas') + ' até agora';
+      }).catch(() => {});
+      lugar(); setInterval(lugar, 20000);
+    }
   }
   function estado(tipo, titulo, texto) {
     const f = $('ecra-fim'); f.dataset.estado = tipo;

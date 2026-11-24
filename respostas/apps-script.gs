@@ -15,6 +15,19 @@
  *    jogo, opiniões, escalas e nuvens de palavras); as colunas «Escrita»
  *    (textos livres) nunca saem daqui.
  *
+ * Novembro de 2026 (versão 4): jogos ao vivo e classificação
+ *  - «salas» para os jogos ao vivo (o professor avança, os telemóveis seguem):
+ *    o estado de cada sala vive na memória temporária do script (CacheService,
+ *    4 horas) e não na folha. O professor publica o estado; os telemóveis
+ *    leem-no de 2 em 2 segundos e enviam as respostas de cada ronda.
+ *    Só quem abriu a sala (tem o segredo dela) vê os nomes e muda o estado.
+ *  - acao=lote: no fim de um jogo ao vivo, o projetor grava de uma vez as
+ *    linhas de todos os alunos no separador da atividade.
+ *  - acao=ranking: classificação COM nomes, só com a chave do professor
+ *    (a primeira chave usada fica guardada; para a mudar, apaga a propriedade
+ *    CHAVE_PROF em Definições do projeto → Propriedades do script).
+ *  - acao=posicao: o lugar de uma pontuação na turma, sem nomes.
+ *
  * Como instalar: ver respostas/LEIA-ME.md. Para atualizar: colar este código
  * por cima do anterior → Implementar → Gerir implementações → lápis →
  * Versão: Nova versão → Implementar (o endereço /exec mantém-se).
@@ -34,6 +47,8 @@ function doPost(e) {
   // esperavam mais de 20 s, o pedido falhava e o telemóvel dizia «Enviado!» na mesma.)
   try {
     const d = JSON.parse(e.postData.contents);
+    if (d.acao === 'sala') return resposta(salaPost(d));
+    if (d.acao === 'lote') return resposta(lote(d));
     // vários nomes = alunos a responder juntos no mesmo telemóvel: uma linha para cada um
     let nomes = (Array.isArray(d.nomes) && d.nomes.length ? d.nomes : [d.nome])
       .map(n => limpar(n, 80).trim()).filter(n => n).slice(0, 6);
@@ -81,11 +96,14 @@ function doPost(e) {
     Com ?acao=resultados&d=<disciplina>&a=<atividade> devolve as respostas da turma, contadas e sem nomes. */
 function doGet(e) {
   const q = (e && e.parameter) || {};
-  if (q.acao === 'resultados') {
-    try { return resposta(resultados(limpar(q.d, 40) || 'CP 4', limpar(q.a, 80) || 'Atividade')); }
-    catch (err) { return resposta({ ok: false, erro: String(err) }); }
-  }
-  return ContentService.createTextOutput('O recetor de respostas das aulas está a funcionar (versão 3: vários nomes e respostas da turma).');
+  try {
+    if (q.acao === 'resultados') return resposta(resultados(limpar(q.d, 40) || 'CP 4', limpar(q.a, 80) || 'Atividade'));
+    if (q.acao === 'sala') return resposta(salaVer(q));
+    if (q.acao === 'ranking') return resposta(ranking(limpar(q.d, 40) || 'CP 4', limpar(q.a, 80) || 'Atividade', q.k));
+    if (q.acao === 'posicao') return resposta(posicao(limpar(q.d, 40) || 'CP 4', limpar(q.a, 80) || 'Atividade', Number(q.p) || 0));
+    if (q.acao === 'versao') return resposta({ ok: true, versao: 4 });
+  } catch (err) { return resposta({ ok: false, erro: String(err) }); }
+  return ContentService.createTextOutput('O recetor de respostas das aulas está a funcionar (versão 4: jogos ao vivo e classificação).');
 }
 
 /** Conta as respostas de um separador. Cada aluno conta uma vez (a última resposta que enviou). */
@@ -122,6 +140,141 @@ function resultados(disciplina, atividade) {
 }
 function nomeSeparador(disciplina, atividade) {
   return disciplina === 'CP 4' ? atividade : disciplina + ' · ' + atividade;   // os separadores antigos do CP 4 não têm prefixo
+}
+
+/* =====================================================================
+   Versão 4 · Salas ao vivo
+   ---------------------------------------------------------------------
+   Chaves na memória temporária (CacheService), por sala s:
+     sk:s          segredo de quem abriu a sala (o projetor do professor)
+     se:s          estado publicado pelo professor (JSON): é o que os telemóveis leem
+     sr:s          lista de quem entrou: { id do telemóvel: nomes }
+     sm:s:r:u      mensagem do telemóvel u na ronda r (a resposta a uma pergunta,
+                   o resultado de um jogo…)
+   O script não sabe nada sobre os jogos: guarda e devolve. As regras estão
+   em comum/aovivo.js (projetor) e respostas/vivo.js (telemóvel).
+   ===================================================================== */
+const SALA_TTL = 4 * 3600;          // segundos
+const SALA_MAX = 80;                // telemóveis por sala
+function mem() { return CacheService.getScriptCache(); }
+function idSala(s) { return String(s || '').toUpperCase().replace(/[^A-Z0-9]/g, '').slice(0, 8); }
+function idCurto(u, n) { return String(u || '').replace(/[^A-Za-z0-9]/g, '').slice(0, n || 16); }
+
+/** Telemóveis (e projetor): ler o estado da sala. Com entrar=1 fica na lista de presenças. */
+function salaVer(q) {
+  const s = idSala(q.s), e = s && mem().get('se:' + s);
+  if (e == null) return { ok: false, erro: 'sala', t: Date.now() };
+  const u = idCurto(q.u);
+  if (q.entrar && u) {
+    const lock = LockService.getScriptLock();
+    lock.waitLock(15000);
+    try {
+      const lista = JSON.parse(mem().get('sr:' + s) || '{}');
+      if (lista[u] !== undefined || Object.keys(lista).length < SALA_MAX) {
+        lista[u] = limpar(q.n, 200);
+        mem().put('sr:' + s, JSON.stringify(lista), SALA_TTL);
+      }
+    } finally { lock.releaseLock(); }
+  }
+  return { ok: true, e: JSON.parse(e), t: Date.now() };
+}
+
+function salaPost(d) {
+  const s = idSala(d.s), c = mem();
+  if (!s) return { ok: false, erro: 'sala' };
+  if (d.op === 'env') {                                   // um telemóvel envia a sua jogada
+    const u = idCurto(d.u), r = idCurto(d.r, 12);
+    if (!u || !r || c.get('sk:' + s) == null) return { ok: false, erro: 'sala' };
+    const txt = JSON.stringify(d.d == null ? null : d.d);
+    if (txt.length > 6000) return { ok: false, erro: 'grande' };
+    c.put('sm:' + s + ':' + r + ':' + u, txt, SALA_TTL);
+    return { ok: true, t: Date.now() };
+  }
+  const k = limpar(d.k, 60), dono = c.get('sk:' + s);
+  if (d.op === 'abrir') {
+    if (k.length < 8) return { ok: false, erro: 'segredo' };
+    if (dono != null && dono !== k) return { ok: false, erro: 'ocupada' };
+    c.put('sk:' + s, k, SALA_TTL);
+    c.put('se:' + s, JSON.stringify(d.e || { fase: 'espera' }), SALA_TTL);
+    if (dono == null) c.put('sr:' + s, '{}', SALA_TTL);
+    return { ok: true, t: Date.now() };
+  }
+  if (dono == null || dono !== k) return { ok: false, erro: 'segredo' };
+  if (d.op === 'pub') {                                   // o professor muda o estado
+    const txt = JSON.stringify(d.e || {});
+    if (txt.length > 90000) return { ok: false, erro: 'grande' };
+    c.put('se:' + s, txt, SALA_TTL);
+    return { ok: true, t: Date.now() };
+  }
+  if (d.op === 'rec') {                                   // o professor recolhe as jogadas de uma ronda
+    const lista = JSON.parse(c.get('sr:' + s) || '{}'), us = Object.keys(lista), r = idCurto(d.r, 12);
+    const msgs = {};
+    if (r && us.length) {
+      const lidas = c.getAll(us.map(u => 'sm:' + s + ':' + r + ':' + u));
+      us.forEach(u => { const x = lidas['sm:' + s + ':' + r + ':' + u]; if (x != null) msgs[u] = JSON.parse(x); });
+    }
+    return { ok: true, lista: lista, msgs: msgs, t: Date.now() };
+  }
+  if (d.op === 'fechar') { c.removeAll(['sk:' + s, 'se:' + s, 'sr:' + s]); return { ok: true }; }
+  return { ok: false, erro: 'op' };
+}
+
+/** Fim de um jogo ao vivo: o projetor grava as linhas de todos de uma vez. */
+function lote(d) {
+  const disciplina = limpar(d.disciplina, 40) || 'CP 4', atividade = limpar(d.atividade, 80) || 'Atividade';
+  const linhas = (Array.isArray(d.linhas) ? d.linhas : []).slice(0, SALA_MAX);
+  if (!linhas.length) return { ok: true, n: 0 };
+  const jogo0 = Array.isArray(linhas[0].jogo) ? linhas[0].jogo.slice(0, 30) : [];
+  const esc0 = Array.isArray(linhas[0].escrita) ? linhas[0].escrita.slice(0, 20) : [];
+  const folha = separador(nomeSeparador(disciplina, atividade), jogo0, esc0), agora = new Date();
+  let n = 0;
+  linhas.forEach((l, i) => {
+    const jogo = Array.isArray(l.jogo) ? l.jogo.slice(0, 30) : [], escrita = Array.isArray(l.escrita) ? l.escrita.slice(0, 20) : [];
+    const resp = jogo.map(j => (j.certa ? '✓ ' : '✗ ') + limpar(j.resposta, 200)).concat(escrita.map(x => limpar(x.resposta, 3000)));
+    const quando = new Date(agora.getTime() + i * 1000);   // um segundo de diferença por equipa: é assim que a classificação as distingue
+    (Array.isArray(l.nomes) ? l.nomes : [l.nome]).map(x => limpar(x, 80).trim()).filter(x => x).slice(0, 6).forEach(nome => {
+      folha.appendRow([quando, nome, Number(l.pontos) || 0, (Number(l.certas) || 0) + ' / ' + (Number(l.total) || 0)].concat(resp).map(seguro));
+      n++;
+    });
+  });
+  return { ok: true, n: n };
+}
+
+/** A chave do professor: a primeira que for usada fica guardada nas propriedades do script. */
+function chaveCerta(k) {
+  k = limpar(k, 60);
+  if (k.length < 4) return false;
+  const p = PropertiesService.getScriptProperties(), guardada = p.getProperty('CHAVE_PROF');
+  if (!guardada) { p.setProperty('CHAVE_PROF', k); return true; }
+  return guardada === k;
+}
+/** Linhas de um separador, uma por aluno (a última que enviou). */
+function ultimasLinhas(disciplina, atividade) {
+  if (!PropertiesService.getScriptProperties().getProperty('FOLHA_ID')) return [];
+  const sh = planilha().getSheetByName(nomeSeparador(disciplina, atividade).replace(/[\[\]\*\?\/\\:]/g, ' ').slice(0, 90));
+  if (!sh || sh.getLastRow() < 2) return [];
+  const v = sh.getDataRange().getValues(), ultima = {};
+  for (let r = 1; r < v.length; r++) ultima[String(v[r][1]).trim().toLowerCase()] = r;
+  return Object.keys(ultima).map(k => v[ultima[k]]);
+}
+/** Classificação com nomes (só para o projetor do professor). Quem respondeu no mesmo
+    telemóvel (mesma data e mesmas respostas) aparece junto, como equipa. */
+function ranking(disciplina, atividade, chave) {
+  if (!chaveCerta(chave)) return { ok: false, erro: 'chave' };
+  const grupos = {};
+  ultimasLinhas(disciplina, atividade).forEach(l => {
+    const quando = l[0] instanceof Date ? l[0].getTime() : String(l[0]);
+    const id = quando + '|' + l[2] + '|' + l.slice(4).join('|');
+    const g = grupos[id] = grupos[id] || { nomes: [], pontos: Number(l[2]) || 0, certas: String(l[3]), t: quando };
+    g.nomes.push(String(l[1]));
+  });
+  const lista = Object.keys(grupos).map(k => grupos[k]).sort((a, b) => b.pontos - a.pontos || parseInt(b.certas, 10) - parseInt(a.certas, 10) || (a.t > b.t ? 1 : -1));
+  return { ok: true, n: lista.length, linhas: lista.slice(0, 60).map(g => ({ nomes: g.nomes, pontos: g.pontos, certas: g.certas })) };
+}
+/** O lugar de uma pontuação na turma, sem nomes (para o telemóvel). */
+function posicao(disciplina, atividade, pontos) {
+  const l = ultimasLinhas(disciplina, atividade);
+  return { ok: true, n: l.length, pos: 1 + l.filter(x => (Number(x[2]) || 0) > pontos).length };
 }
 
 /** Executar uma vez no editor (botão «Executar») para autorizar e testar: cria a folha e manda um email de teste. */

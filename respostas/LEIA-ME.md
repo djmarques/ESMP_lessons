@@ -11,11 +11,38 @@ Esta pasta tem a página que os alunos abrem no telemóvel pelo código QR dos s
 
 Quando o aluno carrega em **Enviar**, as respostas vão para o Google Apps Script (endereço em `config.js`). O script escreve-as na folha de cálculo do teu Google Drive, num separador por disciplina e atividade, e manda-te um email com o assunto «disciplina · atividade · nome · data».
 
+## Novembro de 2026 (versão 4): jogos ao vivo e classificação
+
+**É preciso atualizar o script uma vez** (instruções em «Atualizar o script no Google», mais abaixo). Até lá, os jogos ao vivo avisam que falta a versão 4 e tudo o resto continua como antes.
+
+- **Jogos ao vivo** (`respostas/?f=<pasta>&s=<sala>`): o professor abre uma sala no projetor e é ele que avança; os telemóveis seguem. Ver `comum/LEIA-ME.md`. O estado de cada sala fica 4 horas na memória temporária do script, não na folha. No fim de um questionário ao vivo, o projetor grava de uma vez as linhas de todos no separador da atividade (o mesmo separador das respostas individuais).
+- **Lugar na turma:** depois de enviar uma atividade com pontos, o telemóvel mostra «120 pontos · 3.º lugar em 18 respostas até agora». Sem nomes.
+- **Classificação com nomes:** só no projetor, e só com a chave do professor. A primeira chave que escreveres fica guardada no script (propriedade `CHAVE_PROF`) e neste computador. Para a mudar: no editor do script, Definições do projeto → Propriedades do script → apagar `CHAVE_PROF`.
+- **Equipas:** quem responde no mesmo telemóvel (vários nomes no primeiro ecrã) aparece na classificação como uma equipa («Ana + Bruno»); na folha, cada nome continua a ter a sua linha.
+
+### O que o script passa a aceitar
+
+| Pedido | Quem | O que faz |
+| --- | --- | --- |
+| `POST {acao:'sala', op:'abrir'/'pub'/'rec'/'fechar', s, k}` | projetor | abre a sala, publica o estado, recolhe as jogadas com nomes; `k` é o segredo da sala |
+| `GET ?acao=sala&s=…` (`&u=…&n=…&entrar=1`) | telemóvel | lê o estado; com `entrar=1`, fica na lista de presenças |
+| `POST {acao:'sala', op:'env', s, u, r, d}` | telemóvel | envia a jogada `d` da ronda `r` |
+| `POST {acao:'lote', disciplina, atividade, linhas}` | projetor | grava as linhas de todos de uma vez |
+| `GET ?acao=ranking&d=…&a=…&k=<chave>` | projetor | classificação com nomes |
+| `GET ?acao=posicao&d=…&a=…&p=<pontos>` | telemóvel | lugar na turma, sem nomes |
+
+### Limites
+
+- Não há ligação permanente: cada telemóvel pergunta o estado de 2 em 2 segundos. Entre carregares em «Seguinte» e os telemóveis mudarem passam 1 a 3 segundos.
+- O Apps Script aguenta 30 pedidos em simultâneo. Com uma turma de 25 a 30 telemóveis deve chegar, mas ainda não foi testado com uma turma verdadeira: faz um ensaio antes de contares com isto numa aula.
+- Se o projetor recarregar a página a meio, a sala perde-se (os telemóveis ficam à espera): é preciso abrir outra.
+
 ## Ficheiros
 
 | Ficheiro | O que faz |
 | --- | --- |
 | `index.html`, `aluno.css`, `aluno.js` | A página do aluno no telemóvel |
+| `vivo.js` | O telemóvel num jogo ao vivo (segue o estado da sala) |
 | `config.js` | O endereço do Apps Script (o mesmo para todas as disciplinas) |
 | `apps-script.gs`, `appsscript.json` | O código que está em script.google.com |
 

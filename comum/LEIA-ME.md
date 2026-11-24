@@ -12,6 +12,30 @@ Esta pasta junta o que é igual em todos os sites das aulas. Cada `index.html` c
 | `partilhado.js` | Lê os questionários e jogos dos slides; desenha as respostas da turma (barras, histograma, nuvem); código QR |
 | `aula.js`, `aula.css` | Ferramentas do professor nos slides |
 
+## Ao vivo: a turma toda ao mesmo tempo (novembro de 2026)
+
+| Ficheiro | O que faz |
+| --- | --- |
+| `vivo.js` | A ligação entre o projetor e os telemóveis («salas»), usada pelos dois lados |
+| `jogos.js` | Os jogos de turma: desenho e regras (mariposas, fábrica de sapatos) |
+| `aovivo.js` | O lado do professor: questionário ao vivo, classificação, jogos |
+
+O `aula.js` carrega estes três ficheiros sozinho. Precisa do script do Google na versão 4 (ver `respostas/LEIA-ME.md`) e do site publicado.
+
+**Como abrir:** tecla `J`, ou o botão «Ao vivo» da barra de ferramentas. Aparece o menu:
+
+- **Questionário deste slide:** qualquer questionário ou jogo dos slides, uma pergunta de cada vez. Os alunos leem o código QR e entram; tu carregas em «Começar». Em cada pergunta vês quantos já responderam; a resposta é revelada quando todos respondem, quando o tempo acaba ou quando carregas em «Revelar» (ou `Enter`). Depois: barras por opção, a resposta certa e os cinco primeiros. No fim, o pódio, e as respostas ficam gravadas na folha «Avaliação contínua». Também se abre pela janela «Respostas da turma» → «▶ Jogar ao vivo».
+- **Sê o pássaro:** cada telemóvel recebe um tronco com 12 mariposas claras e 12 escuras e 10 segundos. No fim, o projetor repete as caçadas de todos ao mesmo tempo, num só tronco, e soma as contagens do tronco limpo e do tronco com fuligem.
+- **A fábrica de sapatos:** três maneiras de trabalhar, à tua escolha em cada turno de 45 segundos: todos artesãos (cada um faz o sapato inteiro, quatro tarefas, e perde tempo a trocar de ferramenta), todos na linha de montagem (cada um repete uma tarefa; a linha produz tantos sapatos quantas as peças do posto mais lento) ou metade de cada. O projetor mostra a produção a crescer e, no fim, a tabela dos turnos (sapatos por pessoa).
+
+**Classificação** de uma atividade feita ao ritmo de cada um: janela «Respostas da turma» → «🏆 Classificação». Mostra nomes, por isso pede a tua chave de professor.
+
+**Um botão dentro de um slide:** `<button type="button" data-esmp-jogo="mariposas">Jogar com a turma toda</button>` (ou `data-esmp-jogo="fabrica"`). Exemplos: AI 11.º, slides «Jogo: sê o pássaro» e «Adam Smith: a fábrica de alfinetes».
+
+Na sala de espera, clicar num nome tira esse telemóvel do jogo (para nomes que não são nomes).
+
+**Um jogo novo** precisa de três coisas: as regras e o desenho em `jogos.js` (uma função para o telemóvel que devolve o resultado), uma função em `aovivo.js` que abre a sala, publica `{ fase: 'jogo', jogo: '…', ronda, inicio, dur }` e recolhe os resultados, e uma linha em `respostas/vivo.js` (função `fJogo`).
+
 ## O que aparece nos slides
 
 - **«Responder no telemóvel»** em todos os questionários (`.quiz`) e jogos (`.game`) que não tinham botão. Não é preciso escrever nada em `atividades.js`: o telemóvel lê as perguntas do próprio slide. Cada questionário fica com o seu separador na folha «Avaliação contínua», com o título do slide.
@@ -25,6 +49,7 @@ Esta pasta junta o que é igual em todos os sites das aulas. Cada `index.html` c
 | `Q` | Quadro em branco, escuro ou claro |
 | `G` | Grafo de vocabulário |
 | `P` | Pergunta rápida no telemóvel |
+| `J` | Ao vivo: questionário do slide, mariposas, fábrica de sapatos |
 | `Esc` | Fecha a ferramenta aberta |
 
 No quadro, `Z` ou a tecla de apagar desfaz o último risco.
