@@ -9,7 +9,9 @@
    1. Carrega a atividade.
    2. Pede o nome (ou os nomes: quem não tem telemóvel responde com um colega
       e os dois ficam registados) e percorre os passos, por ordem:
-        jogo         escolha múltipla com tempo, pontos e som (certo/errado)
+        jogo         escolha múltipla com tempo, pontos, som e música (comum/efeitos.js):
+                     contagem 3-2-1, séries de respostas certas, papelinhos, aviso
+                     quando o tempo está a acabar
         vf           verdadeiro ou falso (certo/errado)
         classificar  um item de cada vez, escolher a categoria (certo/errado)
         escala       cursor entre dois valores (opinião, ou estimativa com valor certo)
@@ -21,6 +23,8 @@
       e responde {ok:true}. Só com essa resposta aparece «Respostas recebidas»;
       senão tenta mais vezes. Uma cópia fica no telemóvel até ser confirmada.
    4. Depois de enviado, mostra as respostas da turma em gráficos, sem nomes.
+   5. No fim de um jogo: estrelas (1 a 3) e a «segunda volta», um treino sem
+      tempo só com as perguntas falhadas, que não muda a pontuação enviada.
    ===================================================================== */
 (function () {
   'use strict';
@@ -89,23 +93,15 @@
     try { $('nome').value = localStorage.getItem('esmp-nome') || ''; } catch (e) { /* sem armazenamento */ }
   }
 
-  /* ---- som (sintetizado, sem ficheiros) ---- */
-  let audio = null, muted = false;
-  function tone(f, start, dur, type, vol) {
-    if (muted) return;
-    try {
-      audio = audio || new (window.AudioContext || window.webkitAudioContext)();
-      const t = audio.currentTime + start, o = audio.createOscillator(), g = audio.createGain();
-      o.type = type; o.frequency.setValueAtTime(f, t);
-      g.gain.setValueAtTime(0.0001, t); g.gain.exponentialRampToValueAtTime(vol, t + 0.02); g.gain.exponentialRampToValueAtTime(0.0001, t + dur);
-      o.connect(g).connect(audio.destination); o.start(t); o.stop(t + dur + 0.05);
-    } catch (e) { /* sem som */ }
-  }
-  const sfx = {
-    right: () => { tone(659, 0, .12, 'triangle', .25); tone(988, .11, .25, 'triangle', .25); },
-    wrong: () => tone(220, 0, .35, 'sawtooth', .12),
-    tick: () => tone(1200, 0, .05, 'square', .05)
-  };
+  /* ---- som, música e animações (comum/efeitos.js; se não carregar, o jogo funciona em silêncio) ---- */
+  const nada = () => {}, oco = new Proxy({}, { get: () => nada });
+  const S = E.som || { fx: oco, musica: oco, botoes: () => document.createElement('span'), acordar: nada };
+  const F = E.festa || oco;
+  const sfx = { right: () => S.fx.certo(), wrong: () => S.fx.errado() };
+  // música de fundo nos jogos com tempo, no aparelho de cada aluno (cada um desliga-a no botão da nota musical).
+  // Para a desligar a todos de uma vez: MUSICA_ALUNOS: false em config.js.
+  const COM_MUSICA = !(window.CONFIG && window.CONFIG.MUSICA_ALUNOS === false);
+  let melhorSerie = 0;
 
   /* Colegas sem telemóvel: cada nome acrescentado fica com uma linha própria na folha
      do professor, com as mesmas respostas e a mesma pontuação. */
@@ -126,7 +122,7 @@
     registo.nomes = [nome].concat(extra).filter((n, i, l) => l.findIndex(x => x.toLowerCase() === n.toLowerCase()) === i);
     registo.nome = registo.nomes.join(' + ');
     try { localStorage.setItem('esmp-nome', nome); } catch (e) {}
-    tone(523, 0, .14, 'triangle', .2);       // desbloqueia o áudio no iPhone (tem de ser num toque)
+    S.acordar(); S.fx.toque();               // desbloqueia o áudio no iPhone (tem de ser num toque)
     passo(0);
   });
 
@@ -138,6 +134,7 @@
     if (n >= passos.length) return fimDosPassos();
     show('ecra-passo'); ecra.innerHTML = ''; window.scrollTo(0, 0);
     const p = passos[n];
+    atualJogo = p;
     ({ jogo, classificar, opiniao, escrita, escala, nuvem })[p.tipo](p, () => passo(n + 1));
   }
   function intro(p) { if (p.intro) ecra.insertAdjacentHTML('beforeend', '<p class="intro">' + esc(p.intro) + '</p>'); }
@@ -172,19 +169,24 @@
     inp.focus();                      // dentro do toque: o Android abre o teclado
   });
 
-  /* jogo: escolha múltipla com tempo */
-  function jogo(p, next) {
+  /* jogo: escolha múltipla com tempo.
+     o.treino: a «segunda volta» (só as perguntas falhadas, sem tempo): não mexe no registo que é enviado. */
+  function jogo(p, next, o) {
+    o = o || {};
+    const reg = o.treino ? { pontos: 0, certas: 0, total: 0, jogo: [] } : registo;
     const TOTAL = p.segundos === 0 ? 0 : (p.segundos || 20), qs = p.perguntas;   // segundos: 0 = sem tempo
-    ecra.innerHTML = '<div class="ghead"><span>Pergunta <b class="n">1</b> / ' + qs.length + '</span><span>Pontos <b class="pts">' + registo.pontos + '</b></span>' +
-      '<button class="som" aria-label="Som">' + (muted ? '🔇' : '🔊') + '</button></div>' +
+    ecra.innerHTML = '<div class="ghead"><span>Pergunta <b class="n">1</b> / ' + qs.length + '</span><span class="serie" aria-live="polite"></span>' +
+      (o.treino ? '<span class="treino">Treino</span>' : '<span>Pontos <b class="pts">' + reg.pontos + '</b></span>') + '<span class="sons"></span></div>' +
       '<div class="gtimer"><div class="track"><span></span></div><output>' + TOTAL + '</output></div>' +
       '<p class="stem"></p><div class="opts"></div><p class="fb"></p><button class="btn seg" hidden>Seguinte →</button>';
     const q$ = sel => ecra.querySelector(sel);
     if (!TOTAL) q$('.gtimer').hidden = true;
     if (p.titulo) q$('.ghead').insertAdjacentHTML('beforebegin', '<h2>' + esc(p.titulo) + '</h2>');
     if (p.intro) q$('.ghead').insertAdjacentHTML('beforebegin', '<p class="intro">' + esc(p.intro) + '</p>');
-    q$('.som').addEventListener('click', e => { muted = !muted; e.target.textContent = muted ? '🔇' : '🔊'; });
-    let i = -1, left = TOTAL, timer = null, done = false;
+    q$('.sons').appendChild(S.botoes(TOTAL && COM_MUSICA ? null : { so: 'som' }));
+    ecra.classList.add('a-jogar');
+    const musica = TOTAL && COM_MUSICA;
+    let i = -1, left = TOTAL, timer = null, done = false, seguidas = 0;
     function paint() { if (!TOTAL) return; q$('output').textContent = left; q$('.track span').style.width = (left / TOTAL * 100) + '%'; ecra.classList.toggle('hurry', left <= 5 && !done); }
     function ask(k) {
       i = k; left = TOTAL; done = false;
@@ -193,24 +195,50 @@
       const box = q$('.opts'); box.innerHTML = '';
       q.o.forEach((t, j) => { const b = document.createElement('button'); b.className = 't' + j; b.textContent = t; b.onclick = () => reveal(j); box.appendChild(b); });
       paint(); clearInterval(timer);
-      if (TOTAL) timer = setInterval(() => { left = Math.max(0, left - 1); paint(); if (left > 0 && left <= 5) sfx.tick(); if (!left) reveal(null); }, 1000);
+      if (musica) { S.musica.tensao(false); S.musica.baixar(false); }
+      if (TOTAL) timer = setInterval(() => {
+        left = Math.max(0, left - 1); paint();
+        if (left === 10 && TOTAL >= 15) S.fx.aviso();                                    // faltam 10 segundos
+        if (left > 0 && left <= 5) { S.fx.tique(left); if (musica) S.musica.tensao(true); }   // últimos 5: tiques cada vez mais agudos, música mais rápida
+        if (!left) reveal(null);
+      }, 1000);
     }
     function reveal(j) {
       if (done) return; done = true; clearInterval(timer);
-      const q = qs[i], ok = j === q.c, btns = q$('.opts').querySelectorAll('button');
+      const q = qs[i], ok = j === q.c, btns = q$('.opts').querySelectorAll('button'), pts = q$('.pts'), antes = reg.pontos;
       btns.forEach(b => { b.disabled = true; }); btns[q.c].classList.add('right');
       if (j !== null && !ok) btns[j].classList.add('wrong');
+      if (musica) { S.musica.tensao(false); S.musica.baixar(true); }                     // mais baixa enquanto se lê a explicação
+      ecra.classList.remove('hurry');
       let gain = 0;
-      if (ok) { gain = 100 + (TOTAL ? Math.round(50 * left / TOTAL) : 0); registo.pontos += gain; registo.certas++; sfx.right(); } else sfx.wrong();
-      registo.total++;
-      registo.jogo.push({ pergunta: q.p, resposta: j === null ? '(sem resposta)' : q.o[j], certa: ok });
-      q$('.pts').textContent = registo.pontos;
-      q$('.fb').innerHTML = '<b class="' + (ok ? 'ok' : 'no') + '">' + (ok ? 'Certo! +' + gain : (j === null ? 'Acabou o tempo!' : 'Errado.')) + '</b> ' + esc(q.f || '');
+      if (ok) {
+        gain = 100 + (TOTAL ? Math.round(50 * left / TOTAL) : 0); reg.pontos += gain; reg.certas++;
+        seguidas++; if (!o.treino) melhorSerie = Math.max(melhorSerie, seguidas);
+        S.fx.certo(); F.vibrar(40); F.confeteDe(btns[q.c], { n: 36 + Math.min(seguidas, 5) * 14 });
+        if (pts) { F.flutuar(pts, '+' + gain); F.contar(pts, antes, reg.pontos); F.saltar(pts); }
+        if (seguidas >= 3) setTimeout(() => S.fx.seguidas(seguidas), 380);
+      } else {
+        seguidas = 0;
+        if (j === null) { S.fx.tempo(); F.vibrar([60, 60, 60]); } else { S.fx.errado(); F.vibrar(120); }
+        F.abanar(q$('.opts'));
+      }
+      reg.total++;
+      reg.jogo.push({ pergunta: q.p, resposta: j === null ? '(sem resposta)' : q.o[j], certa: ok });
+      q$('.serie').textContent = F.seguidas(seguidas) || '';
+      q$('.fb').innerHTML = '<b class="' + (ok ? 'ok' : 'no') + '">' + (ok ? (F.frase('certo') || 'Certo!') + (o.treino ? '' : ' +' + gain) : (j === null ? 'Acabou o tempo!' : (F.frase('errado') || 'Errado.'))) + '</b> ' + esc(q.f || '');
       q$('.seg').hidden = false; q$('.seg').textContent = i === qs.length - 1 ? 'Continuar' : 'Seguinte →';
     }
-    q$('.seg').addEventListener('click', () => (i < qs.length - 1 ? ask(i + 1) : (ecra.classList.remove('hurry'), next())));
-    ask(0);
+    q$('.seg').addEventListener('click', () => {
+      if (i < qs.length - 1) return ask(i + 1);
+      ecra.classList.remove('hurry', 'a-jogar'); if (musica) S.musica.parar();
+      next(reg);
+    });
+    // jogos com tempo começam com «3, 2, 1, Já!»; os questionários sem tempo começam logo
+    const arrancar = () => { if (musica) S.musica.tocar('jogo'); ask(0); };
+    const conta = TOTAL && E.festa ? E.festa.contagem(ecra) : null;
+    conta ? conta.then(() => { if (atualJogo === p) arrancar(); }) : arrancar();
   }
+  let atualJogo = null;
 
   /* classificar: um item de cada vez, escolher a categoria */
   function classificar(p, next) {
@@ -233,6 +261,7 @@
       if (temCerta) {
         btns[it.c].classList.add('right'); if (!ok) btns[j].classList.add('wrong');
         ok ? sfx.right() : sfx.wrong(); registo.total++; if (ok) registo.certas++;
+        if (ok) { F.confeteDe(btns[it.c], { n: 28 }); F.vibrar(40); } else { F.abanar(q$('.opts')); F.vibrar(120); }
         registo.jogo.push({ pergunta: (p.titulo ? p.titulo + ': ' : '') + it.t, resposta: p.categorias[j], certa: ok });
         q$('.fb').innerHTML = '<b class="' + (ok ? 'ok' : 'no') + '">' + (ok ? 'Certo!' : 'Não: é ' + esc(p.categorias[it.c]) + '.') + '</b> ' + esc(it.f || '');
       } else {
@@ -337,6 +366,43 @@
     };
     try { localStorage.setItem('esmp-ultimo-' + pasta + '-' + chave, JSON.stringify(payload)); } catch (e) {}
     enviar();
+    celebrar();
+  }
+
+  /* No fim de um jogo: estrelas, uma frase e a «segunda volta» (as perguntas falhadas, em treino). */
+  let falhadas = [], treinou = false;
+  function celebrar() {
+    if (!registo.total) return;
+    const pc = registo.certas / registo.total, estrelas = pc >= 0.9 ? 3 : pc >= 0.6 ? 2 : pc > 0 ? 1 : 0;
+    let m = $('medalha');
+    if (!m) { m = document.createElement('div'); m.id = 'medalha'; $('turma').insertAdjacentElement('beforebegin', m); }
+    m.innerHTML = '<p class="estrelas" role="img" aria-label="' + estrelas + ' de 3 estrelas">' + [1, 2, 3].map(k => '<span class="' + (k <= estrelas ? 'on' : '') + '" style="animation-delay:' + (0.2 + k * 0.25) + 's">★</span>').join('') + '</p>' +
+      '<p class="placar"><b>' + registo.certas + ' de ' + registo.total + '</b> certas · <b>' + registo.pontos + '</b> pontos' + (melhorSerie >= 3 ? ' · ' + melhorSerie + ' seguidas' : '') + '</p>' +
+      '<p class="incentivo">' + ['Não desanimes: a segunda volta mostra-te as explicações.', 'Já sabes algumas. A segunda volta ajuda nas outras.', 'Bom trabalho! Faltou pouco.', 'Excelente! Esta matéria está sabida.'][estrelas] + '</p><div id="segunda"></div>';
+    setTimeout(() => { S.fx.fim(pc >= 0.6); if (pc >= 0.6) F.confete({ chuva: true, n: pc >= 0.9 ? 200 : 110 }); }, 350);
+    falhadas = [];
+    passos.filter(p => p.tipo === 'jogo').forEach(p => p.perguntas.forEach(q => { if (registo.jogo.some(r => r.pergunta === q.p && !r.certa)) falhadas.push(q); }));
+    segundaVolta();
+  }
+  function segundaVolta() {
+    const box = $('segunda'); if (!box) return;
+    if (!falhadas.length) {
+      box.innerHTML = treinou ? '<p class="tudo-certo">✓ À segunda, acertaste todas.</p>' : '';
+      if (treinou) { const inc = document.querySelector('#medalha .incentivo'); if (inc) inc.hidden = true; }
+      return;
+    }
+    box.innerHTML = '<button type="button" class="btn orange">↻ Segunda volta: ' + (falhadas.length === 1 ? 'a pergunta que falhaste' : 'as ' + falhadas.length + ' que falhaste') + '</button>' +
+      '<p class="sm">É um treino, sem tempo. Não muda a pontuação que já foi enviada.</p>';
+    box.querySelector('button').addEventListener('click', () => {
+      show('ecra-passo'); ecra.innerHTML = ''; window.scrollTo(0, 0);
+      const treino = { titulo: 'Segunda volta', intro: 'Treino, sem tempo: lê a explicação de cada resposta.', perguntas: falhadas, segundos: 0 };
+      atualJogo = treino;
+      jogo(treino, reg => {
+        falhadas = falhadas.filter(q => reg.jogo.some(r => r.pergunta === q.p && !r.certa));
+        treinou = true; show('ecra-fim'); window.scrollTo(0, 0); segundaVolta();
+        if (!falhadas.length) { S.fx.fim(true); F.confete({ chuva: true, n: 120 }); }
+      }, { treino: true });
+    });
   }
   $('reenviar').addEventListener('click', () => enviar());
 

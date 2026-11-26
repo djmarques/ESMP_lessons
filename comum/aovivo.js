@@ -11,6 +11,10 @@
    3. Jogos de turma (comum/jogos.js): mariposas e fábrica de sapatos.
    Tudo passa pelo Google Apps Script de respostas/config.js (versão 4):
    ver comum/vivo.js para a explicação da ligação e dos seus limites.
+   Sons e animações (comum/efeitos.js): música na sala de espera e durante
+   cada pergunta (pára quando se revela a resposta, para o professor poder
+   explicar), tiques nos últimos 5 segundos, quem foi o mais rápido, quem
+   subiu na classificação, tambores e papelinhos no pódio.
    ===================================================================== */
 (function () {
   'use strict';
@@ -20,15 +24,21 @@
   const urlScript = () => (X.cfg().SCRIPT_URL || '').trim();
   const esperar = ms => new Promise(r => setTimeout(r, ms));
   const FORMAS = ['▲', '◆', '●', '■'], CORES = ['#A44A16', '#2F6E9E', '#5E7A3A', '#1E2A33'];
+  // sons e animações: se o comum/efeitos.js não carregou, o jogo funciona na mesma, em silêncio
+  const nada = () => {}, oco = new Proxy({}, { get: () => nada });
+  const S = E.som || { fx: oco, musica: oco, botoes: () => document.createElement('span'), acordar: nada };
+  const Festa = E.festa || oco;
   const primeiro = n => String(n).split(' + ').map(x => { const p = x.trim().split(/\s+/); return p[0] + (p.length > 1 ? ' ' + p[p.length - 1][0] + '.' : ''); }).join(' + ');
 
   /* ---------- a sala: janela a toda a largura, com o código QR e quem entrou ---------- */
   async function abrirSala(titulo, sub) {
+    S.acordar();                 // dentro do clique que abriu a sala: o navegador só deixa tocar som depois de um clique
     const ov = el('<div class="esmp-ov esmp-vivo"><div class="ev-topo"><div><p class="ev-k">Ao vivo · ' + esc(sub || '') + '</p><h3>' + esc(titulo) + '</h3></div>' +
-      '<div class="ev-sala"><span>sala</span><b></b></div><div class="ev-gente"><b>0</b><span>na sala</span></div><button type="button" class="ev-x">Fechar ✕</button></div><div class="ev-corpo"><p class="ev-aviso">A abrir a sala…</p></div></div>');
+      '<div class="ev-sala"><span>sala</span><b></b></div><div class="ev-gente"><b>0</b><span>na sala</span></div><span class="ev-som"></span><button type="button" class="ev-x">Fechar ✕</button></div><div class="ev-corpo"><p class="ev-aviso">A abrir a sala…</p></div></div>');
+    ov.querySelector('.ev-som').appendChild(S.botoes());
     const corpo = ov.querySelector('.ev-corpo');
     const ctx = { ov: ov, corpo: corpo, lista: {}, fora: [], v: 0, vivo: true, aoFechar: null, aoEntrar: null };
-    X.abrir(ov, () => { ctx.vivo = false; if (ctx.aoFechar) ctx.aoFechar(); if (ctx.sala && ctx.S) ctx.sala.fechar(ctx.S, ctx.K); });
+    X.abrir(ov, () => { ctx.vivo = false; S.musica.parar(); if (ctx.aoFechar) ctx.aoFechar(); if (ctx.sala && ctx.S) ctx.sala.fechar(ctx.S, ctx.K); });
     ov.querySelector('.ev-x').addEventListener('click', () => { if (!ctx.aMeio || confirm('Fechar a sala? O jogo acaba para todos.')) X.fechar(ov); });
     ctx.tecla = f => { const a = X.abertas[X.abertas.length - 1]; if (a && a.ov === ov) a.tecla = f; };
     await X.config;
@@ -61,14 +71,19 @@
 
   /** Sala de espera: código QR à esquerda, quem entrou à direita, e os botões do jogo por baixo. */
   function espera(ctx, htmlControlos, textoEspera) {
-    ctx.corpo.innerHTML = '<div class="ev-espera"><div class="ev-qr"><div class="code"></div><p class="ev-url"></p><p>Lê o código com a câmara · escreve o teu nome · «Entrar»</p></div>' +
+    ctx.corpo.innerHTML = '<div class="ev-espera"><div class="ev-qr"><div class="code"></div><p class="ev-url"></p><p>Lê o código com a câmara · escreve o teu nome · «Entrar»</p><p class="ev-pc">No computador ou no tablet: no slide do jogo, «Jogar» e escreve o código da sala, <b>' + esc(ctx.S) + '</b></p></div>' +
       '<div class="ev-lado"><p class="ev-k">Quem já entrou (clica num nome para o tirar da sala)</p><div class="ev-nomes"></div><div class="ev-controlos">' + htmlControlos + '</div></div></div>';
     E.qr(ctx.corpo.querySelector('.code'), ctx.url, 460);
     ctx.corpo.querySelector('.ev-url').textContent = ctx.url.replace(/^https?:\/\//, '');
     const box = ctx.corpo.querySelector('.ev-nomes');
+    S.musica.tocar('espera');
+    ctx.vistos = ctx.vistos || {};
     const pintar = () => {
       if (!box.isConnected) return;
-      const us = ctx.presentes();
+      const us = ctx.presentes(), marca = us.map(u => u + ':' + ctx.lista[u]).join('|');
+      if (marca === box.dataset.marca) return;
+      box.dataset.marca = marca;
+      if (us.filter(u => !ctx.vistos[u]).length) { S.fx.entrou(); us.forEach(u => { ctx.vistos[u] = 1; }); }
       box.innerHTML = us.length ? us.map(u => '<button type="button" data-u="' + u + '">' + esc(ctx.lista[u] || '?') + '</button>').join('') : '<p class="ev-vazio">' + esc(textoEspera || 'À espera dos telemóveis…') + '</p>';
     };
     box.addEventListener('click', e => {
@@ -84,7 +99,7 @@
   }
 
   function tabela(linhas, max) {
-    return '<ol class="ev-rank">' + linhas.slice(0, max).map((l, k) => '<li class="p' + (k + 1) + '"><span class="ev-pos">' + (k + 1) + '</span><span class="ev-nome">' + esc(l.nome) + '</span>' + (l.ganho ? '<span class="ev-ganho">+' + l.ganho + '</span>' : '<span></span>') + '<b>' + l.pontos + '</b></li>').join('') + '</ol>';
+    return '<ol class="ev-rank">' + linhas.slice(0, max).map((l, k) => '<li class="p' + (k + 1) + '"><span class="ev-pos">' + (k + 1) + '</span><span class="ev-nome">' + esc(l.nome) + (l.mov > 0 ? ' <i class="ev-mov" title="subiu ' + l.mov + (l.mov === 1 ? ' lugar' : ' lugares') + '">▲' + l.mov + '</i>' : '') + (l.seq >= 3 ? ' <i class="ev-seq" title="' + l.seq + ' certas seguidas">🔥' + l.seq + '</i>' : '') + '</span>' + (l.ganho ? '<span class="ev-ganho">+' + l.ganho + '</span>' : '<span></span>') + '<b>' + l.pontos + '</b></li>').join('') + '</ol>';
   }
 
   /* =====================================================================
@@ -105,7 +120,7 @@
     ctx.publicar({ fase: 'espera' });
 
     function classificacao() {
-      const l = ctx.presentes().map(u => ({ u: u, nome: ctx.lista[u], pontos: (pont[u] || {}).pontos || 0, certas: (pont[u] || {}).certas || 0, ganho: (pont[u] || {}).ganho || 0 }));
+      const l = ctx.presentes().map(u => ({ u: u, nome: ctx.lista[u], pontos: (pont[u] || {}).pontos || 0, certas: (pont[u] || {}).certas || 0, ganho: (pont[u] || {}).ganho || 0, seq: (pont[u] || {}).seq || 0 }));
       l.sort((a, b) => b.pontos - a.pontos || b.certas - a.certas || String(a.nome).localeCompare(String(b.nome), 'pt'));
       l.forEach((x, k) => { x.pos = k && l[k - 1].pontos === x.pontos ? l[k - 1].pos : k + 1; });
       return l;
@@ -120,19 +135,26 @@
         '<h2>' + esc(q.p) + '</h2><div class="ev-ops n' + q.o.length + '">' + q.o.map((t, j) => '<div class="ev-op" style="--c:' + CORES[j % 4] + '"><span class="ev-forma">' + FORMAS[j % 4] + '</span><span class="ev-tx">' + esc(t) + '</span><b class="ev-cont"></b><i class="ev-barra"></i></div>').join('') + '</div>' +
         '<div class="ev-pe"><span class="ev-resp">Responderam <b>0</b> de ' + ctx.presentes().length + '</span><button type="button" class="ev-ir">Revelar a resposta</button></div></div>';
       const barra = ctx.corpo.querySelector('.ev-tempo span'), seg = ctx.corpo.querySelector('.ev-seg'), resp = ctx.corpo.querySelector('.ev-resp b');
-      let msgs = {}, revelado = false;
+      S.musica.tocar('jogo'); if (n === 0) S.fx.inicio();
+      let msgs = {}, revelado = false, ultimoSeg = null, jaResponderam = 0;
       const revelarJa = () => { if (!revelado) { revelado = true; clearInterval(relogio); revelar(q, dur, msgs); } };
       ctx.corpo.querySelector('.ev-ir').addEventListener('click', revelarJa);
       clearInterval(relogio);
       relogio = setInterval(() => {
         const resto = fim - ctx.sala.agora();
-        seg.textContent = Math.max(0, Math.ceil(resto / 1000)); barra.style.width = Math.max(0, Math.min(100, resto / dur * 100)) + '%';
+        const sg = Math.max(0, Math.ceil(resto / 1000));
+        seg.textContent = sg; barra.style.width = Math.max(0, Math.min(100, resto / dur * 100)) + '%';
+        if (sg !== ultimoSeg && !revelado) {                 // uma vez por segundo: aviso aos 10, tiques e música mais rápida nos últimos 5
+          ultimoSeg = sg;
+          if (sg === 10 && dur >= 15000) S.fx.aviso();
+          if (sg >= 1 && sg <= 5) { S.fx.tique(sg); S.musica.tensao(true); const pq = ctx.corpo.querySelector('.ev-perg'); if (pq) pq.classList.add('pressa'); }
+        }
         if (resto < -1800) revelarJa();                     // tempo esgotado, mais uma folga para as últimas respostas chegarem
       }, 200);
       while (ctx.vivo && !revelado && i === n) {
         const m = await ctx.recolher('q' + i);
         if (revelado || i !== n) break;
-        if (m) { msgs = m; const k = ctx.presentes().filter(u => m[u]).length; resp.textContent = k; resp.parentNode.lastChild.textContent = ' de ' + ctx.presentes().length; if (k && k >= ctx.presentes().length) { await esperar(400); revelarJa(); break; } }
+        if (m) { msgs = m; const k = ctx.presentes().filter(u => m[u]).length; if (k > jaResponderam) { S.fx.entrou(); Festa.saltar(resp); } jaResponderam = k; resp.textContent = k; resp.parentNode.lastChild.textContent = ' de ' + ctx.presentes().length; if (k && k >= ctx.presentes().length) { await esperar(400); revelarJa(); break; } }
         await esperar(1300);
       }
     }
@@ -148,10 +170,22 @@
         if (j != null && cont[j] != null) cont[j]++;
         p.ganho = certa ? E.pontosVivo(Number(m.ms) || 0, dur) : 0;
         p.pontos += p.ganho; if (certa) p.certas++;
+        p.seq = certa ? (p.seq || 0) + 1 : 0;                  // respostas certas seguidas
         p.resp[i] = { pergunta: q.p, resposta: j == null ? '(sem resposta)' : q.o[j], certa: certa };
       });
       const l = classificacao(), pl = placar(l), ultima = i === qs.length - 1;
-      ctx.presentes().forEach(u => { if (pl[u]) pl[u][3] = pont[u].resp[i].certa ? 1 : 0; });
+      l.forEach(x => { const p = pont[x.u]; x.mov = p && p.pos && i > 0 ? p.pos - x.pos : 0; if (p) p.pos = x.pos; });      // quem subiu desde a pergunta anterior
+      // o que aconteceu nesta pergunta: quantos acertaram, quem foi o mais rápido, a maior série
+      const certos = ctx.presentes().filter(u => pont[u].resp[i].certa), presentes = ctx.presentes().length;
+      const pc = presentes ? Math.round(certos.length / presentes * 100) : 0;
+      const rapido = certos.map(u => ({ u: u, ms: Number((msgs[u] || {}).ms) || 0 })).sort((a, b) => a.ms - b.ms)[0];
+      const serie = l.filter(x => x.seq >= 3).sort((a, b) => b.seq - a.seq)[0];
+      const factos = ['<b>' + pc + ' %</b> ' + (certos.length === 1 ? 'acertou' : 'acertaram') + (pc === 100 && presentes > 1 ? ': a turma toda!' : pc === 0 ? ': esta era difícil' : '')];
+      if (rapido && presentes > 1) factos.push('⚡ mais rápido: <b>' + esc(primeiro(ctx.lista[rapido.u] || '?')) + '</b> (' + (rapido.ms < 1000 ? 'menos de 1 s' : (rapido.ms / 1000).toLocaleString('pt-PT', { maximumFractionDigits: 1 }) + ' s') + ')');
+      if (serie) factos.push('🔥 <b>' + esc(primeiro(serie.nome || '?')) + '</b>: ' + serie.seq + ' seguidas');
+      S.musica.parar(); S.fx.revelar();                         // silêncio depois do toque: é a altura de explicar a resposta
+      if (pc >= 50) setTimeout(() => { if (ctx.vivo) Festa.confete({ x: 0.5, y: 0.35, n: pc === 100 ? 160 : 80, abertura: 2.6 }); }, 350);
+      ctx.presentes().forEach(u => { if (pl[u]) { pl[u][3] = pont[u].resp[i].certa ? 1 : 0; pl[u][4] = pont[u].seq || 0; } });
       ctx.publicar({ fase: 'revelar', i: i, n: qs.length, p: q.p, o: q.o, c: q.c, f: q.f, placar: pl, total: l.length });
       const total = cont.reduce((a, b) => a + b, 0) || 1;
       ctx.corpo.querySelectorAll('.ev-op').forEach((op, j) => {
@@ -159,6 +193,8 @@
         requestAnimationFrame(() => { op.querySelector('.ev-barra').style.width = (cont[j] / total * 100) + '%'; });
       });
       ctx.corpo.querySelector('.ev-linha').innerHTML = '<span class="ev-num">Pergunta ' + (i + 1) + ' / ' + qs.length + '</span><span class="ev-fb">' + esc(q.f || '') + '</span>';
+      const pq = ctx.corpo.querySelector('.ev-perg'); if (pq) pq.classList.remove('pressa');
+      ctx.corpo.querySelector('.ev-pe').insertAdjacentHTML('beforebegin', '<p class="ev-factos">' + factos.map(f => '<span>' + f + '</span>').join('') + '</p>');
       ctx.corpo.querySelector('.ev-pe').innerHTML = '<div class="ev-top5"><p class="ev-k">Classificação</p>' + tabela(l, 5) + '</div><button type="button" class="ev-ir">' + (ultima ? 'Ver o pódio →' : 'Pergunta seguinte →') + '</button>';
       ctx.corpo.querySelector('.ev-ir').addEventListener('click', () => (ultima ? fim() : pergunta(i + 1)));
     }
@@ -167,8 +203,10 @@
       ctx.aMeio = false;
       const l = classificacao();
       ctx.publicar({ fase: 'fim', placar: placar(l), total: l.length });
-      l.forEach(x => { x.ganho = 0; });
-      ctx.corpo.innerHTML = '<div class="ev-fim"><div class="ev-podio">' + [1, 0, 2].map(k => l[k] ? '<div class="ev-degrau d' + (k + 1) + '"><span>' + esc(l[k].nome) + '</span><b>' + l[k].pontos + '</b><i>' + (k + 1) + '.º</i></div>' : '').join('') + '</div>' +
+      l.forEach(x => { x.ganho = 0; x.mov = 0; x.seq = 0; });
+      S.musica.parar(); S.fx.rufar(2.7);
+      setTimeout(() => { if (!ctx.vivo) return; S.fx.podio(); Festa.confete({ chuva: true, n: 240 }); const f = ctx.corpo.querySelector('.ev-fim'); if (f) f.classList.add('revelado'); }, 2750);
+      ctx.corpo.innerHTML = '<div class="ev-fim suspense"><div class="ev-podio">' + [1, 0, 2].map(k => l[k] ? '<div class="ev-degrau d' + (k + 1) + '"><span>' + esc(l[k].nome) + '</span><b>' + l[k].pontos + '</b><i>' + (k + 1) + '.º</i></div>' : '').join('') + '</div>' +
         '<div class="ev-todos"><p class="ev-k">Classificação final · ' + l.length + (l.length === 1 ? ' jogador' : ' jogadores ou equipas') + '</p>' + tabela(l, 40) + '<p class="ev-guardar">A guardar na folha «Avaliação contínua»…</p></div></div>';
       const g = ctx.corpo.querySelector('.ev-guardar');
       const linhas = l.map(x => { const p = pont[x.u] || { resp: [] }; return { nomes: String(x.nome).split(' + '), pontos: x.pontos, certas: x.certas, total: qs.length, jogo: qs.map((q, k) => p.resp[k] || { pergunta: q.p, resposta: '(não estava)', certa: false }), escrita: [] }; });
@@ -185,7 +223,7 @@
      2. Classificação de uma atividade feita ao ritmo de cada um
      ===================================================================== */
   function ranking(def) {
-    const ov = el('<div class="esmp-ov esmp-vivo"><div class="ev-topo"><div><p class="ev-k">Classificação · ' + esc(def.disciplina || '') + '</p><h3>' + esc(def.titulo) + '</h3></div><span></span><span></span><button type="button" class="ev-x">Fechar ✕</button></div><div class="ev-corpo"></div></div>');
+    const ov = el('<div class="esmp-ov esmp-vivo"><div class="ev-topo"><div><p class="ev-k">Classificação · ' + esc(def.disciplina || '') + '</p><h3>' + esc(def.titulo) + '</h3></div><span></span><span></span><span></span><button type="button" class="ev-x">Fechar ✕</button></div><div class="ev-corpo"></div></div>');
     const corpo = ov.querySelector('.ev-corpo'); let vivo = true, timer = null;
     X.abrir(ov, () => { vivo = false; clearInterval(timer); });
     ov.querySelector('.ev-x').addEventListener('click', () => X.fechar(ov));
@@ -249,13 +287,17 @@
       ctx.corpo.innerHTML = '<div class="ev-jogo"><div class="ev-palco"><div class="ev-tronco"></div><div class="ev-grande"></div></div><div class="ev-lado2"><p class="ev-estado">Prepara-te…</p><div class="ev-tempo"><span></span></div><div class="ev-barras">' + barras() + '</div><div class="ev-controlos"></div></div></div>';
       const palco = M.palco(ctx.corpo.querySelector('.ev-tronco')), grande = ctx.corpo.querySelector('.ev-grande'), estado = ctx.corpo.querySelector('.ev-estado'), barra = ctx.corpo.querySelector('.ev-tempo span');
       palco.preparar(tronco, n);
+      S.musica.parar(); let bip = null;
       while (ctx.vivo) {                                   // contagem e os 10 segundos, pelo relógio do servidor
         const t = ctx.sala.agora() - inicio;
+        const cs = t < 0 ? Math.ceil(-t / 1000) : 0;
+        if (cs !== bip) { bip = cs; if (cs <= 3) S.fx.contagem(cs); if (cs === 0) { S.musica.tocar('jogo'); S.musica.tensao(true); } }
         if (t < 0) { grande.textContent = Math.ceil(-t / 1000); estado.textContent = n + (n === 1 ? ' pássaro pronto' : ' pássaros prontos') + '…'; }
         else if (t < M.DUR) { grande.textContent = ''; estado.textContent = 'A turma está a caçar!'; barra.style.width = (100 - t / M.DUR * 100) + '%'; }
         else break;
         await esperar(100);
       }
+      S.musica.parar(); S.fx.fim(true);
       barra.style.width = '0%'; estado.textContent = 'A juntar as caçadas de todos…';
       let msgs = {};
       for (let k = 0; k < 5 && ctx.vivo; k++) {            // os telemóveis enviam no fim: espera até 7 segundos por todos
@@ -322,15 +364,20 @@
           ctx.corpo.querySelectorAll('.ev-posto').forEach((p, k) => { p.querySelector('b').style.width = (contas.postos[k] / max * 100) + '%'; p.querySelector('output').textContent = contas.postos[k]; p.classList.toggle('gargalo', k === contas.gargalo && max > 1); });
         }
       };
-      let proxima = 0;
+      let proxima = 0, bip = null, tic = null;
+      S.musica.parar();
       while (ctx.vivo) {
         const t = ctx.sala.agora() - inicio;
+        const cs = t < 0 ? Math.ceil(-t / 1000) : 0, falta = Math.ceil((F.DUR - t) / 1000);
+        if (cs !== bip) { bip = cs; if (cs <= 3) S.fx.contagem(cs); if (cs === 0) S.musica.tocar('jogo'); }
+        if (t >= 0 && falta <= 5 && falta >= 1 && falta !== tic) { tic = falta; S.fx.tique(falta); S.musica.tensao(true); }
         if (t < 0) seg.textContent = 'começa em ' + Math.ceil(-t / 1000);
         else if (t < F.DUR) { seg.textContent = Math.ceil((F.DUR - t) / 1000) + ' s'; barra.style.width = (100 - t / F.DUR * 100) + '%'; }
         else break;
         if (t > 3000 && Date.now() > proxima) { proxima = Date.now() + 2500; ctx.recolher(r).then(m => { if (m) { contas = F.contas(papeis, m); pintar(); } }); }
         await esperar(150);
       }
+      S.musica.parar(); S.fx.fim(true);
       barra.style.width = '0%'; seg.textContent = 'a contar…';
       for (let k = 0; k < 3 && ctx.vivo; k++) { await esperar(1500); const m = await ctx.recolher(r); if (m) { contas = F.contas(papeis, m); pintar(); } }
       if (!ctx.vivo) return;

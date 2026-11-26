@@ -7,9 +7,14 @@
    (com ../../ nas pastas de dois níveis, como ai-2ano/o-trabalho).
 
    O que acrescenta, sem mexer nos slides:
-     1. Um botão «Responder no telemóvel» em TODOS os questionários (.quiz) e
-        jogos (.game) que ainda não o tinham. O telemóvel lê as perguntas
-        diretamente dos slides (respostas/?f=<pasta>&q=<n>).
+     1. Um botão «Responder no telemóvel» em TODOS os questionários (.quiz)
+        que ainda não o tinham. O telemóvel lê as perguntas diretamente dos
+        slides (respostas/?f=<pasta>&q=<n>).
+        Nos jogos (.game) há um só botão, «Jogar», que abre a janela do jogo:
+        código QR, «Jogar neste dispositivo» (computador ou tablet, sem
+        código), «Jogar ao vivo», «Classificação» e, para quando não há
+        telemóveis, «Só neste ecrã» (o jogo antigo, de braço no ar, que não
+        fica registado na folha).
      2. «Respostas da turma»: ao lado do código QR, gráficos de barras ao vivo
         com as respostas que vão chegando à folha «Avaliação contínua».
         Com <div class="esmp-ao-vivo" data-path="…"></div>, o código QR e o
@@ -26,6 +31,7 @@
      4. Na janela «Respostas da turma»: «Jogar ao vivo» (uma pergunta de cada
         vez, o professor avança) e «Classificação» (com nomes, só com a
         chave do professor).
+     5. Sons, música de fundo e papelinhos nos jogos: comum/efeitos.js.
    ===================================================================== */
 (function () {
   'use strict';
@@ -75,7 +81,8 @@
 
   /* ---------- jogos ao vivo (comum/vivo.js, comum/jogos.js, comum/aovivo.js) ---------- */
   window.ESMP_CTX = { RAIZ: RAIZ, PASTA: PASTA, PUBLICADO: PUBLICADO, el: el, abrir: abrir, fechar: fechar, isolar: isolar, abertas: abertas, config: config, cfg: cfg, disciplina: disciplina };
-  const vivo = carregar(RAIZ + 'comum/vivo.js').then(() => carregar(RAIZ + 'comum/jogos.js')).then(() => carregar(RAIZ + 'comum/aovivo.js')).catch(() => {});
+  const efeitos = carregar(RAIZ + 'comum/efeitos.js').catch(() => {});      // sons, música e papelinhos (ESMP.som, ESMP.festa)
+  const vivo = efeitos.then(() => carregar(RAIZ + 'comum/vivo.js')).then(() => carregar(RAIZ + 'comum/jogos.js')).then(() => carregar(RAIZ + 'comum/aovivo.js')).catch(() => {});
   const aoVivo = () => vivo.then(() => window.ESMP_VIVO && window.ESMP_VIVO.menu());
 
   /* =====================================================================
@@ -83,12 +90,31 @@
      ===================================================================== */
   let grafoAberto = null;      // { pergunta, juntar(contagens) } quando o grafo foi aberto a partir de uma nuvem
 
-  function sessao(def, url) {
+  /** A janela de uma atividade: código QR, botão para responder neste dispositivo e respostas da turma.
+      o.jogo: a janela foi aberta pelo botão «Jogar» de um jogo; o.local(): joga só neste ecrã, sem registo. */
+  function sessao(def, url, o) {
+    o = o || {};
+    const verbo = o.jogo ? 'Jogar' : 'Responder';
     const ov = el('<div class="esmp-ov esmp-sessao"><div class="es-caixa">' +
-      '<header><div><p class="es-k">Responder no telemóvel · ' + esc(def.disciplina || '') + '</p><h3>' + esc(def.titulo) + '</h3></div><button type="button" class="es-x">Fechar ✕</button></header>' +
-      '<div class="es-cols"><div class="es-qr"><div class="code"></div><a target="_blank" rel="noopener"></a><p>Lê o código com a câmara · escreve o teu nome · responde</p><p class="es-sm">Quem não tem telemóvel responde com um colega: no primeiro ecrã, «Responder com um colega».</p></div>' +
-      '<div class="es-res"><div class="es-vivo"><button type="button" data-v="quiz" title="Uma pergunta de cada vez para a turma toda: tu avanças, os telemóveis seguem">▶ Jogar ao vivo</button><button type="button" data-v="ranking" title="Quem teve mais pontos (com nomes; pede a chave do professor)">🏆 Classificação</button></div><label class="es-rev"><input type="checkbox"> Mostrar as respostas certas</label><div class="es-painel"></div></div></div></div></div>');
-    const link = ov.querySelector('.es-qr a'); link.href = url;
+      '<header><div><p class="es-k">' + (o.jogo ? 'Jogar' : 'Responder no telemóvel') + ' · ' + esc(def.disciplina || '') + '</p><h3>' + esc(def.titulo) + '</h3></div><button type="button" class="es-x">Fechar ✕</button></header>' +
+      '<div class="es-cols"><div class="es-qr"><div class="code"></div><a class="es-end" target="_blank" rel="noopener"></a><p>Lê o código com a câmara · escreve o teu nome · ' + (o.jogo ? 'joga' : 'responde') + '</p>' +
+      '<p class="es-ou"><span>ou, no computador ou no tablet</span></p><a class="es-aqui" target="_blank" rel="noopener" title="Abre a atividade num separador novo deste navegador. As respostas ficam registadas na folha, como no telemóvel.">▶ ' + verbo + ' neste dispositivo</a>' +
+      '<form class="es-sala" autocomplete="off"><label for="es-sala-cod">Sala ao vivo aberta pelo professor?</label><input id="es-sala-cod" maxlength="8" placeholder="código" autocapitalize="characters" spellcheck="false" aria-label="Código da sala"><button>Entrar</button></form>' +
+      '<p class="es-sm">Quem não tem telemóvel nem computador responde com um colega: no primeiro ecrã, «Responder com um colega».</p></div>' +
+      '<div class="es-res"><div class="es-vivo"><button type="button" data-v="quiz" title="Uma pergunta de cada vez para a turma toda: tu avanças, os telemóveis seguem">▶ Jogar ao vivo</button><button type="button" data-v="ranking" title="Quem teve mais pontos (com nomes; pede a chave do professor)">🏆 Classificação</button>' +
+      (o.local ? '<button type="button" data-v="local" title="Sem telemóveis: a turma responde de braço no ar e tu clicas na resposta (teclas 1 a 4; Enter passa à seguinte). Nada fica registado na folha.">Só neste ecrã · sem registo</button>' : '') +
+      '</div><label class="es-rev"><input type="checkbox"> Mostrar as respostas certas</label><div class="es-painel"></div></div></div></div></div>');
+    const aqui = ov.querySelector('.es-aqui'); aqui.href = url;
+    const fSala = ov.querySelector('.es-sala');
+    if (!PUBLICADO) { aqui.hidden = true; ov.querySelector('.es-ou').hidden = true; fSala.hidden = true; }
+    // quem está no computador não lê o código QR da sala: escreve as letras que estão no ecrã do professor
+    fSala.addEventListener('submit', e => {
+      e.preventDefault();
+      const inp = fSala.querySelector('input'), cod = inp.value.toUpperCase().replace(/[^A-Z0-9]/g, '');
+      if (cod.length < 4) { inp.focus(); return; }
+      window.open(RAIZ + 'respostas/?f=' + PASTA + '&s=' + cod, '_blank', 'noopener');
+    });
+    const link = ov.querySelector('.es-qr a.es-end'); link.href = url;
     if (!PUBLICADO) link.textContent = 'O código QR aparece quando o site estiver publicado (GitHub Pages).';
     else { link.textContent = url.replace(/^https?:\/\/(www\.)?/, '').slice(0, 70) + (url.length > 80 ? '…' : ''); E.qr(ov.querySelector('.code'), url, 520); }
     let painel = null;
@@ -103,9 +129,11 @@
     const temCertas = E.passos(def).some(p => (p.tipo === 'jogo') || (p.tipo === 'classificar' && p.itens.some(i => typeof i.c === 'number')) || (p.tipo === 'escala' && E.itensEscala(p).some(i => i.c != null)));
     ov.querySelector('.es-rev').hidden = !temCertas;
     // ao vivo e classificação só fazem sentido quando há perguntas com resposta certa (pontos)
-    ov.querySelector('.es-vivo').hidden = !temCertas;
+    ov.querySelectorAll('.es-vivo [data-v="quiz"], .es-vivo [data-v="ranking"]').forEach(b => { b.hidden = !temCertas; });
+    ov.querySelector('.es-vivo').hidden = !temCertas && !o.local;
     ov.querySelector('.es-vivo').addEventListener('click', e => {
       const b = e.target.closest('button'); if (!b) return;
+      if (b.dataset.v === 'local') { fechar(ov); o.local(); return; }
       vivo.then(() => {
         if (!window.ESMP_VIVO) return;
         if (b.dataset.v === 'quiz') { fechar(ov); window.ESMP_VIVO.quiz(def); } else window.ESMP_VIVO.ranking(def);
@@ -117,11 +145,52 @@
     abrir(ov, () => painel && painel.parar());
   }
 
-  // (1) botão em todos os questionários e jogos que ainda não têm ligação ao telemóvel
+  // atividades escritas em <pasta>/atividades.js (carregadas uma vez por pasta)
+  const atividades = {};
+  function atividade(f, a) {
+    atividades[f] = atividades[f] || carregar(RAIZ + f + '/atividades.js?v=' + Date.now()).then(() => { const x = window.ATIVIDADES || {}; window.ATIVIDADES = undefined; return x; });
+    return atividades[f].then(t => t[a]);
+  }
+  const defDe = (act, f) => ({ disciplina: act.disciplina || (cfg().DISCIPLINAS || {})[f] || 'CP 4', titulo: act.titulo, passos: act.passos, jogo: act.jogo, escrita: act.escrita });
+
+  // (1a) jogos: um só botão, «Jogar», no lugar de «Começar o jogo». Abre a janela do jogo
+  // (código QR, «Jogar neste dispositivo», «Jogar ao vivo»), em que as respostas ficam registadas.
+  // O jogo antigo, que corre no próprio slide sem registo, passa a ser a opção «Só neste ecrã».
+  function prepararJogo(c, n, slide) {
+    const comecar = c.querySelector('.gbegin'), inicio = c.querySelector('.gstart');
+    if (!comecar || !inicio) return false;
+    // se o slide já tinha «Responder no telemóvel» para este jogo (atividades.js), usa-se essa atividade
+    const tel = slide.querySelectorAll('.quiz, .game').length === 1 ? slide.querySelector('.phone-btn[data-path]') : null;
+    let u = null;
+    if (tel) { u = new URL(tel.dataset.path, location.href); if (!u.searchParams.get('f') || !u.searchParams.get('a')) u = null; }
+    if (u) { tel.style.display = 'none'; tel.dataset.esmpOculto = '1'; }
+    const b = el('<button type="button" class="esmp-jogar"><span aria-hidden="true">▶</span> Jogar</button>');
+    comecar.style.display = 'none'; comecar.insertAdjacentElement('beforebegin', b);
+    const p = inicio.querySelector('p:not(.sm)'), sm = inicio.querySelector('p.sm');
+    if (p) p.textContent = p.textContent.replace(/\s*·\s*(respondam de braço no ar|no telemóvel ou de braço no ar)\s*$/, '');
+    if (sm) sm.textContent = 'No telemóvel, no tablet ou no computador · as respostas ficam registadas';
+    const local = () => comecar.click();
+    const doSlide = () => {
+      const def = E.extrair(document, n); if (!def) return local();
+      config.then(() => { def.disciplina = disciplina(); sessao(def, RAIZ + 'respostas/?f=' + PASTA + '&q=' + n, { jogo: true, local: local }); });
+    };
+    b.addEventListener('click', e => {
+      e.stopPropagation();
+      if (E.som) E.som.acordar();
+      if (!u) return doSlide();
+      const f = u.searchParams.get('f');
+      config.then(() => atividade(f, u.searchParams.get('a'))).then(act => (act ? sessao(defDe(act, f), u.href, { jogo: true, local: local }) : doSlide())).catch(doSlide);
+    });
+    return true;
+  }
+
+  // (1b) botão em todos os questionários que ainda não têm ligação ao telemóvel
   const JA_TEM = '.phone-btn, .phone-qr, a.act-btn[href*="respostas/"], .esmp-tel';
   E.componentes(document).forEach((c, n) => {
     const slide = c.closest('.slide');
-    if (!slide || slide.querySelector(JA_TEM)) return;
+    if (!slide) return;
+    if (c.classList.contains('game') && prepararJogo(c, n, slide)) return;
+    if (slide.querySelector(JA_TEM)) return;
     const b = el('<button type="button" class="esmp-tel">Responder no telemóvel</button>');
     c.parentNode.insertBefore(b, c);
     b.addEventListener('click', e => {
@@ -132,13 +201,44 @@
     });
   });
 
+  // (1c) o jogo «só neste ecrã»: música de fundo, tensão nos últimos segundos e papelinhos.
+  // O jogo em si está no app.js de cada aula; aqui só se observa o que ele vai mostrando.
+  efeitos.then(() => {
+    const S = E.som, F = E.festa; if (!S || !F) return;
+    let dono = null;                                    // o jogo que tem a música a tocar
+    document.querySelectorAll('.game').forEach(game => {
+      const slide = game.closest('.slide'), som = game.querySelector('.gsound');
+      if (som) { som.insertAdjacentElement('afterend', S.botoes({ so: 'musica' })); som.addEventListener('click', () => setTimeout(S.sincronizar, 0)); }
+      let antes = 'fora';
+      const ver = () => {
+        const k = game.classList, visivel = !slide || slide.classList.contains('current');
+        const fase = !visivel || !k.contains('playing') ? 'fora' : k.contains('was-right') ? 'certo' : k.contains('was-wrong') ? 'errado' : k.contains('hurry') ? 'pressa' : 'pergunta';
+        if (fase === antes) return;
+        const vinha = antes; antes = fase;
+        if (fase === 'fora') {
+          if (dono === game) { dono = null; S.musica.parar(); }
+          const m = k.contains('over') && vinha !== 'fora' && /(\d+)\s*\/\s*(\d+)/.exec((game.querySelector('.gfinal') || {}).textContent || '');
+          if (m && Number(m[1]) / Number(m[2]) >= 0.6) F.confete({ chuva: true, n: 120 });
+          return;
+        }
+        // a música toca enquanto a pergunta está aberta e pára quando a resposta aparece: é a altura de o professor explicar
+        const q = game.querySelector('.gq:not([hidden])');
+        if (fase === 'certo' || fase === 'errado') { if (dono === game) { dono = null; S.musica.parar(); } }
+        else { if (dono !== game) { dono = game; S.musica.tocar('jogo'); } S.musica.tensao(fase === 'pressa'); }
+        if (fase === 'certo') {
+          F.confeteDe(q && q.querySelector('.right'), { n: 50 });
+          const seg = parseInt((game.querySelector('.gstreak') || {}).textContent, 10);
+          if (seg >= 3) setTimeout(() => S.fx.seguidas(seg), 350);
+        } else if (fase === 'errado') F.abanar(q && q.querySelector('.gopts'));
+      };
+      new MutationObserver(ver).observe(game, { attributes: true, attributeFilter: ['class'] });
+      if (slide) new MutationObserver(ver).observe(slide, { attributes: true, attributeFilter: ['class'] });
+    });
+  });
+
   // (2) «Respostas da turma» ao lado dos botões e códigos QR que já existiam
-  const atividades = {};
-  function atividade(f, a) {
-    atividades[f] = atividades[f] || carregar(RAIZ + f + '/atividades.js?v=' + Date.now()).then(() => { const x = window.ATIVIDADES || {}; window.ATIVIDADES = undefined; return x; });
-    return atividades[f].then(t => t[a]);
-  }
   document.querySelectorAll('.phone-btn[data-path], .phone-qr[data-path], a.act-btn[href*="respostas/"]').forEach(orig => {
+    if (orig.dataset.esmpOculto) return;               // jogo: o botão «Jogar» já abre esta janela
     const u = new URL(orig.dataset.path || orig.getAttribute('href'), location.href);
     const f = u.searchParams.get('f') || (/aluno\.html/.test(u.pathname) ? PASTA : ''), a = u.searchParams.get('a');
     if (!f || !a) return;
@@ -148,7 +248,7 @@
       e.stopPropagation(); e.preventDefault();
       atividade(f, a).then(act => {
         if (!act) return;
-        sessao({ disciplina: act.disciplina || (cfg().DISCIPLINAS || {})[f] || 'CP 4', titulo: act.titulo, passos: act.passos, jogo: act.jogo, escrita: act.escrita }, u.href);
+        sessao(defDe(act, f), u.href);
       }).catch(() => {});
     });
   });

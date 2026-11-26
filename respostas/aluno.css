@@ -22,11 +22,16 @@ textarea { min-height:110px; resize:vertical; }
 .aviso { background:var(--orange-light); border-radius:10px; padding:10px 12px; font-size:15px; }
 .intro { background:#fff; border:1px solid var(--line); border-radius:12px; padding:12px 14px; font-size:16px; }
 .ghead { display:flex; justify-content:space-between; align-items:center; font-size:15px; }
-.som { border:0; background:none; font-size:22px; }
+.ghead { gap:8px; } .ghead .serie { flex:1; text-align:center; font-weight:700; color:var(--orange); white-space:nowrap; } .ghead .treino { font-weight:700; color:var(--blue); }
+.ghead .esmp-som button { width:36px; height:36px; padding:6px; border-color:var(--line); color:var(--navy); }
+#ecra-passo.a-jogar { position:relative; min-height:380px; }
 .gtimer { display:flex; gap:10px; align-items:center; margin:10px 0 14px; }
 .track { flex:1; height:10px; background:var(--line); border-radius:99px; overflow:hidden; }
 .track span { display:block; height:100%; width:100%; background:var(--blue); transition:width .9s linear; }
-.hurry .track span { background:var(--orange); }
+.hurry .track span { background:var(--orange); animation:pisca .5s ease-in-out infinite alternate; }
+.hurry .gtimer output { color:var(--orange); animation:bate 1s ease-in-out infinite; }
+@keyframes pisca { to { opacity:.5; } }
+@keyframes bate { 0%, 100% { transform:scale(1); } 12% { transform:scale(1.4); } }
 output { font-weight:700; font-size:20px; min-width:28px; text-align:right; }
 .stem { font-family:var(--head); font-size:23px; font-weight:700; margin:0 0 14px; }
 .opts { display:grid; gap:10px; }
@@ -35,7 +40,9 @@ output { font-weight:700; font-size:20px; min-width:28px; text-align:right; }
 .opts.neutro button { background:#fff; color:var(--navy); border:2px solid var(--line); }
 .opts.neutro button.escolhido { border-color:var(--orange); background:var(--orange-light); }
 .opts button.wrong { opacity:.45; text-decoration:line-through; }
-.opts button.right { outline:4px solid #F0A673; }
+.opts button { transition:transform .08s; } .opts button:active:not(:disabled) { transform:scale(.97); }
+.opts button.right { outline:4px solid #F0A673; animation:certa .45s ease-out; }
+@keyframes certa { 40% { transform:scale(1.04); } }
 .opts button:disabled:not(.right):not(.wrong):not(.escolhido) { opacity:.45; }
 .fb { min-height:2.8em; margin:14px 0 0; }
 .fb b.ok { color:var(--green); } .fb b.no { color:var(--orange); }
@@ -97,3 +104,15 @@ input.palavra { margin-top:8px; }
 .jg-tronco { display: block; width: 100%; height: auto; max-height: 68vh; border-radius: 14px; user-select: none; -webkit-user-select: none; }
 .jg-sapato { display: block; width: 100%; height: auto; background: #fff; border: 2px solid var(--line); border-radius: 14px; user-select: none; -webkit-user-select: none; }
 .jg-msg { font-size: 17px; margin: 10px 0 0; } .jg-papel { background: var(--orange-light); border-radius: 12px; padding: 10px 12px; font-size: 16px; margin: 0 0 10px; }
+
+/* ---- fim de um jogo: estrelas e segunda volta ---- */
+#medalha { margin:18px 0 6px; background:#fff; border:1px solid var(--line); border-radius:14px; padding:14px 14px 16px; }
+.estrelas { margin:0; font-size:58px; line-height:1; letter-spacing:8px; color:var(--line); }
+.estrelas span { display:inline-block; }
+.estrelas .on { color:var(--orange); animation:salta .5s ease-out both; }
+.placar { margin:8px 0 2px; font-family:var(--head); font-size:21px; }
+.incentivo { margin:0; color:#5B6670; }
+#segunda .btn { margin-top:14px; } #segunda .sm { margin:8px 0 0; }
+.tudo-certo { margin:12px 0 0; font-weight:700; color:var(--green); }
+@media (prefers-reduced-motion:reduce) { .hurry .track span, .hurry .gtimer output, .estrelas .on, .opts button.right { animation:none; } }
+.vv-extra { margin:10px 0 0; text-align:center; font-weight:700; color:var(--orange); animation:salta .45s ease-out both; }

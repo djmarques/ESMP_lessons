@@ -11,6 +11,14 @@
 .phone-btn + .esmp-ver { float: right; }
 .phone-qr .esmp-ver { display: block; margin: 10px auto 0; }
 .esmp-ver::before { content: "▮▯▮ "; letter-spacing: -2px; font-size: 11px; vertical-align: 1px; }
+/* «Jogar»: o único botão dos jogos (abre a janela com o código QR e «Jogar neste dispositivo») */
+.esmp-jogar { font: 700 24px Carlito, Calibri, Arial, sans-serif; border: 0; border-radius: 14px; padding: 14px 44px; margin: 6px 0 4px; background: #A44A16; color: #fff; cursor: pointer; line-height: 1.2; box-shadow: 0 5px 0 #7A3610; animation: esmp-pulsa 2.4s ease-in-out infinite; transition: transform .08s; }
+.esmp-jogar span { font-size: .8em; margin-right: 6px; }
+.esmp-jogar:hover { background: #B4541C; }
+.esmp-jogar:active { transform: translateY(4px); box-shadow: 0 1px 0 #7A3610; animation: none; }
+@keyframes esmp-pulsa { 0%, 100% { box-shadow: 0 5px 0 #7A3610, 0 0 0 0 rgba(164,74,22,.45); } 55% { box-shadow: 0 5px 0 #7A3610, 0 0 0 16px rgba(164,74,22,0); } }
+@media (prefers-reduced-motion: reduce) { .esmp-jogar { animation: none; } }
+.ghead .esmp-som { margin-left: 2px; } .ghead .esmp-som button { width: 34px; height: 34px; padding: 6px; border-radius: 8px; }
 
 /* ---- barra de ferramentas ---- */
 .esmp-doca { position: fixed; right: 12px; bottom: 84px; z-index: 900; display: flex; flex-direction: column; gap: 6px; opacity: .5; transition: opacity .2s; }
@@ -29,7 +37,7 @@
 .esmp-ao-vivo .eav-painel { font-size: 18px; min-height: 280px; }
 .esmp-ao-vivo .er-nuvem { font-size: clamp(22px, 2.4vw, 34px); min-height: 220px; }
 @media (max-width: 700px) { .esmp-ao-vivo { grid-template-columns: 1fr; } .esmp-ao-vivo .eav-qr { max-width: 260px; margin: 0 auto; } }
-@media print { .esmp-doca, .esmp-tel, .esmp-ver { display: none !important; } }
+@media print { .esmp-doca, .esmp-tel, .esmp-ver, .esmp-jogar, .esmp-som { display: none !important; } }
 @media (max-width: 700px) { .esmp-doca { bottom: 120px; right: 8px; } }
 
 /* ---- camadas ---- */
@@ -43,12 +51,23 @@
 .esmp-ov h3 { font-family: Caladea, Cambria, Georgia, serif; font-size: 30px; line-height: 1.15; margin: 0; color: #1E2A33; }
 .esmp-ov .es-x { flex: none; font: inherit; font-weight: 700; font-size: 15px; border: 2px solid #C9D1D8; background: #fff; color: #1E2A33; border-radius: 999px; padding: 7px 16px; cursor: pointer; }
 .es-cols { display: grid; grid-template-columns: minmax(280px, 38%) 1fr; gap: 28px; min-height: 0; flex: 1; }
-.es-qr { text-align: center; background: #fff; border-radius: 14px; padding: 18px; align-self: start; }
-.es-qr .code canvas, .es-qr .code img, .es-qr .code svg { width: min(100%, 58vh) !important; height: auto !important; aspect-ratio: 1; display: block; margin: 0 auto 10px; }
+.es-qr { text-align: center; background: #fff; border-radius: 14px; padding: 18px; align-self: start; max-height: 100%; overflow: auto; }
+.es-qr .code canvas, .es-qr .code img, .es-qr .code svg { width: min(100%, 46vh) !important; height: auto !important; aspect-ratio: 1; display: block; margin: 0 auto 10px; }
 .es-qr .code canvas[style*="none"], .es-qr .code img[style*="none"] { display: none !important; }   /* o qrcodejs cria um canvas e uma imagem e esconde um deles */
 .es-qr a { display: block; color: #2F6E9E; font-size: 14px; word-break: break-all; }
 .es-qr p { margin: 10px 0 0; font-size: 18px; font-weight: 700; }
 .es-qr .es-sm { font-size: 14px; font-weight: 400; color: #5B6670; }
+/* «Jogar neste dispositivo»: para quem está no computador ou no tablet e não precisa do código */
+.es-qr .es-ou { display: flex; align-items: center; gap: 12px; margin: 14px 0 10px; font-size: 14px; font-weight: 700; color: #5B6670; text-transform: uppercase; letter-spacing: .06em; }
+.es-qr .es-ou::before, .es-qr .es-ou::after { content: ""; flex: 1; height: 1px; background: #D8D3CA; }
+.es-qr a.es-aqui { display: block; padding: 13px 18px; border-radius: 12px; background: #A44A16; color: #fff; font-size: 21px; font-weight: 700; text-decoration: none; word-break: normal; box-shadow: 0 4px 0 #7A3610; }
+.es-qr a.es-aqui:hover { background: #B4541C; }
+.es-qr a.es-aqui:active { transform: translateY(3px); box-shadow: 0 1px 0 #7A3610; }
+.es-sala { display: flex; align-items: center; justify-content: center; flex-wrap: wrap; gap: 8px; margin: 16px 0 0; font-size: 15px; color: #5B6670; }
+.es-sala label { font-weight: 700; }
+.es-sala input { width: 96px; font: 700 17px ui-monospace, Menlo, Consolas, monospace; text-transform: uppercase; letter-spacing: .1em; text-align: center; padding: 6px 8px; border: 2px solid #C9D1D8; border-radius: 8px; background: #fff; color: #1E2A33; }
+.es-sala input::placeholder { font: 400 14px Carlito, Calibri, Arial, sans-serif; letter-spacing: 0; text-transform: none; }
+.es-sala button { font: 700 15px Carlito, Calibri, Arial, sans-serif; border: 0; border-radius: 8px; padding: 8px 14px; background: #1E2A33; color: #fff; cursor: pointer; }
 .es-res { overflow: auto; min-height: 0; font-size: 20px; padding-right: 6px; }
 .es-rev { display: inline-flex; align-items: center; gap: 8px; font-size: 16px; font-weight: 700; margin: 0 0 10px; cursor: pointer; }
 .es-rev input { width: 20px; height: 20px; accent-color: #2E6B4F; }
@@ -107,6 +126,8 @@
 .es-vivo[hidden] { display: none; }
 .es-vivo button { font: 700 16px Carlito, Calibri, Arial, sans-serif; border: 0; border-radius: 999px; padding: 8px 16px; cursor: pointer; background: #A44A16; color: #fff; }
 .es-vivo button[data-v="ranking"] { background: #1E2A33; }
+.es-vivo button[data-v="local"] { background: none; color: #1E2A33; box-shadow: inset 0 0 0 2px #C9D1D8; margin-left: auto; }
+.es-vivo button[data-v="local"]:hover { box-shadow: inset 0 0 0 2px #1E2A33; }
 .ev-menu { display: grid; gap: 10px; }
 .ev-menu > button[data-j] { text-align: left; font: inherit; border: 2px solid #E2DED7; background: #fff; border-radius: 12px; padding: 12px 16px; cursor: pointer; display: grid; gap: 2px; color: #1E2A33; }
 .ev-menu > button[data-j]:hover:not(:disabled) { border-color: #A44A16; }
@@ -116,7 +137,7 @@
 
 .esmp-vivo { position: fixed; inset: 0; z-index: 1200; background: #1E2A33; color: #F6F3EC; display: grid; grid-template-rows: auto 1fr; font-family: Carlito, Calibri, Arial, sans-serif; overflow: hidden; }
 .esmp-vivo * { box-sizing: border-box; }
-.ev-topo { display: grid; grid-template-columns: 1fr auto auto auto; gap: 22px; align-items: center; padding: 14px 26px; border-bottom: 1px solid rgba(246,243,236,.15); }
+.ev-topo { display: grid; grid-template-columns: 1fr auto auto auto auto; gap: 22px; align-items: center; padding: 14px 26px; border-bottom: 1px solid rgba(246,243,236,.15); }
 .ev-topo h3 { font: 700 28px Caladea, Cambria, Georgia, serif; margin: 0; color: #fff; line-height: 1.15; }
 .ev-k { font-size: 13px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; color: #F0A673; margin: 0 0 4px; }
 .ev-sala, .ev-gente { text-align: center; line-height: 1.05; }
@@ -215,3 +236,21 @@
 [data-esmp-jogo] { font: 700 17px Carlito, Calibri, Arial, sans-serif; border: 0; border-radius: 999px; padding: 9px 20px; background: #F0A673; color: #1E2A33; cursor: pointer; }
 [data-esmp-jogo]::before { content: "◉ "; }
 @media print { [data-esmp-jogo] { display: none !important; } }
+
+/* ---- ao vivo: sons e animações (novembro de 2026) ---- */
+.ev-som .esmp-som button { color: #F6F3EC; border-color: rgba(246,243,236,.4); }
+.ev-perg.pressa .ev-tempo span { background: #F0A673; animation: evpressa .5s ease-in-out infinite alternate; }
+.ev-perg.pressa .ev-seg { color: #F0A673; animation: evbate 1s ease-in-out infinite; }
+@keyframes evpressa { to { opacity: .55; } }
+@keyframes evbate { 0%, 100% { transform: scale(1); } 12% { transform: scale(1.35); } }
+.ev-factos { display: flex; flex-wrap: wrap; gap: 6px 16px; align-items: baseline; margin: 16px 0 0; padding: 10px 16px; border-radius: 12px; background: rgba(246,243,236,.09); font-size: 21px; animation: evpop .4s ease-out both; }
+.ev-factos b { color: #F0A673; } .ev-factos span + span::before { content: "·"; opacity: .4; margin-right: 16px; }
+.ev-factos + .ev-pe { margin-top: 12px; }
+.ev-mov, .ev-seq { font-style: normal; font-size: .72em; font-weight: 700; margin-left: 6px; white-space: nowrap; }
+.ev-mov { color: #9BD3A8; } .ev-rank li.p1 .ev-mov { color: #1F5A33; }
+/* pódio com suspense: os tambores tocam 2,7 s; aparece o 3.º, depois o 2.º e, no fim, o 1.º */
+.ev-fim.suspense .ev-degrau.d3 { animation-delay: .6s; } .ev-fim.suspense .ev-degrau.d2 { animation-delay: 1.6s; } .ev-fim.suspense .ev-degrau.d1 { animation-delay: 2.75s; }
+.ev-fim.suspense:not(.revelado) .ev-todos .ev-rank { visibility: hidden; }
+@media (prefers-reduced-motion: reduce) { .ev-perg.pressa .ev-tempo span, .ev-perg.pressa .ev-seg { animation: none; } }
+@media (max-width: 900px) { .ev-topo { grid-template-columns: 1fr auto auto; } }
+.ev-qr .ev-pc { font-size: 15px; font-weight: 400; color: #5B6670; } .ev-qr .ev-pc b { font: 700 17px ui-monospace, Menlo, Consolas, monospace; letter-spacing: .1em; color: #A44A16; }

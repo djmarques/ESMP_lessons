@@ -11,6 +11,9 @@
      fim        o lugar final
      jogo       um jogo de turma (comum/jogos.js): mariposas ou fábrica
    O telemóvel nunca recebe os nomes dos colegas: só o seu lugar e os seus pontos.
+   Sons curtos e animações (comum/efeitos.js): tiques nos últimos 5 segundos,
+   papelinhos e vibração na resposta certa, série de certas, subida de lugar.
+   Aqui não há música de fundo: essa toca no projetor, para a sala toda.
    ===================================================================== */
 (function () {
   'use strict';
@@ -27,6 +30,9 @@
   const show = id => document.querySelectorAll('.ecra').forEach(x => { x.hidden = x.id !== id; });
   const guardar = (k, v) => { try { sessionStorage.setItem(k, v); } catch (e) { /* sem armazenamento */ } };
   const ler = k => { try { return sessionStorage.getItem(k); } catch (e) { return null; } };
+  const nada = () => {}, oco = new Proxy({}, { get: () => nada });
+  const SOM = E.som || { fx: oco, musica: oco, botoes: () => document.createElement('span'), acordar: nada };
+  const F = E.festa || oco;
 
   document.title = 'Jogo ao vivo';
   $('titulo').textContent = 'Jogo ao vivo';
@@ -58,7 +64,7 @@
     const extra = Array.from(document.querySelectorAll('.nome-extra')).map(i => i.value.trim()).filter(n => n.length >= 2);
     nomes = [nome].concat(extra).join(' + ');
     try { localStorage.setItem('esmp-nome', nome); } catch (e) { /* sem armazenamento */ }
-    J.som(523, 0.14, 0.08);                    // desbloqueia o som no iPhone (tem de ser num toque)
+    SOM.acordar(); SOM.fx.toque();                 // desbloqueia o som no iPhone (tem de ser num toque)
     entrar();
   });
 
@@ -114,11 +120,13 @@
   function fPergunta(e) {
     clearInterval(relogio);
     const r = 'q' + e.i;
-    ecra.innerHTML = '<div class="ghead"><span>Pergunta <b>' + (e.i + 1) + '</b> / ' + e.n + '</span></div>' +
+    ecra.innerHTML = '<div class="ghead"><span>Pergunta <b>' + (e.i + 1) + '</b> / ' + e.n + '</span><span class="serie">' + (F.seguidas(serie) || '') + '</span><span class="sons"></span></div>' +
       '<div class="gtimer"><div class="track"><span></span></div><output></output></div>' +
       '<p class="stem">' + esc(e.p) + '</p><div class="opts vv-opts"></div><p class="fb vv-estado"></p>';
     const box = ecra.querySelector('.opts'), est = ecra.querySelector('.vv-estado'), out = ecra.querySelector('output'), barra = ecra.querySelector('.track span');
     barra.style.transition = 'none';
+    ecra.querySelector('.sons').appendChild(SOM.botoes({ so: 'som' }));
+    let ultimoSeg = null;
     const FORMAS = ['▲', '◆', '●', '■'];
     e.o.forEach((t, j) => {
       const b = document.createElement('button'); b.className = 't' + j; b.innerHTML = '<span class="vv-forma">' + FORMAS[j % 4] + '</span> ' + esc(t);
@@ -130,7 +138,7 @@
     async function escolher(j, b) {
       if (respondi[r] != null) return;
       const ms = Math.max(0, Math.min(e.dur, e.dur - (e.fim - sala.agora())));
-      respondi[r] = j; marcar(j); J.som(700, 0.08, 0.06);
+      respondi[r] = j; marcar(j); SOM.fx.toque(); F.vibrar(20);
       est.textContent = 'A enviar…';
       try { const x = await sala.enviar(S, U, r, { r: j, ms: Math.round(ms) }); if (!x || !x.ok) throw 0; est.innerHTML = '<b class="ok">Resposta enviada.</b> Espera pelos colegas.'; }
       catch (err) { delete respondi[r]; box.querySelectorAll('button').forEach(x => { x.disabled = false; x.classList.remove('escolhido'); }); est.innerHTML = '<b class="no">Não chegou.</b> Toca outra vez.'; }
@@ -138,31 +146,49 @@
     if (respondi[r] != null) { marcar(respondi[r]); est.innerHTML = '<b class="ok">Resposta enviada.</b> Espera pelos colegas.'; }
     relogio = setInterval(() => {
       const resto = e.fim - sala.agora();
-      out.textContent = Math.max(0, Math.ceil(resto / 1000));
+      const sg = Math.max(0, Math.ceil(resto / 1000));
+      out.textContent = sg;
+      if (sg !== ultimoSeg) { ultimoSeg = sg; if (sg >= 1 && sg <= 5 && resto <= e.dur && respondi[r] == null) SOM.fx.tique(sg); }   // o tempo está a acabar e ainda não respondeste
       barra.style.width = Math.max(0, Math.min(100, resto / e.dur * 100)) + '%';
       ecra.classList.toggle('hurry', resto < 5000 && respondi[r] == null);
       if (resto <= 0) {
         clearInterval(relogio); ecra.classList.remove('hurry');
-        if (respondi[r] == null) { box.querySelectorAll('button').forEach(b => { b.disabled = true; }); est.innerHTML = '<b class="no">Acabou o tempo.</b>'; }
+        if (respondi[r] == null) { box.querySelectorAll('button').forEach(b => { b.disabled = true; }); est.innerHTML = '<b class="no">Acabou o tempo.</b>'; SOM.fx.tempo(); F.vibrar([60, 60, 60]); }
       }
     }, 200);
   }
 
   const ordinal = n => n + '.º';
+  let serie = 0, lugarAntes = 0, ultimaRevelada = -1;       // certas seguidas e lugar na pergunta anterior, só neste telemóvel
   function fRevelar(e) {
     clearInterval(relogio); ecra.classList.remove('hurry');
     const meu = respondi['q' + e.i], pl = (e.placar || {})[U] || [0, 0, 0, 0];
     const certo = meu === e.c;
+    let subiu = 0;
+    if (e.i !== ultimaRevelada) {
+      ultimaRevelada = e.i; serie = typeof pl[4] === 'number' ? pl[4] : (certo ? serie + 1 : 0);      // a série vem do projetor (que viu todas as perguntas)
+      subiu = lugarAntes && pl[1] && e.i > 0 ? lugarAntes - pl[1] : 0; lugarAntes = pl[1] || lugarAntes;
+    }
     ecra.innerHTML = '<div class="vv-veredito ' + (certo ? 'ok' : 'no') + '"><b>' + (certo ? 'Certo!' : (meu == null ? 'Sem resposta' : 'Errado')) + '</b><span>' + (certo ? '+' + pl[2] + ' pontos' : 'a resposta certa está marcada') + '</span></div>' +
       '<p class="stem">' + esc(e.p) + '</p><div class="opts vv-opts"></div>' + (e.f ? '<p class="fb">' + esc(e.f) + '</p>' : '') +
-      '<div class="vv-lugar"><span>' + pl[0] + ' pontos</span><b>' + (pl[1] ? ordinal(pl[1]) + ' lugar' : '') + '</b><span>' + (e.total ? 'de ' + e.total : '') + '</span></div>';
+      '<div class="vv-lugar"><span>' + pl[0] + ' pontos</span><b>' + (pl[1] ? ordinal(pl[1]) + ' lugar' : '') + '</b><span>' + (e.total ? 'de ' + e.total : '') + '</span></div>' +
+      (serie >= 2 || subiu > 0 ? '<p class="vv-extra">' + [serie >= 2 ? F.seguidas(serie) || '' : '', subiu > 0 ? '▲ subiste ' + subiu + (subiu === 1 ? ' lugar' : ' lugares') : ''].filter(Boolean).join(' · ') + '</p>' : '');
     const box = ecra.querySelector('.opts');
     e.o.forEach((t, j) => { const b = document.createElement('button'); b.className = 't' + j + (j === e.c ? ' right' : (j === meu ? ' wrong' : '')); b.disabled = true; b.textContent = t; box.appendChild(b); });
-    J.som(certo ? 880 : 220, certo ? 0.25 : 0.3, 0.08);
+    if (certo) {
+      SOM.fx.certo(); F.vibrar([40, 40, 80]); F.confete({ x: 0.5, y: 0.25, n: 40 + Math.min(serie, 5) * 14, abertura: 2.4 });
+      if (serie >= 3) setTimeout(() => SOM.fx.seguidas(serie), 380); else if (subiu > 0) setTimeout(() => SOM.fx.subiu(), 380);
+    } else { SOM.fx.errado(); F.vibrar(150); F.abanar(ecra.querySelector('.vv-veredito')); }
   }
   function fFim(e) {
     clearInterval(relogio);
     const pl = (e.placar || {})[U] || [0, 0];
+    // o projetor toca os tambores e só mostra o pódio ao fim de uns 3 segundos: o telemóvel espera também
+    aviso('Rufam os tambores…', 'Olha para o ecrã da sala.');
+    setTimeout(() => { if (ultimo.indexOf('fim|') === 0) mostrarFim(e, pl); }, 3400);
+  }
+  function mostrarFim(e, pl) {
+    if (pl[1] >= 1 && pl[1] <= 3) { SOM.fx.podio(); F.vibrar([60, 40, 60, 40, 160]); F.confete({ chuva: true, n: 160 }); } else SOM.fx.fim(true);
     ecra.innerHTML = '<div class="vv-centro"><div class="vv-taca">' + (pl[1] === 1 ? '🏆' : pl[1] === 2 ? '🥈' : pl[1] === 3 ? '🥉' : '✓') + '</div><h2>' + (pl[1] ? ordinal(pl[1]) + ' lugar' : 'Fim do jogo') + '</h2>' +
       '<p>' + pl[0] + ' pontos' + (e.total ? ' · ' + e.total + (e.total === 1 ? ' jogador' : ' jogadores') : '') + '</p><p class="vv-nome">' + esc(nomes) + '</p><p class="sm">As tuas respostas ficaram registadas na folha do professor.</p></div>';
   }

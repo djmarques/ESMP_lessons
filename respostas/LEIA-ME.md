@@ -11,6 +11,16 @@ Esta pasta tem a página que os alunos abrem no telemóvel pelo código QR dos s
 
 Quando o aluno carrega em **Enviar**, as respostas vão para o Google Apps Script (endereço em `config.js`). O script escreve-as na folha de cálculo do teu Google Drive, num separador por disciplina e atividade, e manda-te um email com o assunto «disciplina · atividade · nome · data».
 
+## 26 de novembro de 2026: som, música, estrelas e segunda volta
+
+A página do aluno passou a carregar `../comum/efeitos.js` (sons, música de fundo e animações; ver `comum/LEIA-ME.md`). O script do Google **não mudou**: não é preciso atualizar nada em script.google.com.
+
+- **Computador e tablet:** nos slides, o botão «Jogar» abre a janela do jogo, que tem o código QR e o botão «Jogar neste dispositivo». Esse botão abre esta mesma página num separador novo, por isso as respostas ficam registadas na folha exatamente como no telemóvel.
+- **Jogos com tempo:** contagem «3, 2, 1, Já!», música de fundo, aviso aos 10 segundos, tiques e música mais rápida nos últimos 5, papelinhos na resposta certa, série de respostas certas.
+- **No fim:** estrelas (1 a 3) e «Segunda volta», um treino sem tempo só com as perguntas falhadas. A segunda volta não é enviada: a folha fica com a pontuação da primeira tentativa.
+- **Música nos aparelhos dos alunos:** cada aluno desliga-a no botão da nota musical. Para a desligar a todos, `MUSICA_ALUNOS: false` em `config.js`.
+- **Jogo ao vivo:** o telemóvel só tem sons curtos e vibração; a música toca no projetor.
+
 ## Novembro de 2026 (versão 4): jogos ao vivo e classificação
 
 **É preciso atualizar o script uma vez** (instruções em «Atualizar o script no Google», mais abaixo). Até lá, os jogos ao vivo avisam que falta a versão 4 e tudo o resto continua como antes.
@@ -43,7 +53,7 @@ Quando o aluno carrega em **Enviar**, as respostas vão para o Google Apps Scrip
 | --- | --- |
 | `index.html`, `aluno.css`, `aluno.js` | A página do aluno no telemóvel |
 | `vivo.js` | O telemóvel num jogo ao vivo (segue o estado da sala) |
-| `config.js` | O endereço do Apps Script (o mesmo para todas as disciplinas) |
+| `config.js` | O endereço do Apps Script (o mesmo para todas as disciplinas) e `MUSICA_ALUNOS` |
 | `apps-script.gs`, `appsscript.json` | O código que está em script.google.com |
 
 ## Tipos de atividade
