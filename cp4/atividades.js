@@ -1138,5 +1138,125 @@ window.ATIVIDADES = {
     "porque": "Porquê?"
    }
   ]
+ },
+ "esc-racismo": {
+  "disciplina": "CP 4",
+  "titulo": "Texto: o sonho de Luther King",
+  "passos": [
+   {
+    "tipo": "escrita",
+    "titulo": "Comentário",
+    "intro": "10 a 12 linhas: o que pedia Martin Luther King · o que mudou desde então e o que falta · um «sonho» teu para o lugar onde trabalhas ou vives.",
+    "perguntas": [
+     "Plano: a ideia principal do teu texto, numa só frase.",
+     "O teu texto."
+    ]
+   }
+  ]
+ },
+ "esc-genero": {
+  "disciplina": "CP 4",
+  "titulo": "Texto: igualdade entre mulheres e homens no trabalho",
+  "passos": [
+   {
+    "tipo": "escrita",
+    "titulo": "Texto de opinião",
+    "intro": "10 a 12 linhas: «O que falta para haver igualdade entre mulheres e homens no trabalho?» A tua posição · um argumento · um exemplo que conheças · uma proposta.",
+    "perguntas": [
+     "Plano: a ideia principal do teu texto, numa só frase.",
+     "O teu texto."
+    ]
+   }
+  ]
+ },
+ "esc-sigilo": {
+  "disciplina": "CP 4",
+  "titulo": "Texto: sigilo profissional (o caso da Marta)",
+  "passos": [
+   {
+    "tipo": "escrita",
+    "titulo": "Resposta fundamentada",
+    "intro": "A Marta trabalha na receção de uma clínica. Uma vizinha pergunta-lhe se é verdade que o senhor do 3.º andar «anda lá em tratamentos». 8 a 10 linhas: o que deve a Marta responder · porquê · o que podia acontecer se contasse.",
+    "perguntas": [
+     "Plano: o que a Marta deve fazer, numa só frase.",
+     "O teu texto."
+    ]
+   }
+  ]
+ },
+ "esc-migracoes": {
+  "disciplina": "CP 4",
+  "titulo": "Texto: uma história de migração",
+  "passos": [
+   {
+    "tipo": "escrita",
+    "titulo": "Relato",
+    "intro": "10 a 12 linhas: a tua história, a de alguém da tua família ou a de um colega. De onde e para onde · porquê · o mais difícil · quem ajudou · o que ficou a faltar.",
+    "perguntas": [
+     "Plano: de quem é a história e qual foi a viagem, numa só frase.",
+     "O teu texto."
+    ]
+   }
+  ]
+ },
+ "esc-valores": {
+  "disciplina": "CP 4",
+  "titulo": "Texto: um valor (liberdade, responsabilidade, justiça ou democracia)",
+  "passos": [
+   {
+    "tipo": "escrita",
+    "titulo": "Texto expositivo",
+    "intro": "8 a 10 linhas: explica o valor por palavras tuas · dá um exemplo do teu trabalho ou do teu bairro · diz o que acontece quando falta.",
+    "perguntas": [
+     "Que valor escolheste, e porquê?",
+     "O teu texto."
+    ]
+   }
+  ]
+ },
+ "esc-schengen": {
+  "disciplina": "CP 4",
+  "titulo": "Texto: fronteiras abertas na Europa",
+  "passos": [
+   {
+    "tipo": "escrita",
+    "titulo": "Texto argumentativo",
+    "intro": "10 a 12 linhas: «Fronteiras abertas na Europa: mais liberdade ou menos segurança?» A tua posição · dois argumentos · um argumento contrário e a tua resposta · conclusão.",
+    "perguntas": [
+     "Plano: a tua posição, numa só frase.",
+     "O teu texto."
+    ]
+   }
+  ]
+ },
+ "esc-patrimonio": {
+  "disciplina": "CP 4",
+  "titulo": "Texto: candidatura de um bem a património",
+  "passos": [
+   {
+    "tipo": "escrita",
+    "titulo": "Texto de candidatura",
+    "intro": "10 a 12 linhas: o que é o bem · porque é importante para a comunidade · que perigo corre · o que devia ser feito.",
+    "perguntas": [
+     "Que bem escolheste e onde fica?",
+     "O teu texto."
+    ]
+   }
+  ]
+ },
+ "esc-final": {
+  "disciplina": "CP 4",
+  "titulo": "Texto final: do eu à Europa",
+  "passos": [
+   {
+    "tipo": "escrita",
+    "titulo": "Texto de síntese (individual)",
+    "intro": "Cerca de 15 linhas, um parágrafo por DR: o que aprendi sobre mim e o outro (DR1) · o que muda na forma como trabalho com os outros (DR2) · a quem recorro e que políticas defendo (DR3) · o que a Europa tem a ver comigo (DR4). Fecha com uma frase: o que vou fazer de diferente.",
+    "perguntas": [
+     "Plano: a ideia que atravessa os quatro DR, numa só frase.",
+     "O teu texto."
+    ]
+   }
+  ]
  }
 };

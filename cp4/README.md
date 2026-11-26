@@ -1,6 +1,6 @@
 # CP 4 · Processos identitários
 
-Site interativo da unidade Cidadania e Profissionalidade 4 (formação de adultos), para projetar na sala. Tem 178 slides: o programa e os blocos dos quatro Domínios de Referência (DR), mais o projeto de grupo.
+Site interativo da unidade Cidadania e Profissionalidade 4 (formação de adultos), para projetar na sala. Tem 186 slides: o programa e os blocos dos quatro Domínios de Referência (DR), mais o projeto de grupo.
 
 - **DR1 · Da identidade à alteridade**: 1. o nome e o reconhecimento; 2. o navio de Teseu; 3. Phineas Gage e o outro; 4. identidade pessoal e social; 5. como tratar o outro (empatia, igualdade e equidade, diversidade, intolerância).
 - **DR2 · Deontologia na construção da cultura organizacional**: 1. ética do dever e das consequências (Kant e Mill); 2. organizações verticais e horizontais; 3. códigos de conduta, pertença e lealdade, equipas multiculturais; 4. motivação (Maslow, Herzberg), convergência de objetivos, metas SMART.
@@ -17,6 +17,23 @@ Cada slide diz que Domínios de Referência mobiliza: `<section class="slide" �
 ## Projeto de grupo
 
 Um PowerPoint por grupo sobre um caso ou um tema, com os quatro DR: em cada DR, pelo menos um slide com uma ideia, um com um caso real e um com o que se faz. O slide «O trabalho de grupo: quatro DR» (programa) apresenta-o. Cada oficina tem a abertura e o slide «O que o DR pede» (os três critérios de evidência do referencial, em linguagem simples). Atividades no telemóvel: `grupo`, `proj1` a `proj4`, `pares`, `fecho`.
+
+## Oficinas de escrita (26 de novembro de 2026)
+
+Oito slides novos, um por tema do manual da Areal Editores (UFCD 4, «Processos identitários») que ainda não tinha slide próprio ou exercício de texto. Cada um dá o essencial do tema em cartões e pede um texto, escrito no telemóvel e recolhido na folha «Avaliação contínua» (um separador por texto, com o plano e o texto em colunas «Escrita»).
+
+| Slide | Bloco | Tema do manual | Texto pedido | Atividade |
+| --- | --- | --- | --- | --- |
+| `s-esc-racismo` | DR1.5 | 5 Racismo · 13 Discurso de Martin Luther King | comentário | `esc-racismo` |
+| `s-esc-genero` | DR1.5 | 6 Desigualdades de género · 7 A mulher na modernidade | texto de opinião | `esc-genero` |
+| `s-esc-sigilo` | DR2.3 | 11 Sigilo profissional | resposta fundamentada a um caso | `esc-sigilo` |
+| `s-esc-migracoes` | DR3.2 | 14 a 17 Migrações e acolhimento | relato | `esc-migracoes` |
+| `s-esc-valores` | DR4.1 | 19 Liberdade, responsabilidade, justiça e democracia | texto expositivo | `esc-valores` |
+| `s-esc-schengen` | DR4.1 | 24 O espaço e a cooperação Schengen | texto argumentativo | `esc-schengen` |
+| `s-esc-patrimonio` | DR4.2 | 20 a 23 Património cultural português | texto de candidatura | `esc-patrimonio` |
+| `s-esc-final` | Apresentações finais | 25 Atividade aglutinadora: igualdade e combate à discriminação na União Europeia | texto de síntese, individual | `esc-final` |
+
+Os slides têm a classe `oficina` (regras no fim do `style.css`): cartões compactos em duas colunas e, em baixo, o texto pedido ao lado do código QR. Para criar outra oficina, copia um destes slides e uma das atividades `esc-…` no fim do `atividades.js`. Os dois filmes propostos pelo manual (temas 12 e 18) não foram incluídos. Dados com data: diferença salarial de 12,5% (remuneração base, 2023); 29 países no espaço Schengen (2026).
 
 ## Atividades novas (novembro de 2026)
 

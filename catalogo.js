@@ -53,6 +53,7 @@ window.CATALOGO = [
     temas: [
       { unidade: 'CP 4', titulo: 'Processos identitários', descricao: 'DR1 identidade e alteridade (o nome, o navio de Teseu, Phineas Gage, como tratar o outro) · DR2 deontologia, organizações, códigos de conduta, motivação · DR3 políticas públicas de inclusão · DR4 identidade europeia e património comum · projeto de grupo.', pasta: 'cp4/' },
       { unidade: 'CP 2 · trabalho autónomo', titulo: 'Processos sociais de mudança', descricao: 'Portefólio em PowerPoint · DR1 aprendizagem ao longo da vida · DR2 novos processos de trabalho · DR3 movimentos associativos · DR4 instâncias supranacionais.', pasta: 'cp2/' },
+      { unidade: 'CP 8 · trabalho autónomo', titulo: 'Construção de projetos pessoais e sociais', descricao: 'Portefólio em PowerPoint · DR1 gestão prospetiva da vida pessoal · DR2 revitalizar empresas e instituições · DR3 projetos coletivos · DR4 responsabilidades em fenómenos coletivos.', pasta: 'cp8/' },
     ],
   },
 ];

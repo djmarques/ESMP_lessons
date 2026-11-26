@@ -14,6 +14,7 @@ respostas/          página do aluno no telemóvel e script da folha «Avaliaç�
 demo/               atividade de demonstração com todos os tipos de pergunta
 clc6/               CLC 6 · Culturas de urbanismo e mobilidade
 cp4/                CP 4 · Processos identitários
+cp8/                CP 8 · Construção de projetos pessoais e sociais (trabalho autónomo, portefólio)
 ai-3ano/
   cidadania-europeia/   Área de Integração 12.º · Cidadania europeia (copiar para aqui)
 ```

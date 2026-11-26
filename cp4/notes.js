@@ -182,4 +182,12 @@ window.NOTES = {
  "s-final": "Apresentações finais dos grupos: 15 minutos cada, os quatro DR num só trabalho. Sortear a ordem no início.",
  "s-final-avaliar": "Durante cada apresentação, os outros grupos avaliam no telemóvel (atividade «pares»); o formador usa a mesma grelha. Temporizador de 15 minutos. As avaliações dos colegas são formativas: tu decides o peso que têm.",
  "s-final-fecho": "Fecho da unidade. Recapitular os quatro DR, do eu ao mundo, e voltar à primeira atividade (a história do meu nome). Autoavaliação final no telemóvel (atividade «fecho»).",
+ "s-esc-racismo": "Oficina de escrita a partir do manual da Areal (temas 5 e 13). O texto do discurso tem direitos de autor: ouvir a gravação (há versões legendadas) em vez de distribuir a transcrição completa. Os textos chegam à folha «Avaliação contínua», separador «CP 4 · Texto: o sonho de Luther King» (atividade «esc-racismo»).",
+ "s-esc-genero": "Temas 6 e 7 do manual. Datas: decreto de 1931 (voto das mulheres com curso secundário ou superior); Decreto-Lei n.º 49 317, de 1969 (saída do país sem autorização do marido); Constituição de 1976. Dado a atualizar todos os anos: barómetro do Gabinete de Estratégia e Planeamento (12,5% na remuneração base em 2023). Atividade «esc-genero».",
+ "s-esc-sigilo": "Tema 11 do manual. O caso da Marta é inventado. Pode ser feito em pares antes de escrever: um faz de vizinha, o outro de Marta. Atividade «esc-sigilo».",
+ "s-esc-migracoes": "Temas 14 a 17 do manual. Cuidado com histórias pessoais difíceis: quem não quiser contar a sua pode contar a de outra pessoa. O número de estrangeiros residentes é o mesmo do bloco DR3.2 (atualizar em conjunto). Atividade «esc-migracoes».",
+ "s-esc-valores": "Tema 19 do manual; responde ao ponto «por reforçar» da planificação (democracia e justiça sem slide de definição). Atividade «esc-valores».",
+ "s-esc-schengen": "Tema 24 do manual. Dados do Conselho da União Europeia: 29 países; Bulgária e Roménia desde 1 de janeiro de 2025; Chipre em avaliação. Confirmar antes de cada edição. Atividade «esc-schengen».",
+ "s-esc-patrimonio": "Temas 20 a 23 do manual. Liga à pesquisa «um património perto de ti» do slide anterior: o bem pesquisado pode ser o da candidatura. Atividade «esc-patrimonio».",
+ "s-esc-final": "Tema 25 do manual (atividade aglutinadora). Texto individual, para avaliação sumativa a par do trabalho de grupo. Pode ser escrito em casa. Atividade «esc-final».",
 };

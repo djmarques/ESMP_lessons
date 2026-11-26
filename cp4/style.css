@@ -732,3 +732,20 @@ svg [data-step] { transform: none; }
   .escada { grid-template-columns: 1fr; min-height: 0; } .deg { height: auto !important; border-radius: 10px; }
   .smart { grid-template-columns: repeat(2, 1fr); } .andar { width: 100% !important; } .telbox { justify-content: center; }
 }
+
+/* ---- Oficinas de escrita (novembro de 2026): cartões compactos em duas colunas; em baixo, o texto pedido e o código QR ---- */
+.oficina h2 { margin-bottom: 14px; font-size: 38px; }
+.oficina .modes { margin: -6px 0 10px; }
+.oficina-cartoes { gap: 10px; align-items: stretch; }
+.oficina-cartoes .card { padding: 10px 16px; font-size: 18px; line-height: 1.4; }
+.oficina-cartoes .card .label { margin-bottom: 4px; }
+.oficina-cartoes .ddef { margin: 0; align-self: center; }
+.oficina-cartoes > .sm { align-self: center; margin: 0; }
+.oficina-fim { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 18px; align-items: center; margin-top: 12px; }
+.oficina-fim .card { padding: 12px 18px; font-size: 18px; line-height: 1.4; }
+.oficina-fim .telbox > .sm { display: none; }
+.oficina-fim .telbox .phone-qr a { display: none; }
+.oficina-fim .telbox { flex-direction: column; text-align: center; gap: 6px; }
+.oficina-fim .telbox .phone-qr canvas, .oficina-fim .telbox .phone-qr img { width: 124px !important; height: 124px !important; }
+.oficina .source { margin-top: 8px; }
+@media (max-width: 860px) { .oficina-cartoes { grid-template-columns: 1fr; } .oficina-fim { grid-template-columns: 1fr; } }
