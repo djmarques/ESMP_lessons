@@ -16,7 +16,7 @@
   height: min(62vh, 620px); min-height: 340px;
   background: radial-gradient(ellipse at 50% 42%, #2b3945, var(--navy) 78%); color: var(--cream);
 }
-.palco3d > canvas:first-child { display: block; width: 100%; height: 100%; }
+.palco3d > canvas.c3d { display: block; width: 100%; height: 100%; }      /* the one WebGL canvas of the page, lent to the current slide */
 .palco3d.sem-3d::after { content: "A animação 3D não está disponível neste navegador: as legendas contam a história."; position: absolute; inset: 38% 10% auto; text-align: center; color: var(--peach); }
 /* A label follows a point of the 3D scene (neuro3d.js moves it every frame). */
 .et3d { position: absolute; left: 0; top: 0; opacity: 0; transition: opacity .5s; pointer-events: none; white-space: nowrap; will-change: transform;

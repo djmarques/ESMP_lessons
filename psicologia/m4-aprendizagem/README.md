@@ -59,6 +59,8 @@ As lições 4 a 8 ganharam onze slides 3D: três substituem versões em 2D (mant
 | `s-espelho` (novo) | 7 | Fazer e ver fazer ativam zonas comuns; o que se sabe e o que se discute sobre neurónios-espelho |
 | `s-kolb` (substituído) | 8 | O ciclo de Kolb num anel 3D, com o exemplo do penálti, e os quatro estilos |
 
+**Um só contexto WebGL:** todas as cenas partilham um único `WebGLRenderer` e um único `<canvas class="c3d">`, que passa para o slide que está a ser mostrado (`sharedRenderer` em `neuro3d.js`). Os navegadores só mantêm vivos poucos contextos WebGL (cerca de 16 num computador, menos nos telemóveis): com um por cena, as primeiras cenas da página ficavam em branco. Ao acrescentar cenas, nunca criar outro `WebGLRenderer`.
+
 **Conceitos dentro da animação:** os nomes dos conceitos (estímulo condicionado, reforço negativo, insight, reforço vicariante…) aparecem como etiquetas laranja presas ao objeto a que dizem respeito (classe `conceito` em `stage.label`), e não só na legenda de baixo.
 
 **Extras de uma cena:** `data-dx="0.2"` no `.palco3d` desloca a imagem para a esquerda (para dar lugar a um cartão à direita); `data-dy="0"` desliga a subida que compensa a legenda; um elemento com `data-em="2 3"` dentro do palco só aparece nos passos 2 e 3.

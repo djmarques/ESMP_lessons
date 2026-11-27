@@ -142,12 +142,28 @@
    * @param {Function} update  update(step, dt, time, sinceStep) called every frame while the slide is shown
    * @returns {{scene, camera, label, slide, ctl}} or null when the browser has no WebGL
    */
+  /**
+   * ONE WebGL renderer (and one canvas) for the whole page. A browser keeps only a few WebGL contexts alive
+   * (about 16 on a computer, fewer on phones) and silently kills the oldest when a page asks for more: with
+   * one renderer per scene, the first scenes of the lesson went blank as soon as the page had more scenes
+   * than that. Only one slide is shown at a time, so the scene of the current slide borrows the canvas.
+   */
+  let shared;
+  function sharedRenderer() {
+    if (shared !== undefined) return shared;
+    try {
+      shared = new T.WebGLRenderer({ antialias: true, alpha: true });
+      shared.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
+      shared.domElement.className = 'c3d';
+      // if the graphics card resets, let the browser give the context back instead of leaving a dead canvas
+      shared.domElement.addEventListener('webglcontextlost', e => e.preventDefault());
+    } catch (e) { shared = null; }
+    return shared;
+  }
   function makeStage(box, update) {
-    const slide = box.closest('.slide');
-    let renderer;
-    try { renderer = new T.WebGLRenderer({ antialias: true, alpha: true }); } catch (e) { box.classList.add('sem-3d'); return null; }
-    renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
-    box.prepend(renderer.domElement);
+    const slide = box.closest('.slide'), renderer = sharedRenderer();
+    if (!renderer) { box.classList.add('sem-3d'); return null; }
+    const canvas = renderer.domElement;
     const scene = new T.Scene(), camera = new T.PerspectiveCamera(30, 1, 0.05, 400);
     scene.add(new T.HemisphereLight(0xffffff, 0x2a3540, 1.5));
     const key = new T.DirectionalLight(0xfff0dc, 2.2); key.position.set(-4, 6, 6); scene.add(key);
@@ -159,14 +175,18 @@
       labels.push({ el, target, when }); return el;
     }
     let width = 1, height = 1, last = 0, running = false, step = -1, stepAt = 0;
-    function resize() { width = box.clientWidth || 1; height = box.clientHeight || 1; renderer.setSize(width, height, false); camera.aspect = width / height;
+    const mine = () => canvas.parentNode === box;                       // is the shared canvas in this stage right now?
+    function resize() {
+      if (!mine()) return;                                              // a hidden stage must not resize the canvas another slide is using
+      width = box.clientWidth || 1; height = box.clientHeight || 1; renderer.setSize(width, height, false); camera.aspect = width / height;
       // the caption covers the bottom of the stage: the picture is drawn a little higher than the middle
       // (data-dy replaces that 14%; data-dx="0.2" moves the picture 20% of the width to the left, away from a card on the right, except on phones)
       const dy = box.dataset.dy !== undefined ? Number(box.dataset.dy) : box.querySelector('.leg3d') ? 0.14 : 0;
-      camera.setViewOffset(width, height, width * Number(box.dataset.dx || 0) * (width < 700 ? 0 : 1), height * dy, width, height); camera.updateProjectionMatrix(); }
+      camera.setViewOffset(width, height, width * Number(box.dataset.dx || 0) * (width < 700 ? 0 : 1), height * dy, width, height); camera.updateProjectionMatrix();
+    }
     const currentStep = () => { let k = 0; while (slide.classList.contains('ge' + (k + 1))) k++; return k; };
     function frame(time) {
-      if (!slide.classList.contains('current')) { running = false; return; }
+      if (!slide.classList.contains('current') || !mine()) { running = false; return; }
       requestAnimationFrame(frame);
       const dt = Math.min((time - last) / 1000 || 0.016, 0.05); last = time;
       const s = currentStep();
@@ -183,7 +203,11 @@
         item.el.style.transform = `translate(-50%, -100%) translate(${((p.x + 1) / 2) * width}px, ${((1 - p.y) / 2) * height}px)`;
       }
     }
-    function start() { if (running || !slide.classList.contains('current')) return; running = true; last = performance.now(); resize(); requestAnimationFrame(frame); }
+    function start() {
+      if (running || !slide.classList.contains('current')) return;
+      if (!mine()) box.prepend(canvas);                                 // borrow the canvas from the slide that had it
+      running = true; last = performance.now(); resize(); requestAnimationFrame(frame);
+    }
     new ResizeObserver(resize).observe(box);
     new MutationObserver(start).observe(slide, { attributes: true, attributeFilter: ['class'] });
     setTimeout(start, 0);
@@ -253,7 +277,7 @@
     });
     if (!stage) return;
     stage.scene.add(head.group);
-    const cam = director(stage.camera, shotsMm([[[0, -5, -10], [-460, 460, 100]], [[0, -15, 12], [-370, 215, 100]], [[0, 5, 12], [-215, 385, 100]], [[0, -30, -8], [-350, -25, 25]]]));
+    const cam = director(stage.camera, shotsMm([[[0, -5, 2], [-460, 460, 100]], [[0, -15, 26], [-370, 215, 100]], [[0, 5, 20], [-215, 385, 100]], [[0, -30, 2], [-350, -25, 25]]]));
     stage.label('<b>caixa negra</b>só se vê o que entra e o que sai', head.anchor([0, 0, 70]), s => s === 0);
     stage.label('<b>córtex</b>2 a 4 mm de espessura', head.anchor([-35, -10, 78]), s => s === 1);
     stage.label('<b>córtex pré-frontal</b>planear, decidir, travar impulsos', head.anchor([-22, 62, 30]), s => s === 2);
@@ -477,7 +501,7 @@
     });
     if (!stage) return;
     stage.scene.add(world);
-    const cam = director(stage.camera, [{ at: V(0, 0, 0), from: V(0, 1.4, 12.5) }, { at: V(-0.6, 0, 0), from: V(-0.6, 1.2, 10) }, { at: V(1.28, 0, 0), from: V(1.28, 0.35, 2.3) }, { at: V(1, 0, 0), from: V(1, 1.4, 11.5) }]);
+    const cam = director(stage.camera, [{ at: V(0, 0, 0), from: V(0, 1.4, 12.5) }, { at: V(-0.6, 0, 0), from: V(-0.6, 1.2, 10) }, { at: V(1.28, 0, 0), from: V(1.28, 0.35, 2.3) }, { at: V(1, 0, 0), from: V(1, 1.4, 11.5) }], 1.8);
     const pin = (x, y) => { const o = new T.Object3D(); o.position.set(x, y, 0); world.add(o); return o; };
     stage.label('<b>dendrites</b>recebem sinais', pin(-4.3, 1.1), s => s < 2);
     stage.label('<b>corpo celular</b>', pin(-3.3, -0.55), s => s < 2, 'baixo');
@@ -548,7 +572,7 @@
     });
     if (!stage) return;
     stage.scene.add(world);
-    const cam = director(stage.camera, [{ at: V(0, 0, 0), from: V(0, 0.6, 12) }]);
+    const cam = director(stage.camera, [{ at: V(0, 0, 0), from: V(0, 0.6, 12) }], 1.7);
     const pin = (p, dy) => { const o = new T.Object3D(); o.position.set(p.x, p.y + dy, 0); world.add(o); return o; };
     stage.label('<b>entrada</b>', pin(P.in, 0.45), () => true); stage.label('<b>saída</b>', pin(P.out, 0.45), () => true);
     stage.label('caminho A', pin(P.a1, 0.45), () => true, 'peq'); stage.label('caminho B', pin(P.b1, -0.4), () => true, 'peq baixo');
@@ -599,13 +623,13 @@
     });
     if (!stage) return;
     stage.scene.add(world);
-    const cam = director(stage.camera, [{ at: V(0.2, 0.5, 0), from: V(0.2, 3.4, 11.5) }]);
+    const cam = director(stage.camera, [{ at: V(0.2, 0.95, 0), from: V(0.2, 3.85, 11.5) }], 1.8);
     const pin = (x, y) => { const o = new T.Object3D(); o.position.set(x, y, 0); world.add(o); return o; };
     stage.label('<b>brânquia</b>encolhe-se para se proteger', pin(-1.1, 1.25), () => true);
     stage.label('<b>sifão</b>onde se toca', pin(0.6, 0.2), () => true, 'baixo');
     stage.label('cabeça', pin(-4.2, 1.1), () => true, 'peq');
     stage.label('<b>neurónio sensorial</b>sente o toque', pin(3.3, 2.45), s => s >= 1);
-    stage.label('<b>neurónio motor</b>encolhe a brânquia', pin(4.2, -0.75), s => s >= 1, 'baixo');
+    stage.label('<b>neurónio motor</b>encolhe a brânquia', pin(4.2, -0.4), s => s >= 1, 'baixo');
     stage.label('neurotransmissor', pin(4.25, 0.5), s => s >= 1, 'peq');
   };
 
@@ -1133,9 +1157,9 @@
       head.mats.cortex.opacity = 0.12; head.mats.cortex.depthWrite = false;
       for (const k of ['talamo', 'amigdala', 'cerebelo']) head[k].forEach(m => (m.visible = false));
       const FIELDS = [{ x: 0.25, y: 0.27, cor: 0xF0A673 }, { x: 0.74, y: 0.3, cor: 0xFFD34E }, { x: 0.7, y: 0.75, cor: 0x8FC4E8 }, { x: 0.27, y: 0.72, cor: 0xE58FB5 }];
-      // four real points of the surface of each hippocampus, from front to back
+      // four real points of the surface of the right hippocampus (the one nearer to the camera), from front to back
       const cells = [];
-      for (const name of ['hipocampo_d', 'hipocampo_e']) {
+      for (const name of ['hipocampo_d']) {
         const pos = geometry(name).getAttribute('position'), order = Array.from({ length: pos.count }, (_, i) => i).sort((a, b) => pos.getY(b) - pos.getY(a));
         FIELDS.forEach((f, i) => { const v = order[Math.floor((0.12 + i * 0.25) * pos.count)]; const s = makeSparks(head.group, 1, 4.6, f.cor)[0]; s.position.set(pos.getX(v), pos.getY(v), pos.getZ(v) + 2); s.visible = true; cells.push({ s, i }); });
       }
@@ -1275,15 +1299,17 @@
     });
     if (!stage) return;
     stage.scene.add(world);
-    const cam = director(stage.camera, [{ at: V(0, 0.95, 0), from: V(0, 6.6, 11.2) }, { at: V(0, 0.75, 0.2), from: V(0, 8.6, 9.2) }]);
+    const cam = director(stage.camera, [{ at: V(0, 0.95, 0), from: V(0, 6.6, 11.2) }, { at: V(0, 0.75, 0.2), from: V(0, 8.6, 9.2) }], 1.6);
     STOPS.forEach((s, i) => {
-      const top = i === 2 ? spot(s.g, 0.55, 0.8, 0.3) : spot(s.g, 0, 1.4, 0);            // the nearest moment is named beside its ball, not over it
+      // the nearest moment is named beside its ball, not over it; the side ones a little outwards, away from the far one
+      const top = i === 2 ? spot(s.g, 0.55, 0.8, 0.3) : spot(s.g, i === 1 ? 1.0 : i === 3 ? -0.8 : 0, 1.4, 0);
       stage.label(`<b>${s.nome}</b>${s.tipo}`, top, st => st >= i + 1 && st !== i + 1 && st < 6, i === 2 ? 'lado' : '');
       stage.label(`<b>${s.nome}</b>${s.tipo}<br><i>${s.ex}</i>`, top, st => st === i + 1, 'conceito' + (i === 2 ? ' lado' : ''));
       stage.label(`<b>${s.nome}</b>`, top, st => st >= 6, i === 2 ? 'lado' : '');
     });
     STYLES.forEach(s => stage.label(`<b>${s.nome}</b>`, s.at, st => st >= 6, 'conceito'));
     stage.label('cada volta melhora a seguinte', spot(world, 0, 0.9, 0), st => st === 5, 'peq');
+    stage.label('<b>quatro momentos</b>um clique para cada um', spot(world, 0, 1.1, 0), st => st === 0);
   };
 
   /* ---------- 24. Start every scene present in the page ---------- */
