@@ -21,9 +21,12 @@ fonts, icons and QR codes, which load from Google Fonts and cdnjs).
 | `europa-mapa.js` | The country outlines for `europa3d.js`: Natural Earth 1:50m (public domain), via the world-atlas package, projected (Lambert azimuthal equal-area, centred on 52° N 10° E, as in the European Union's maps) and simplified. Made by `tools/build_map.js` (`npm i world-atlas@2 topojson-client@3`, then `node tools/build_map.js europa-mapa.js`) |
 | `assets/vendor/three.min.js` | three.js (release 160, MIT licence), the library that draws the 3D board. Kept in the repository so the animation also works without internet |
 | `assets/fundadores/` | The founders' portraits (`monnet.webp`, `schuman.webp`, `adenauer.webp`, `churchill.webp`, `delors.webp`) |
+| `chernobyl.js`, `chernobyl.css` | The extra lesson after lesson 4, «Chernobyl e o fim da URSS»: the simulations (wave and energy, electromagnetic spectrum, alpha, beta and gamma, radiation in the body, the reactor and the accident, the maps) and their styles. See «Extra lesson» below |
+| `chernobyl-mapa.js` | Country outlines from Portugal to the Pacific, in longitude and latitude, for the maps of the extra lesson: Natural Earth 1:50m (public domain). Made by `tools/build_mapa_urss.js` (`npm i world-atlas@2 topojson-client@3 topojson-simplify@3`, then `node tools/build_mapa_urss.js chernobyl-mapa.js`) |
 | `notes.js` | Speaker notes from the PowerPoint deck (generated: do not edit by hand) |
 | `assets/` | Images taken from the deck: the enlargement maps, the CE mark, the charger illustrations |
 | `tools/extract_notes.py` | Rebuilds `notes.js` from a `.pptx` |
+| `archive/` | Earlier versions of the files, by date (for example `index_2026-11-27.html`: the site before the extra lesson) |
 
 ## Publish on GitHub Pages
 
@@ -97,6 +100,45 @@ python tools/extract_notes.py Area_Integracao_12ano_tema_5.2_v2.pptx notes.js
 | `data-count="27"` | The number counts up from 0 |
 | `class="sort"` | Drag a chip into a column (Enter or Space moves it with the keyboard); "Repor cartões" resets. Give columns `data-bin="x"` and chips `data-answer="x"` to add a "Verificar" button; set the number of columns with `style="--n:4"` |
 | `<details name="…">` in `.accordion` | Click-to-open panels; panels sharing a name open one at a time |
+
+## Extra lesson: Chernobyl and the end of the Soviet Union
+
+Added on 27 November 2026, after the students' questions in lesson 4. It is its own group in the sidebar («Aula 4 · Extra»),
+right after «Revisão da aula 4», and it can be skipped without affecting lesson 5. Fifteen slides:
+
+| Slide (`#id`) | What it is |
+|---|---|
+| `ch-abertura` | Opening, with the five chapters |
+| `ch-onda`, `ch-espectro` | Simulations with a slider: shorter wavelength → higher frequency → more energy per photon (the formula E = h × f builds one term per press); the electromagnetic spectrum, with the ionising part marked |
+| `ch-tipos`, `ch-corpo` | Alpha, beta and gamma against paper, aluminium and lead; then the three «atomic bullets» in a human body, chosen with buttons (from outside or from inside the body) |
+| `ch-reator`, `ch-acidente` | Fission, chain reaction and a reactor in section (the slider moves the control rods); then the accident, one press per moment of the night |
+| `ch-silencio` | Map: the cloud travels while the announcements are delayed (36 hours, almost 3 days, 18 days) |
+| `ch-balanco`, `ch-confianca`, `ch-fatores` | Ordinary light slides: the figures, why it hurt the regime's credibility, and the other causes (a block that cracks) |
+| `ch-fim`, `ch-ue` | Maps: one country becomes fifteen; three former Soviet republics join the European Union |
+| `ch-debate`, `ch-quiz` | A timed debate in pairs and a revision quiz |
+
+**How a simulation slide is written.** The slide has the classes `cine tabuleiro rad`. Inside it,
+`<div class="palco rad-palco" data-sim="onda">` names the simulation (`onda`, `espectro`, `tipos`, `corpo`, `reator`, `mapa`;
+`reator` and `mapa` also take `data-cena`). The captions in `<div class="stack legendas">` are the builds: the simulation reads
+how many are shown and draws that moment, so the arrow keys, the sidebar and the Reproduzir button all work as in lessons 3 to 5.
+
+**To change a caption**, edit its text in `index.html`. **To change what the picture does at a build**, look in `chernobyl.js` for
+the simulation (`SIMS.reator`, `SIMS.mapa`…): the accident is the table `ROTEIRO`, the maps are `CENAS` (which camera at each
+build) and the function `paint` (the colour of each country at each build). Every text drawn on the pictures is in that file too.
+
+**Controls** are plain HTML in `<div class="rad-controlos">`: a range input or buttons with `data-ctl="name"` (buttons also carry
+`data-valor`). The arrow keys go back to moving the slides as soon as the mouse lets go of a slider.
+
+**Teacher notes** for these slides are at the end of `notes.js` (keys `ch-…`). If you regenerate `notes.js` from the PowerPoint
+deck, copy them back from `archive/` or from the repository history.
+
+**The maps** use today's borders. Crimea is drawn with Ukraine (the borders of 1991, recognised by the United Nations and the
+European Union); Natural Earth, the source, draws it with Russia, and `tools/build_mapa_urss.js` moves it.
+
+**To remove the lesson**, delete its `<section class="lesson" data-title="Aula 4 · Extra…">` in `index.html` and the three lines
+that load `chernobyl.css`, `chernobyl-mapa.js` and `chernobyl.js`.
+
+Sources for every figure are listed on the last slide («Onde confirmar») and, slide by slide, in the teacher notes.
 
 ## Licences
 

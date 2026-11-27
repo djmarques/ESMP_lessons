@@ -21,6 +21,8 @@
                         otherwise mark the right option button with data-ok
       .task             research task; data-url (QR code and link) and data-minutes (timer)
       .sort             drag-and-drop classification: chips are dragged into columns
+      .rad              slide with a simulation drawn by chernobyl.js (extra lesson after lesson 4):
+                        <div class="palco rad-palco" data-sim="…"> names it; controls carry data-ctl
 -->
 <html lang="pt-PT">
 <head>
@@ -34,6 +36,7 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
 <link rel="stylesheet" href="style.css">
 <link rel="stylesheet" href="fundadores.css">
+<link rel="stylesheet" href="chernobyl.css">
 </head>
 <body>
 
@@ -1092,6 +1095,307 @@
 </article>
 </section>
 
+<!-- ======================= AULA 4 · EXTRA: CHERNOBYL E O FIM DA URSS ======================= -->
+<section class="lesson" data-title="Aula 4 · Extra: Chernobyl e o fim da URSS">
+
+<!-- An extra lesson that grew out of the students' questions in lesson 4 (the fall of the Berlin Wall and the end of
+     the Soviet Union). The dark slides (class "rad") are simulations drawn by chernobyl.js on a canvas: the element
+     <div class="palco rad-palco" data-sim="…"> names the simulation, the captions are its builds, and the sliders and
+     buttons in "rad-controlos" are read by the simulation through their data-ctl. Styles: chernobyl.css. The maps use
+     chernobyl-mapa.js. The teacher's notes are at the end of notes.js (keys "ch-…"). -->
+<article class="slide cine abertura" id="ch-abertura" data-src="ch-abertura" data-nav="Abertura: de Chernobyl a 2004" data-cap="Abertura">
+  <div class="cine-corpo">
+    <p class="kicker">Aula 4 · Extra</p>
+    <h2 class="display">Chernobyl e o fim da União Soviética</h2>
+    <p class="lead">1986: em janeiro, Portugal entra na Comunidade Europeia. Em abril, do outro lado da Cortina de Ferro, explode um reator nuclear. Cinco anos depois, a União Soviética deixa de existir.</p>
+    <ol class="indice">
+      <li style="--i:0"><a href="#ch-onda"><b>A radiação</b><span>ondas, energia e três tipos</span></a></li>
+      <li style="--i:1"><a href="#ch-reator"><b>O acidente</b><span>26 de abril de 1986</span></a></li>
+      <li style="--i:2"><a href="#ch-silencio"><b>O silêncio</b><span>a resposta soviética</span></a></li>
+      <li style="--i:3"><a href="#ch-fim"><b>O fim da URSS</b><span>1989–1991</span></a></li>
+      <li style="--i:4"><a href="#ch-ue"><b>Da URSS à União Europeia</b><span>2004 até hoje</span></a></li>
+    </ol>
+  </div>
+</article>
+
+<article class="slide cine tabuleiro rad" id="ch-onda" data-src="ch-onda" data-nav="Simulação: onda curta, mais energia" data-cap="Onda">
+  <div class="cine-corpo">
+    <div class="palco rad-palco" data-sim="onda"></div>
+    <div class="rad-topo">
+      <div><p class="kicker">Extra · A radiação</p>
+      <h2>Onda curta, mais energia</h2></div>
+      <!-- The formula builds one term at a time; the "?" keeps the place of h until its build. -->
+      <p class="rad-formula" aria-label="E igual a h vezes f: a energia de um fotão é a constante de Planck vezes a frequência">
+        <span data-step="2"><b>E</b><small>energia de um fotão</small></span>
+        <span class="sinal" data-step="3"><b>=</b></span>
+        <span data-step="3"><span class="stack"><b>?</b><b data-step="4">h</b></span><small data-step="4">constante de Planck: um número fixo</small></span>
+        <span class="sinal" data-step="3"><b>×</b></span>
+        <span data-step="3"><b>f</b><small>frequência</small></span>
+      </p>
+    </div>
+    <div class="rad-meio"></div>
+    <div class="rad-controlos"><label><b>Comprimento de onda</b><span>longo</span><input type="range" min="0" max="100" value="22" data-ctl="lambda" aria-label="Comprimento de onda, de longo a curto"><span>curto</span></label></div>
+    <div class="stack legendas">
+      <p><time>Comprimento de onda</time>A luz, as ondas de rádio e os raios X são da mesma família: ondas eletromagnéticas. O que as distingue é o <b>comprimento de onda</b>, a distância entre duas cristas. Mexam no cursor.</p>
+      <p data-step="1"><time>Frequência</time>Todas viajam à mesma velocidade, a da luz. Se as cristas estão mais juntas, passam mais cristas por segundo no mesmo ponto: a <b>frequência</b> é maior.</p>
+      <p data-step="2"><time>Energia</time>A energia de uma onda chega em pacotes, os <b>fotões</b>. Chamemos <b>E</b> à energia de um fotão. Reparem na barra da direita enquanto mexem no cursor.</p>
+      <p data-step="3"><time>De que depende?</time>A energia de cada fotão depende da frequência, <b>f</b>: mais cristas por segundo, mais energia. Falta só um número para acertar as contas.</p>
+      <p data-step="4"><time>A constante</time>Esse número é <b>h</b>, a constante de Planck: um número fixo, igual para todas as ondas. Energia = h × frequência.</p>
+      <p data-step="5"><time>Conclusão</time>Onda curta → frequência alta → fotões com muita energia. Onda longa → frequência baixa → fotões com pouca energia.</p>
+    </div>
+  </div>
+</article>
+
+<article class="slide cine tabuleiro rad" id="ch-espectro" data-src="ch-espectro" data-nav="Simulação: o espectro eletromagnético" data-cap="Espectro">
+  <div class="cine-corpo">
+    <div class="palco rad-palco" data-sim="espectro"></div>
+    <div class="rad-topo"><div><p class="kicker">Extra · A radiação</p>
+      <h2>O espectro eletromagnético</h2></div></div>
+    <div class="rad-meio"></div>
+    <div class="rad-controlos"><label><b>Percorrer o espectro</b><span>rádio</span><input type="range" min="0" max="100" step="0.01" value="15.75" data-ctl="lambda" aria-label="Posição no espectro, do rádio aos raios gama"><span>raios gama</span></label></div>
+    <div class="stack legendas">
+      <p><time>Uma só família</time>Do rádio aos raios gama, é sempre o mesmo tipo de onda. Só muda o comprimento de onda e, com ele, a energia de cada fotão. Mexam no cursor.</p>
+      <p data-step="1"><time>Não ionizante</time>Do rádio à luz visível, cada fotão tem pouca energia: aquece ou faz vibrar as moléculas, mas não consegue arrancar eletrões aos átomos. É o caso do Wi-Fi, do micro-ondas e da luz.</p>
+      <p data-step="2"><time>Ionizante</time>A partir do ultravioleta mais energético, cada fotão já consegue arrancar eletrões aos átomos. É a <b>radiação ionizante</b>: pode partir moléculas das células, incluindo o ADN.</p>
+      <p data-step="3"><time>Raios gama</time>No extremo estão os raios gama, que saem do núcleo de átomos instáveis, como o césio-137 libertado em Chernobyl. São um dos três tipos de radiação que vêm de um núcleo.</p>
+    </div>
+  </div>
+</article>
+
+<article class="slide cine tabuleiro rad" id="ch-tipos" data-src="ch-tipos" data-nav="Animação: três tipos de radiação" data-cap="α β γ">
+  <div class="cine-corpo">
+    <div class="palco rad-palco" data-sim="tipos"></div>
+    <div class="rad-topo"><div><p class="kicker">Extra · A radiação</p>
+      <h2>Três tipos de radiação</h2></div></div>
+    <div class="rad-meio"></div>
+    <div class="stack legendas">
+      <p><time>Radioatividade</time>Alguns átomos têm o núcleo instável: para ficarem estáveis, deitam fora energia. É a isso que se chama radioatividade. A energia sai de três maneiras.</p>
+      <p data-step="1"><time>Alfa (α)</time>Um bloco de 2 protões e 2 neutrões: pesada e mais lenta. Uma folha de papel trava-a, tal como a camada exterior da pele.</p>
+      <p data-step="2"><time>Beta (β)</time>Um eletrão muito rápido. Atravessa o papel; uns milímetros de alumínio travam-no.</p>
+      <p data-step="3"><time>Gama (γ)</time>Não é uma partícula com massa: é uma onda eletromagnética de muita energia, um fotão. Atravessa o papel, o alumínio e o corpo; só chumbo ou betão espessos a enfraquecem, e mesmo assim alguma passa.</p>
+      <p data-step="4"><time>Ionizantes</time>As três são radiação ionizante: perdem a energia a arrancar eletrões aos átomos por onde passam. Num ser vivo, esses átomos são os das células.</p>
+    </div>
+  </div>
+</article>
+
+<article class="slide cine tabuleiro rad" id="ch-corpo" data-src="ch-corpo" data-nav="Simulação: balas atómicas no corpo" data-cap="No corpo">
+  <div class="cine-corpo">
+    <div class="palco rad-palco" data-sim="corpo"></div>
+    <div class="rad-topo"><div><p class="kicker">Extra · A radiação</p>
+      <h2>Balas atómicas: o que acontece no corpo</h2></div></div>
+    <div class="rad-meio"></div>
+    <div class="rad-controlos">
+      <div class="grupo"><b>Radiação</b>
+        <button type="button" data-ctl="tipo" data-valor="alfa" aria-pressed="true">α alfa</button>
+        <button type="button" data-ctl="tipo" data-valor="beta" aria-pressed="false">β beta</button>
+        <button type="button" data-ctl="tipo" data-valor="gama" aria-pressed="false">γ gama</button></div>
+      <div class="grupo"><b>Vem de</b>
+        <button type="button" data-ctl="onde" data-valor="fora" aria-pressed="true">fora do corpo</button>
+        <button type="button" data-ctl="onde" data-valor="dentro" aria-pressed="false">dentro (respirada ou engolida)</button></div>
+    </div>
+    <div class="stack legendas">
+      <p><time>Experimentem</time>Escolham a radiação e de onde vem. À esquerda, o corpo; à direita, um pedaço de tecido muito ampliado. Cada faísca é uma ionização: um eletrão arrancado a um átomo.</p>
+      <p data-step="1"><time>Por fora e por dentro</time>Por fora, o perigo é a gama, que atravessa tudo, e a beta, que pode queimar a pele. Por dentro é ao contrário: a alfa, que nem a pele passava, gasta toda a energia em duas ou três células.</p>
+      <p data-step="2"><time>Em Chernobyl</time>O iodo-131 da nuvem caiu nos pastos, passou para o leite e acumulou-se na tiroide de quem o bebeu, sobretudo crianças. Lá dentro, a radiação beta fez o estrago: milhares de cancros da tiroide.</p>
+      <p data-step="3"><time>E as células?</time>Uma célula repara quase todos os danos. Quando não consegue, pode morrer ou, anos mais tarde, dar origem a um cancro. Por isso conta a dose: quanta radiação, durante quanto tempo.</p>
+    </div>
+  </div>
+</article>
+
+<article class="slide cine tabuleiro rad" id="ch-reator" data-src="ch-reator" data-nav="Animação: como funciona um reator" data-cap="Reator">
+  <div class="cine-corpo">
+    <div class="palco rad-palco" data-sim="reator" data-cena="funciona"></div>
+    <div class="rad-topo"><div><p class="kicker">Extra · O acidente</p>
+      <h2>Como funciona um reator nuclear</h2></div></div>
+    <div class="rad-meio"></div>
+    <div class="rad-controlos" data-step="2"><label><b>Barras de controlo</b><span>fora</span><input type="range" min="5" max="100" value="55" data-ctl="barras" aria-label="Barras de controlo, de fora a dentro do núcleo"><span>dentro</span></label></div>
+    <div class="stack legendas">
+      <p><time>Fissão</time>Um neutrão bate num núcleo de urânio-235 e parte-o em dois. Liberta-se calor e saem dois ou três neutrões novos.</p>
+      <p data-step="1"><time>Reação em cadeia</time>Cada neutrão novo pode partir outro núcleo: 1, 2, 4, 8, 16… Sem travão, a reação cresce muito depressa.</p>
+      <p data-step="2"><time>O travão</time>Um reator é esta reação em cadeia, com travão. As <b>barras de controlo</b> absorvem neutrões: se descem, a reação abranda; se sobem, acelera. Experimentem com o cursor.</p>
+      <p data-step="3"><time>Do calor à eletricidade</time>O calor ferve a água que sobe pelos tubos do combustível. O vapor faz girar a turbina, a turbina faz girar o gerador, e o gerador produz eletricidade.</p>
+      <p data-step="4"><time>O modelo soviético</time>Neste tipo de reator (o RBMK), a <b>grafite</b> abranda os neutrões, para que partam mais núcleos. E a <b>água</b> faz dois trabalhos: arrefece e absorve alguns neutrões. Guardem esta ideia.</p>
+    </div>
+  </div>
+</article>
+
+<article class="slide cine tabuleiro rad" id="ch-acidente" data-src="ch-acidente" data-nav="Animação: o acidente, passo a passo" data-cap="Acidente">
+  <div class="cine-corpo">
+    <div class="palco rad-palco" data-sim="reator" data-cena="acidente"></div>
+    <div class="rad-topo"><div><p class="kicker">Extra · O acidente</p>
+      <h2>26 de abril de 1986, passo a passo</h2></div></div>
+    <div class="rad-meio"></div>
+    <div class="stack legendas">
+      <p><time>25 de abril · O teste</time>Central de Chernobyl, na Ucrânia soviética, a 130 km de Kiev. O reator 4 vai parar para manutenção e aproveita-se para um teste de segurança: se faltar a eletricidade, a turbina, ainda a rodar, consegue alimentar as bombas de água até arrancarem os geradores de emergência?</p>
+      <p data-step="1"><time>00:28 · A potência cai</time>O teste devia fazer-se a 700–1000 MW. Mas a potência cai, sem ninguém querer, para cerca de 30 MW: o reator fica quase parado e difícil de controlar.</p>
+      <p data-step="2"><time>01:03 · Sem travões</time>Para a fazer subir, os operadores tiram quase todas as barras de controlo. Estabilizam nos 200 MW e decidem fazer o teste assim. No núcleo fica o equivalente a 8 barras; a regra exigia pelo menos 15.</p>
+      <p data-step="3"><time>01:23:04 · Começa o teste</time>A turbina abranda e as bombas mandam menos água. Menos água, mais vapor. E, neste reator, o vapor absorve menos neutrões do que a água: mais fissões, mais calor, ainda mais vapor. Um ciclo que se alimenta a si próprio.</p>
+      <p data-step="4"><time>01:23:40 · O botão de emergência</time>Carrega-se no botão de paragem de emergência (AZ-5): todas as barras descem. Mas cada barra tem uma ponta de grafite. Ao entrar, a ponta empurra a água do fundo do núcleo e, durante segundos, a reação acelera em vez de travar.</p>
+      <p data-step="5"><time>Segundos depois · A explosão</time>A potência dispara para cerca de 100 vezes o normal. O vapor rebenta os tubos e levanta a tampa de 1000 toneladas; dois ou três segundos depois, uma segunda explosão. O edifício não tinha cúpula de contenção.</p>
+      <p data-step="6"><time>Dez dias</time>O núcleo fica a céu aberto, incandescente. Durante cerca de dez dias saem para o ar iodo-131, césio-137 e outros materiais radioativos. O vento leva-os para a Bielorrússia, a Escandinávia e o resto da Europa.</p>
+    </div>
+  </div>
+</article>
+
+<article class="slide cine tabuleiro rad" id="ch-silencio" data-src="ch-silencio" data-nav="Mapa: a nuvem e o silêncio" data-cap="Silêncio">
+  <div class="cine-corpo">
+    <div class="palco rad-palco" data-sim="mapa" data-cena="nuvem"></div>
+    <div class="rad-topo"><div><p class="kicker">Extra · A resposta soviética</p>
+      <h2>A nuvem viaja, Moscovo cala-se</h2></div></div>
+    <div class="rad-meio"></div>
+    <div class="stack legendas">
+      <p><time>26 de abril, 01:23</time>Explosão no reator 4. A três quilómetros fica Pripyat, a cidade dos trabalhadores da central, com 49 mil habitantes. Ninguém os avisa.</p>
+      <p data-step="1"><time>27 de abril, 14:00</time>Cerca de 36 horas depois, começa a evacuação de Pripyat: 45 mil pessoas saem em autocarros, com a promessa de que voltam em breve.</p>
+      <p data-step="2"><time>28 de abril, de manhã</time>A nuvem chega à Suécia, a mais de 1000 km. Na central nuclear de Forsmark os alarmes disparam: a radioatividade vem de fora, de leste. Só então o mundo fica a saber que algo aconteceu.</p>
+      <p data-step="3"><time>28 de abril, à noite</time>A agência oficial soviética, a TASS, divulga um comunicado de poucas frases: houve um acidente em Chernobyl, um reator ficou danificado, estão a ser tomadas medidas. Nada sobre o perigo.</p>
+      <p data-step="4"><time>1 de maio</time>Em Kiev, a 130 km, o desfile do 1.º de Maio não é cancelado: milhares de pessoas, incluindo crianças das escolas, saem à rua.</p>
+      <p data-step="5"><time>14 de maio</time>Gorbachev fala ao país pela primeira vez, na televisão: 18 dias depois da explosão. Nessa altura já tinham sido retiradas 116 mil pessoas num raio de 30 km.</p>
+    </div>
+  </div>
+</article>
+
+<article class="slide" id="ch-balanco" data-src="ch-balanco" data-nav="O balanço em números">
+  <p class="kicker">Chernobyl · O balanço</p>
+  <h2>O que custou</h2>
+  <div class="ch-numeros">
+    <div class="card peach" data-step="1"><p class="big" data-count="30">30</p><p><b>mortos em três meses</b></p><p class="small">2 na noite da explosão e 28 de síndrome aguda de radiação, entre trabalhadores da central e bombeiros.</p></div>
+    <div class="card sky" data-step="2"><p class="big">≈ <span data-count="350">350</span> mil</p><p><b>pessoas deslocadas</b></p><p class="small">116 mil em 1986, da zona de 30 km à volta da central; cerca de 220 mil nos anos seguintes.</p></div>
+    <div class="card" data-step="3"><p class="big">&gt; <span data-count="600">600</span> mil</p><p><b>«liquidadores»</b></p><p class="small">Soldados, mineiros, bombeiros e técnicos chamados a limpar a zona e a cobrir o reator.</p></div>
+    <div class="card sand" data-step="4"><p class="big">&gt; <span data-count="6000">6000</span></p><p><b>cancros da tiroide até 2005</b></p><p class="small">Em quem era criança ou adolescente em 1986; grande parte deve-se ao iodo-131 no leite. Quinze foram mortais.</p></div>
+    <div class="card navy" data-step="5"><p class="big">4 a 16 mil</p><p><b>mortes por cancro, a longo prazo?</b></p><p class="small">Não há consenso. As duas estimativas são de organismos das Nações Unidas: a primeira só para as pessoas mais expostas, a segunda para toda a Europa, até 2065.</p></div>
+    <div class="card" data-step="6"><p class="big">2000</p><p><b>fecha o último reator</b></p><p class="small">Os outros reatores de Chernobyl continuaram a funcionar depois do acidente. Em 2016, uma cobertura nova foi colocada sobre o reator 4.</p></div>
+  </div>
+  <p class="src">Fontes: UNSCEAR, relatório de 2008 · Organização Mundial da Saúde (2005 e 2011) · World Nuclear Association</p>
+</article>
+
+<article class="slide" id="ch-confianca" data-src="ch-confianca" data-nav="Porque abalou o regime?">
+  <p class="kicker">Chernobyl · A credibilidade</p>
+  <h2>Porque é que isto abalou o regime?</h2>
+  <div class="ch-pares">
+    <p class="cabeca"><span>O que o regime dizia</span><i></i><b>O que Chernobyl mostrou</b></p>
+    <p data-step="1"><span>«A técnica soviética é a mais avançada e a mais segura.»</span><i>→</i><b>Um reator com um defeito conhecido desde 1983, de que os operadores nunca foram avisados.</b></p>
+    <p data-step="2"><span>«O Estado protege o povo.»</span><i>→</i><b>36 horas sem avisar Pripyat; crianças no desfile do 1.º de Maio, em Kiev.</b></p>
+    <p data-step="3"><span>«A nossa imprensa diz a verdade.»</span><i>→</i><b>Moscovo só admitiu o acidente depois de a Suécia o detetar.</b></p>
+  </div>
+  <ol class="flow" data-step="4">
+    <li><b>Glasnost</b>Depois de Chernobyl, alarga-se a liberdade de falar e de publicar («transparência»).</li>
+    <li><b>Protestos</b>Na Ucrânia e na Lituânia, nascem movimentos contra o nuclear.</li>
+    <li><b>Independência</b>Esses movimentos passam a pedir a saída da União Soviética.</li>
+  </ol>
+  <div class="ch-citacao" data-step="5">
+    <blockquote>Chernobyl foi «talvez a verdadeira causa do colapso da União Soviética».<cite>Mikhail Gorbachev, último líder soviético, em 2006. Muitos historiadores acham que exagera: veem em Chernobyl um acelerador, não a causa.</cite></blockquote>
+  </div>
+  <p class="src">Fontes: World Nuclear Association, «Sequence of Events» · M. Gorbachev, «Turning Point at Chernobyl» (2006) · S. Plokhy, Chernobyl: History of a Tragedy (2018)</p>
+</article>
+
+<article class="slide" id="ch-fatores" data-src="ch-fatores" data-nav="Uma causa entre várias">
+  <p class="kicker">O fim da URSS · As causas</p>
+  <h2>Uma causa entre várias</h2>
+  <!-- Each cause is a crack that draws itself (class "draw"); on the last build the two halves of the block come apart. -->
+  <svg class="ch-bloco" viewBox="0 0 1000 425" role="img" aria-label="Um bloco com a sigla URSS racha com cada causa e parte-se em dezembro de 1991">
+    <g class="esq">
+      <polygon class="metade" points="330,30 500,30 488,105 512,170 490,240 510,305 498,380 330,380"/>
+      <text class="sigla" x="494" y="238" text-anchor="end">UR</text>
+      <path class="racha draw" pathLength="1" data-step="1" d="M330,70 l38,-10 l22,20 l34,-6"/>
+      <path class="racha draw" pathLength="1" data-step="2" d="M330,160 l30,12 l26,-18 l40,10"/>
+      <path class="racha draw" pathLength="1" data-step="3" d="M330,250 l36,-12 l24,22 l36,-8"/>
+      <path class="racha draw forte" pathLength="1" data-step="4" d="M330,340 l44,-16 l30,22 l50,-14 l30,10"/>
+    </g>
+    <g class="dir">
+      <polygon class="metade" points="500,30 670,30 670,380 498,380 510,305 490,240 512,170 488,105"/>
+      <text class="sigla" x="506" y="238">SS</text>
+      <path class="racha draw" pathLength="1" data-step="5" d="M670,70 l-38,-10 l-22,20 l-34,-6"/>
+      <path class="racha draw" pathLength="1" data-step="6" d="M670,160 l-30,12 l-26,-18 l-40,10"/>
+      <path class="racha draw" pathLength="1" data-step="7" d="M670,250 l-36,-12 l-24,22 l-36,-8"/>
+      <path class="racha draw" pathLength="1" data-step="8" d="M670,340 l-44,-16 l-30,22 l-50,-14"/>
+    </g>
+    <g data-step="1"><text class="t" x="296" y="66" text-anchor="end">Economia parada</text><text x="296" y="90" text-anchor="end">lojas vazias, filas, atraso técnico</text></g>
+    <g data-step="2"><text class="t" x="296" y="156" text-anchor="end">Guerra do Afeganistão</text><text x="296" y="180" text-anchor="end">1979–1989: dez anos, sem vitória</text></g>
+    <g data-step="3"><text class="t" x="296" y="246" text-anchor="end">Corrida aos armamentos</text><text x="296" y="270" text-anchor="end">acompanhar os Estados Unidos sai caro</text></g>
+    <g class="forte-t" data-step="4"><text class="t" x="296" y="336" text-anchor="end">Chernobyl, 1986</text><text x="296" y="360" text-anchor="end">o Estado falhou, e escondeu</text></g>
+    <g data-step="5"><text class="t" x="704" y="66">Reformas de Gorbachev</text><text x="704" y="90">a glasnost abre a porta à crítica</text></g>
+    <g data-step="6"><text class="t" x="704" y="156">Nacionalismos</text><text x="704" y="180">as repúblicas querem decidir por si</text></g>
+    <g data-step="7"><text class="t" x="704" y="246">1989 na Europa de Leste</text><text x="704" y="270">cai o Muro; os países-satélite saem</text></g>
+    <g data-step="8"><text class="t" x="704" y="336">Golpe falhado</text><text x="704" y="360">agosto de 1991: o poder central desfaz-se</text></g>
+    <!-- The last build shows this date; chernobyl.css moves the two halves apart when it is on. -->
+    <text class="fim" x="500" y="418" data-step="9">dezembro de 1991: a União Soviética acaba</text>
+  </svg>
+  <p class="src">Fontes: Encyclopaedia Britannica, «Why did the Soviet Union collapse?» e «Collapse of the Soviet Union»</p>
+</article>
+
+<article class="slide cine tabuleiro rad" id="ch-fim" data-src="ch-fim" data-nav="Mapa: o fim da União Soviética" data-cap="Fim da URSS">
+  <div class="cine-corpo">
+    <div class="palco rad-palco" data-sim="mapa" data-cena="fim"></div>
+    <div class="rad-topo"><div><p class="kicker">Extra · O fim da URSS</p>
+      <h2>De um país a quinze</h2></div></div>
+    <div class="rad-meio"></div>
+    <div class="stack legendas">
+      <p><time>1986</time>A União Soviética era um só país com 15 repúblicas: 22 milhões de km², cerca de 240 vezes Portugal, e perto de 290 milhões de habitantes. Mandava Moscovo.</p>
+      <p data-step="1"><time>1989</time>A 23 de agosto, dois milhões de pessoas dão as mãos ao longo de mais de 600 km, de Tallinn a Vilnius, a pedir a independência da Estónia, da Letónia e da Lituânia. Em novembro, cai o Muro de Berlim.</p>
+      <p data-step="2"><time>11 de março de 1990</time>A Lituânia é a primeira república a declarar a independência. Moscovo não a reconhece.</p>
+      <p data-step="3"><time>Agosto de 1991</time>Em Moscovo, um golpe de Estado contra Gorbachev falha em três dias. Nas semanas seguintes, uma república atrás da outra declara a independência.</p>
+      <p data-step="4"><time>Dezembro de 1991</time>Dia 1: na Ucrânia, mais de 90 % votam pela independência. Dia 8: Rússia, Ucrânia e Bielorrússia declaram que a União Soviética deixou de existir. Dia 25: Gorbachev demite-se e a bandeira soviética é arriada do Kremlin.</p>
+      <p data-step="5"><time>15 países</time>Onde havia um país, passa a haver quinze. Cada um vai escolher o seu caminho.</p>
+    </div>
+  </div>
+</article>
+
+<article class="slide cine tabuleiro rad" id="ch-ue" data-src="ch-ue" data-nav="Mapa: da URSS à União Europeia" data-cap="UE">
+  <div class="cine-corpo">
+    <div class="palco rad-palco" data-sim="mapa" data-cena="ue"></div>
+    <div class="rad-topo"><div><p class="kicker">Extra · Da URSS à União Europeia</p>
+      <h2>Três antigas repúblicas soviéticas entram na União</h2></div></div>
+    <div class="rad-meio"></div>
+    <div class="stack legendas">
+      <p><time>1995</time>Das 15 antigas repúblicas, três viram-se logo para ocidente: a Estónia, a Letónia e a Lituânia pedem a adesão à União Europeia em 1995.</p>
+      <p data-step="1"><time>As condições</time>Para entrar, cumprir os critérios de Copenhaga: democracia, economia de mercado e aplicar as regras da União. À Lituânia exigiu-se mais uma coisa: fechar a central de Ignalina, com dois reatores do mesmo tipo do de Chernobyl.</p>
+      <p data-step="2"><time>1 de maio de 2004</time>O maior alargamento: entram dez países, entre eles as três antigas repúblicas soviéticas. Dezoito anos depois de Chernobyl, a União Europeia chega a território que tinha sido da União Soviética.</p>
+      <p data-step="3"><time>Hoje</time>A Ucrânia, invadida pela Rússia em 2022, e a Moldávia são candidatas desde esse ano e estão a negociar a adesão. A Geórgia é candidata desde 2023, mas o processo está parado. A Rússia e a Bielorrússia seguiram outro caminho.</p>
+    </div>
+  </div>
+</article>
+
+<article class="slide" id="ch-debate" data-src="ch-debate" data-nav="Debate: esconder para evitar o pânico?">
+  <p class="kicker">Debate · A pares · 8 minutos</p>
+  <h2>Esconder um acidente para evitar o pânico?</h2>
+  <div class="task" data-minutes="8">
+    <ol class="steps-list big-list">
+      <li>Em 1986, as autoridades soviéticas justificaram o silêncio com a necessidade de evitar o pânico. Um de vocês defende essa decisão; o outro ataca-a.</li>
+      <li>O que perde um governo quando os cidadãos descobrem que lhes escondeu a verdade?</li>
+      <li>E hoje, na União Europeia: quem tem de nos avisar, e como sabemos se é verdade?</li>
+    </ol>
+    <details class="answer"><summary>Mostrar pistas</summary>
+      <ul>
+        <li>O silêncio não evitou a radiação: quem ficou em Pripyat e quem foi ao desfile em Kiev esteve exposto sem saber, e sem poder proteger-se.</li>
+        <li>Carta dos Direitos Fundamentais da União Europeia, artigo 11.º: liberdade de expressão e de informação.</li>
+        <li>Desde 1987, um ano depois de Chernobyl, os países da Comunidade são obrigados a avisar-se uns aos outros, de imediato, em caso de emergência radiológica (Decisão 87/600/Euratom).</li>
+      </ul>
+    </details>
+  </div>
+</article>
+
+<article class="slide" id="ch-quiz" data-nav="Revisão: Chernobyl e o fim da URSS">
+  <p class="kicker">Revisão · Aula extra · para estudar em casa</p>
+  <h2>Chernobyl e o fim da União Soviética</h2>
+  <div class="quiz">
+    <div class="q"><p>Quanto mais curto é o comprimento de onda…</p>
+      <div class="opts"><button>menos energia tem cada fotão</button><button data-ok>mais energia tem cada fotão</button><button>mais devagar viaja a onda</button></div>
+      <p class="why">Todas viajam à velocidade da luz. Onda curta, frequência alta, mais energia em cada fotão.</p></div>
+    <div class="q"><p>Que radiação é travada por uma folha de papel?</p>
+      <div class="opts"><button data-ok>Alfa</button><button>Beta</button><button>Gama</button></div>
+      <p class="why">A alfa perde logo a energia. O perigo é respirá-la ou engoli-la.</p></div>
+    <div class="q" data-answer="V"><p>No reator de Chernobyl, quando a água fervia e virava vapor, a reação acelerava.</p><p class="why">Verdadeiro: o vapor absorve menos neutrões do que a água. Mais vapor, mais fissões, mais calor.</p></div>
+    <div class="q"><p>Quem deu o primeiro alerta fora da União Soviética?</p>
+      <div class="opts"><button>Os Estados Unidos</button><button data-ok>A Suécia</button><button>A Alemanha</button></div>
+      <p class="why">A 28 de abril de 1986, os alarmes da central de Forsmark detetaram a nuvem.</p></div>
+    <div class="q" data-answer="F"><p>Chernobyl foi a única causa do fim da União Soviética.</p><p class="why">Falso: foi um acelerador, a par da economia, da guerra do Afeganistão, dos nacionalismos e das reformas de Gorbachev.</p></div>
+    <div class="q"><p>Que antigas repúblicas soviéticas entraram na União Europeia em 2004?</p>
+      <div class="opts"><button>Ucrânia e Moldávia</button><button>Polónia e Hungria</button><button data-ok>Estónia, Letónia e Lituânia</button></div>
+      <p class="why">A Polónia e a Hungria eram do bloco soviético, mas nunca foram repúblicas da União Soviética.</p></div>
+  </div>
+</article>
+</section>
+
 <!-- ======================= AULA 5 ======================= -->
 <section class="lesson" data-title="Aula 5 · Quadro institucional">
 
@@ -1777,6 +2081,11 @@
     <li>Manual refletE! (Areal Editores), Área de Integração, tema-problema 5.2 «Cidadania europeia»: quadro institucional, cidadania, direitos e deveres, ameaças e desafios.</li>
     <li>Eurocid, Centro de Informação Europeia Jacques Delors: direitos dos cidadãos, desafios da União, critérios de Copenhaga.</li>
     <li>Conselho Europeu (consilium.europa.eu); Iniciativa de Cidadania Europeia (citizens-initiative.europa.eu); Agência Europeia do Ambiente; Eurostat (área da União).</li>
+    <li>Aula extra, o acidente: World Nuclear Association, «Chernobyl Accident 1986», «Sequence of Events» e «RBMK Reactors»; Agência para a Energia Nuclear da OCDE, «Chernobyl: the site and accident sequence».</li>
+    <li>Aula extra, a radiação e a saúde: Agência de Proteção Ambiental dos Estados Unidos (EPA), «Radiation Basics»; NASA, «Tour of the Electromagnetic Spectrum»; UNSCEAR, relatório de 2008, anexo D; Organização Mundial da Saúde, «Chernobyl: the true scale of the accident» (2005) e «Radiation: the Chernobyl accident».</li>
+    <li>Aula extra, o fim da União Soviética: Encyclopaedia Britannica, «Collapse of the Soviet Union» e «Why did the Soviet Union collapse?»; M. Gorbachev, «Turning Point at Chernobyl» (Project Syndicate, 2006); S. Plokhy, <i>Chernobyl: History of a Tragedy</i> (2018); UNESCO, Memória do Mundo, «The Baltic Way».</li>
+    <li>Aula extra, a União Europeia: Ato de Adesão de 2003, protocolo sobre a central de Ignalina; Comissão Europeia, relatórios do alargamento de 4 de novembro de 2026; Decisão 87/600/Euratom do Conselho.</li>
+    <li>Mapas da aula extra: fronteiras atuais, de Natural Earth (domínio público); a Crimeia está desenhada como parte da Ucrânia.</li>
     <li>Mapa base: «Blank map of Europe cropped», Wikimedia Commons, CC BY-SA 3.0.</li>
     <li>Fotografias históricas (Wikimedia Commons): Nagasáqui, 1945 (C. Levy, Arquivos Nacionais dos EUA, domínio público); estrela amarela (D. Ullrich, CC BY-SA 3.0); Noite de Cristal, 10 de novembro de 1938 (autor desconhecido, domínio público); Magdeburgo, 1938 (Bundesarchiv, Bild 146-1970-083-42, CC BY-SA 3.0 DE); portão de Birkenau, 1945 (S. Mucha, domínio público); câmara de gás de Auschwitz I, 1945 (autor desconhecido, domínio público).</li>
   </ul>
@@ -1805,6 +2114,9 @@
 <script src="tabuleiro.js"></script>
 <script src="europa-mapa.js"></script>
 <script src="europa3d.js"></script>
+<!-- aula extra «Chernobyl e o fim da URSS»: contornos dos países e simulações (ver README) -->
+<script src="chernobyl-mapa.js"></script>
+<script src="chernobyl.js"></script>
 <!-- ferramentas comuns a todas as aulas: telemóvel em todos os questionários, respostas da turma, quadro, grafo, pergunta rápida (ver comum/LEIA-ME.md) -->
 <script src="../../comum/partilhado.js"></script>
 <script src="../../comum/aula.js"></script>

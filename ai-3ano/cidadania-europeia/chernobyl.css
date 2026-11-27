@@ -1,0 +1,106 @@
+/* ==========================================================================
+   Aula 4 · Extra: «Chernobyl e o fim da União Soviética».
+   Loaded after style.css and fundadores.css and uses their tokens and their film screen:
+   every simulation slide is  class="slide cine tabuleiro rad"  (dark screen, chapter bar,
+   picture behind the text), drawn by chernobyl.js.
+
+     1. Layout of a simulation slide (title row, free space, controls, caption)
+     2. Controls: sliders and choice buttons
+     3. The formula that builds term by term
+     4. The light slides: figures, "said / showed" pairs, the block that cracks
+     5. Phones
+   ========================================================================== */
+
+/* ---------- 1. Layout: title on top, free space for the picture, controls, caption ---------- */
+.rad .cine-corpo { justify-content: flex-start; gap: .5rem; }
+.rad-topo { display: flex; align-items: flex-end; justify-content: space-between; gap: 1.5rem; margin-right: 4.6rem; }   /* clear of the teacher's tools */
+.rad-meio { flex: 1; min-height: 9rem; pointer-events: none; }      /* the canvas shows through here; chernobyl.js measures it */
+.rad .legendas { max-width: 46rem; }
+.rad .legendas p { font-size: 1.12rem; }
+
+/* The opening has five chapters: keep them on one row (the shared rule would wrap the fifth). */
+#ch-abertura .indice { grid-template-columns: repeat(5, minmax(0, 1fr)); }
+#ch-abertura .display { font-size: 3rem; }
+#ch-abertura .indice { flex-shrink: 0; }        /* never squeezed: on a short screen the slide scrolls instead */
+#ch-abertura .indice li { display: grid; }
+#ch-abertura .indice a { height: auto; }           /* the card stretches with its row, and the row grows with the card */
+/* Ten chapters in the bar: let it scroll sideways on narrow screens instead of pushing the play button out. */
+.rad .capitulos, #ch-abertura .capitulos { overflow-x: auto; scrollbar-width: none; }
+
+/* ---------- 2. Controls ---------- */
+.rad-controlos { display: flex; flex-wrap: wrap; align-items: center; gap: .5rem 1.6rem; margin-right: 4.6rem; font-size: 1rem; color: var(--sand); }
+.rad-controlos label { display: flex; align-items: center; gap: .7rem; flex: 1 1 22rem; max-width: 46rem; }
+.rad-controlos b { color: var(--tinta); white-space: nowrap; }
+.rad-controlos span { white-space: nowrap; font-size: .9rem; }
+.rad-controlos .grupo { display: flex; align-items: center; gap: .4rem; }
+.rad-controlos input[type=range] { flex: 1; min-width: 8rem; height: 2rem; margin: 0; background: none; cursor: pointer; -webkit-appearance: none; appearance: none; }
+.rad-controlos input[type=range]::-webkit-slider-runnable-track { height: .5rem; border-radius: 99px; background: rgba(246, 243, 236, .25); }
+.rad-controlos input[type=range]::-moz-range-track { height: .5rem; border-radius: 99px; background: rgba(246, 243, 236, .25); }
+.rad-controlos input[type=range]::-webkit-slider-thumb { -webkit-appearance: none; width: 1.7rem; height: 1.7rem; margin-top: -.6rem; border: 3px solid var(--tinta); border-radius: 50%; background: var(--orange); }
+.rad-controlos input[type=range]::-moz-range-thumb { width: 1.4rem; height: 1.4rem; border: 3px solid var(--tinta); border-radius: 50%; background: var(--orange); }
+.rad-controlos button { padding: .3rem 1rem; border: 2px solid var(--cor, var(--apricot)); border-radius: 99px; background: none; color: var(--tinta); font-weight: 700; }
+.rad-controlos button[aria-pressed="true"] { background: var(--cor, var(--apricot)); color: #12191F; }
+.rad-controlos button:hover { filter: brightness(1.15); }
+.rad-controlos [data-valor="alfa"] { --cor: #F0A673; }
+.rad-controlos [data-valor="beta"] { --cor: #7FB0D0; }
+.rad-controlos [data-valor="gama"] { --cor: #E8C65A; }
+/* A control that belongs to a later build is not just invisible: it takes no clicks either. */
+.rad-controlos[data-step]:not(.on) { visibility: hidden; }
+
+/* ---------- 3. The formula: one term per build, each with its name underneath ---------- */
+.rad-formula { display: flex; align-items: flex-start; gap: .8rem; margin: 0; }
+.rad-formula > span { display: grid; justify-items: center; gap: .1rem; }
+.rad-formula b { font: italic 700 2.5rem/1 var(--serif); color: var(--tinta); }
+.rad-formula .sinal b { font-style: normal; color: var(--sand); }
+.rad-formula small { max-width: 8.5rem; font-size: .8rem; line-height: 1.15; text-align: center; color: var(--apricot); }
+
+/* ---------- 4. The light slides ---------- */
+/* Figures: cards with a large number, three to a row. */
+.ch-numeros { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: .8rem; }
+.ch-numeros .card { display: grid; align-content: start; gap: .15rem; }
+.ch-numeros .big { font-size: 2.4rem; }
+.ch-numeros .navy .big { color: var(--apricot); }
+.ch-numeros .small { font-size: .9rem; }
+.navy .small { color: var(--sand); }
+
+/* What the regime said, and what Chernobyl showed: two columns with their headings. */
+.ch-pares { display: grid; gap: .5rem; }
+.ch-pares p { display: grid; grid-template-columns: 1fr 2.2rem 1fr; align-items: stretch; margin: 0; }
+.ch-pares span, .ch-pares b { display: flex; align-items: center; padding: .6rem .9rem; border-radius: 4px; font-size: 1.08rem; }
+.ch-pares span { background: var(--sky); font-style: italic; }
+.ch-pares b { background: var(--peach); font-weight: 400; }
+.ch-pares i { align-self: center; text-align: center; font-style: normal; font-size: 1.4rem; color: var(--orange); }
+.ch-pares .cabeca span, .ch-pares .cabeca b { padding: 0 .9rem; background: none; font: 700 .75rem var(--sans); letter-spacing: .12em; text-transform: uppercase; color: var(--slate); }
+.ch-citacao { padding: .8rem 1.1rem; border-left: 4px solid var(--orange); border-radius: 4px; background: var(--cream); }
+.ch-citacao blockquote { font-size: 1.25rem; }
+
+/* The block that cracks: each cause is a crack; on the last build the two halves come apart. */
+.ch-bloco { width: 100%; max-height: 62vh; overflow: visible; }
+.ch-bloco .metade { fill: var(--navy); }
+.ch-bloco .sigla { font: 700 92px var(--serif); fill: var(--paper); }
+.ch-bloco .racha { stroke: var(--paper); stroke-width: 3.5; stroke-linecap: round; stroke-linejoin: round; }
+.ch-bloco .racha.forte { stroke: var(--apricot); stroke-width: 6; }
+.ch-bloco text { font: 400 19px var(--sans); fill: var(--slate); }
+.ch-bloco .t { font: 700 23px var(--serif); fill: var(--navy); }
+.ch-bloco .forte-t .t { fill: var(--orange); }
+.ch-bloco .fim { font: 700 26px var(--serif); fill: var(--orange); text-anchor: middle; }
+.ch-bloco .esq, .ch-bloco .dir { transform-box: fill-box; transform-origin: 50% 100%; transition: transform 1.4s var(--ease) .2s; }
+.ch-bloco:has(.fim.on) .esq { transform: translate(-14px, 3px) rotate(-2.5deg); }
+.ch-bloco:has(.fim.on) .dir { transform: translate(14px, 5px) rotate(2.5deg); }
+
+/* ---------- 5. Phones ---------- */
+@media (max-width: 900px) {
+  .rad-topo { flex-direction: column; align-items: flex-start; gap: .3rem; margin-right: 0; }
+  .rad-formula b { font-size: 1.6rem; }
+  .rad-formula small { max-width: 5.5rem; font-size: .68rem; }
+  .rad-meio { min-height: 15rem; }
+  .rad-controlos { margin-right: 3.6rem; font-size: .9rem; }
+  .rad-controlos label { flex-basis: 100%; }
+  .rad .legendas p { font-size: 1rem; }
+  #ch-abertura .indice { grid-template-columns: 1fr 1fr; }
+  #ch-abertura .display { font-size: 2.1rem; }
+  .ch-numeros { grid-template-columns: 1fr 1fr; }
+  .ch-pares p { grid-template-columns: 1fr; }
+  .ch-pares i { transform: rotate(90deg); }
+  .ch-pares .cabeca { display: none; }
+}
