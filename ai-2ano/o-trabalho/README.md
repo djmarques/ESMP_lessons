@@ -138,3 +138,12 @@ Um só tabuleiro com quatro paragens (a fábrica, a casa, a mesa das regras, a f
 - A história é uma tabela: no `percurso3d.js`, `SCRIPT` diz onde está cada peça a partir de cada momento, `SHOTS` diz o que a câmara enquadra, e as etiquetas estão em `label(…)`. As legendas por baixo da imagem estão no `index.html` (um `<p>` por clique, dentro de `.i3d-leg`).
 - Um slide mostra o momento `BASE[id do slide]` mais o número de cliques dados. Para o tabuleiro aparecer noutro slide, cria o slide com as classes `ci i3d-slide p3d` e acrescenta o seu endereço a `BASE`.
 - Usa o `assets/vendor/three.min.js` e o aspeto das outras animações 3D (classes `.i3d-…`), mas tem o seu próprio desenhador. Sem WebGL, as legendas contam a história.
+
+## 27 de novembro de 2026 (b): os conceitos dentro da imagem
+
+As definições por baixo das animações não prendiam os alunos, porque não tinham correspondência visual. Duas mudanças, só na lição 6:
+
+- **Tabuleiro 3D** (`percurso3d.js`): cada conceito nasce dentro da imagem, num cartão posto num canto livre e ligado por uma linha ao objeto que o mostra, e as partes da definição aparecem uma de cada vez: Toyotismo e just in time (depois de o produto sair), teletrabalho (quando o trabalhador chega a casa), contrato individual e contrato coletivo (sobre o papel), desempregado (sobre o trabalhador, na fila) e taxa de desemprego (as palavras da fórmula têm as cores das etiquetas das pessoas). No código: `conceito(nome, partes)`, `after(momento, segundos)` e, no fim de cada `label(…)`, o sítio do cartão na imagem (frações da largura e da altura).
+- **Cenas 2D** (`conceitos.js`, novo): no clique em que uma definição aparece, fica maior e sobe para junto da imagem até ao clique seguinte, e uma linha liga-a (ou liga cada uma das suas partes, cada uma com a sua cor) ao que ela descreve na imagem, que fica contornado. Por omissão, o alvo é o que a imagem revela nesse mesmo clique; a tabela `ALVO`, no início do ficheiro, afina slide a slide. Nenhum slide foi alterado por dentro.
+- Para ligar isto nas outras cenas do site (história do trabalho, organizar o trabalho I), muda `ONDE` no início do `conceitos.js` para `() => true` e vê cada cena: onde a linha não apontar para o sítio certo, acrescenta uma linha a `ALVO`.
+- As versões de antes desta mudança estão em `archive/`, com a data 2026-11-27b.

@@ -1,0 +1,91 @@
+/* =====================================================================
+   neuro3d.css — the 3D slides of «Por dentro do cérebro» and of Degrau 1
+   (drawn by neuro3d.js). Uses the tokens of style.css.
+     1. The 3D stage, its labels and its captions
+     2. Controls under the stage (buttons, response bars)
+     3. The cortex slide: 3D brain beside the simplified plot
+     4. Phones
+   ===================================================================== */
+
+/* ---------- 1. Stage, labels, captions ---------- */
+.slide.n3d h2 { margin-bottom: 12px; font-size: 38px; }
+.slide.n3d .lede { margin: 0 0 12px; font-size: 18px; }
+.palco3d {
+  position: relative; overflow: hidden; border-radius: 12px;
+  height: min(62vh, 620px); min-height: 340px;
+  background: radial-gradient(ellipse at 50% 42%, #2b3945, var(--navy) 78%); color: var(--cream);
+}
+.palco3d > canvas:first-child { display: block; width: 100%; height: 100%; }
+.palco3d.sem-3d::after { content: "A animação 3D não está disponível neste navegador: as legendas contam a história."; position: absolute; inset: 38% 10% auto; text-align: center; color: var(--peach); }
+/* A label follows a point of the 3D scene (neuro3d.js moves it every frame). */
+.et3d { position: absolute; left: 0; top: 0; opacity: 0; transition: opacity .5s; pointer-events: none; white-space: nowrap; will-change: transform;
+  padding: 3px 11px; border-radius: 8px; background: rgba(18, 25, 31, .8); font-size: 15px; line-height: 1.25; color: var(--peach); text-align: center; }
+.et3d b { display: block; font: 700 17px var(--head); color: #fff; }
+.et3d.peq { font-size: 13px; padding: 1px 8px; }
+.et3d.baixo { translate: 0 118%; }                      /* written under its point instead of above */
+.et3d.visivel { opacity: 1; }
+/* Captions: one per step, all in the same cell so the box keeps the size of the longest. */
+.leg3d { position: absolute; left: 16px; bottom: 16px; z-index: 2; display: grid; align-items: end; max-width: min(640px, calc(100% - 32px));
+  padding: 12px 16px; border-left: 4px solid var(--orange); border-radius: 4px; background: rgba(18, 25, 31, .88); }
+.leg3d > p { grid-area: 1 / 1; margin: 0; font-size: 19px; line-height: 1.35; color: var(--cream); }
+.leg3d > p:has(~ p.on) { opacity: 0; visibility: hidden; }
+.leg3d time { display: block; margin-bottom: 3px; font: 700 13px ui-monospace, Menlo, Consolas, monospace; letter-spacing: .14em; text-transform: uppercase; color: var(--accent); }
+.leg3d b { color: #fff; }
+.palco3d canvas.eeg { position: absolute; right: 16px; top: 16px; width: 280px; height: 130px; border-radius: 8px; background: rgba(18, 25, 31, .7); transition: opacity .5s; }
+
+/* ---------- 2. Controls and response bars ---------- */
+.ctl3d { display: flex; flex-wrap: wrap; align-items: center; gap: 10px 14px; margin-top: 12px; }
+.ctl3d output { flex: 1 1 260px; font-size: 18px; color: var(--navy); font-weight: 700; }
+.ctl3d .btn { font-size: 18px; }
+.sustos { display: flex; align-items: flex-end; gap: 6px; height: 96px; min-width: 150px; padding: 0 6px; border-bottom: 2px solid rgba(246, 243, 236, .5); }
+.sustos span { width: 20px; height: var(--h); border-radius: 4px 4px 0 0; background: var(--accent); animation: grow .5s var(--ease) both; transform-origin: bottom; }
+.sustos span.apito { background: #7FB0D0; }
+.sustos-caixa { position: absolute; right: 16px; top: 16px; z-index: 2; padding: 10px 12px 8px; border-radius: 8px; background: rgba(18, 25, 31, .8); }
+.sustos-caixa.esq { left: 16px; right: auto; }
+.sustos-caixa small { display: block; margin-top: 5px; font-size: 13px; color: var(--peach); text-align: center; }
+
+/* ---------- 3. Cortex: brain and plot side by side ---------- */
+.cortex-split { display: grid; grid-template-columns: 1fr 1.08fr; gap: 18px; align-items: stretch; }
+.cortex-split .palco3d { height: min(56vh, 560px); }
+.plot-lado { display: flex; flex-direction: column; gap: 8px; }
+.plot3d { flex: 1; border: 1px solid var(--line); border-radius: 12px; background: var(--white); padding: 6px; }
+.plot3d svg { display: block; width: 100%; height: 100%; max-height: 52vh; }
+.plot3d text { font: 19px var(--body); fill: var(--text); }
+.plot3d .tit { font-weight: 700; fill: var(--navy); }
+.plot3d .eixos line { stroke: var(--navy); stroke-width: 2.5; }
+.plot3d .eixos .grade { stroke: var(--line); stroke-width: 1; stroke-dasharray: 4 5; }
+.plot3d .pl-pontos circle { fill: var(--muted); opacity: .38; }
+.plot3d .pl-um line { stroke: var(--orange); stroke-width: 2; stroke-dasharray: 6 5; }
+.plot3d .pl-um circle { fill: var(--orange); }
+.plot3d .pl-um text { fill: var(--orange); font-weight: 700; }
+.plot3d path { fill: none; stroke-width: 6; stroke-linecap: round; }
+.plot3d .pl-todos { stroke: var(--navy); }
+.plot3d .baixo { stroke: var(--blue); } .plot3d .alto { stroke: var(--orange); }
+.plot3d text.baixo, .plot3d text.alto { stroke: none; font-size: 16px; font-weight: 700; }
+.plot3d text.baixo { fill: var(--blue); } .plot3d text.alto { fill: var(--orange); }
+.plot3d .pl-idade line { stroke: var(--navy); stroke-width: 1.5; stroke-dasharray: 3 4; }
+.plot3d .pl-idade circle { fill: var(--navy); stroke: #fff; stroke-width: 2; }
+/* each layer of the plot arrives with its step (classes ge1… on the slide, set by app.js) */
+.plot3d .pl-pontos, .plot3d .pl-todos, .plot3d .pl-dois, .plot3d .pl-idade { opacity: 0; transition: opacity .7s var(--ease); }
+.ge1 .plot3d .pl-pontos, .ge2 .plot3d .pl-todos, .ge2 .plot3d .pl-idade, .ge3 .plot3d .pl-dois { opacity: 1; }
+.ge1 .plot3d .pl-um, .ge3 .plot3d .pl-todos { opacity: 0; transition: opacity .5s; }
+.ge3 .plot3d .pl-pontos { opacity: .45; }
+.idade-ctl { display: flex; align-items: center; gap: 12px; font-size: 17px; color: var(--navy); font-weight: 700; }
+.idade-ctl input { flex: 1; accent-color: var(--orange); height: 28px; }
+/* the magnifier: a slab of cortex whose height is the thickness at the chosen age (enlarged 26 times) */
+.lupa { position: absolute; right: 14px; top: 14px; z-index: 2; display: grid; justify-items: center; gap: 4px; padding: 10px 14px; border-radius: 8px; background: rgba(18, 25, 31, .82); font-size: 14px; color: var(--peach); }
+.lupa i { display: block; width: 74px; height: var(--esp, 78px); border-radius: 6px 6px 0 0; background: linear-gradient(#E9B48E, #C98F6B); border-bottom: 5px solid #F6F3EC; transition: height .2s; }
+.lupa b { font: 700 18px var(--head); color: #fff; } .lupa output { font: 700 20px var(--head); color: var(--accent); }
+.fig-original { margin-top: 8px; font-size: 15px; }
+.fig-original img { display: block; max-width: min(100%, 520px); margin-top: 8px; border: 1px solid var(--line); border-radius: 8px; }
+
+/* ---------- 4. Phones ---------- */
+@media (max-width: 860px) {
+  .slide.n3d h2 { font-size: 26px; }
+  .palco3d { height: 60vh; min-height: 320px; }
+  .leg3d { left: 8px; bottom: 8px; max-width: calc(100% - 16px); padding: 9px 12px; } .leg3d > p { font-size: 15px; }
+  .et3d { font-size: 12px; } .et3d b { font-size: 13px; }
+  .cortex-split { grid-template-columns: 1fr; } .cortex-split .palco3d { height: 44vh; }
+  .palco3d canvas.eeg { width: 170px; height: 80px; }
+  .sustos { height: 60px; } .sustos span { width: 12px; }
+}

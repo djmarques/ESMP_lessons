@@ -1300,3 +1300,47 @@ html:not(.i3d-ok) .i3d-leg > [data-step].on { display: block; }   /* no 3D: ever
 .p3d .i3d-nota.p3d-ideia{font-weight:400;font-size:16px;line-height:1.25;padding:6px 12px;text-align:center} .p3d .p3d-ideia b{display:block;font-family:var(--head);font-size:20px;color:var(--orange)}
 .p3d .i3d-fala.p3d-conta{font-style:normal;font-size:26px;padding:6px 16px}
 @media (max-width: 860px){.p3d .i3d-nota.p3d-ideia{font-size:10px;padding:2px 6px;white-space:normal;width:9.5em} .p3d .p3d-ideia b{font-size:12px} .p3d .i3d-fala.p3d-conta{font-size:15px}}
+
+/* ---------- Conceitos dentro da imagem (27 de novembro de 2026) ----------
+   1. Cenas 2D (conceitos.js): no clique em que aparece, a definição fica maior (.agora) e uma linha
+      laranja liga-a, ou a cada uma das suas partes, ao que ela descreve na imagem (.cx-ligacoes). */
+.slide.cena { position: relative; }
+.slide.cena.cx.current { display: flex; flex-direction: column; }   /* linhas por ordem (style.order, posto pelo conceitos.js): a definição do clique sobe para junto da imagem */
+.ddef.mini .term, .ddef.mini .part, .ddef.mini .eq, .ddef.mini .op { transition: font-size .35s var(--ease), background-color .35s, border-color .35s, padding .35s; }
+.ddef.mini.agora { gap: 12px; margin-top: 12px; }
+.ddef.mini.agora .term { font-size: 25px; padding: 8px 16px; background: var(--orange); }
+.ddef.mini.agora .term small { font-size: 14px; color: #fff; }
+.ddef.mini.agora .eq { font-size: 32px; }
+.ddef.mini.agora .part { font-size: 19.5px; padding: 7px 12px; background: #fff; border: 2.5px solid var(--orange); }
+.ddef.mini.agora .part.cx-c1 { border-color: var(--navy); } .ddef.mini.agora .part.cx-c2 { border-color: var(--blue); }
+.ddef.mini.agora .op { font-size: 25px; }
+.cx-ligacoes { position: absolute; left: 0; top: 0; width: 100%; height: 100%; overflow: visible; pointer-events: none; z-index: 2; }
+.cx-ligacoes path { fill: none; stroke: var(--orange); stroke-width: 3.5; stroke-linecap: round; stroke-dasharray: 1; stroke-dashoffset: 0; }
+.cx-ligacoes circle { fill: var(--orange); }
+.cx-ligacoes .cx-alvo { fill: rgba(164, 74, 22, .07); stroke: var(--orange); stroke-width: 3; }
+.cx-ligacoes path.cx-c1, .cx-ligacoes .cx-alvo.cx-c1 { stroke: var(--navy); } .cx-ligacoes circle.cx-c1 { fill: var(--navy); } .cx-ligacoes .cx-alvo.cx-c1 { fill: rgba(30, 42, 51, .05); }
+.cx-ligacoes path.cx-c2, .cx-ligacoes .cx-alvo.cx-c2 { stroke: var(--blue); } .cx-ligacoes circle.cx-c2 { fill: var(--blue); } .cx-ligacoes .cx-alvo.cx-c2 { fill: rgba(47, 110, 158, .06); }
+.cx-ligacoes path.cx-nova { stroke-dashoffset: 1; animation: cx-traco .7s var(--ease) forwards; animation-delay: calc(var(--n) * .45s); }
+.cx-ligacoes circle.cx-nova { opacity: 0; animation: cx-surge .25s ease-out forwards; animation-delay: calc(var(--n) * .45s + .6s); }
+.cx-ligacoes .cx-alvo.cx-nova { opacity: 0; transform-box: fill-box; transform-origin: center; animation: cx-surge .3s ease-out forwards, cx-pulso .9s ease-in-out 2; animation-delay: calc(var(--n) * .45s + .5s), calc(var(--n) * .45s + .8s); }
+@keyframes cx-traco { to { stroke-dashoffset: 0; } }
+@keyframes cx-surge { to { opacity: 1; } }
+@keyframes cx-pulso { 50% { transform: scale(1.08); } }
+@media (max-width: 860px) { .ddef.mini.agora .term { font-size: 20px; } .ddef.mini.agora .part { font-size: 16px; } .cx-ligacoes { display: none; } }   /* ecrã estreito: fica o destaque, sem as linhas */
+@media (prefers-reduced-motion: reduce) { .cx-ligacoes .cx-nova { animation: none !important; opacity: 1 !important; stroke-dashoffset: 0 !important; } }
+/* 2. Tabuleiro 3D (percurso3d.js): o conceito é um cartão num canto livre da imagem, ligado por uma linha ao que o mostra;
+      as partes da definição aparecem uma de cada vez. Na conta da taxa, as cores das palavras são as das etiquetas. */
+.p3d .p3d-conceito { display: grid; justify-items: center; gap: 4px; width: max-content; max-width: 345px; padding: 8px 11px 9px; border-radius: 12px; background: #fff; border: 2.5px solid var(--orange); box-shadow: 0 6px 18px rgba(30, 42, 51, .22); white-space: normal; text-align: center; z-index: 2; }
+.p3d .p3d-conceito > b { font: 700 20px/1.2 var(--head); color: #fff; background: var(--navy); border-radius: 8px; padding: 3px 14px; }
+.p3d .p3d-conceito > span { display: block; font: 700 16px/1.25 var(--body); color: var(--navy); background: var(--cream); border: 1px solid var(--line); border-radius: 8px; padding: 3px 10px; opacity: 0; }
+.p3d .p3d-conceito.visivel > span { animation: p3d-parte .5s var(--ease) both; animation-delay: calc(var(--i) * 1s + .6s); }
+.p3d .p3d-conceito.p3d-conta { max-width: none; }
+.p3d .p3d-conceito.p3d-conta > span { font-size: 19px; padding: 5px 12px; } .p3d .p3d-conceito.p3d-conta > span + span { font: 700 25px/1.2 var(--head); background: #fff; border-color: var(--orange); }
+.p3d .p3d-conceito i { font-style: normal; color: #fff; border-radius: 6px; padding: 0 6px; } .p3d .p3d-conceito i.d { background: var(--orange); } .p3d .p3d-conceito i.a { background: var(--navy); }
+.p3d .i3d-nota.p3d-d { background: var(--orange); border-color: var(--orange); color: #fff; }
+.p3d-fios { position: absolute; left: 0; top: 0; width: 100%; height: 100%; overflow: visible; pointer-events: none; z-index: 1; }
+.p3d-fios path { fill: none; stroke: var(--orange); stroke-width: 3.5; stroke-linecap: round; opacity: 0; transition: opacity .4s; }
+.p3d-fios circle { fill: var(--orange); stroke: #fff; stroke-width: 2.5; opacity: 0; transition: opacity .4s; }
+@keyframes p3d-parte { from { opacity: 0; transform: translateY(7px); } to { opacity: 1; transform: none; } }
+@media (max-width: 860px) { .p3d .p3d-conceito { max-width: 170px; padding: 4px 6px 5px; border-width: 2px; gap: 2px; } .p3d .p3d-conceito > b { font-size: 12px; padding: 1px 8px; } .p3d .p3d-conceito > span { font-size: 10px; padding: 1px 5px; } .p3d .p3d-conceito.p3d-conta > span { font-size: 11px; } .p3d .p3d-conceito.p3d-conta > span + span { font-size: 14px; } .p3d-fios path { stroke-width: 2.5; } }
+@media (prefers-reduced-motion: reduce) { .p3d .p3d-conceito > span { animation: none !important; opacity: 1; } }

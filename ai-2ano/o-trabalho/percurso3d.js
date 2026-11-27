@@ -21,6 +21,10 @@
    - A slide shows moment BASE[slide id] + (number of builds revealed). app.js
      puts the classes ge1…geN on the slide; nothing else is needed from it.
    - Text is HTML (captions under the picture, labels over it), never 3D.
+   - Each concept of the lesson is born INSIDE the picture: a card in a free
+     corner, joined by a line to the thing that shows it (conceito(…) below);
+     its parts appear one at a time. The caption under the picture only tells
+     the story.
    If WebGL is not available, the captions still tell the story.
    Code comments in English; every text students read in European Portuguese.
    ========================================================================== */
@@ -200,27 +204,42 @@
 
   /* ---------- STORY: labels (HTML over the 3D picture) ---------- */
   const labels = [];
-  /** Label over a piece or a fixed point [x, y, z]; show(moment) says when. */
-  function label(html, cls, target, dy, show) {
+  /** Label over a piece or a fixed point [x, y, z]; show(moment, seconds into it) says when. */
+  const wires = document.createElementNS('http://www.w3.org/2000/svg', 'svg');   // the lines from the concept cards to their things
+  wires.setAttribute('class', 'p3d-fios');
+  layer.append(wires);
+  /** dock = [x, y] (fractions of the picture: centre and top of the label): the label stays there,
+      and a line joins it to its target. Without dock, the label sits on its target. */
+  function label(html, cls, target, dy, show, dock) {
     const el = document.createElement('div');
     el.className = 'i3d-et ' + cls;
     el.innerHTML = html;
     layer.append(el);
-    labels.push({ el, target, dy, show });
+    const item = { el, target, dy, show, dock };
+    if (dock && target) {
+      item.wire = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+      item.dot = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+      item.dot.setAttribute('r', 6.5);
+      wires.append(item.wire, item.dot);
+    }
+    labels.push(item);
   }
   const at = (...ms) => m => ms.includes(m);
+  const after = (moment, seconds) => (m, time) => m === moment && time >= seconds;
+  /** A concept card: the name, then the parts of its definition, revealed one at a time. */
+  const conceito = (name, parts) => `<b>${name}</b>` + parts.map((t, i) => `<span style="--i:${i}">${t}</span>`).join('');
   const P = pieces;
   // the four stops, in the wide shots; one idea per stop at the end
   label('1 · a fábrica', 'i3d-nota i3d-forte', [-12.2, 3.3, -3.2], 0, at(0));
-  label('2 · a casa', 'i3d-nota i3d-forte', [-4.4, 3.3, -3.2], 0, at(0, 6));
-  label('3 · a mesa das regras', 'i3d-nota i3d-forte', [4, 3.3, -3.2], 0, at(0, 6));
-  label('4 · a fila do desemprego', 'i3d-nota i3d-forte', [12.2, 3.3, -3.2], 0, at(0, 6));
+  label('2 · a casa', 'i3d-nota i3d-forte', [-4.4, 3.3, -3.2], 0, at(0));
+  label('3 · a mesa das regras', 'i3d-nota i3d-forte', [4, 3.3, -3.2], 0, at(0));
+  label('4 · a fila do desemprego', 'i3d-nota i3d-forte', [12.2, 3.3, -3.2], 0, at(0));
   label('<b>Toyotismo</b><br>produzir só o que é pedido', 'i3d-nota p3d-ideia', [-12.2, 1.2, -4.6], 0, at(8));
   label('<b>Teletrabalho</b><br>trabalhar à distância', 'i3d-nota p3d-ideia', [-4.2, -0.3, 6.6], 0, at(8));
   label('<b>Contrato coletivo</b><br>sindicato + associação de empregadores', 'i3d-nota p3d-ideia', [4, 1.2, -4.6], 0, at(8));
   label('<b>Taxa de desemprego</b><br>desempregados ÷ população ativa × 100', 'i3d-nota p3d-ideia', [11.4, -0.3, 6.6], 0, at(8));
   // the cast
-  label('trabalhador', 'i3d-pessoa', P.W, 1.5, m => m <= 6);
+  label('trabalhador', 'i3d-pessoa', P.W, 1.5, m => m <= 5);
   label('quem manda', 'i3d-pessoa', P.B, 1.8, at(1, 2, 4));
   label('cliente', 'i3d-pessoa', P.K, 1.45, at(2));
   // 1 · Ford's crisis (the four reasons of the slide «A crise dos modelos»)
@@ -228,29 +247,30 @@
   label('armazém cheio: os clientes querem escolher', 'i3d-nota', [-9.9, 2.1, -0.5], 0, at(1));
   label('tarefas repetitivas: doenças profissionais', 'i3d-nota', [-12.6, 0.35, 1.6], 0, at(1));
   label('sem autonomia', 'i3d-nota', [-11.2, 2.15, -1.05], 0, at(1));
-  // 2 · Toyota
+  // 2 · Toyota: the two concepts appear when the picture has shown them
   label('1.º a encomenda', 'i3d-fala', P.encomenda, 0.3, at(2));
-  label('2.º o produto', 'i3d-fala', P.produto, 0.5, at(2));
-  label('trabalho de equipa', 'i3d-nota', [-14.2, 2.2, 0.5], 0, at(2));
+  label('2.º o produto', 'i3d-fala', P.produto, 0.5, (m, time) => m === 2 && time < 6.2);
+  label(conceito('Toyotismo', ['modelo de organização da produção', 'nascido no Japão, na fábrica da Toyota']), 'p3d-conceito', [-12.3, 1.05, 0.5], 0, after(2, 0.6), [0.15, 0.05]);
+  label(conceito('Just in time', ['produzir só o necessário', 'na quantidade necessária', 'no momento necessário']), 'p3d-conceito', P.produto, 0.3, after(2, 6.2), [0.83, 0.56]);
   // 3 · telework
-  label('teletrabalho', 'i3d-nota i3d-forte', [-3.9, 2.5, 0.4], 0, at(3));
-  label('computador + internet', 'i3d-nota', [-2.9, 1.2, 0.9], 0, at(3));
-  label('a empresa', 'i3d-nota', [-1.5, 3.5, -2.3], 0, at(3));
+  label(conceito('Teletrabalho', ['trabalho à distância', 'com meios informáticos e telecomunicações']), 'p3d-conceito', [-3.3, 1.25, 0.35], 0, after(3, 2.4), [0.78, 0.64]);
+  label('ligação à internet', 'i3d-nota', [-2.4, 4.0, -1.1], 0, at(3));
+  label('a empresa', 'i3d-nota', [-0.6, 2.2, -2.3], 0, at(3));
   // 4 and 5 · the rules
-  label('contrato individual', 'i3d-nota', P.contratoI, 0.3, at(4));
-  label('sozinho: pouca força para negociar', 'i3d-fala', [6.0, 2.5, 0.3], 0, at(4));
-  label('sindicato', 'i3d-nota i3d-forte', [7.3, 2.1, 0.3], 0, at(5));
-  label('associação de empregadores', 'i3d-nota i3d-forte', [1.2, 2.5, 0.3], 0, at(5));
-  label('contrato coletivo', 'i3d-fala', P.contratoC, 1.4, at(5));
+  label(conceito('Contrato individual', ['um trabalhador + o seu empregador']), 'p3d-conceito', P.contratoI, 0.06, at(4), [0.5, 0.05]);
+  label('sozinho: pouca força para negociar', 'i3d-fala', [6.4, 0.5, 2.0], 0, after(4, 3.4));
+  label('sindicato', 'i3d-nota i3d-forte', [7.6, 2.0, 0.3], 0, at(5));
+  label('associação de empregadores', 'i3d-nota i3d-forte', [0.9, 2.3, 0.3], 0, at(5));
+  label(conceito('Contrato coletivo', ['acordo escrito', 'sindicato + associação de empregadores', 'regras para todo um setor']), 'p3d-conceito', P.contratoC, 1.05, at(5), [0.5, 0]);
   // 6 · the factory leaves
   label('a fábrica mudou de país', 'i3d-fala', [-12.2, 0.6, -0.4], 0, at(6));
-  label('sem trabalho · disponível · à procura', 'i3d-nota', P.W, 2.2, at(6));
-  // 7 · counting
+  label(conceito('Desempregado', ['sem trabalho', 'disponível para trabalhar', 'à procura de trabalho']), 'p3d-conceito', P.W, 1.25, after(6, 3.2), [0.84, 0.03]);
+  // 7 · counting: the colours of the words are the colours of the labels over the people
   label('população ativa: 10', 'i3d-nota i3d-forte', [10.6, 2.5, -0.95], 0, at(7));
   label('empregados: 8', 'i3d-nota', [10.5, 1.7, 0.25], 0, at(7));
-  label('desempregados: 2', 'i3d-nota', [14.1, 2.0, -0.35], 0, at(7));
+  label('desempregados: 2', 'i3d-nota p3d-d', [14.1, 2.0, -0.35], 0, at(7));
   label('inativos: 6 · não entram na conta', 'i3d-nota', [12.0, 1.6, 3.9], 0, at(7));
-  label('2 ÷ 10 × 100 = 20 %', 'i3d-fala p3d-conta', [12.6, 3.3, -2.6], 0, at(7));
+  label(conceito('Taxa de desemprego', ['<i class="d">desempregados</i> ÷ <i class="a">população ativa</i> × 100', '<i class="d">2</i> ÷ <i class="a">10</i> × 100 = 20 %']), 'p3d-conceito p3d-conta', null, 0, after(7, 1.2), [0.21, 0.04]);
 
   /* ---------- Engine (no need to change to tell another story) ---------- */
   const tmpV = new T.Vector3(), look = new T.Vector3(), eye = new T.Vector3();
@@ -392,9 +412,29 @@
 
     // labels: project each one, then push apart any that would overlap (and keep them inside the picture)
     const placed = [];
+    for (const item of labels) {                             // docked cards first: the other labels keep clear of them
+      if (!item.dock) continue;
+      const isPiece = item.target && !Array.isArray(item.target);
+      const vis = item.show(moment, current.time) && (!isPiece || item.target.scale.x > 0.6);
+      item.el.classList.toggle('visivel', vis);
+      if (item.wire) { item.wire.style.opacity = item.dot.style.opacity = vis ? 1 : 0; }
+      if (!vis) continue;
+      const w = item.el.offsetWidth || 200, h = item.el.offsetHeight || 80;
+      const left = Math.max(6, Math.min(width - w - 6, item.dock[0] * width - w / 2)), top = Math.max(6, Math.min(height - h - 6, item.dock[1] * height));
+      item.el.style.transform = `translate(${left.toFixed(1)}px, ${top.toFixed(1)}px)`;
+      placed.push({ x: left + w / 2, b: top + h, w, h });
+      if (!item.wire) continue;
+      if (isPiece) { tmpV.copy(item.target.position); tmpV.y += item.dy * item.target.scale.x; } else tmpV.set(...item.target);
+      tmpV.project(camera);
+      const ax = (tmpV.x + 1) / 2 * width, ay = (1 - tmpV.y) / 2 * height;
+      const ex = Math.max(left, Math.min(left + w, ax)), ey = Math.max(top, Math.min(top + h, ay));   // the point of the card nearest to the thing
+      item.wire.setAttribute('d', `M${ex.toFixed(1)},${ey.toFixed(1)} L${ax.toFixed(1)},${ay.toFixed(1)}`);
+      item.dot.setAttribute('cx', ax.toFixed(1)); item.dot.setAttribute('cy', ay.toFixed(1));
+    }
     for (const item of labels) {
+      if (item.dock) continue;
       const isPiece = !Array.isArray(item.target);
-      let vis = item.show(moment) && (!isPiece || item.target.scale.x > 0.6);
+      let vis = item.show(moment, current.time) && (!isPiece || item.target.scale.x > 0.6);
       if (vis) {
         if (isPiece) { tmpV.copy(item.target.position); tmpV.y += item.dy * item.target.scale.x; } else tmpV.set(...item.target);
         tmpV.project(camera);
