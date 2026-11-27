@@ -1,18 +1,15 @@
 # Área de Integração 11.º · O trabalho
 
-Site interativo do tema-problema 6.1, para projetar na sala e para os alunos estudarem em casa. Tem 180 slides em 9 lições, pela ordem em que são dadas, mais uma lição extra:
+Site interativo do tema-problema 6.1, para projetar na sala e para os alunos estudarem em casa. Tem 205 slides: seis lições, pela ordem em que são dadas, e depois os recursos extra.
 
 1. O que é trabalhar? (física, economia, filosofia, Organização Internacional do Trabalho)
 2. Do ócio ao dever (Aristóteles, São Bento, Lutero, Calvino, Weber)
 3. Labor, obra e ação (Hannah Arendt)
 4. História do trabalho I e II (cenas animadas: da recoleção ao comércio triangular; da manufatura aos sindicatos; a civilização industrial: energia, fábricas, crises)
-5. Organizar o trabalho I e II (Smith, Taylor, Ford, Toyota; automação, globalização, teletrabalho, plataformas)
-6. Direito do trabalho (Código do Trabalho, contratos, Constituição)
-7. Emprego e desemprego (setores de atividade, precariedade, taxa de desemprego, consequências, medidas)
-8. Jovens, idade e formação (primeiro emprego, idadismo, educação e formação ao longo da vida, trabalho digno)
-9. Currículo, entrevista e IA (construtor de currículo, assistente de inteligência artificial, treino em trios)
+5. Organizar o trabalho I (Smith, Taylor, Ford)
+6. Do Toyotismo ao desemprego: uma só aula de 50 minutos com o Toyotismo, o teletrabalho, o direito do trabalho (com o contrato coletivo) e a taxa de desemprego, ligados por um tabuleiro 3D que atravessa a aula
 
-Extra: Marx e os seus críticos (mais-valia, alienação, Böhm-Bawerk, Friedman).
+Recursos extra (não foram dados nas aulas; ficam no fim do índice, para consulta e para os alunos mais curiosos): Organizar o trabalho II (a crise dos modelos, kaizen, automação, globalização, plataformas), Direito do trabalho (contratos, Constituição), Emprego e desemprego (setores de atividade, precariedade, consequências, medidas), Jovens, idade e formação, Currículo, entrevista e IA, Marx e os seus críticos.
 
 A lição de teatro («O trabalho em cena») foi arquivada: está em `archive/index_2026-11-11.html`.
 
@@ -108,3 +105,36 @@ Bloco novo de 19 slides, entre a revisão da história do trabalho e «5 · Orga
 ## 24 de novembro de 2026: física da máquina a vapor refeita
 
 O slide `s-ci-vapor-fisica` (oito fórmulas num só slide) foi substituído por sete slides `s-fv-ponte`, `s-fv-pressao`, `s-fv-forca`, `s-fv-trabalho`, `s-fv-potencia`, `s-fv-rendimento`, `s-fv-mapa`, mais `s-fv-inducao` antes da animação do dínamo, e por cinco problemas com resolução (`s-fv-p1` a `s-fv-p5`, `s-fv-r1` a `s-fv-r5`). A versão anterior está em `archive/index_2026-11-24.html`; o código do slide antigo continua em `civind.js` (sem efeito enquanto o slide não existir).
+
+## 27 de novembro de 2026: aula compacta «Do Toyotismo ao desemprego»
+
+Faltava dar tudo o que vinha depois de «5 · Organizar o trabalho I» e só havia uma aula de 50 minutos antes do teste. A lição «6 · Do Toyotismo ao desemprego» junta, por esta ordem, 12 slides que já existiam e 8 novos:
+
+| Paragem | Slides |
+| --- | --- |
+| 1 · A fábrica | `s-sx-abertura` (novo, 3D), `s-o-toyota`, `s-tres-modelos`, `s-o-modelos-ie`, `s-o-modelos-mm` |
+| 2 · A casa | `s-sx-casa` (novo, 3D), `s-o-teletrabalho`, `s-o-tele-jogo`, `s-o-tele-tabela` |
+| 3 · A mesa das regras | `s-sx-mesa` (novo, 3D), `s-balanca`, `s-codigo`, `s-sx-coletivo` (novo: cena do contrato coletivo), `s-sx-coletivo-jogo` (novo: certo ou errado) |
+| 4 · A fila do desemprego | `s-sx-fila` (novo, 3D), `s-e-desempregado`, `s-e-taxa-cena`, `s-taxa` |
+| Fecho | `s-sx-fim` (novo, 3D), `s-sx-jogo` (novo: jogo de 8 perguntas, duas por paragem) |
+
+- Nenhum slide foi apagado nem alterado por dentro: os 12 mudaram de sítio (o endereço `#s-…` é o mesmo) e todos os outros ficaram, pela ordem antiga, em grupos «Extra · …» no fim do índice.
+- Os slides novos começam por `s-sx-`. A cena do contrato coletivo usa as mesmas figuras das outras cenas; a regra que troca o contrato individual pelo coletivo está no fim do `style.css`.
+- As atividades no telemóvel continuam a funcionar: dependem do endereço do slide, que não mudou. O questionário e o jogo novos ganham sozinhos o botão do telemóvel (ver `comum/LEIA-ME.md`).
+- Para voltar à ordem antiga: os quatro ficheiros de antes estão em `archive/`, com a data 2026-11-27 (`index`, `notes`, `style`, `README`); o `percurso3d.js` pode ficar, porque sem os slides `s-sx-…` não faz nada.
+
+### O tabuleiro 3D que atravessa a aula (`percurso3d.js`)
+
+Um só tabuleiro com quatro paragens (a fábrica, a casa, a mesa das regras, a fila do desemprego). O trabalhador (a peça laranja com o ponto branco) caminha de paragem em paragem. A mesma cena aparece em cinco slides, e cada um retoma a história onde o anterior a deixou:
+
+| Slide | Momentos | O que se vê |
+| --- | --- | --- |
+| `s-sx-abertura` | 0 a 2 | o tabuleiro inteiro; a crise do Fordismo (linha e armazém cheio); a Toyota (a encomenda, depois o produto) |
+| `s-sx-casa` | 2 a 3 | o trabalhador vai para casa; o portátil liga-se à empresa |
+| `s-sx-mesa` | 3 a 5 | um trabalhador e um empregador, contrato individual; depois o sindicato, a associação de empregadores e o contrato coletivo |
+| `s-sx-fila` | 5 a 7 | a fábrica sai do tabuleiro; a fila; a conta da taxa (16 pessoas, 6 inativas, 10 ativas, 2 desempregadas: 20 %) |
+| `s-sx-fim` | 8 | o tabuleiro inteiro, com uma ideia por paragem |
+
+- A história é uma tabela: no `percurso3d.js`, `SCRIPT` diz onde está cada peça a partir de cada momento, `SHOTS` diz o que a câmara enquadra, e as etiquetas estão em `label(…)`. As legendas por baixo da imagem estão no `index.html` (um `<p>` por clique, dentro de `.i3d-leg`).
+- Um slide mostra o momento `BASE[id do slide]` mais o número de cliques dados. Para o tabuleiro aparecer noutro slide, cria o slide com as classes `ci i3d-slide p3d` e acrescenta o seu endereço a `BASE`.
+- Usa o `assets/vendor/three.min.js` e o aspeto das outras animações 3D (classes `.i3d-…`), mas tem o seu próprio desenhador. Sem WebGL, as legendas contam a história.

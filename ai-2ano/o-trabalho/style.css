@@ -1290,3 +1290,13 @@ html:not(.i3d-ok) .i3d-leg > [data-step].on { display: block; }   /* no 3D: ever
 @media (max-width: 1100px) { .vf-svg { max-height: 300px; } }
 @media (min-width: 861px) and (max-height: 760px) { .vf-svg { max-height: calc(100vh - 430px); } .civ-fis .cf-cadeia { font-size: 15px; margin-bottom: 6px; } }
 @media (min-width: 1101px) { .civ-fis .cf-corpo { grid-template-columns: minmax(300px, 1.2fr) 1fr; } }
+
+/* ---------- Aula compacta «Do Toyotismo ao desemprego» (27 de novembro de 2026) ----------
+   Cena do contrato coletivo (#s-sx-coletivo): ao 3.º clique o contrato individual do início
+   dá lugar ao contrato coletivo e o trabalhador sorri. */
+#s-sx-coletivo #col-p1{transition:opacity .7s var(--ease)} #s-sx-coletivo.ge3 #col-p1{opacity:0} #s-sx-coletivo.ge3 #col-w .f0{opacity:0} #s-sx-coletivo.ge3 #col-w .f1{opacity:1}
+/* Tabuleiro 3D da aula (percurso3d.js): usa as classes das outras animações 3D (.i3d-…).
+   Etiquetas próprias: a ideia de cada paragem, no fim, e a conta da taxa de desemprego. */
+.p3d .i3d-nota.p3d-ideia{font-weight:400;font-size:16px;line-height:1.25;padding:6px 12px;text-align:center} .p3d .p3d-ideia b{display:block;font-family:var(--head);font-size:20px;color:var(--orange)}
+.p3d .i3d-fala.p3d-conta{font-style:normal;font-size:26px;padding:6px 16px}
+@media (max-width: 860px){.p3d .i3d-nota.p3d-ideia{font-size:10px;padding:2px 6px;white-space:normal;width:9.5em} .p3d .p3d-ideia b{font-size:12px} .p3d .i3d-fala.p3d-conta{font-size:15px}}
