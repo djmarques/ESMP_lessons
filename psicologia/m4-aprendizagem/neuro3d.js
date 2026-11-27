@@ -75,6 +75,15 @@
   const centre = name => { const c = new T.Vector3(); geometry(name).boundingBox.getCenter(c); return [c.x, c.y, c.z]; };
 
   /**
+   * A real point of the surface of a mesh, in millimetres: the vertex nearest to `hint` (or to the middle of the mesh).
+   * It is where the arrow of a label ends, so that the arrow always touches the structure it names.
+   */
+  function onMesh(name, hint) {
+    const pos = geometry(name).getAttribute('position'), h = hint || centre(name); let best = 0, bestD = Infinity;
+    for (let i = 0; i < pos.count; i++) { const d = (pos.getX(i) - h[0]) ** 2 + (pos.getY(i) - h[1]) ** 2 + (pos.getZ(i) - h[2]) ** 2; if (d < bestD) { bestD = d; best = i; } }
+    return [pos.getX(best), pos.getY(best), pos.getZ(best)];
+  }
+  /**
    * One head for one scene: cortex (two hemispheres with their own colours), cerebellum,
    * brainstem, thalamus, hippocampus, amygdala and skull. Everything sits in `group`,
    * which turns millimetres into scene units.
@@ -148,7 +157,7 @@
    * one renderer per scene, the first scenes of the lesson went blank as soon as the page had more scenes
    * than that. Only one slide is shown at a time, so the scene of the current slide borrows the canvas.
    */
-  let shared;
+  let shared, arrowCount = 0;
   function sharedRenderer() {
     if (shared !== undefined) return shared;
     try {
@@ -168,11 +177,25 @@
     scene.add(new T.HemisphereLight(0xffffff, 0x2a3540, 1.5));
     const key = new T.DirectionalLight(0xfff0dc, 2.2); key.position.set(-4, 6, 6); scene.add(key);
     const rim = new T.DirectionalLight(0x9ec3e6, 1.1); rim.position.set(4, 3, -6); scene.add(rim);
-    const labels = [], p = new T.Vector3();
-    /** HTML label that follows a 3D object; `when(step)` says in which steps it shows. */
-    function label(html, target, when, cls) {
+    const labels = [], p = new T.Vector3(), tip = new T.Vector3(), SVG = 'http://www.w3.org/2000/svg';
+    let arrows = null;
+    /**
+     * HTML label that follows a 3D object; `when(step)` says in which steps it shows.
+     * With `aim` (another 3D object: the exact place the label talks about), an arrow is drawn from the label to that place.
+     */
+    function label(html, target, when, cls, aim) {
       const el = document.createElement('div'); el.className = 'et3d ' + (cls || ''); el.innerHTML = html; box.append(el);
-      labels.push({ el, target, when }); return el;
+      const item = { el, target, when };
+      if (aim) {
+        if (!arrows) {                                                  // one SVG layer per stage, under the labels
+          const id = 'seta3d-' + (++arrowCount);
+          arrows = document.createElementNS(SVG, 'svg'); arrows.setAttribute('class', 'setas3d'); arrows.setAttribute('aria-hidden', 'true'); arrows.dataset.ponta = id;
+          arrows.innerHTML = `<defs><marker id="${id}" markerUnits="userSpaceOnUse" markerWidth="15" markerHeight="15" refX="13" refY="7.5" orient="auto"><path d="M0 0 L15 7.5 L0 15 Z"/></marker></defs>`;
+          box.insertBefore(arrows, box.querySelector('.et3d'));
+        }
+        item.aim = aim; item.line = document.createElementNS(SVG, 'line'); item.line.setAttribute('marker-end', `url(#${arrows.dataset.ponta})`); arrows.append(item.line);
+      }
+      labels.push(item); return el;
     }
     let width = 1, height = 1, last = 0, running = false, step = -1, stepAt = 0;
     const mine = () => canvas.parentNode === box;                       // is the shared canvas in this stage right now?
@@ -199,8 +222,19 @@
       renderer.render(scene, camera);
       for (const item of labels) {
         item.target.getWorldPosition(p); p.project(camera);
-        item.el.classList.toggle('visivel', item.when(step) && p.z < 1);
-        item.el.style.transform = `translate(-50%, -100%) translate(${((p.x + 1) / 2) * width}px, ${((1 - p.y) / 2) * height}px)`;
+        const shown = item.when(step) && p.z < 1, ly = ((1 - p.y) / 2) * height; let lx = ((p.x + 1) / 2) * width;
+        item.el.classList.toggle('visivel', shown);
+        const w = item.aim ? item.el.offsetWidth : 0, h = item.aim ? item.el.offsetHeight : 0, c = item.el.classList;
+        if (item.aim && !c.contains('lado') && w < width - 8) lx = clamp(lx, w / 2 + 4, width - w / 2 - 4);   // a label with an arrow never leaves the stage sideways
+        item.el.style.transform = `translate(-50%, -100%) translate(${lx}px, ${ly}px)`;
+        if (!item.aim) continue;
+        // the arrow: from the edge of the label nearest to the place, to the place itself
+        item.aim.getWorldPosition(tip).project(camera);
+        const ax = ((tip.x + 1) / 2) * width, ay = ((1 - tip.y) / 2) * height;
+        const x0 = lx - w / 2 + (c.contains('lado') ? w / 2 : 0), y0 = ly - h + (c.contains('baixo') ? 1.18 * h : c.contains('lado') ? h / 2 : 0);
+        const sx = clamp(ax, x0, x0 + w), sy = clamp(ay, y0, y0 + h), far = Math.hypot(ax - sx, ay - sy) > 16;
+        item.line.style.opacity = shown && far ? 1 : 0;                 // no arrow when the label already sits on the place
+        if (far) { item.line.setAttribute('x1', sx); item.line.setAttribute('y1', sy); item.line.setAttribute('x2', ax); item.line.setAttribute('y2', ay); }
       }
     }
     function start() {
@@ -283,10 +317,13 @@
     stage.label('<b>córtex pré-frontal</b>planear, decidir, travar impulsos', head.anchor([-22, 62, 30]), s => s === 2);
     const at = (name, dz) => { const c = centre(name); return head.anchor([c[0], c[1], c[2] + dz]); };
     // seen from the left side, the front of the head is on the left of the screen: the four labels are kept apart
-    stage.label('<b>tálamo</b>a portaria dos sentidos', at('talamo_e', 34), s => s >= 3);
-    stage.label('<b>hipocampo</b>guardar memórias novas', head.anchor([-30, -40, -24]), s => s >= 3, 'baixo');
-    stage.label('<b>amígdala</b>o alarme: medo', head.anchor([-24, 26, -12]), s => s >= 3);
-    stage.label('<b>cerebelo</b>movimentos treinados', head.anchor([-20, -98, -12]), s => s >= 3);
+    // every label has an arrow that ends on a real point of the structure it names (left side: the one facing the camera)
+    const real = (name, hint) => head.anchor(onMesh(name, hint));
+    stage.label('<b>tálamo</b>a portaria dos sentidos', at('talamo_e', 32), s => s >= 3, '', real('talamo_e'));
+    stage.label('<b>hipocampo</b>guardar memórias novas', head.anchor([-30, -80, 34]), s => s >= 3, '', real('hipocampo_e', [-28, -36, -6]));
+    stage.label('<b>amígdala</b>o alarme: medo', head.anchor([-24, 40, -6]), s => s >= 3, '', real('amigdala_e', centre('amigdala_e').map((v, i) => v + (i === 1 ? 7 : 0))));   // its front part: the back is behind the hippocampus
+    stage.label('<b>cerebelo</b>movimentos treinados', head.anchor([-20, -130, -26]), s => s >= 3, '', real('cerebelo', [-42, -68, -34]));
+    stage.label('tronco cerebral', head.anchor([-10, 36, -52]), s => s >= 3, 'peq', real('tronco', [-12, -22, -38]));
   };
 
   /* ---------- 6. cortex: thinner from 3 to 20 years (Piccolo and colleagues, 2016) ---------- */
@@ -411,11 +448,12 @@
     stage.scene.add(head.group);
     const cam = director(stage.camera, shotsMm([[[0, -15, 20], [330, 230, 150]], [[0, -15, 10], [380, 60, 90]], [[14, -18, -4], [195, 255, 95]], [[14, -18, -4], [195, 255, 95]]]));
     stage.label('<b>elétrodos</b>medem a eletricidade à superfície', head.anchor([60, 30, 62]), s => s === 0);
-    stage.label('<b>córtex auditivo</b>mais sangue com oxigénio', head.anchor([66, -22, 22]), s => s === 1);
+    const real = (name, hint) => head.anchor(onMesh(name, hint)), heard = real('rh', [60, -22, 8]);
+    stage.label('<b>córtex auditivo</b>mais sangue com oxigénio', head.anchor([66, -22, 30]), s => s === 1, '', heard);
     stage.label('ouvido', head.anchor([92, -8, -2]), s => s >= 2, 'peq');
-    stage.label('tronco cerebral', head.anchor([10, -40, -52]), s => s >= 2, 'peq');
-    stage.label('<b>tálamo</b>', head.anchor(centre('talamo_d').map((v, i) => v + (i === 2 ? 14 : 0))), s => s >= 2);
-    stage.label('<b>córtex auditivo</b>', head.anchor([72, -30, 30]), s => s >= 2);
+    stage.label('tronco cerebral', head.anchor([10, -40, -52]), s => s >= 2, 'peq baixo', real('tronco', [6, -36, -36]));
+    stage.label('<b>tálamo</b>', head.anchor(centre('talamo_d').map((v, i) => v + (i === 2 ? 26 : 0))), s => s >= 2, '', real('talamo_d'));
+    stage.label('<b>córtex auditivo</b>', head.anchor([78, -34, 36]), s => s >= 2, '', heard);
   };
 
   /* ---------- 9. sirene: habituation, seen in the brain ---------- */
@@ -443,9 +481,10 @@
     stage.scene.add(head.group);
     const cam = director(stage.camera, shotsMm([[[14, -18, -4], [195, 255, 95]]]));
     stage.label('ouvido', head.anchor([92, -8, -2]), () => true, 'peq');
-    stage.label('<b>tálamo</b>', head.anchor(centre('talamo_d').map((v, i) => v + (i === 2 ? 14 : 0))), () => true);
-    stage.label('<b>córtex auditivo</b>', head.anchor([72, -30, 30]), () => true);
-    stage.label('<b>amígdala</b>o alarme', head.anchor(centre('amigdala_d').map((v, i) => v - (i === 2 ? 16 : 0))), () => true);
+    const real = (name, hint) => head.anchor(onMesh(name, hint));
+    stage.label('<b>tálamo</b>', head.anchor(centre('talamo_d').map((v, i) => v + (i === 2 ? 26 : 0))), () => true, '', real('talamo_d'));
+    stage.label('<b>córtex auditivo</b>', head.anchor([78, -34, 36]), () => true, '', real('rh', [60, -22, 8]));
+    stage.label('<b>amígdala</b>o alarme', head.anchor(centre('amigdala_d').map((v, i) => v - (i === 2 ? 20 : 0))), () => true, 'baixo', real('amigdala_d'));
   };
 
   /* ---------- 10. Building blocks for the schematic scenes (neurons, network, sea slug) ---------- */
@@ -854,14 +893,15 @@
     stage.label('<b>rato</b>', inFront, s => s === 2);
     stage.label('<b>rato</b>estímulo condicionado', inFront, s => s >= 3, 'conceito');
     stage.label('<b>ruído forte</b>estímulo incondicionado', head.anchor([104, -8, 6]), s => s === 1 || s === 2);
-    stage.label('<b>tálamo</b>', head.anchor([thal[0], thal[1], thal[2] + 16]), () => true);
-    stage.label('córtex visual', head.anchor([20, -100, 24]), s => s !== 1, 'peq');
-    stage.label('córtex auditivo', head.anchor([72, -30, 30]), s => s === 1 || s === 2, 'peq');
-    const amyAt = head.anchor([amy[0] + 4, amy[1] + 4, amy[2] - 16]);
-    stage.label('<b>amígdala</b>calma', amyAt, s => s === 0, 'baixo');
-    stage.label('<b>amígdala</b>alarme: medo', amyAt, s => s >= 1 && s <= 3, 'baixo conceito');
-    stage.label('<b>amígdala</b>alarme mais fraco', amyAt, s => s >= 4, 'baixo');
-    stage.label('<b>córtex pré-frontal</b>trava o alarme', head.anchor([14, 66, 14]), s => s >= 4, 'conceito azul');
+    const real = (name, hint) => head.anchor(onMesh(name, hint)), amyReal = real('amigdala_d');
+    stage.label('<b>tálamo</b>', head.anchor([thal[0], thal[1], thal[2] + 26]), () => true, '', real('talamo_d'));
+    stage.label('córtex visual', head.anchor([20, -100, 30]), s => s !== 1, 'peq', real('rh', vis));
+    stage.label('córtex auditivo', head.anchor([78, -34, 36]), s => s === 1, 'peq', real('rh', aud));
+    const amyAt = head.anchor([amy[0] + 4, amy[1] + 4, amy[2] - 20]);
+    stage.label('<b>amígdala</b>calma', amyAt, s => s === 0, 'baixo', amyReal);
+    stage.label('<b>amígdala</b>alarme: medo', amyAt, s => s >= 1 && s <= 3, 'baixo conceito', amyReal);
+    stage.label('<b>amígdala</b>alarme mais fraco', amyAt, s => s >= 4, 'baixo', amyReal);
+    stage.label('<b>córtex pré-frontal</b>trava o alarme', head.anchor([14, 70, 26]), s => s >= 4, 'conceito azul', real('rh', [16, 60, -4]));
   };
 
   /* ---------- 17. skinner: the box, the lever and four consequences (degrau 3) ---------- */
@@ -1001,10 +1041,10 @@
     });
     if (!stage) return;
     stage.scene.add(head.group);
-    const cam = director(stage.camera, shotsMm([[[0, 10, 26], [-255, 225, 110]]]));
-    stage.label('<b>área tegmental ventral</b>neurónios da dopamina', head.anchor([0, -22, -26]), () => true, 'baixo');
-    stage.label('<b>estriado</b>recebe a dopamina', head.anchor([-26, 6, 22]), () => true);
-    stage.label('córtex pré-frontal', head.anchor([-24, 62, 24]), () => true, 'peq');
+    const cam = director(stage.camera, shotsMm([[[0, 12, 26], [-330, 95, 95]]]));      // almost from the side: prefrontal cortex, striatum and midbrain do not hide one another
+    stage.label('<b>área tegmental ventral</b>neurónios da dopamina', head.anchor([0, -22, -32]), () => true, 'baixo', head.anchor(vta));
+    stage.label('<b>estriado</b>recebe a dopamina', head.anchor([-36, 4, 44]), () => true, '', head.anchor(onMesh('putamen_e', [-30, 6, 6])));
+    stage.label('<b>córtex pré-frontal</b>', head.anchor([-24, 66, 44]), () => true, '', head.anchor(onMesh('lh', pf)));
   };
 
   /* ---------- 19. kohler: the chimpanzee, the stick and the banana (degrau 4) ---------- */
@@ -1179,8 +1219,9 @@
       if (!stage) return;
       stage.scene.add(head.group);
       const c = centre('hipocampo_d'), cam = director(stage.camera, shotsMm([[[0, -20, 12], [330, 150, 80]], [[6, -22, 2], [300, 95, 55]]]));
-      stage.label('<b>hipocampo</b>guardar memórias novas', head.anchor([c[0] + 6, c[1] - 6, c[2] + 20]), s => s === 0);
-      stage.label('<b>células de lugar</b>cada uma dispara num sítio', head.anchor([c[0] + 6, c[1] - 6, c[2] + 20]), s => s >= 1, 'conceito');
+      const above = head.anchor([c[0] + 6, c[1] - 6, c[2] + 30]), onIt = head.anchor(onMesh('hipocampo_d'));
+      stage.label('<b>hipocampo</b>guardar memórias novas', above, s => s === 0, '', onIt);
+      stage.label('<b>células de lugar</b>cada uma dispara num sítio', above, s => s >= 1, 'conceito', onIt);
     } else {
       /* --- doing and watching: the same areas answer (premotor and inferior parietal cortex) --- */
       const spots = [[-50, 8, 30], [50, 8, 30], [-54, -36, 42], [54, -36, 42]].map(c => ({ c, r: 24, a: 0, cor: rgb(0xFF8A30) }));
@@ -1194,9 +1235,10 @@
       if (!stage) return;
       stage.scene.add(head.group);
       const cam = director(stage.camera, shotsMm([[[0, -16, 16], [-400, 110, 150]], [[0, -26, 16], [-390, -40, 170]], [[0, -16, 16], [-400, 110, 150]]]));
-      stage.label('<b>córtex pré-motor</b>prepara o gesto', head.anchor([-62, 26, 10]), () => true, 'baixo');
-      stage.label('<b>córtex parietal inferior</b>', head.anchor([-62, -46, 62]), () => true);
-      stage.label('córtex visual', head.anchor([-22, -104, 20]), s => s === 1, 'peq');
+      const real = hint => head.anchor(onMesh('lh', hint));
+      stage.label('<b>córtex pré-motor</b>prepara o gesto', head.anchor([-62, 40, -4]), () => true, 'baixo', real([-50, 8, 30]));
+      stage.label('<b>córtex parietal inferior</b>', head.anchor([-62, -14, 88]), () => true, '', real([-54, -36, 42]));
+      stage.label('córtex visual', head.anchor([-22, -112, 34]), s => s === 1, 'peq', real([-16, -94, 6]));
     }
   };
 

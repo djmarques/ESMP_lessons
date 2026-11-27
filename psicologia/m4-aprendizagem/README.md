@@ -61,6 +61,8 @@ As lições 4 a 8 ganharam onze slides 3D: três substituem versões em 2D (mant
 
 **Um só contexto WebGL:** todas as cenas partilham um único `WebGLRenderer` e um único `<canvas class="c3d">`, que passa para o slide que está a ser mostrado (`sharedRenderer` em `neuro3d.js`). Os navegadores só mantêm vivos poucos contextos WebGL (cerca de 16 num computador, menos nos telemóveis): com um por cena, as primeiras cenas da página ficavam em branco. Ao acrescentar cenas, nunca criar outro `WebGLRenderer`.
 
+**Setas para o sítio certo:** nos slides com anatomia real, cada etiqueta tem uma seta que termina num ponto verdadeiro da estrutura que nomeia. Em `neuro3d.js`, o quinto argumento de `stage.label(html, âncora, quando, classe, alvo)` é esse ponto; `onMesh('talamo_e')` devolve o vértice da malha mais próximo do centro (ou de uma pista dada em milímetros). Sem `alvo`, a etiqueta não tem seta.
+
 **Conceitos dentro da animação:** os nomes dos conceitos (estímulo condicionado, reforço negativo, insight, reforço vicariante…) aparecem como etiquetas laranja presas ao objeto a que dizem respeito (classe `conceito` em `stage.label`), e não só na legenda de baixo.
 
 **Extras de uma cena:** `data-dx="0.2"` no `.palco3d` desloca a imagem para a esquerda (para dar lugar a um cartão à direita); `data-dy="0"` desliga a subida que compensa a legenda; um elemento com `data-em="2 3"` dentro do palco só aparece nos passos 2 e 3.

@@ -26,6 +26,10 @@
 .et3d.baixo { translate: 0 118%; }                      /* written under its point instead of above */
 .et3d.lado { translate: 50% 50%; }                        /* written to the right of its point */
 .et3d.visivel { opacity: 1; }
+/* Arrows from a label to the exact place it names (one SVG layer per stage; neuro3d.js moves the lines every frame). */
+.setas3d { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; pointer-events: none; }
+.setas3d line { stroke: #fff; stroke-width: 2.5; stroke-linecap: round; opacity: 0; transition: opacity .5s; filter: drop-shadow(0 0 2px rgba(0, 0, 0, .9)); }
+.setas3d path { fill: #fff; }
 /* Captions: one per step, all in the same cell so the box keeps the size of the longest. */
 .leg3d { position: absolute; left: 16px; bottom: 16px; z-index: 2; display: grid; align-items: end; max-width: min(640px, calc(100% - 32px));
   padding: 12px 16px; border-left: 4px solid var(--orange); border-radius: 4px; background: rgba(18, 25, 31, .88); }
@@ -109,6 +113,7 @@
 .cartaz3d { position: absolute; right: 16px; top: 16px; z-index: 2; max-width: 46%; padding: 10px 16px; border-radius: 8px; background: rgba(18, 25, 31, .86); font: 700 22px var(--head); color: #fff; text-align: center; }
 .cartaz3d small { display: block; font: 400 15px var(--body); color: var(--peach); }
 .cartaz3d.esq { left: 16px; right: auto; }
+#s-espelho .cartaz3d { max-width: 250px; }                     /* narrow, so that it never covers the label of the parietal cortex */
 .cartaz3d.sob-traco { top: 195px; width: 400px; max-width: none; background: var(--orange); box-shadow: 0 2px 12px rgba(0, 0, 0, .4); } .cartaz3d.sob-traco small { color: #fff; }
 .cartaz3d.sob-traco.azul { background: var(--blue); }
 .duas-curvas { display: flex; gap: 14px; }
@@ -140,6 +145,8 @@
   .palco3d { height: 60vh; min-height: 320px; }
   .leg3d { left: 8px; bottom: 8px; max-width: calc(100% - 16px); padding: 9px 12px; } .leg3d > p { font-size: 15px; }
   .et3d { font-size: 12px; } .et3d b { font-size: 13px; }
+  .setas3d line { stroke-width: 1.8; }
+  #s-n-caixa .et3d:has(b) { font-size: 0; padding: 2px 8px; }               /* five labels on a narrow screen: names only, the caption explains */
   .cortex-split { grid-template-columns: 1fr; } .cortex-split .palco3d { height: 44vh; }
   .palco3d canvas.eeg { width: 170px; height: 80px; }
   .sustos { height: 60px; } .sustos span { width: 12px; }
