@@ -5,13 +5,15 @@
    A scene lives in <div class="palco3d" data-cena="NAME"> inside a slide:
 
      caixa      the «black box» opens: skull → cortex → prefrontal → deep structures
-     neuronio   one neuron talks to another: impulse, synapse, neurotransmitter
-     rede       mini-game: practise a path and its connections grow; stop, and they are pruned
-     cortex     the cortex gets thinner from 3 to 20 years (Piccolo and colleagues, 2016),
-                with a simplified plot built step by step and an age slider
-     medir      how brain activity is measured: EEG, fMRI, and the path of a sound
-     sirene     habituation: play the siren and watch the brain's response shrink
-     lesma      Kandel's sea slug (Aplysia): the gill-withdrawal reflex habituates
+     memoria    how a memory is stored: areas of the cortex, real fibre bundles, the hippocampus, consolidation
+     piramidal  two neurons of the cortex: dendrites, spines, cell body, axon; three signals are not enough, seven are
+     sinapse    one synapse, very close: vesicles, transmitter, receptors, sodium coming in
+     potencial  the action potential: sodium channels, potassium channels, and the voltage plotted beside the stage
+     hebb       mini-game: a student learns a new way to school; groups of neurons that fire together wire together
+     cortex     the brain cut across: the cortex is the outer ribbon, thinner from 3 to 20 years (Piccolo and colleagues, 2016)
+     medir      how brain activity is measured: EEG, fMRI, and a sound followed through thousands of neurons
+     sirene     habituation: play the alarm and watch thousands of neurons answer, the amygdala less each time
+     lesma      Kandel's sea slug (Aplysia) at three scales: the animal, the circuit of the reflex, the synapse
      pavlov     degrau 2 · ring the bell, give the food: the dog learns to salivate at the bell
      medo       degrau 2 · the little Albert in the brain: rat and noise meet in the amygdala
      skinner    degrau 3 · a Skinner box with four consequences (reinforcement and punishment)
@@ -22,15 +24,16 @@
      bobo       degrau 5 · Bandura's doll: data-modo="1961" (imitation) or "1965" (model rewarded or punished)
      kolb       lesson 8 · the four moments of Kolb's cycle and the four styles between them
 
-   Anatomy is real, not drawn: it is the file cp4/cerebro3d-dados.js (FreeSurfer fsaverage cortex
-   and deep structures, BodyParts3D skull), in millimetres of the MNI305 template
-   (x → right, y → front, z → up). Neurons, the network, the sea slug, the animals, the people and Kolb's ring are schematic models.
+   Anatomy is real, not drawn: cortex and deep structures (FreeSurfer fsaverage) and skull (BodyParts3D)
+   come from cp4/cerebro3d-dados.js, the fibre bundles (HCP1065 tractography atlas) from neuro-feixes.js;
+   all in millimetres of the MNI305 template (x → right, y → front, z → up). The firing of the «neurons»,
+   the pyramidal cells, the synapse, the membrane, the sea slug, the animals, the people and Kolb's ring are models.
 
    How scenes follow the lesson: app.js puts the classes ge1, ge2… on the slide as the teacher
    clicks («step is at least n»). Every frame a scene reads the step and eases towards what
    that step shows, so going back, or opening the slide at any step, always works.
    Buttons and sliders are plain HTML in the slide (data-act, data-ctl); captions are the
-   <p data-step> inside .leg3d.
+   <p data-step> inside .leg3d (over the stage) or .leg3d.fora (under it, when a panel sits beside the stage).
 
    Code comments in English; every text students read is in European Portuguese.
    ===================================================================== */
@@ -161,7 +164,8 @@
   function sharedRenderer() {
     if (shared !== undefined) return shared;
     try {
-      shared = new T.WebGLRenderer({ antialias: true, alpha: true });
+      shared = new T.WebGLRenderer({ antialias: true, alpha: true, stencil: true });
+      shared.localClippingEnabled = true;                              // the cortex scene cuts the brain with a plane
       shared.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
       shared.domElement.className = 'c3d';
       // if the graphics card resets, let the browser give the context back instead of leaving a dead canvas
@@ -249,7 +253,7 @@
     const ctl = name => { const el = slide.querySelector(`[data-ctl="${name}"]`); return el ? Number(el.value) : 0; };
     /** Run fn when a button of this slide (data-act="name") is pressed. */
     const on = (name, fn) => slide.querySelectorAll(`[data-act="${name}"]`).forEach(b => b.addEventListener('click', fn));
-    return { scene, camera, label, slide, ctl, on, box };
+    return { scene, camera, label, slide, ctl, on, box, pixels: () => height * renderer.getPixelRatio() };
   }
   /**
    * Camera that eases towards shots[step] = { at, from } (already in scene units), with a slow sway.
@@ -285,6 +289,8 @@
     apito: () => { tone(1500, 0, 0.5, 'square', 0.12, 1750); tone(1750, 0.5, 0.45, 'square', 0.12, 1500); },
     toque: () => tone(240, 0, 0.12, 'triangle', 0.15),
     passo: () => tone(880, 0, 0.07, 'sine', 0.08),
+    // a sudden, loud, harsh blast (three horns slightly out of tune): meant to startle
+    alarme: () => { for (const f of [311, 370, 466]) { tone(f, 0, 0.9, 'sawtooth', 0.3, f * 0.97); tone(f * 2.01, 0, 0.9, 'square', 0.08); } },
   };
 
   /* ---------- 4. Signals: glowing dots that travel along a path ---------- */
@@ -326,7 +332,293 @@
     stage.label('tronco cerebral', head.anchor([-10, 36, -52]), s => s >= 3, 'peq', real('tronco', [-12, -22, -38]));
   };
 
-  /* ---------- 6. cortex: thinner from 3 to 20 years (Piccolo and colleagues, 2016) ---------- */
+  /* ---------- 6. Small building blocks shared by the schematic scenes ---------- */
+  const V = (x, y, z) => new T.Vector3(x, y, z || 0);
+  const tube = (pts, r, material, seg) => new T.Mesh(new T.TubeGeometry(new T.CatmullRomCurve3(pts), seg || 24, r, 8), material);
+  const ball = (r, material, x, y, z) => { const m = new T.Mesh(new T.SphereGeometry(r, 24, 16), material); m.position.set(x || 0, y || 0, z || 0); return m; };
+  /** Seeded random numbers: the same picture on every computer. */
+  const lcg = seed => () => (seed = (seed * 16807) % 2147483647) / 2147483647;
+  /** Rises in the first quarter, holds until x = 1, then dies away (the shape of a burst of activity). */
+  const burst = x => x < 0 ? 0 : x < 0.25 ? x / 0.25 : x < 1 ? 1 : Math.exp(-(x - 1) * 2.6);
+
+  /* ---------- 7. Real fibre bundles (neuro-feixes.js) and paths drawn the same way ---------- */
+  const FX = window.NEURO_FEIXES;
+  const FIBRE_VS = 'attribute float u; varying float vu; void main(){ vu = u; gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0); }';
+  const FIBRE_FS = 'uniform vec3 cor; uniform float base, pulso, forca; varying float vu; void main(){ float d = (vu - pulso) / 0.13; float p = forca * exp(-d * d); gl_FragColor = vec4(mix(cor, vec3(1.0, 0.95, 0.72), clamp(p, 0.0, 1.0)), base + p); }';
+  /**
+   * Thin lines (millimetres) on which a pulse of light can travel. `lines` = array of arrays of [x, y, z].
+   * Returns { obj, u, first, last }: u.base = how visible the fibres are at rest; u.pulso = where the pulse is
+   * (0 = start of every line, 1 = end); u.forca = how bright it is; first/last = mean start and end points.
+   */
+  function makeFibres(parent, lines, color) {
+    let nseg = 0; for (const l of lines) nseg += l.length - 1;
+    const pos = new Float32Array(nseg * 6), u = new Float32Array(nseg * 2), first = [0, 0, 0], last = [0, 0, 0]; let j = 0;
+    for (const l of lines) {
+      for (let a = 0; a < 3; a++) { first[a] += l[0][a] / lines.length; last[a] += l[l.length - 1][a] / lines.length; }
+      for (let i = 0; i < l.length - 1; i++) for (let e = 0; e < 2; e++) { const p = l[i + e]; pos[j * 3] = p[0]; pos[j * 3 + 1] = p[1]; pos[j * 3 + 2] = p[2]; u[j++] = (i + e) / (l.length - 1); }
+    }
+    const g = new T.BufferGeometry(); g.setAttribute('position', new T.BufferAttribute(pos, 3)); g.setAttribute('u', new T.BufferAttribute(u, 1));
+    const m = new T.ShaderMaterial({ transparent: true, depthWrite: false, blending: T.AdditiveBlending, vertexShader: FIBRE_VS, fragmentShader: FIBRE_FS,
+      uniforms: { cor: { value: new T.Color(color) }, base: { value: 0 }, pulso: { value: -1 }, forca: { value: 0 } } });
+    const obj = new T.LineSegments(g, m); obj.renderOrder = 6; obj.frustumCulled = false; parent.add(obj);
+    return { obj, u: m.uniforms, first, last };
+  }
+  /** A real bundle of the HCP1065 atlas; `part` keeps only the first fraction of every streamline. */
+  function makeBundle(parent, name, color, part) {
+    const t = FX[name], q = new Int16Array(bytes(t.p)), k = Math.max(2, Math.round(t.k * (part || 1))), lines = [];
+    for (let l = 0; l < t.n; l++) { const line = []; for (let i = 0; i < k; i++) { const s = (l * t.k + i) * 3; line.push([q[s] / 100, q[s + 1] / 100, q[s + 2] / 100]); } lines.push(line); }
+    return makeFibres(parent, lines, color);
+  }
+  /** A simplified path: n gently curved lines from around `a` to around `b` (used where the atlas has no reliable bundle). */
+  function makePath(parent, a, b, n, spread, color, lift) {
+    const rnd = lcg(Math.round(Math.abs(a[0] * 31 + b[1] * 17 + n)) + 5), lines = [];
+    for (let l = 0; l < n; l++) {
+      const j = () => (rnd() - 0.5) * spread, p0 = [a[0] + j() * 0.5, a[1] + j() * 0.5, a[2] + j() * 0.5], p1 = [b[0] + j(), b[1] + j(), b[2] + j()], line = [];
+      for (let i = 0; i <= 12; i++) { const s = i / 12, h = Math.sin(s * Math.PI) * (lift || 0); line.push([lerp(p0[0], p1[0], s), lerp(p0[1], p1[1], s), lerp(p0[2], p1[2], s) + h]); }
+      lines.push(line);
+    }
+    return makeFibres(parent, lines, color);
+  }
+
+  /* ---------- 8. Thousands of neurons: a cloud of points that flash when they fire ---------- */
+  /** Points of a mesh (millimetres): its vertices pushed `depth` mm inwards, or (fill) scattered through its inside. */
+  function meshPoints(name, opt) {
+    const g = geometry(name), pos = g.getAttribute('position'), nor = g.getAttribute('normal'), c = centre(name), rnd = lcg(name.length * 97 + 11), out = [];
+    for (let pass = 0; pass < (opt.times || 1); pass++) for (let i = 0; i < pos.count; i++) {
+      if (opt.fill) { const f = Math.cbrt(rnd()); out.push(c[0] + (pos.getX(i) - c[0]) * f, c[1] + (pos.getY(i) - c[1]) * f, c[2] + (pos.getZ(i) - c[2]) * f); }
+      else out.push(pos.getX(i) - nor.getX(i) * opt.depth, pos.getY(i) - nor.getY(i) * opt.depth, pos.getZ(i) - nor.getZ(i) * opt.depth);
+    }
+    return out;
+  }
+  /**
+   * A cloud of «neurons». Each point has a firing rate (0…1) that the scene sets every frame; the cloud then makes
+   * each point flash at random, more often the higher its rate, as real neurons do (a flash lasts about a quarter of a second).
+   * Tens of thousands of points stand for the billions of real neurons: the picture shows where and when, not how many.
+   */
+  function makeCloud(parent) {
+    const P = [], cloud = { groups: {}, n: 0 };
+    cloud.add = (name, pts) => { cloud.groups[name] = { from: P.length / 3, n: pts.length / 3 }; for (let i = 0; i < pts.length; i++) P.push(pts[i]); };
+    cloud.build = size => {
+      const n = cloud.n = P.length / 3, g = new T.BufferGeometry();
+      cloud.pos = new Float32Array(P); cloud.rate = new Float32Array(n); cloud.glow = new Float32Array(n);
+      g.setAttribute('position', new T.BufferAttribute(cloud.pos, 3));
+      cloud.attr = new T.BufferAttribute(cloud.glow, 1); cloud.attr.setUsage(T.DynamicDrawUsage); g.setAttribute('glow', cloud.attr);
+      cloud.mat = new T.ShaderMaterial({ transparent: true, depthWrite: false, blending: T.AdditiveBlending,
+        uniforms: { px: { value: 6 }, size: { value: size || 1 }, dim: { value: 0.07 }, alpha: { value: 1 } },
+        vertexShader: 'attribute float glow; uniform float px, size; varying float vg; void main(){ vg = glow; vec4 mv = modelViewMatrix * vec4(position, 1.0); gl_PointSize = max(1.3, size * (1.0 + 1.5 * glow) * px / -mv.z); gl_Position = projectionMatrix * mv; }',
+        fragmentShader: 'uniform float dim, alpha; varying float vg; void main(){ vec2 d = gl_PointCoord - 0.5; float r = dot(d, d); if (r > 0.25) discard; vec3 c = mix(vec3(0.40, 0.56, 0.78), vec3(1.0, 0.78, 0.34), vg); gl_FragColor = vec4(c, alpha * (dim + (0.8 - dim) * vg) * (1.0 - r * 4.0)); }' });
+      cloud.obj = new T.Points(g, cloud.mat); cloud.obj.renderOrder = 7; cloud.obj.frustumCulled = false; parent.add(cloud.obj);
+    };
+    /** Points of a group within reach of a centre, with a weight that falls with distance: { idx, w }. */
+    cloud.near = (name, c, r) => {
+      const gr = cloud.groups[name], idx = [], w = [], p = cloud.pos;
+      for (let i = gr.from; i < gr.from + gr.n; i++) { const d = (p[i * 3] - c[0]) ** 2 + (p[i * 3 + 1] - c[1]) ** 2 + (p[i * 3 + 2] - c[2]) ** 2, k = Math.exp(-d / (r * r)); if (k > 0.03) { idx.push(i); w.push(k); } }
+      return { idx: Int32Array.from(idx), w: Float32Array.from(w) };
+    };
+    /** Set every rate to the resting level, or the rates of one group. */
+    cloud.rest = (level, name) => { const gr = name ? cloud.groups[name] : { from: 0, n: cloud.n }; cloud.rate.fill(level, gr.from, gr.from + gr.n); };
+    /** Add activity to a set of points returned by near(). */
+    cloud.drive = (set, amount) => { if (amount < 0.004) return; const r = cloud.rate; for (let i = 0; i < set.idx.length; i++) r[set.idx[i]] += amount * set.w[i]; };
+    /** One frame of random firing; `stage` gives the camera and the height of the picture, for the size of the points. */
+    cloud.step = (dt, stage) => {
+      const r = cloud.rate, gl = cloud.glow, k = dt * 2.4, f = dt * 4.5;       // at rate 1 a neuron flashes about 2.4 times a second
+      for (let i = 0; i < cloud.n; i++) { const v = gl[i] - f; gl[i] = Math.random() < r[i] * k ? 1 : v > 0 ? v : 0; }
+      cloud.attr.needsUpdate = true;
+      cloud.mat.uniforms.px.value = S * stage.pixels() / (2 * Math.tan(stage.camera.fov * Math.PI / 360));
+    };
+    return cloud;
+  }
+  /** The usual cloud: both hemispheres of the cortex plus the deep structures named in `deep`. */
+  function brainCloud(head, deep) {
+    const cloud = makeCloud(head.group);
+    cloud.add('cortex', meshPoints('lh', { depth: 1.5 }).concat(meshPoints('rh', { depth: 1.5 })));
+    for (const [key, names] of Object.entries(deep)) { let pts = []; for (const n of names) pts = pts.concat(meshPoints(n, { fill: true, times: 2 })); cloud.add(key, pts); }
+    cloud.build(1);
+    return cloud;
+  }
+  const DEEP = { tronco: ['tronco'], talamo: ['talamo_e', 'talamo_d'], amigdala: ['amigdala_e', 'amigdala_d'], hipocampo: ['hipocampo_e', 'hipocampo_d'] };
+  /** Show a head as a faint ghost, so that the cloud of neurons inside it can be seen. */
+  function ghost(head, cortex, deep) {
+    head.osso.forEach(m => (m.visible = false)); head.cerebelo.forEach(m => (m.visible = false));
+    head.mats.cortex.opacity = cortex; head.mats.cortex.depthWrite = false;
+    for (const k of ['tronco', 'talamo', 'amigdala', 'hipocampo']) { head.mats[k].opacity = deep; head.mats[k].depthWrite = false; }
+  }
+
+  /* ---------- 9. Hearing: a sound travels from the ear to the auditory cortex (shared by «medir» and «sirene») ---------- */
+  /**
+   * The stations of the pathway, on both sides: [group of the cloud, centre (mm), radius (mm), start (s), duration (s), gain, role].
+   * Places are approximate centres in the space of the model; times are in slow motion (the real journey takes hundredths of a second).
+   */
+  function makeHearing(head) {
+    const cloud = brainCloud(head, DEEP), stations = [], fibres = [];
+    for (const s of [-1, 1]) {
+      const amy = centre(s < 0 ? 'amigdala_e' : 'amigdala_d');
+      for (const [g, c, r, t0, dur, gain, role] of [
+        ['tronco', [9 * s, -40, -40], 8, 0.45, 0.5, 0.9, 'via'],       // cochlear nucleus: where the nerve enters the brainstem
+        ['tronco', [7 * s, -37, -26], 6.5, 0.75, 0.5, 0.8, 'via'],     // on the way up
+        ['tronco', [6 * s, -34, -11], 6.5, 1.05, 0.5, 0.9, 'via'],     // inferior colliculus, at the top of the brainstem
+        ['talamo', [16 * s, -27, -5], 7, 1.5, 0.6, 1, 'via'],          // medial geniculate body, at the back of the thalamus
+        ['cortex', [46 * s, -20, 8], 11, 2.35, 0.9, 1, 'cortex'],      // primary auditory cortex (Heschl's gyrus)
+        ['cortex', [54 * s, -24, 5], 25, 2.75, 1.0, 0.3, 'cortex'],    // the auditory areas around it, later and weaker
+        ['amigdala', amy, 14, 2.0, 0.9, 1, 'alarme'],                  // the alarm, reached from the thalamus
+      ]) stations.push({ set: cloud.near(g, c, r), t0, dur, gain, role });
+      const nerve = makeBundle(head.group, s < 0 ? 'CNVIII_L' : 'CNVIII_R', 0x8FC4E8, 0.36);           // real nerve: inner ear → brainstem
+      const rad = makePath(head.group, [16 * s, -27, -5], [44 * s, -20, 8], 46, 9, 0x8FC4E8, 4);         // thalamus → auditory cortex (simplified path)
+      fibres.push({ f: nerve, t0: 0, dur: 0.5 }, { f: rad, t0: 1.85, dur: 0.6 });
+    }
+    const H = { cloud, t: 99, via: 1, cortex: 1, alarme: 1, base: 0.03, show: 1 };
+    /** A sound arrives. via / cortex / alarme = how strongly each part of the pathway answers (0…1). */
+    H.fire = (via, cortex, alarme) => { H.t = 0; H.via = via; H.cortex = cortex; H.alarme = alarme; };
+    H.update = (dt, stage, extra) => {
+      H.t += dt; cloud.rest(H.base);
+      for (const st of stations) cloud.drive(st.set, st.gain * H[st.role] * burst((H.t - st.t0) / st.dur));
+      for (const fb of fibres) { fb.f.u.base.value = 0.16 * H.show; fb.f.u.pulso.value = (H.t - fb.t0) / fb.dur; fb.f.u.forca.value = H.t < fb.t0 + fb.dur * 1.3 ? H.show : 0; }
+      if (extra) extra();
+      cloud.mat.uniforms.alpha.value = H.show; cloud.step(dt, stage);
+    };
+    return H;
+  }
+
+  /* ---------- 10. medir: EEG, fMRI and a sound followed through thousands of neurons ---------- */
+  SCENES.medir = box => {
+    if (!D) return box.classList.add('sem-3d');
+    const head = buildHead(), eeg = box.querySelector('canvas.eeg'), real = (name, hint) => head.anchor(onMesh(name, hint));
+    head.cerebelo.forEach(m => (m.visible = false));
+    for (const k of ['tronco', 'talamo', 'amigdala', 'hipocampo']) head.mats[k].depthWrite = false;
+    // electrodes: points on the skull, found by shooting rays outwards from the middle of the head
+    const dots = new T.Group(); head.group.add(dots);
+    const ray = new T.Raycaster(), skull = new T.Mesh(geometry('cranio'), new T.MeshBasicMaterial({ side: T.DoubleSide }));
+    const elMat = new T.MeshBasicMaterial({ color: COR.laranja, transparent: true, depthWrite: false });
+    for (let i = 0; i < 21; i++) {
+      const lat = [0.25, 0.25, 0.25, 0.25, 0.25, 0.25, 0.25, 0.25, 0.7, 0.7, 0.7, 0.7, 0.7, 0.7, 1.15, 1.15, 1.15, 1.15, 1.5, 1.5, 1.5][i], lon = i * 2.4;
+      const dir = new T.Vector3(Math.cos(lon) * Math.cos(lat), Math.sin(lon) * Math.cos(lat), Math.sin(lat)).normalize();
+      ray.set(new T.Vector3(0, -18, 5), dir); ray.far = 400;
+      const hits = ray.intersectObject(skull);
+      if (hits.length) { const e = new T.Mesh(new T.SphereGeometry(4.5, 12, 10), elMat); e.position.copy(hits[hits.length - 1].point).addScaledVector(dir, 2); dots.add(e); }
+    }
+    const H = makeHearing(head), cortexAll = { idx: Int32Array.from({ length: H.cloud.groups.cortex.n }, (_, i) => i), w: new Float32Array(H.cloud.groups.cortex.n).fill(1) };
+    const blobs = [{ c: [58, -22, 8], r: 30, a: 0, cor: rgb(0xFF7A30) }, { c: [-58, -22, 8], r: 30, a: 0, cor: rgb(0xFF7A30) }];
+    let cycle = 9, eegT = 0, painted = '';
+    const stage = makeStage(box, (step, dt, time, since) => {
+      cam(step, dt, time);
+      fade(head.mats.osso, step === 0 ? 0.3 : 0, dt, head.osso);
+      elMat.opacity = toward(elMat.opacity, step === 0 ? 1 : 0, dt, 5); dots.visible = elMat.opacity > 0.02;
+      fade(head.mats.cortex, step === 1 ? 1 : step === 0 ? 0.22 : 0.1, dt, head.cortex);
+      for (const k of ['tronco', 'talamo', 'amigdala', 'hipocampo']) fade(head.mats[k], step >= 2 ? 0.22 : 0, dt, head[k]);
+      H.show = toward(H.show, step === 1 ? 0 : 1, dt, 5);
+      // EEG: the cortex fires in slow waves, all together; the trace on the right is the sum that the electrodes pick up
+      const wave = 0.5 + 0.5 * Math.sin(time * 2 * Math.PI * 0.9);
+      if (step >= 2) { cycle += dt; if (cycle > 5) { cycle = 0; H.fire(1, 1, 0); som.passo(); } } else H.t = 99;
+      H.update(dt, stage, step === 0 ? () => H.cloud.drive(cortexAll, 0.14 * wave * wave) : null);
+      if (step === 1) {
+        // fMRI: the coloured map appears seconds after the sound (it measures blood, not electricity)
+        const k = ease((since % 9 - 2.5) / 2.5) * (1 - ease((since % 9 - 7) / 1.5));
+        blobs[0].a = blobs[1].a = k * 0.9; paint(head, null, blobs); painted = 'mapa';
+      } else if (painted) { paint(head, null); painted = ''; }
+      if (eeg) {
+        eeg.style.opacity = step === 0 ? 1 : 0; eegT += dt;
+        const g = eeg.getContext('2d'); g.clearRect(0, 0, eeg.width, eeg.height); g.strokeStyle = '#F0A673'; g.lineWidth = 2;
+        for (let r = 0; r < 4; r++) { g.beginPath(); for (let x = 0; x < eeg.width; x += 2) { const t = time - (eeg.width - x) * 0.012, y = 18 + r * 30 - Math.sin(t * 2 * Math.PI * 0.9 + r * 0.25) * 9 + Math.sin(t * 31 + r * 2) * 2.5 + Math.sin(t * 57 + r) * 1.5; x ? g.lineTo(x, y) : g.moveTo(x, y); } g.stroke(); }
+      }
+    });
+    if (!stage) return;
+    stage.scene.add(head.group);
+    const cam = director(stage.camera, shotsMm([[[0, -15, 20], [330, 230, 150]], [[0, -15, 10], [380, 60, 90]], [[14, -22, 6], [250, 296, 92]], [[14, -22, 6], [250, 296, 92]]]));
+    const topDot = dots.children.reduce((m, e) => (e.position.z > m.position.z ? e : m), dots.children[0]);
+    stage.label('<b>elétrodos</b>somam a eletricidade de milhões de neurónios', head.anchor([84, -104, 66]), s => s === 0, '', topDot ? head.anchor(topDot.position.toArray()) : undefined);
+    stage.label('<b>córtex auditivo</b>mais sangue com oxigénio', head.anchor([66, -22, 30]), s => s === 1, '', real('rh', [60, -22, 8]));
+    stage.label('<b>1 · nervo auditivo</b>vem do ouvido', head.anchor([84, -54, -34]), s => s >= 2, '', head.anchor([20, -33, -41]));
+    stage.label('<b>2 · tronco cerebral</b>', head.anchor([-44, 20, -44]), s => s >= 2, '', real('tronco', [-4, -34, -30]));
+    stage.label('<b>3 · tálamo</b>', head.anchor([-6, -40, 40]), s => s >= 2, '', real('talamo_d', [16, -27, -5]));
+    stage.label('<b>4 · córtex auditivo</b>', head.anchor([80, -34, 40]), s => s >= 2, '', real('rh', [48, -20, 8]));
+  };
+
+  /* ---------- 11. sirene: habituation, seen in thousands of neurons ---------- */
+  SCENES.sirene = box => {
+    const slide = box.closest('.slide'), bars = slide.querySelector('.sustos'), say = sayIn(slide);
+    const n = { sirene: 0, apito: 0 };
+    /** Size of the alarm response to the n-th repetition of the same harmless sound (illustrative: it falls by about a third each time). */
+    const response = k => Math.max(0.05, Math.pow(0.66, k - 1));
+    let H = null;
+    function play(kind) {
+      n[kind]++; const r = response(n[kind]); som[kind === 'sirene' ? 'alarme' : 'apito']();
+      // the sound always reaches the brain; the auditory cortex answers a little less each time, the alarm much less
+      if (H) H.fire(1, 0.45 + 0.55 * r, r);
+      if (bars) { const b = document.createElement('span'); b.className = kind; b.style.setProperty('--h', Math.round(r * 100) + '%'); b.dataset.n = kind === 'sirene' ? n.sirene + '.º' : 'novo'; bars.append(b); if (bars.children.length > 10) bars.firstChild.remove(); }
+      say(kind === 'apito' && n.apito === 1 && n.sirene > 2 ? 'Som novo: o alarme volta a disparar em força. A habituação é <b>a este som</b>, não a todos.'
+        : n[kind] === 1 ? 'Primeira vez: o alarme dispara em força. Susto!' : r < 0.2 ? 'O som chega ao córtex auditivo, mas o alarme quase não reage: <b>habituou-se</b>.' : 'O alarme reage menos…');
+    }
+    slide.querySelector('[data-act="sirene"]').addEventListener('click', () => play('sirene'));
+    slide.querySelector('[data-act="apito"]').addEventListener('click', () => play('apito'));
+    slide.querySelector('[data-act="repor"]').addEventListener('click', () => { n.sirene = n.apito = 0; if (bars) bars.innerHTML = ''; say('Carrega em «Tocar o alarme».'); });
+    if (!D) return box.classList.add('sem-3d');
+    const head = buildHead(), real = (name, hint) => head.anchor(onMesh(name, hint)); ghost(head, 0.1, 0.22);
+    H = makeHearing(head);
+    const stage = makeStage(box, (step, dt, time) => { cam(0, dt, time); H.update(dt, stage); });
+    if (!stage) return;
+    stage.scene.add(head.group);
+    const cam = director(stage.camera, shotsMm([[[4, -18, 12], [166, 188, 62]]]));
+    stage.label('tronco cerebral', head.anchor([60, -50, -40]), () => true, 'peq', real('tronco', [6, -38, -30]));
+    stage.label('<b>tálamo</b>', head.anchor([-6, -40, 40]), () => true, '', real('talamo_d', [16, -27, -5]));
+    stage.label('<b>córtex auditivo</b>ouve o som', head.anchor([86, -42, 22]), () => true, '', real('rh', [48, -20, 8]));
+    stage.label('<b>amígdala</b>o alarme: susto', head.anchor([-44, 64, -22]), () => true, 'conceito', real('amigdala_e'));
+  };
+
+  /* ---------- 12. memoria: how a memory is stored (hippocampus first, cortex little by little) ---------- */
+  SCENES.memoria = box => {
+    if (!D || !FX) return box.classList.add('sem-3d');
+    const head = buildHead(); ghost(head, 0.1, 0.12);
+    head.talamo.forEach(m => (m.visible = false)); head.amigdala.forEach(m => (m.visible = false)); head.tronco.forEach(m => (m.visible = false));
+    const cloud = brainCloud(head, { hipocampo: ['hipocampo_e', 'hipocampo_d'] });
+    // three parts of one memory (a goal you scored), each in its own area of the left cortex, and the bundle that links it to the hippocampus
+    const PARTS = [
+      { nome: 'o que viste', sub: 'a baliza, a bola', c: [-24, -92, 4], r: 20, feixe: 'ILF_L', cor: 0x8FC4E8, at: [-40, -132, -8] },
+      { nome: 'onde estavas', sub: 'à entrada da área', c: [-12, -70, 46], r: 20, feixe: 'C_PHP_L', cor: 0x7BB98A, at: [-30, -126, 64] },
+      { nome: 'o que pensaste', sub: '«remato já!»', c: [-24, 44, -8], r: 20, feixe: 'UF_L', cor: 0xE58FB5, at: [-34, 96, 22] },
+    ].map(p => Object.assign(p, { set: cloud.near('cortex', p.c, p.r), f: makeBundle(head.group, p.feixe, p.cor), a: 0 }));
+    const hip = cloud.near('hipocampo', centre('hipocampo_e'), 40), fornix = makeBundle(head.group, 'F_L', 0xC57BA6);
+    // cortex to cortex: the bundles that end up carrying the memory without the hippocampus
+    const direct = [makeBundle(head.group, 'IFOF_L', 0xF0A673), makeBundle(head.group, 'SLF2_L', 0xF0A673)];
+    let hipA = 0, wired = 0;
+    const stage = makeStage(box, (step, dt, time, since) => {
+      cam(step, dt, time);
+      const T0 = step === 4 ? 2.6 : 5, t = since % T0, on = [0, 0, 0]; let hipOn = 0;
+      const toHip = [-1, -1, -1], fromHip = [-1, -1, -1], dir = [-1, -1];           // where the pulse is on each bundle (−1 = none)
+      if (step === 1) on.fill(burst((t - 0.3) / 3.2));
+      if (step === 2) { on.fill(burst((t - 0.2) / 3.4)); for (let i = 0; i < 3; i++) toHip[i] = (t - 0.6) / 1.3; hipOn = burst((t - 1.9) / 1.8); }
+      if (step === 3) {                                                            // a cue: you see the goal again; the hippocampus relights the rest
+        on[0] = burst((t - 0.2) / 3.6); toHip[0] = (t - 0.5) / 1.1; hipOn = burst((t - 1.6) / 1.6);
+        fromHip[1] = fromHip[2] = (t - 2.0) / 1.1; on[1] = on[2] = burst((t - 3.1) / 1.4);
+      }
+      if (step === 4) { hipOn = burst((t - 0.1) / 0.7); for (let i = 0; i < 3; i++) { fromHip[i] = (t - 0.3) / 0.7; on[i] = burst((t - 1.0) / 0.9); } dir[0] = dir[1] = (t - 1.1) / 0.8; }
+      if (step >= 5) { on[0] = burst((t - 0.2) / 3.6); dir[0] = (t - 0.6) / 1.2; on[2] = burst((t - 1.8) / 2.4); dir[1] = 1 - (t - 1.9) / 1.2; on[1] = burst((t - 3.1) / 1.6); hipOn = 0.12 * burst((t - 1.5) / 1.5); }
+      wired = toward(wired, step < 4 ? 0 : step === 4 ? clamp(since / 10) : 1, dt, 3);         // cortex-to-cortex links grow night after night
+      cloud.rest(0.022); cloud.rest(step >= 5 ? 0.01 : 0.03, 'hipocampo');
+      PARTS.forEach((p, i) => {
+        cloud.drive(p.set, on[i]);
+        const pulse = toHip[i] >= 0 && toHip[i] <= 1.2 ? toHip[i] : fromHip[i] >= 0 && fromHip[i] <= 1.2 ? 1 - fromHip[i] : -1;
+        p.f.u.base.value = toward(p.f.u.base.value, step >= 2 && step <= 4 ? 0.3 : step >= 5 ? 0.08 : 0, dt, 4); p.f.u.pulso.value = pulse; p.f.u.forca.value = pulse >= 0 ? 1 : 0;
+      });
+      cloud.drive(hip, hipOn);
+      fornix.u.base.value = toward(fornix.u.base.value, step === 0 ? 0.3 : 0, dt, 4);
+      direct.forEach((f, i) => { f.u.base.value = 0.05 + 0.4 * wired; f.u.base.value *= step >= 4 ? 1 : 0; f.u.pulso.value = dir[i]; f.u.forca.value = dir[i] >= 0 && dir[i] <= 1.2 ? 0.4 + 0.6 * wired : 0; });
+      hipA = toward(hipA, step === 0 ? 1 : step >= 5 ? 0.15 : 0.5, dt, 4); head.mats.hipocampo.opacity = hipA; head.mats.hipocampo.depthWrite = false;
+      cloud.step(dt, stage);
+    });
+    if (!stage) return;
+    stage.scene.add(head.group);
+    const cam = director(stage.camera, shotsMm([[[0, -14, 22], [-400, 120, 70]], [[0, -14, 30], [-480, 40, 90]]]));
+    const hipReal = head.anchor(onMesh('hipocampo_e'));
+    stage.label('<b>hipocampo</b>um de cada lado, dentro do lobo temporal', head.anchor([-40, 118, -8]), s => s === 0, '', hipReal);
+    stage.label('fórnix: a saída do hipocampo', head.anchor([-10, -96, 30]), s => s === 0, 'peq', head.anchor([-6, -24, 16]));
+    PARTS.forEach(p => stage.label(`<b>${p.nome}</b>${p.sub}`, head.anchor(p.at), s => s >= 1, '', head.anchor(onMesh('lh', p.c))));
+    stage.label('<b>hipocampo</b>regista o que disparou junto', head.anchor([-40, 118, -8]), s => s === 2 || s === 3, 'conceito', hipReal);
+    stage.label('<b>hipocampo</b>repete o padrão, vezes sem conta', head.anchor([-40, 118, -8]), s => s === 4, 'conceito', hipReal);
+    stage.label('<b>hipocampo</b>já faz menos falta', head.anchor([-40, 118, -8]), s => s >= 5, '', hipReal);
+    stage.label('<b>ligações diretas no córtex</b>cada vez mais fortes', head.anchor([-50, 92, 82]), s => s >= 4, 'conceito', head.anchor([-40, -4, 46]));
+  };
+
+  /* ---------- 13. cortex: the outer layer of the brain gets thinner from 3 to 20 years (Piccolo and colleagues, 2016) ---------- */
   // Curves redrawn from figure 1a of the article (approximate): mean cortical thickness, in mm, by age.
   const ESP = {
     baixo: a => 3.3149 - 0.07367 * a + 0.001869 * a * a,       // low family income: steep at first, then levels off
@@ -354,325 +646,483 @@
       <g class="pl-idade"><line y1="20" y2="320"/><circle r="7"/></g></svg>`;
     const mark = plotBox && plotBox.querySelector('.pl-idade');
     if (!D) return box.classList.add('sem-3d');
-    const head = buildHead(); let shown = -1;
-    head.osso.forEach(m => (m.visible = false));
+    /* --- the brain, cut across so that the cortex shows as what it is: the outer layer ---
+       The front part of the head is clipped away by a plane. The cut face is painted with the «stencil» trick:
+       wherever the plane is inside a closed surface, a flat colour is drawn. Two surfaces are capped, one inside the other:
+       the real surface of the brain (orange cap) and a copy pushed inwards by the thickness of the cortex (cream cap, drawn on top).
+       What is left of the orange is a ribbon exactly as thick as the cortex. */
+    const CUT = -16, GAIN = 5;                                     // where the cut is (mm behind the middle); how much the change with age is magnified
+    const head = buildHead(), plane = new T.Plane(new T.Vector3(0, 0, 1), CUT * S);
+    for (const k of ['osso', 'cerebelo', 'tronco', 'talamo', 'hipocampo', 'amigdala']) head[k].forEach(m => (m.visible = false));
+    head.mats.cortex.transparent = false; head.mats.cortex.clippingPlanes = [plane];
+    const outer = head.cortex.map(m => m.geometry), inner = outer.map(g => { const c = new T.BufferGeometry(); c.setAttribute('position', g.getAttribute('position').clone()); c.setIndex(g.getIndex()); return c; });
+    function setThickness(mm) {
+      outer.forEach((g, k) => { const p = g.getAttribute('position'), n = g.getAttribute('normal'), q = inner[k].getAttribute('position');
+        for (let i = 0; i < p.count; i++) q.setXYZ(i, p.getX(i) - n.getX(i) * mm, p.getY(i) - n.getY(i) * mm, p.getZ(i) - n.getZ(i) * mm); q.needsUpdate = true; });
+    }
+    const caps = [];
+    function cap(geoms, color, order) {
+      for (const g of geoms) for (const [side, op] of [[T.BackSide, T.IncrementWrapStencilOp], [T.FrontSide, T.DecrementWrapStencilOp]]) {
+        const m = new T.Mesh(g, new T.MeshBasicMaterial({ depthWrite: false, depthTest: false, colorWrite: false, side, clippingPlanes: [plane], stencilWrite: true, stencilFunc: T.AlwaysStencilFunc, stencilFail: op, stencilZFail: op, stencilZPass: op }));
+        m.renderOrder = order; m.frustumCulled = false; head.group.add(m);
+      }
+      const face = new T.Mesh(new T.PlaneGeometry(5, 5), new T.MeshBasicMaterial({ color, side: T.DoubleSide, depthTest: order < 2, stencilWrite: true, stencilRef: 0, stencilFunc: T.NotEqualStencilFunc, stencilFail: T.ReplaceStencilOp, stencilZFail: T.ReplaceStencilOp, stencilZPass: T.ReplaceStencilOp }));
+      face.position.z = -CUT * S; face.renderOrder = order + 0.1; face.onAfterRender = r => r.clearStencil(); caps.push(face);
+    }
+    cap(outer, 0xE2875A, 1); cap(inner, 0xF4ECDD, 2);
+    let shown = -1;
     const stage = makeStage(box, (step, dt, time) => {
       cam(0, dt, time);
-      head.group.rotation.z = Math.sin(time / 5) * 0.5;
       const age = stage.ctl('idade'), mmNow = ESP.todos(age);
       if (Math.abs(mmNow - shown) > 0.004) {
-        shown = mmNow;
-        // thick cortex in warm orange, thin cortex in pale blue: the whole surface changes together (it is the mean)
-        const k = clamp((mmNow - 2.55) / 0.5), c = [lerp(0.62, 0.95, k), lerp(0.74, 0.62, k), lerp(0.86, 0.42, k)];
-        paint(head, () => c);
+        shown = mmNow; setThickness(2.6 + (mmNow - 2.6) * GAIN);
         if (lupa) { lupa.style.setProperty('--esp', (mmNow * 26).toFixed(1) + 'px'); lupa.querySelector('output').textContent = mmNow.toFixed(2).replace('.', ',') + ' mm'; lupa.querySelector('b').textContent = Math.round(age) + ' anos'; }
         if (mark) { mark.setAttribute('transform', `translate(${X(age)} 0)`); mark.querySelector('circle').setAttribute('cy', Y(mmNow)); }
       }
     });
     if (!stage) return;
-    stage.scene.add(head.group);
-    const cam = director(stage.camera, shotsMm([[[0, -15, 8], [-360, 150, 110]]]));
+    stage.scene.add(head.group); caps.forEach(c => stage.scene.add(c));
+    const cam = director(stage.camera, shotsMm([[[0, CUT, 24], [-84, 270, 98]]]));
+    const top = onMesh('rh', [52, CUT, 60]);
+    stage.label('<b>córtex</b>a camada de fora', head.anchor([104, CUT, 58]), () => true, 'conceito', head.anchor([top[0], CUT, top[2] - 2]));
+    stage.label('<b>substância branca</b>os «cabos» entre zonas', head.anchor([-92, CUT, -40]), () => true, '', head.anchor([-26, CUT, 26]));
   };
 
-  /* ---------- 7. The path of a sound, shared by «medir» and «sirene» ---------- */
+  /* ---------- 14. Neurons of the cortex: pyramidal cells, one synapse, the action potential ---------- */
   /**
-   * Ear → brainstem → thalamus → auditory cortex (both sides), with a branch thalamus → amygdala.
-   * Returns { fire(strength), update(dt), glows }: fire() sends one wave; `glows` is what paint() needs.
+   * A pyramidal neuron, the commonest cell of the cortex: a cone-shaped body, one long dendrite going up (apical),
+   * several around the base (basal), all covered with tiny spines, and (drawn by the scene) a thin axon leaving from the base.
+   * Returns { group, mat, spines }: the group has the body at its origin and is about 5 units tall (from −1.5 to 3.7); spines = their positions.
    */
-  function soundPath(head) {
-    const ear = [86, -8, -6], stem = [6, -36, -36], thal = centre('talamo_d'), amy = centre('amigdala_d');
-    const cortexD = [58, -22, 8], cortexE = [-58, -22, 8], thalE = centre('talamo_e');
-    const legs = [                                                   // [from, to, start time, duration]
-      [ear, stem, 0, 0.5], [stem, thal, 0.5, 0.4], [stem, thalE, 0.5, 0.4], [thal, cortexD, 0.9, 0.4], [thalE, cortexE, 0.9, 0.4], [thal, amy, 0.9, 0.35],
-    ];
-    const sparks = makeSparks(head.group, legs.length, 4.2, COR.sinal);
-    const glows = [{ c: cortexD, r: 26, a: 0, cor: rgb(0xFFD34E) }, { c: cortexE, r: 26, a: 0, cor: rgb(0xFFD34E) }];
-    const state = { t: 9, strength: 1, alarm: 0, glows };
-    const amyBase = new T.Color(COR.amigdala), hot = new T.Color(0xFFF1A8);
-    state.fire = strength => { state.t = 0; state.strength = strength; };
-    state.update = dt => {
-      state.t += dt;
-      legs.forEach(([a, b, t0, dur], i) => {
-        const k = (state.t - t0) / dur, s = sparks[i];
-        s.visible = k > 0 && k < 1;
-        if (s.visible) { s.position.set(lerp(a[0], b[0], k), lerp(a[1], b[1], k), lerp(a[2], b[2], k)); s.scale.setScalar(0.5 + state.strength); s.material.opacity = 0.35 + 0.65 * state.strength; }
-      });
-      const arrived = state.t > 1.3 ? Math.exp(-(state.t - 1.3) * 1.1) : 0;       // the cortex lights up on arrival and fades
-      glows[0].a = glows[1].a = arrived * state.strength;
-      state.alarm = state.t > 1.25 ? Math.exp(-(state.t - 1.25) * 1.3) * state.strength : 0;
-      head.mats.amigdala.color.copy(amyBase).lerp(hot, state.alarm);
-      head.amigdala.forEach(m => m.scale.setScalar(1 + state.alarm * 0.35));
-    };
-    return state;
+  function makePyramidal(color, seed) {
+    const g = new T.Group(), m = mat(color, { roughness: 0.55, emissive: color, emissiveIntensity: 0 }), rnd = lcg(seed), spines = [];
+    const body = new T.Mesh(new T.ConeGeometry(0.42, 0.95, 18), m), under = ball(0.37, m, 0, -0.34, 0); under.scale.y = 0.6; g.add(body, under);
+    const bend = () => (rnd() - 0.5);
+    function grow(from, dir, len, r, depth) {
+      const to = from.clone().addScaledVector(dir, len), mid = from.clone().lerp(to, 0.5).add(V(bend() * len * 0.2, bend() * len * 0.2, bend() * len * 0.2));
+      g.add(tube([from, mid, to], r, m, 10));
+      for (let s = 0.22; s < 1; s += 0.17 + rnd() * 0.1) spines.push(from.clone().lerp(to, s).add(V(bend(), bend(), bend()).normalize().multiplyScalar(r + 0.065)));
+      if (depth > 0) for (let k = 0; k < 2; k++) grow(to, dir.clone().add(V(bend() * 1.3, bend() * 0.9, bend() * 1.3)).normalize(), len * (0.6 + rnd() * 0.2), r * 0.68, depth - 1);
+    }
+    let p = V(0, 0.4, 0);                                                             // the apical dendrite: a trunk with side branches…
+    for (let i = 0; i < 3; i++) {
+      const q = p.clone().add(V(bend() * 0.25, 0.72, bend() * 0.25)); g.add(tube([p, p.clone().lerp(q, 0.5), q], 0.085 - i * 0.012, m, 8));
+      grow(q, V(i % 2 ? -1 : 1, 0.35, bend()).normalize(), 0.9, 0.035, 1); p = q;
+    }
+    for (let k = 0; k < 3; k++) grow(p, V((k - 1) * 0.8, 1, bend() * 0.8).normalize(), 0.7, 0.04, 1);     // …that ends in a tuft
+    for (let k = 0; k < 5; k++) { const a = k / 5 * Math.PI * 2 + rnd(); grow(V(Math.cos(a) * 0.25, -0.4, Math.sin(a) * 0.25), V(Math.cos(a), -0.3 - rnd() * 0.3, Math.sin(a) * 0.7).normalize(), 1.0, 0.045, 1); }   // basal dendrites
+    const inst = new T.InstancedMesh(new T.SphereGeometry(0.036, 8, 6), m, spines.length), M4 = new T.Matrix4();
+    spines.forEach((s, i) => { M4.makeTranslation(s.x, s.y, s.z); inst.setMatrixAt(i, M4); }); g.add(inst);
+    return { group: g, mat: m, spines };
   }
 
-  /* ---------- 8. medir: EEG, fMRI and the path of a sound ---------- */
-  SCENES.medir = box => {
-    if (!D) return box.classList.add('sem-3d');
-    const head = buildHead(), eeg = box.querySelector('canvas.eeg');
-    // electrodes: points on the skull, found by shooting rays outwards from the middle of the head
-    const dots = new T.Group(); head.group.add(dots);
-    const ray = new T.Raycaster(), skull = new T.Mesh(geometry('cranio'), new T.MeshBasicMaterial({ side: T.DoubleSide }));
-    const elMat = new T.MeshBasicMaterial({ color: COR.laranja, transparent: true, depthWrite: false });
-    for (let i = 0; i < 21; i++) {
-      const lat = [0.25, 0.25, 0.25, 0.25, 0.25, 0.25, 0.25, 0.25, 0.7, 0.7, 0.7, 0.7, 0.7, 0.7, 1.15, 1.15, 1.15, 1.15, 1.5, 1.5, 1.5][i], lon = i * 2.4;
-      const dir = new T.Vector3(Math.cos(lon) * Math.cos(lat), Math.sin(lon) * Math.cos(lat), Math.sin(lat)).normalize();
-      ray.set(new T.Vector3(0, -18, 5), dir); ray.far = 400;
-      const hits = ray.intersectObject(skull);
-      if (hits.length) { const e = new T.Mesh(new T.SphereGeometry(4.5, 12, 10), elMat); e.position.copy(hits[hits.length - 1].point).addScaledVector(dir, 2); dots.add(e); }
-    }
-    const path = soundPath(head); let cycle = 0, eegT = 0;
-    const blobs = [{ c: [58, -22, 8], r: 30, a: 0, cor: rgb(0xFF7A30) }, { c: [-58, -22, 8], r: 30, a: 0, cor: rgb(0xFF7A30) }];
+  SCENES.piramidal = box => {
+    const world = new T.Group(), A = makePyramidal(0x7FB0D0, 5), B = makePyramidal(0xF0A673, 23);
+    A.group.position.set(-2.7, 0.2, 0); B.group.position.set(2.5, -0.1, 0); world.add(A.group, B.group);
+    // the cortex around them: many more cells, far away and out of focus
+    const far = new T.InstancedMesh(new T.ConeGeometry(0.3, 0.7, 8), mat(0x3B4A57, { opacity: 0.55 }), 46), M4 = new T.Matrix4(), rnd = lcg(9);
+    for (let i = 0; i < 46; i++) { M4.makeTranslation((rnd() - 0.5) * 22, (rnd() - 0.5) * 9, -4 - rnd() * 7); far.setMatrixAt(i, M4); } world.add(far);
+    // the axon of A: leaves the base, runs down, and one branch reaches a dendrite of B
+    const inB = p => p.clone().add(B.group.position), target = B.spines.map(inB).reduce((best, s) => (s.distanceTo(V(1.2, -0.9, 0.2)) < best.distanceTo(V(1.2, -0.9, 0.2)) ? s : best));
+    const axonPts = [V(-2.7, -0.35, 0), V(-2.65, -1.2, 0.1), V(-1.9, -1.95, 0.15), V(-0.5, -1.95, 0.2), V(0.5, -1.45, 0.2), target.clone().add(V(-0.1, -0.05, 0.02))], axon = new T.CatmullRomCurve3(axonPts);
+    world.add(tube(axonPts, 0.03, A.mat, 60), ball(0.075, A.mat, axonPts[5].x, axonPts[5].y, axonPts[5].z));
+    world.add(tube([V(-1.9, -1.95, 0.15), V(-1.6, -3.0, 0.1), V(-1.7, -4.6, 0)], 0.03, A.mat, 20));              // the main axon goes on, to other areas
+    // signals arriving at A from other neurons: seven of its spines, lit one after the other
+    const inA = p => p.clone().add(A.group.position), inputs = [3, 11, 19, 27, 36, 44, 52].map(i => inA(A.spines[i % A.spines.length]));
+    const flashes = makeSparks(world, inputs.length, 0.1, COR.sinal), impulse = makeSparks(world, 1, 0.11, COR.sinal)[0], hitB = makeSparks(world, 1, 0.12, COR.sinal)[0];
+    let charge = 0, chargeB = 0;
     const stage = makeStage(box, (step, dt, time, since) => {
       cam(step, dt, time);
-      fade(head.mats.osso, step === 0 ? 0.92 : 0, dt, head.osso);
-      elMat.opacity = toward(elMat.opacity, step === 0 ? 1 : 0, dt, 5); dots.visible = elMat.opacity > 0.02;
-      fade(head.mats.cortex, step >= 2 ? 0.2 : 1, dt, head.cortex);
-      for (const k of ['talamo', 'amigdala']) fade(head.mats[k], step >= 2 ? 1 : 0, dt, head[k]);
-      if (step === 1) {
-        // fMRI: the coloured map appears seconds after the sound (it measures blood, not electricity)
-        const k = ease((since % 9 - 2.5) / 2.5) * (1 - ease((since % 9 - 7) / 1.5));
-        blobs[0].a = blobs[1].a = k * 0.9; paint(head, null, blobs);
-      } else if (step >= 2) {
-        cycle += dt; if (cycle > 3.2) { cycle = 0; path.fire(1); if (stage.slide.classList.contains('current')) som.passo(); }
-        path.update(dt); paint(head, null, path.glows);
-      } else paint(head, null);
-      if (eeg) {
-        // EEG traces: fast wiggles, drawn while the electrodes are on
-        eeg.style.opacity = step === 0 ? 1 : 0; eegT += dt;
-        const g = eeg.getContext('2d'); g.clearRect(0, 0, eeg.width, eeg.height); g.strokeStyle = '#F0A673'; g.lineWidth = 2;
-        for (let r = 0; r < 4; r++) { g.beginPath(); for (let x = 0; x < eeg.width; x += 2) { const t = eegT * 3 + x * 0.05; const y = 18 + r * 30 + Math.sin(t * (1.3 + r * 0.4)) * 6 + Math.sin(t * 4.1 + r) * 4 + Math.sin(t * 9.3 + r * 2) * 2; x ? g.lineTo(x, y) : g.moveTo(x, y); } g.stroke(); }
-      }
-    });
-    if (!stage) return;
-    stage.scene.add(head.group);
-    const cam = director(stage.camera, shotsMm([[[0, -15, 20], [330, 230, 150]], [[0, -15, 10], [380, 60, 90]], [[14, -18, -4], [195, 255, 95]], [[14, -18, -4], [195, 255, 95]]]));
-    stage.label('<b>elétrodos</b>medem a eletricidade à superfície', head.anchor([60, 30, 62]), s => s === 0);
-    const real = (name, hint) => head.anchor(onMesh(name, hint)), heard = real('rh', [60, -22, 8]);
-    stage.label('<b>córtex auditivo</b>mais sangue com oxigénio', head.anchor([66, -22, 30]), s => s === 1, '', heard);
-    stage.label('ouvido', head.anchor([92, -8, -2]), s => s >= 2, 'peq');
-    stage.label('tronco cerebral', head.anchor([10, -40, -52]), s => s >= 2, 'peq baixo', real('tronco', [6, -36, -36]));
-    stage.label('<b>tálamo</b>', head.anchor(centre('talamo_d').map((v, i) => v + (i === 2 ? 26 : 0))), s => s >= 2, '', real('talamo_d'));
-    stage.label('<b>córtex auditivo</b>', head.anchor([78, -34, 36]), s => s >= 2, '', heard);
-  };
-
-  /* ---------- 9. sirene: habituation, seen in the brain ---------- */
-  SCENES.sirene = box => {
-    const slide = box.closest('.slide'), bars = slide.querySelector('.sustos'), out = slide.querySelector('output');
-    const n = { sirene: 0, apito: 0 };
-    /** Size of the response to the n-th repetition of the same harmless sound (illustrative: it falls by about a third each time). */
-    const response = k => Math.max(0.06, Math.pow(0.66, k - 1));
-    let path = null;
-    function play(kind) {
-      n[kind]++; const r = response(n[kind]); som[kind](); if (path) path.fire(r);
-      if (bars) { const b = document.createElement('span'); b.className = kind; b.style.setProperty('--h', Math.round(r * 100) + '%'); b.title = Math.round(r * 100) + '%'; bars.append(b); if (bars.children.length > 16) bars.firstChild.remove(); }
-      if (out) out.textContent = kind === 'apito' && n.apito === 1 && n.sirene > 2 ? 'Som novo: o cérebro volta a reagir em força. A habituação é a este som, não a todos.'
-        : n[kind] === 1 ? 'Primeira vez: resposta grande. Susto!' : r < 0.2 ? 'Quase não reage: habituou-se.' : 'A resposta diminui…';
-    }
-    slide.querySelector('[data-act="sirene"]').addEventListener('click', () => play('sirene'));
-    slide.querySelector('[data-act="apito"]').addEventListener('click', () => play('apito'));
-    slide.querySelector('[data-act="repor"]').addEventListener('click', () => { n.sirene = n.apito = 0; if (bars) bars.innerHTML = ''; if (out) out.textContent = 'Carrega em «Tocar a sirene».'; });
-    if (!D) return box.classList.add('sem-3d');
-    const head = buildHead(); head.osso.forEach(m => (m.visible = false));
-    head.mats.cortex.opacity = 0.2; head.mats.cortex.depthWrite = false;
-    path = soundPath(head);
-    const stage = makeStage(box, (step, dt, time) => { cam(0, dt, time); path.update(dt); paint(head, null, path.glows); });
-    if (!stage) return;
-    stage.scene.add(head.group);
-    const cam = director(stage.camera, shotsMm([[[14, -18, -4], [195, 255, 95]]]));
-    stage.label('ouvido', head.anchor([92, -8, -2]), () => true, 'peq');
-    const real = (name, hint) => head.anchor(onMesh(name, hint));
-    stage.label('<b>tálamo</b>', head.anchor(centre('talamo_d').map((v, i) => v + (i === 2 ? 26 : 0))), () => true, '', real('talamo_d'));
-    stage.label('<b>córtex auditivo</b>', head.anchor([78, -34, 36]), () => true, '', real('rh', [60, -22, 8]));
-    stage.label('<b>amígdala</b>o alarme', head.anchor(centre('amigdala_d').map((v, i) => v - (i === 2 ? 20 : 0))), () => true, 'baixo', real('amigdala_d'));
-  };
-
-  /* ---------- 10. Building blocks for the schematic scenes (neurons, network, sea slug) ---------- */
-  const V = (x, y, z) => new T.Vector3(x, y, z || 0);
-  const tube = (pts, r, material, seg) => new T.Mesh(new T.TubeGeometry(new T.CatmullRomCurve3(pts), seg || 24, r, 8), material);
-  const ball = (r, material, x, y, z) => { const m = new T.Mesh(new T.SphereGeometry(r, 24, 16), material); m.position.set(x || 0, y || 0, z || 0); return m; };
-  /**
-   * A schematic neuron: cell body at `at`, dendrites fanning out to the side `dir` (−1 = left),
-   * returns the group and the tips of its dendrites.
-   */
-  function soma(at, color, dir, n) {
-    const g = new T.Group(), m = mat(color, { roughness: 0.5 }), tips = [];
-    g.add(ball(0.36, m, at.x, at.y, at.z));
-    for (let i = 0; i < (n || 6); i++) {
-      const a = (i / ((n || 6) - 1) - 0.5) * 2.3, len = 0.95 + (i % 3) * 0.22;
-      const tip = V(at.x + dir * Math.cos(a) * len, at.y + Math.sin(a) * len, at.z + ((i % 2) - 0.5) * 0.5);
-      const mid = at.clone().lerp(tip, 0.55).add(V(0, ((i % 2) - 0.5) * 0.18, 0));
-      g.add(tube([at, mid, tip], 0.05, m, 12)); tips.push(tip);
-      const twig = tip.clone().add(V(dir * 0.3, (i % 2 ? 0.28 : -0.28), 0.1)); g.add(tube([mid, mid.clone().lerp(twig, 0.6), twig], 0.03, m, 8));
-    }
-    return { group: g, tips, mat: m };
-  }
-
-  /* ---------- 11. neuronio: how two neurons talk ---------- */
-  SCENES.neuronio = box => {
-    const world = new T.Group();
-    const A = soma(V(-3.3, 0, 0), 0x7FB0D0, -1), B = soma(V(2.9, 0.1, 0), 0xF0A673, -1, 5);
-    const axonPts = [V(-3.3, 0, 0), V(-2.2, -0.12, 0), V(-1, 0.1, 0), V(0.1, -0.05, 0), V(1.0, 0, 0)], axon = new T.CatmullRomCurve3(axonPts);
-    world.add(A.group, B.group, tube(axonPts, 0.045, A.mat, 40));
-    const myelin = mat(COR.creme, { roughness: 0.4 });
-    for (let i = 0; i < 5; i++) { const a = 0.14 + i * 0.165, pts = [0, 0.5, 1].map(k => axon.getPoint(a + k * 0.13)); world.add(tube(pts, 0.11, myelin, 6)); }
-    const bulb = ball(0.17, A.mat, 1.08, 0, 0), post = ball(0.2, B.mat, 1.5, 0, 0); post.scale.set(0.45, 1.25, 1.25);
-    world.add(bulb, post, tube([V(1.5, 0, 0), V(2.1, 0.02, 0), V(2.9, 0.1, 0)], 0.05, B.mat, 12));
-    const outPts = [V(2.9, 0.1, 0), V(4, 0.3, 0), V(5.6, 0.1, 0)]; world.add(tube(outPts, 0.045, B.mat, 20));
-    const vesicles = makeSparks(world, 9, 0.036, 0xFFD34E), impulse = makeSparks(world, 2, 0.13, COR.sinal);
-    vesicles.forEach((v, i) => { v.userData.home = V(1.02 + (i % 3) * 0.045, ((i / 3 | 0) - 1) * 0.07, ((i % 2) - 0.5) * 0.08); });
-    const baseB = new T.Color(0xF0A673), hot = new T.Color(0xFFF1A8), out = new T.CatmullRomCurve3(outPts);
-    const stage = makeStage(box, (step, dt, time, since) => {
-      cam(step, dt, time);
-      const T0 = step === 2 ? 4 : 3.4, t = step >= 1 ? since % T0 : -1;            // one message every few seconds
-      const k = t / 1.5;                                                            // 1.5 s along the axon
-      impulse[0].visible = t >= 0 && k < 1; if (impulse[0].visible) impulse[0].position.copy(axon.getPoint(clamp(k)));
-      const rel = step >= 2 ? (t - 1.5) / 0.9 : -1;                                 // then the transmitter crosses the gap
-      vesicles.forEach((v, i) => {
-        v.visible = step >= 2;
-        const go = clamp(rel * 1.4 - i * 0.04), h = v.userData.home;
-        v.position.set(lerp(h.x, 1.4, ease(go)) + (go > 0 && go < 1 ? 0.06 : 0), h.y * (1 + go), h.z);
-        v.material.opacity = go >= 1 ? clamp(2.2 - rel) : rel > 2.2 ? 0 : 1;
-      });
-      const fired = step >= 3 ? (t - 2.4) / 1.0 : -1;                               // and the next neuron fires
-      B.mat.color.copy(baseB).lerp(hot, step >= 3 && fired > -0.3 && fired < 0.5 ? 1 - Math.abs(fired - 0.1) : 0);
-      impulse[1].visible = fired > 0 && fired < 1; if (impulse[1].visible) impulse[1].position.copy(out.getPoint(fired));
+      const T0 = 6.5, t = since % T0, n = step === 1 ? 3 : step >= 2 ? 7 : 0;         // 3 signals are not enough; 7 are
+      let got = 0;
+      flashes.forEach((f, i) => { const k = (t - 0.4 - i * 0.28) / 0.5; f.visible = i < n && k > 0 && k < 1; if (f.visible) { f.position.copy(inputs[i]).lerp(inA(V(0, 0, 0)), ease(k) * 0.85); f.material.opacity = 1 - k * 0.5; } if (i < n && k >= 1) got++; });
+      const fired = step >= 2 && got >= 7, tf = t - (0.4 + 6 * 0.28 + 0.5);            // time since the neuron fired
+      charge = toward(charge, fired && tf > 0.25 ? 0 : t > 4 ? 0 : got / 7, dt, 6);
+      A.mat.emissiveIntensity = charge * 0.75 + (fired && tf < 0.25 ? 0.6 : 0);
+      const k = fired ? tf / 1.5 : -1; impulse.visible = k > 0 && k < 1; if (impulse.visible) impulse.position.copy(axon.getPoint(k));
+      const arrived = fired && step >= 3 && tf > 1.5 && tf < 2.4; hitB.visible = arrived; if (arrived) { hitB.position.copy(target); hitB.scale.setScalar(1 + (tf - 1.5)); hitB.material.opacity = 1 - (tf - 1.5) / 0.9; }
+      chargeB = toward(chargeB, arrived ? 0.3 : 0, dt, 4); B.mat.emissiveIntensity = chargeB;
     });
     if (!stage) return;
     stage.scene.add(world);
-    const cam = director(stage.camera, [{ at: V(0, 0, 0), from: V(0, 1.4, 12.5) }, { at: V(-0.6, 0, 0), from: V(-0.6, 1.2, 10) }, { at: V(1.28, 0, 0), from: V(1.28, 0.35, 2.3) }, { at: V(1, 0, 0), from: V(1, 1.4, 11.5) }], 1.8);
-    const pin = (x, y) => { const o = new T.Object3D(); o.position.set(x, y, 0); world.add(o); return o; };
-    stage.label('<b>dendrites</b>recebem sinais', pin(-4.3, 1.1), s => s < 2);
-    stage.label('<b>corpo celular</b>', pin(-3.3, -0.55), s => s < 2, 'baixo');
-    stage.label('<b>axónio</b>leva o impulso elétrico', pin(-1.2, 0.3), s => s < 2);
-    stage.label('mielina: acelera', pin(0.2, -0.3), s => s === 1, 'peq baixo');
-    stage.label('<b>sinapse</b>', pin(1.3, 0.35), s => s === 0 || s === 1 || s === 3);
-    stage.label('<b>vesículas</b>com neurotransmissor', pin(1.02, 0.2), s => s === 2);
-    stage.label('fenda', pin(1.3, -0.22), s => s === 2, 'peq baixo');
-    stage.label('<b>recetores</b>do neurónio seguinte', pin(1.62, 0.28), s => s === 2);
-    stage.label('soma os sinais: <b>dispara ou não</b>', pin(2.9, 0.65), s => s === 3);
+    // the caption covers the lower third of the stage, so every shot is framed for the band above it
+    const cam = director(stage.camera, [{ at: V(-0.2, 0.95, 0), from: V(-0.2, 1.5, 19.5) }, { at: V(-1.6, 1.35, 0), from: V(-1.6, 1.8, 16.5) }, { at: V(-0.8, 0.95, 0), from: V(-0.8, 1.5, 19) }, { at: V(1.5, -0.75, 0), from: V(1.5, -0.4, 8) }], 1.9);
+    const spot2 = (x, y, z) => spot(world, x, y, z), near = (x, y) => inA(A.spines.reduce((m, q) => (q.distanceTo(V(x, y, 0)) < m.distanceTo(V(x, y, 0)) ? q : m))), left = near(-1.0, 2.3), soma = spot2(-2.95, 0.15);
+    stage.label('<b>dendrites</b>recebem sinais de milhares de neurónios', spot2(-6.6, 3.3), s => s === 0, '', spot(world, left.x, left.y, left.z));
+    stage.label('<b>espinhas</b>onde chegam os sinais', spot2(-5.9, 3.1), s => s === 1, '', spot(world, inputs[1].x, inputs[1].y, inputs[1].z));
+    stage.label('<b>corpo celular</b>soma os sinais', spot2(-6.0, 0.1), s => s <= 2, '', soma);
+    stage.label('<b>axónio</b>leva o impulso', spot2(-5.3, -1.75), s => s === 0 || s === 2, '', spot2(-2.5, -1.6));
+    stage.label('<b>sinapse</b>', spot2(0.1, 0.75), s => s === 0, '', spot(world, target.x - 0.1, target.y - 0.05, target.z));
+    stage.label('<b>outro neurónio</b>', spot2(5.6, 2.6), s => s === 0, 'peq');
+    stage.label('<b>3 sinais: não chega</b>o neurónio fica calado', spot2(0.15, 3.6), s => s === 1, 'conceito azul');
+    stage.label('<b>7 sinais juntos: dispara!</b>tudo ou nada', spot2(-0.1, 1.55), s => s === 2, 'conceito');
+    stage.label('<b>sinapse</b>não se tocam', spot2(-0.4, 0.05), s => s === 3, 'conceito', spot(world, target.x - 0.1, target.y - 0.05, target.z));
+    stage.label('<b>o neurónio seguinte</b>recebeu um sinal: precisa de muitos', spot2(4.4, 0.2), s => s >= 3, '', spot2(2.75, -0.05));
   };
 
-  /* ---------- 12. rede: practise a path, and its connections grow ---------- */
-  SCENES.rede = box => {
-    const slide = box.closest('.slide'), out = slide.querySelector('output');
-    const world = new T.Group(), P = { in: V(-3.4, 0), a1: V(-1.2, 1.25), a2: V(1.1, 1.35), b1: V(-1.2, -1.25), b2: V(1.1, -1.35), c: V(0, 0.05), out: V(3.4, 0) };
-    const cell = mat(0x7FB0D0, { roughness: 0.5 });
-    Object.values(P).forEach(p => world.add(ball(0.27, cell, p.x, p.y, 0)));
-    const ROUTE = { A: ['in', 'a1', 'a2', 'out'], B: ['in', 'b1', 'b2', 'out'] };
-    const edges = [['in', 'a1'], ['a1', 'a2'], ['a2', 'out'], ['in', 'b1'], ['b1', 'b2'], ['b2', 'out'], ['in', 'c'], ['c', 'out'], ['a1', 'b2'], ['b1', 'a2']].map(([a, b]) => {
-      const m = mat(0x8A929A), from = P[a], to = P[b], mesh = new T.Mesh(new T.CylinderGeometry(1, 1, from.distanceTo(to), 10), m);
-      mesh.position.copy(from).lerp(to, 0.5); mesh.quaternion.setFromUnitVectors(V(0, 1, 0), to.clone().sub(from).normalize()); world.add(mesh);
-      return { a, b, w: 0.3, show: 0.3, mesh, m };
+  /**
+   * One synapse, seen very close: the end of an axon (above) with its vesicles, the cleft, and the membrane of the next
+   * neuron (below) with its receptors. release(n) empties n vesicles; update(dt, time) moves everything.
+   * short = true cuts the two stalks, for when the synapse is shown inside a round lens (the sea slug).
+   * After update: .bound = fraction of the transmitter that is on the receptors (0…1), and the receptors open in proportion.
+   */
+  function makeSynapse(colA, colB, short) {
+    const g = new T.Group(), rnd = lcg(31);
+    const shellA = mat(colA, { opacity: 0.3, depthWrite: false, side: T.DoubleSide }), solidA = mat(colA), shellB = mat(colB, { opacity: 0.34, depthWrite: false, side: T.DoubleSide, emissive: 0xFFD34E, emissiveIntensity: 0 }), solidB = mat(colB);
+    // above: a bulb cut flat underneath (the membrane that faces the cleft), hanging from its axon
+    const bulb = new T.Mesh(new T.SphereGeometry(1.5, 40, 24, 0, Math.PI * 2, 0, 2.62), shellA); bulb.position.y = 1.75;
+    const faceA = new T.Mesh(new T.CircleGeometry(0.75, 32), mat(colA, { opacity: 0.75, side: T.DoubleSide })); faceA.rotation.x = Math.PI / 2; faceA.position.y = 0.45;
+    g.add(bulb, faceA, tube(short ? [V(0, 3.2, 0), V(0.08, 3.7, 0), V(0.1, 4.2, 0)] : [V(0, 3.2, 0), V(0.15, 4.2, 0), V(-0.2, 5.6, 0)], 0.3, solidA, 12));
+    // below: the head of a dendritic spine, cut flat on top, on its thin neck
+    const head = new T.Mesh(new T.SphereGeometry(1.3, 40, 24, 0, Math.PI * 2, 0.52, Math.PI - 0.52), shellB); head.position.y = -1.18;
+    g.add(head, tube(short ? [V(0, -2.4, 0), V(-0.05, -3.0, 0), V(0, -3.6, 0)] : [V(0, -2.4, 0), V(-0.1, -3.2, 0), V(0.15, -4.4, 0)], 0.24, solidB, 12));
+    // receptors: channels across the lower membrane, closed until the transmitter binds
+    const recM = mat(0xF6F3EC, { roughness: 0.4 }), receptors = [[-0.42, 0.1], [0, -0.28], [0.42, 0.1], [-0.18, 0.36], [0.2, 0.4]].map(([x, z]) => {
+      const r = new T.Group(); r.position.set(x, -0.08, z);
+      const halves = [0, Math.PI].map(a => { const h = new T.Mesh(new T.CylinderGeometry(0.11, 0.11, 0.3, 14, 1, false, a + 0.25, Math.PI - 0.5), recM); r.add(h); return h; });
+      const plug = ball(0.075, recM); r.add(plug); g.add(r); return { r, halves, plug, x, z };
     });
-    const edge = (a, b) => edges.find(e => e.a === a && e.b === b);
-    const spark = makeSparks(world, 1, 0.16, COR.sinal)[0], weak = new T.Color(0x8A929A), strong = new T.Color(0xF0A673);
-    let run = null, trained = { A: 0, B: 0 };
-    const routeTime = r => ROUTE[r].slice(1).reduce((s, b, i) => { const e = edge(ROUTE[r][i], b); return s + (e.w < 0.08 ? Infinity : 0.45 / (0.25 + e.w)); }, 0);
-    const alive = () => edges.filter(e => e.w >= 0.08).length;
-    const say = s => { if (out) out.textContent = s; };
-    function practise(r) {
-      if (run) return;
-      if (!isFinite(routeTime(r))) return say(`O caminho ${r} foi podado: já não há ligação por aí.`);
-      run = { r, i: 0, t: 0 };
+    // vesicles full of transmitter, and the transmitter itself once it is out
+    const vesM = mat(0xBFEFC2, { opacity: 0.9 }), vesicles = Array.from({ length: 10 }, (_, i) => {
+      const home = V((rnd() - 0.5) * 1.5, 0.95 + rnd() * 1.6, (rnd() - 0.5) * 1.1), v = ball(0.19, vesM, home.x, home.y, home.z); g.add(v);
+      return { v, home, dock: V((i % 5 - 2) * 0.26, 0.62, ((i / 5 | 0) - 0.5) * 0.4), t: -1 };
+    });
+    const bits = makeSparks(g, 80, 0.05, 0x7BE38A).map(s => ({ s, t: -1, from: V(0, 0, 0), to: V(0, 0, 0) }));
+    // sodium waiting in the cleft; it enters when the receptors open
+    const na = makeSparks(g, 14, 0.065, 0xFF9F2E).map((s, i) => ({ s, home: V((i % 2 ? 1 : -1) * (0.95 + rnd() * 0.5), 0.15 + rnd() * 0.25, (rnd() - 0.5) * 1.2), in: V((rnd() - 0.5) * 1.2, -0.7 - rnd() * 0.9, (rnd() - 0.5) * 0.8), k: 0, rec: receptors[i % 5] }));
+    const syn = { group: g, bound: 0, charge: 0, full: 24 };       // full = how many molecules on the receptors count as «all of them»
+    syn.release = n => vesicles.filter(v => !v.go).slice(0, n).forEach((v, i) => { v.go = true; v.spilt = false; v.t = -i * 0.07; });
+    syn.update = (dt, time) => {
+      // a released vesicle goes to the membrane, opens, and comes back refilled a little later
+      for (const v of vesicles) {
+        if (!v.go) { v.v.position.copy(v.home); v.v.position.y += Math.sin(time * 1.3 + v.home.x * 9) * 0.03; v.v.scale.setScalar(1); continue; }
+        v.t += dt;
+        const k = v.t / 0.4;
+        if (k < 1) { v.v.position.copy(v.home).lerp(v.dock, ease(k)); v.v.scale.setScalar(1); }
+        else if (v.t < 0.6) {
+          v.v.scale.setScalar(Math.max(0.01, 1 - (v.t - 0.4) / 0.2));
+          if (!v.spilt) { v.spilt = true; let made = 0; for (const b of bits) if (b.t < 0 && made < 8) { made++; b.t = 0; b.from.copy(v.dock).setY(0.42); const r = receptors[(made + (v.dock.x * 10 | 0) + 50) % 5]; b.to.set(r.x + (rnd() - 0.5) * 0.16, -0.02 + rnd() * 0.06, r.z + (rnd() - 0.5) * 0.16); } }
+        } else if (v.t > 2.6) { v.go = false; v.spilt = false; v.t = -1; }
+        else v.v.scale.setScalar(v.t > 2.2 ? (v.t - 2.2) / 0.4 : 0.01), v.v.position.copy(v.home);
+      }
+      // the transmitter crosses the cleft (0.5 s), stays on a receptor (1.2 s), and is taken away
+      let on = 0;
+      for (const b of bits) {
+        if (b.t < 0) { b.s.visible = false; continue; }
+        b.t += dt; b.s.visible = true;
+        if (b.t < 0.5) b.s.position.copy(b.from).lerp(b.to, ease(b.t / 0.5)).add(V(Math.sin(b.t * 30 + b.to.x * 50) * 0.02, 0, 0));
+        else if (b.t < 1.7) { b.s.position.copy(b.to); on++; }
+        else if (b.t < 2.1) { b.s.position.copy(b.to).lerp(V(b.to.x * 2.6, 0.2, b.to.z * 2), (b.t - 1.7) / 0.4); b.s.material.opacity = 1 - (b.t - 1.7) / 0.4; }
+        else { b.t = -1; b.s.material.opacity = 1; }
+      }
+      syn.bound = toward(syn.bound, clamp(on / syn.full), dt, 8);
+      for (const r of receptors) { const o = syn.bound; r.halves[0].position.x = -0.035 * o; r.halves[1].position.x = 0.035 * o; r.plug.scale.setScalar(Math.max(0.01, 1 - o * 1.6)); }
+      // sodium flows in while the receptors are open, and is pumped back out afterwards
+      na.forEach((q, i) => {
+        q.k = toward(q.k, syn.bound > 0.25 + (i % 7) * 0.07 ? 1 : 0, dt, syn.bound > 0.2 ? 3 : 0.8); q.s.visible = true;
+        const top = V(q.rec.x, 0.12, q.rec.z), k = q.k;
+        q.s.position.copy(k < 0.5 ? q.home.clone().lerp(top, ease(k * 2)) : top.clone().lerp(q.in, ease(k * 2 - 1)));
+        if (k < 0.02) q.s.position.y += Math.sin(time * 2 + i) * 0.03;
+      });
+      syn.charge = toward(syn.charge, syn.bound, dt, 3); shellB.emissiveIntensity = syn.charge * 0.55;
+    };
+    return syn;
+  }
+
+  SCENES.sinapse = box => {
+    const world = new T.Group(), syn = makeSynapse(0x7FB0D0, 0xF0A673); world.add(syn.group);
+    const calcium = makeSparks(world, 8, 0.06, 0xCFE6FF), impulse = makeSparks(world, 1, 0.2, COR.sinal)[0];
+    let fired = -1, mv = null, shownMv = '';
+    const stage = makeStage(box, (step, dt, time, since) => {
+      cam(step, dt, time);
+      const T0 = 5.5, t = step >= 1 ? since % T0 : -1, cycle = Math.floor(since / T0);
+      // the impulse comes down the axon; calcium enters; the vesicles open
+      impulse.visible = t >= 0 && t < 0.7; if (impulse.visible) impulse.position.set(0, 5.4 - t / 0.7 * 3.2, 0.3);
+      calcium.forEach((c, i) => { const k = (t - 0.6 - (i % 4) * 0.05) / 0.5, side = i % 2 ? 1 : -1; c.visible = t >= 0 && k > 0 && k < 1.6; if (c.visible) { c.position.set(side * lerp(2.3, 0.7, ease(clamp(k))), 1.1 + (i / 2 | 0) * 0.22, 0.3); c.material.opacity = clamp(1.6 - k); } });
+      if (t > 0.95 && fired !== cycle && step >= 1) { fired = cycle; syn.release(4); som.passo(); }
+      if (step < 1) fired = -1;
+      syn.update(dt, time);
+      const txt = Math.round(-70 + 8 * syn.charge) + ' mV'; if (mv && txt !== shownMv) { shownMv = txt; mv.innerHTML = `<b>${txt}</b>dentro da espinha`; }
+    });
+    if (!stage) return;
+    stage.scene.add(world);
+    const cam = director(stage.camera, [{ at: V(0, 0.75, 0), from: V(0, 1.6, 14.5) }, { at: V(0, 1.15, 0), from: V(0, 1.8, 12.5) }, { at: V(0, -0.45, 0), from: V(0, 0.5, 10.5) }, { at: V(0, 0.75, 0), from: V(0, 1.6, 14.5) }], 1.2);
+    const at = (x, y, z) => spot(world, x, y, z);
+    stage.label('<b>fim do axónio</b>de um neurónio', at(-4.6, 2.5), s => s === 0 || s === 3, '', at(-1.25, 2.3));
+    stage.label('<b>vesículas</b>cheias de neurotransmissor', at(4.7, 2.5), s => s <= 1, '', at(0.6, 1.9));
+    stage.label('<b>fenda</b>20 milionésimos de milímetro', at(-4.8, 0.65), s => s === 0, '', at(-0.62, 0.2));
+    stage.label('<b>recetores</b>canais fechados', at(4.4, 0.75), s => s === 0, '', at(0.5, -0.02));
+    stage.label('<b>espinha da dendrite</b>do neurónio seguinte', at(4.6, -1.0), s => s === 0, '', at(1.1, -1.1));
+    stage.label('<b>1 · chega o impulso</b>entra cálcio', at(-4.2, 2.6), s => s === 1, 'conceito azul', at(-1.45, 1.5));
+    stage.label('<b>2 · as vesículas abrem-se</b>e largam o neurotransmissor', at(-4.4, 0.55), s => s === 1, 'conceito', at(-0.5, 0.48));
+    stage.label('<b>3 · o neurotransmissor encaixa</b>e o recetor abre', at(-3.9, 0.55), s => s === 2, 'conceito', at(-0.5, 0.0));
+    stage.label('<b>4 · entra sódio (Na⁺)</b>cargas positivas', at(3.6, 0.6), s => s === 2, 'conceito', at(0.75, -0.75));
+    mv = stage.label('', at(3.3, -1.45), s => s >= 2, '');
+  };
+
+  /* --- the action potential: sodium in, potassium out --- */
+  /** Voltage inside the axon (millivolts) at time t of the cycle (seconds, slow motion). */
+  const AP = t => t < 0.6 ? -70 : t < 1.0 ? lerp(-70, -55, ease((t - 0.6) / 0.4)) : t < 1.45 ? lerp(-55, 40, ease((t - 1.0) / 0.45)) : t < 2.3 ? lerp(40, -78, ease((t - 1.45) / 0.85)) : t < 3.2 ? lerp(-78, -70, ease((t - 2.3) / 0.9)) : -70;
+  SCENES.potencial = box => {
+    const slide = box.closest('.slide'), plot = slide.querySelector('canvas.pot');
+    const world = new T.Group(), rnd = lcg(77), M4 = new T.Matrix4();
+    // the membrane: two layers of lipids, seen from the side; outside the cell is above, the inside of the axon below
+    const CH = [[-3.6, 'na', 0], [-2.3, 'k', 0], [-0.6, 'na', 1], [0.7, 'k', 1], [2.4, 'na', 2], [3.7, 'k', 2]];
+    const heads = []; for (let x = -5.6; x <= 5.6; x += 0.27) for (let z = -0.95; z <= 0.95; z += 0.27) if (!CH.some(c => Math.abs(c[0] - x) < 0.42 && Math.abs(z) < 0.42)) heads.push([x, z]);
+    for (const y of [0.3, -0.3]) { const inst = new T.InstancedMesh(new T.SphereGeometry(0.115, 10, 8), mat(0xE9D7B8, { roughness: 0.5 }), heads.length); heads.forEach(([x, z], i) => { M4.makeTranslation(x, y, z); inst.setMatrixAt(i, M4); }); world.add(inst); }
+    world.add(box3(11.4, 0.42, 2.1, mat(0xB58E63, { opacity: 0.55 }), 0, 0, 0));
+    const inside = box3(11.4, 3.2, 2.1, mat(0x4A6A8A, { opacity: 0.22, depthWrite: false }), 0, -2.0, 0); world.add(inside);
+    const cold = new T.Color(0x4A6A8A), warm = new T.Color(0xF0A040);
+    // channels: sodium (orange) and potassium (violet), each with a gate that closes the pore
+    const COL = { na: 0xF08A3C, k: 0x9C8CFF }, channels = CH.map(([x, kind, group]) => {
+      const g = new T.Group(); g.position.set(x, 0, 0); const m = mat(COL[kind], { roughness: 0.45, side: T.DoubleSide });
+      const halves = [0, Math.PI].map(a => { const h = new T.Mesh(new T.CylinderGeometry(0.36, 0.3, 1.05, 18, 1, true, a + 0.2, Math.PI - 0.4), m); g.add(h); return h; });
+      const gate = ball(0.22, m, 0, -0.1, 0); g.add(gate); world.add(g); return { g, halves, gate, kind, group, x, open: 0 };
+    });
+    // ions: sodium mostly outside, potassium mostly inside; each one knows the channel it will cross by
+    const ions = [];
+    for (const kind of ['na', 'k']) { const sp = makeSparks(world, 46, 0.12, kind === 'na' ? 0xFF9F2E : 0xA99BFF), chs = channels.filter(c => c.kind === kind);
+      sp.forEach((s, i) => { const out = kind === 'na' ? i < 40 : i >= 40, side = out ? 1 : -1, home = V((rnd() - 0.5) * 10.6, side * (0.9 + rnd() * 1.9), (rnd() - 0.5) * 1.6);
+        const ch = chs.reduce((b, c) => (Math.abs(c.x - home.x) < Math.abs(b.x - home.x) ? c : b)), moves = (kind === 'na') === out && Math.abs(ch.x - home.x) < 1.5 && rnd() < 0.75;
+        s.visible = true; ions.push({ s, kind, home, ch, moves, lag: rnd() * 0.3, far: V(ch.x + (rnd() - 0.5) * 1.6, -side * (1.0 + rnd() * 1.5), (rnd() - 0.5) * 1.4), side }); }); }
+    const band = box3(0.9, 3.1, 2.0, new T.MeshBasicMaterial({ color: 0xFFD98A, transparent: true, opacity: 0, depthWrite: false }), 0, -2.0, 0); world.add(band);
+    /* --- the plot beside the stage: the voltage inside the axon, drawn as the cycle goes --- */
+    function draw(step, t) {
+      if (!plot) return;
+      const g = plot.getContext('2d'), W = plot.width, Hh = plot.height, L = 104, X = s => L + s / 3.6 * (W - L - 34), Y = v => 58 + (40 - v) / 118 * (Hh - 150);
+      g.clearRect(0, 0, W, Hh); g.lineCap = 'round'; g.lineJoin = 'round'; g.textBaseline = 'middle';
+      // three levels to read: the peak, the threshold and rest (large type: the canvas is shown at about half its size)
+      g.font = 'bold 32px Carlito, Calibri, sans-serif'; g.textAlign = 'right';
+      for (const [v, name, dash] of [[40, '+40', 0], [-55, '−55', 1], [-70, '−70', 0]]) {
+        g.fillStyle = '#1E2A33'; g.fillText(name, L - 12, Y(v) + (v === -70 ? 9 : v === -55 ? -7 : 0)); g.strokeStyle = dash ? '#A44A16' : '#C9D1D8'; g.lineWidth = dash ? 3 : 2; g.setLineDash(dash ? [10, 9] : []); g.beginPath(); g.moveTo(L, Y(v)); g.lineTo(W - 20, Y(v)); g.stroke(); }
+      g.setLineDash([]); g.textAlign = 'right'; g.font = 'bold 28px Carlito, Calibri, sans-serif';
+      g.fillStyle = '#A44A16'; g.fillText('limiar', W - 22, Y(-55) - 20); g.fillStyle = '#6F7880'; g.fillText('repouso', W - 22, Y(-70) + 24);
+      g.strokeStyle = '#1E2A33'; g.lineWidth = 4; g.beginPath(); g.moveTo(L, 34); g.lineTo(L, Hh - 64); g.lineTo(W - 16, Hh - 64); g.stroke();
+      g.fillStyle = '#1E2A33'; g.textAlign = 'left'; g.fillText('milivolts', L + 12, 22);
+      g.textAlign = 'center'; g.fillText('tempo: cerca de 2 milésimos de segundo →', (W + L) / 2, Hh - 30);
+      // the curve so far: orange while sodium enters, violet while potassium leaves
+      const upto = step === 0 ? 0.55 : t;
+      for (const [a, b, color] of [[0, 1.0, '#6F7880'], [1.0, 1.45, '#E0731A'], [1.45, 2.3, '#7A66F0'], [2.3, 3.6, '#6F7880']]) {
+        if (upto <= a) break; g.strokeStyle = color; g.lineWidth = 9; g.beginPath();
+        for (let s = a; s <= Math.min(b, upto) + 0.001; s += 0.02) { const x = X(s), y = Y(AP(s)); s === a ? g.moveTo(x, y) : g.lineTo(x, y); } g.stroke();
+      }
+      g.fillStyle = '#1E2A33'; g.beginPath(); g.arc(X(upto), Y(AP(upto)), 12, 0, 7); g.fill();
+      g.font = 'bold 34px Carlito, Calibri, sans-serif';
+      if (upto > 1.1 && step >= 1) { g.textAlign = 'right'; g.fillStyle = '#E0731A'; g.fillText('entra', X(1.2) - 10, Y(8)); g.fillText('sódio', X(1.2) - 10, Y(-13)); }
+      if (upto > 1.8 && step >= 2) { g.textAlign = 'left'; g.fillStyle = '#7A66F0'; g.fillText('sai', X(1.95) + 18, Y(8)); g.fillText('potássio', X(1.95) + 18, Y(-13)); }
     }
-    stage0();
-    function stage0() { say('Escolhe um caminho e pratica-o várias vezes. Repara na grossura das ligações e no tempo do sinal.'); }
-    slide.querySelector('[data-act="a"]').addEventListener('click', () => practise('A'));
-    slide.querySelector('[data-act="b"]').addEventListener('click', () => practise('B'));
-    slide.querySelector('[data-act="tempo"]').addEventListener('click', () => {
-      // months without practice: every connection weakens; the weakest are pruned
-      edges.forEach(e => { e.w = Math.max(0, e.w - 0.11); });
-      say(`Passaram meses sem praticar: ficam ${alive()} de 10 ligações. As que não se usam são podadas.`);
+    const stage = makeStage(box, (step, dt, time, since) => {
+      cam(0, dt, time);
+      const T0 = step === 1 ? 4.2 : 5.6, raw = step >= 1 ? since % T0 : 0, t = step === 1 ? Math.min(raw, 1.45) : raw;       // step 1 stops at the peak
+      const local = c => step >= 3 ? t - c.group * 0.45 + 0.45 : t;                 // step 3: the three stretches of membrane fire one after the other
+      for (const c of channels) {
+        const tl = local(c), want = c.kind === 'na' ? (tl > 1.0 && tl < 1.6 ? 1 : 0) : (tl > 1.5 && tl < 2.5 ? 1 : 0);
+        c.open = toward(c.open, want, dt, 14); c.halves[0].position.x = -0.1 * c.open; c.halves[1].position.x = 0.1 * c.open; c.gate.scale.setScalar(Math.max(0.01, 1 - c.open));
+      }
+      for (const q of ions) {
+        const tl = local(q.ch), start = q.kind === 'na' ? 1.02 : 1.55, back = step >= 2 ? clamp((tl - 3.3 - q.lag) / 1.2) : raw > 3.6 ? clamp((raw - 3.6) / 0.5) : 0;
+        const k = q.moves ? clamp((tl - start - q.lag) / 0.45) * (1 - ease(back)) : 0, top = V(q.ch.x, q.side * 0.75, 0), bot = V(q.ch.x, -q.side * 0.75, 0);
+        const p = k < 0.35 ? q.home.clone().lerp(top, ease(k / 0.35)) : k < 0.65 ? top.clone().lerp(bot, (k - 0.35) / 0.3) : bot.clone().lerp(q.far, ease((k - 0.65) / 0.35));
+        p.x += Math.sin(time * 1.7 + q.home.x * 7) * 0.05; p.y += Math.cos(time * 1.3 + q.home.y * 5) * 0.05; q.s.position.copy(p);
+      }
+      const v = AP(t); inside.material.color.copy(cold).lerp(warm, clamp((v + 70) / 110));
+      // step 3: a band of light shows where along the axon the inside is positive at this moment
+      const wave = step >= 3 ? (t - 0.75) / 1.35 : -1; band.material.opacity = wave > 0 && wave < 1 ? 0.35 : 0; band.position.x = lerp(-4.6, 4.6, clamp(wave));
+      draw(step, Math.min(t, 3.6));
     });
-    slide.querySelector('[data-act="repor"]').addEventListener('click', () => { edges.forEach(e => (e.w = 0.3)); trained = { A: 0, B: 0 }; run = null; stage0(); });
+    if (!stage) return;
+    stage.scene.add(world);
+    const cam = director(stage.camera, [{ at: V(0, 0.4, 0), from: V(0, 2.2, 14.5) }], 1.6);
+    const at = (x, y) => spot(world, x, y, 0.9);
+    // names of the two sides at the left; what is happening, under the membrane at the right
+    stage.label('<b>fora do neurónio</b>muito sódio (Na⁺)', at(-3.6, 3.7), () => true);
+    stage.label('<b>dentro do axónio</b>muito potássio (K⁺)', at(-3.6, -3.05), () => true);
+    stage.label('canal de sódio', at(-0.6, 2.5), s => s <= 1 || s === 3, 'peq', at(-0.6, 0.62));
+    stage.label('canal de potássio', at(3.7, 2.5), s => s === 0 || s >= 2, 'peq', at(3.7, 0.62));
+    stage.label('<b>canais fechados</b>em repouso', at(3.0, -3.05), s => s === 0, 'conceito azul');
+    stage.label('<b>o sódio entra</b>o interior fica positivo', at(3.0, -3.05), s => s === 1, 'conceito');
+    stage.label('<b>o potássio sai</b>o interior volta a negativo', at(2.9, -3.05), s => s === 2, 'conceito azul');
+    stage.label('<b>a onda avança</b>cada troço dispara o seguinte', at(2.9, -3.05), s => s >= 3, 'conceito');
+  };
+
+  /* ---------- 15. hebb: neurons that fire together wire together (a student learns a new way to school) ---------- */
+  SCENES.hebb = box => {
+    const slide = box.closest('.slide'), say = sayIn(slide), state = slide.querySelector('.estado'), map = slide.querySelector('canvas.mapa');
+    const PLACES = [{ nome: 'casa', cor: 0x8FC4E8, m: [0.14, 0.78] }, { nome: 'café', cor: 0x7BB98A, m: [0.4, 0.3] }, { nome: 'jardim', cor: 0xE58FB5, m: [0.66, 0.7] }, { nome: 'escola', cor: 0xF2C14E, m: [0.88, 0.24] }];
+    const world = new T.Group(), rnd = lcg(41), cells = [], links = [];
+    // one group of neurons for each place on the way
+    PLACES.forEach((p, a) => { p.c = V(-4.2 + a * 2.8, a % 2 ? 0.9 : -0.7, 0); p.cells = []; p.fire = 0;
+      for (let i = 0; i < 11; i++) { const pos = p.c.clone().add(V((rnd() - 0.5) * 1.7, (rnd() - 0.5) * 1.7, (rnd() - 0.5) * 1.5)), m = mat(p.cor, { roughness: 0.45, emissive: p.cor, emissiveIntensity: 0 }), s = ball(0.17, m, pos.x, pos.y, pos.z); world.add(s); const c = { pos, m, s, a, lit: 0 }; cells.push(c); p.cells.push(c); } });
+    // connections: within a group (already there), from one group to the next (weak at first), and a few stray ones
+    const edge = (a, b, kind, k) => { const m = mat(0x8A929A, { opacity: 0.5 }), mesh = new T.Mesh(new T.CylinderGeometry(1, 1, a.pos.distanceTo(b.pos), 6), m);
+      mesh.position.copy(a.pos).lerp(b.pos, 0.5); mesh.quaternion.setFromUnitVectors(V(0, 1, 0), b.pos.clone().sub(a.pos).normalize()); world.add(mesh); links.push({ a, b, kind, k, mesh, m, show: 0 }); };
+    PLACES.forEach((p, a) => { for (let i = 0; i < 11; i++) edge(p.cells[i], p.cells[(i + 3) % 11], 'dentro', a);
+      if (a < 3) for (let i = 0; i < 9; i++) edge(p.cells[i], PLACES[a + 1].cells[(i * 4 + a) % 11], 'caminho', a); });
+    for (let i = 0; i < 7; i++) edge(PLACES[i % 2 ? 0 : 1].cells[i], PLACES[i % 2 ? 2 : 3].cells[i + 2], 'solta', i);
+    const w = [0.12, 0.12, 0.12], sparks = makeSparks(world, 9, 0.09, COR.sinal); let stray = 1, walks = 0, run = null;
+    const grey = new T.Color(0x8A929A), hot = new T.Color(0xFFB45A);
+    const report = s => { say(s); if (state) state.textContent = `feito ${walks} ${walks === 1 ? 'vez' : 'vezes'} · ligações a ${Math.round((w[0] + w[1] + w[2]) / 3 * 100)}\u00A0%`; };
+    function stageless() { report('Façam o caminho, de casa até à escola.'); }
+    slide.querySelector('[data-act="andar"]').addEventListener('click', () => { if (!run) run = { kind: 'andar', t: 0 }; });
+    slide.querySelector('[data-act="lembrar"]').addEventListener('click', () => { if (!run) run = { kind: 'lembrar', t: 0, reach: 0 }; });
+    slide.querySelector('[data-act="tempo"]').addEventListener('click', () => { for (let i = 0; i < 3; i++) w[i] = Math.max(0.05, w[i] * 0.72); stray = Math.max(0, stray - 0.5); report('Semanas sem o fazer: as ligações enfraquecem.'); });
+    slide.querySelector('[data-act="repor"]').addEventListener('click', () => { w.fill(0.12); stray = 1; walks = 0; run = null; stageless(); });
+    stageless();
+    /* --- the map beside the stage: the way from home to school, and where the student is --- */
+    let where = 0, known = 0;
+    function drawMap(time) {
+      if (!map) return; const g = map.getContext('2d'), W = map.width, Hh = map.height, P = p => [p.m[0] * W, p.m[1] * Hh];
+      g.clearRect(0, 0, W, Hh); g.lineCap = 'round';
+      g.strokeStyle = '#E4E9EE'; g.lineWidth = 26; for (const y of [0.24, 0.5, 0.76]) { g.beginPath(); g.moveTo(0, y * Hh); g.lineTo(W, y * Hh); g.stroke(); } for (const x of [0.14, 0.4, 0.66, 0.88]) { g.beginPath(); g.moveTo(x * W, 0); g.lineTo(x * W, Hh); g.stroke(); }
+      for (let i = 0; i < 3; i++) { const a = P(PLACES[i]), b = P(PLACES[i + 1]); g.strokeStyle = `rgba(164, 74, 22, ${0.18 + 0.82 * w[i]})`; g.lineWidth = 5 + 11 * w[i]; g.setLineDash(w[i] < 0.5 ? [4, 16] : []); g.beginPath(); g.moveTo(a[0], a[1]); g.lineTo(b[0], b[1]); g.stroke(); }
+      g.setLineDash([]); g.textAlign = 'center'; g.font = 'bold 38px Carlito, Calibri, sans-serif';
+      PLACES.forEach((p, i) => { const [x, y] = P(p); g.fillStyle = '#' + p.cor.toString(16).padStart(6, '0'); g.strokeStyle = '#1E2A33'; g.lineWidth = 4; g.beginPath(); g.arc(x, y, 24 + 8 * p.fire, 0, 7); g.fill(); g.stroke(); g.fillStyle = '#1E2A33'; g.fillText(p.nome, x, y + (i % 2 ? -50 : 64)); });
+      const i = Math.min(2, Math.floor(where)), f = where - i, a = P(PLACES[i]), b = P(PLACES[i + 1]), x = lerp(a[0], b[0], f), y = lerp(a[1], b[1], f) + Math.sin(time * 9) * 3;
+      g.fillStyle = '#1E2A33'; g.beginPath(); g.arc(x, y - 40, 15, 0, 7); g.fill(); g.fillRect(x - 12, y - 25, 24, 34);                       // the student
+    }
     const stage = makeStage(box, (step, dt, time) => {
       cam(0, dt, time);
-      for (const e of edges) {
-        e.show = toward(e.show, e.w, dt, 5);
-        const r = 0.015 + 0.085 * e.show; e.mesh.scale.set(r, 1, r); e.mesh.visible = e.show > 0.05;
-        e.m.color.copy(weak).lerp(strong, clamp((e.show - 0.3) / 0.6)); e.m.opacity = clamp(e.show * 5);
+      PLACES.forEach(p => (p.want = 0)); let lit = [0, 0, 0];
+      if (run && run.kind === 'andar') {
+        // 1.6 s from each place to the next; near a place its neurons fire, and between two places both groups fire together
+        run.t += dt; where = clamp(run.t / 1.6, 0, 3);
+        PLACES.forEach((p, a) => (p.want = clamp(1.25 - Math.abs(where - a) * 1.5)));
+        for (let i = 0; i < 3; i++) { const both = Math.min(PLACES[i].want, PLACES[i + 1].want); lit[i] = both; if (both > 0.3) w[i] = Math.min(1, w[i] + dt * 0.22 * (1 - w[i]) * 2.2); }
+        if (run.t > 5.4) { run = null; walks++; where = 0; report('Chegou à escola.'); }
+      } else if (run) {
+        // remembering: only «casa» is given; each group wakes the next one if the connection between them is strong enough
+        run.t += dt; let reach = 0; for (let i = 0; i < 3 && w[i] > 0.5; i++) reach = i + 1;
+        PLACES.forEach((p, a) => (p.want = a <= reach ? clamp(1.3 - Math.abs(run.t / 0.9 - a) * 1.2) : 0)); for (let i = 0; i < reach; i++) lit[i] = Math.min(PLACES[i].want, PLACES[i + 1].want);
+        where = Math.min(reach, run.t / 0.9);
+        if (run.t > 0.9 * reach + 1.4) { run = null; where = 0; report(reach === 3 ? 'Lembrou-se de tudo: <b>já sabe o caminho</b>.' : reach === 0 ? 'Não veio mais nada: ainda não sabe o caminho.' : `Lembrou-se até ${reach === 1 ? 'ao café' : 'ao jardim'}; depois perdeu-se.`); }
       }
-      spark.visible = !!run;
-      if (run) {
-        const nodes = ROUTE[run.r], e = edge(nodes[run.i], nodes[run.i + 1]), dur = 0.45 / (0.25 + e.w);
-        run.t += dt; spark.position.copy(P[nodes[run.i]]).lerp(P[nodes[run.i + 1]], clamp(run.t / dur));
-        if (run.t >= dur) {
-          run.t = 0; run.i++; som.passo();
-          if (run.i >= nodes.length - 1) {
-            // «neurons that fire together wire together»: every connection on the path gets stronger
-            nodes.slice(1).forEach((b, i) => { const x = edge(nodes[i], b); x.w = Math.min(1, x.w + 0.14); });
-            trained[run.r]++;
-            say(`Caminho ${run.r}: ${trained[run.r]} ${trained[run.r] === 1 ? 'treino' : 'treinos'}. O sinal demora agora ${routeTime(run.r).toFixed(1).replace('.', ',')} s a chegar.`);
-            run = null;
-          }
-        }
-      }
+      for (const p of PLACES) p.fire = toward(p.fire, p.want, dt, 9);
+      for (const c of cells) { c.lit = Math.random() < PLACES[c.a].fire * dt * 9 ? 1 : Math.max(0, c.lit - dt * 5); c.m.emissiveIntensity = c.lit * 0.9; c.s.scale.setScalar(1 + c.lit * 0.35); }
+      links.forEach((l, i) => {
+        const goal = l.kind === 'dentro' ? 0.5 : l.kind === 'caminho' ? w[l.k] : 0.18 * stray; l.show = toward(l.show, goal, dt, 5);
+        const r = 0.008 + 0.05 * l.show; l.mesh.scale.set(r, 1, r); l.mesh.visible = l.show > 0.02;
+        const on = l.kind === 'caminho' ? lit[l.k] : l.kind === 'dentro' ? PLACES[l.k].fire * 0.5 : 0; l.m.color.copy(grey).lerp(hot, clamp(Math.max(on, l.kind === 'caminho' ? (l.show - 0.3) : 0))); l.m.opacity = 0.25 + 0.75 * clamp(l.show * 1.4);
+      });
+      sparks.forEach((s, i) => { const k = i % 3, l = links.filter(x => x.kind === 'caminho' && x.k === k)[(i / 3 | 0) * 2], ph = (time * 1.6 + i * 0.37) % 1; s.visible = lit[k] > 0.3; if (s.visible) s.position.copy(l.a.pos).lerp(l.b.pos, ph); });
+      drawMap(time);
     });
     if (!stage) return;
     stage.scene.add(world);
-    const cam = director(stage.camera, [{ at: V(0, 0, 0), from: V(0, 0.6, 12) }], 1.7);
-    const pin = (p, dy) => { const o = new T.Object3D(); o.position.set(p.x, p.y + dy, 0); world.add(o); return o; };
-    stage.label('<b>entrada</b>', pin(P.in, 0.45), () => true); stage.label('<b>saída</b>', pin(P.out, 0.45), () => true);
-    stage.label('caminho A', pin(P.a1, 0.45), () => true, 'peq'); stage.label('caminho B', pin(P.b1, -0.4), () => true, 'peq baixo');
+    const cam = director(stage.camera, [{ at: V(0, 0.15, 0), from: V(0, 1.2, 14) }], 1.55);
+    PLACES.forEach((p, a) => stage.label(`<b>${p.nome}</b>`, spot(world, p.c.x + (a % 2 ? 0.9 : 0), p.c.y + (a % 2 ? 1.2 : -1.25), 0), () => true, a % 2 ? '' : 'baixo'));
+    stage.label('<b>disparam juntos → ligam-se</b>', spot(world, 0, 2.7, 0), () => !!run && run.kind === 'andar', 'conceito');
   };
-
-  /* ---------- 13. lesma: Kandel's sea slug (Aplysia) ---------- */
+  /* ---------- 16. lesma: Kandel's sea slug (Aplysia) at three scales: the animal, the circuit, the synapse ---------- */
+  /** A canvas painted with blotches, used as skin (and as its relief). */
+  function blotchTexture(base, dark, light, seed) {
+    const c = document.createElement('canvas'); c.width = 512; c.height = 256; const g = c.getContext('2d'), rnd = lcg(seed);
+    g.fillStyle = base; g.fillRect(0, 0, 512, 256);
+    for (let i = 0; i < 260; i++) { const x = rnd() * 512, y = rnd() * 256, r = 4 + rnd() * 22; g.globalAlpha = 0.10 + rnd() * 0.3; g.fillStyle = rnd() < 0.72 ? dark : light; g.beginPath(); g.ellipse(x, y, r, r * (0.5 + rnd() * 0.6), rnd() * 3, 0, 7); g.fill(); }
+    for (let i = 0; i < 900; i++) { g.globalAlpha = 0.25 + rnd() * 0.4; g.fillStyle = rnd() < 0.5 ? dark : light; g.fillRect(rnd() * 512, rnd() * 256, 2, 2); }
+    const t = new T.CanvasTexture(c); t.wrapS = t.wrapT = T.RepeatWrapping; if ('colorSpace' in t) t.colorSpace = T.SRGBColorSpace; return t;
+  }
+  /** A sphere pulled into another shape: fn(x, y, z) of the unit sphere → [x, y, z]. */
+  function shaped(fn, material) {
+    const g = new T.SphereGeometry(1, 56, 36), p = g.getAttribute('position');
+    for (let i = 0; i < p.count; i++) { const v = fn(p.getX(i), p.getY(i), p.getZ(i)); p.setXYZ(i, v[0], v[1], v[2]); }
+    g.computeVertexNormals(); return new T.Mesh(g, material);
+  }
   SCENES.lesma = box => {
-    const slide = box.closest('.slide'), bars = slide.querySelector('.sustos'), out = slide.querySelector('output');
-    const world = new T.Group(), skin = mat(0x7A4658, { roughness: 0.55 }), pale = mat(0xA8667A, { roughness: 0.5 });
-    const part = (m, s, p) => { const b = ball(1, m, p[0], p[1], p[2]); b.scale.set(s[0], s[1], s[2]); world.add(b); return b; };
-    part(skin, [2.1, 0.62, 0.95], [-1.6, 0, 0]); part(skin, [0.7, 0.5, 0.6], [-3.7, 0.12, 0]);                      // body and head
-    part(pale, [1.25, 0.34, 0.3], [-1.3, 0.5, 0.62]); part(pale, [1.25, 0.34, 0.3], [-1.3, 0.5, -0.62]);             // the two flaps of the mantle
-    for (const [x, z, h] of [[-4.0, 0.25, 0.55], [-4.0, -0.25, 0.55], [-4.35, 0.3, 0.3], [-4.35, -0.3, 0.3]]) { const c = new T.Mesh(new T.ConeGeometry(0.1, h, 10), skin); c.position.set(x, 0.45 + h / 2, z); world.add(c); }
-    const gill = new T.Group(); gill.position.set(-1.1, 0.55, 0); world.add(gill);
-    const gillMat = mat(0xF2A7B5, { roughness: 0.45 });
-    for (let i = 0; i < 9; i++) { const leaf = new T.Mesh(new T.ConeGeometry(0.13, 0.75, 8), gillMat); const a = (i - 4) * 0.2; leaf.position.set(Math.sin(a) * 0.5, 0.3, (i % 3 - 1) * 0.16); leaf.rotation.z = -a; leaf.scale.z = 0.5; gill.add(leaf); }
-    const siphon = new T.Mesh(new T.CylinderGeometry(0.16, 0.22, 0.7, 14, 1, true), mat(0x9A5A6E, { side: T.DoubleSide })); siphon.position.set(0.25, 0.62, 0); siphon.rotation.z = -0.5; world.add(siphon);
-    const sand = new T.Mesh(new T.CircleGeometry(7, 48), mat(0x5B6773, { roughness: 1 })); sand.rotation.x = -Math.PI / 2; sand.position.y = -0.62; world.add(sand);
-    const brush = new T.Group(); brush.add(new T.Mesh(new T.CylinderGeometry(0.035, 0.035, 2.2, 8), mat(0xDDD5C6))); const tip = ball(0.09, mat(0xF6F3EC), 0, -1.1, 0); brush.add(tip); brush.rotation.z = -0.5; world.add(brush);
-    // the synapse behind the reflex, drawn large on the right
-    const sens = mat(0x7FB0D0), motor = mat(0xF0A673), syn = V(3.6, 0.55, 0);
-    world.add(tube([V(3.0, 2.3, 0), V(3.45, 1.5, 0), syn.clone().add(V(0, 0.45, 0))], 0.08, sens, 14), ball(0.36, sens, syn.x, syn.y + 0.42, 0));
-    const postM = ball(0.42, motor, syn.x, syn.y - 0.52, 0); postM.scale.set(1.3, 0.5, 1.2); world.add(postM, tube([syn.clone().add(V(0, -0.6, 0)), V(3.75, -0.2, 0), V(4.3, -0.55, 0)], 0.08, motor, 14));
-    const drops = makeSparks(world, 14, 0.05, COR.sinal);
-    let n = 0, boost = 1, touchT = 9, r = 0, shown = 0;
+    const slide = box.closest('.slide'), bars = slide.querySelector('.sustos'), say = sayIn(slide);
+    const world = new T.Group(), animal = new T.Group(); world.add(animal);
+    const skinTex = blotchTexture('#6E4B3C', '#2E1B17', '#B98F6C', 3), phys = (extra) => new T.MeshPhysicalMaterial(Object.assign({ map: skinTex, bumpMap: skinTex, bumpScale: 0.6, roughness: 0.42, clearcoat: 0.75, clearcoatRoughness: 0.3, transparent: true }, extra));
+    const skin = phys({}), flap = phys({ color: 0xE9C9B4, side: T.DoubleSide }), mantleM = phys({ color: 0xD9A7A0 }), gillM = mat(0xE98FA0, { roughness: 0.45, side: T.DoubleSide }), fades = [skin, flap, mantleM, gillM];
+    /* --- the animal: head to the left, tail to the right, about 5 units long (a real one: some 15 centimetres) --- */
+    const wrinkle = (x, z) => 1 + 0.035 * Math.sin(x * 23 + z * 7) + 0.025 * Math.sin(z * 31 - x * 11);
+    animal.add(shaped((x, y, z) => { const k = wrinkle(x, z); return [x * 2.45, (y < 0 ? y * 0.28 : y * (0.74 + 0.26 * Math.exp(-(((x - 0.1) / 0.55) ** 2)))) * k + 0.3, z * 0.98 * (1 + 0.1 * x) * k]; }, skin));          // body, flat underneath
+    const neck = shaped((x, y, z) => [x * 1.05 - 2.75, (y < 0 ? y * 0.3 : y * 0.52) * wrinkle(x, z) + 0.42 + 0.12 * -x, z * 0.56 * wrinkle(z, x)], skin); animal.add(neck);
+    for (const s of [1, -1]) {
+      const rhino = shaped((x, y, z) => [x * 0.1 * (1.2 - y) - 3.05 + y * -0.06, y * 0.34 + 1.22, z * 0.13 * (1.25 - y) + s * 0.21], skin), oral = shaped((x, y, z) => [x * 0.36 - 3.78, y * 0.13 + 0.36 + x * 0.05, z * 0.2 + s * (0.3 - x * 0.12)], skin);
+      animal.add(rhino, oral, ball(0.03, mat(0x0E0E10), -3.4, 0.86, s * 0.2));
+      // parapodia: the two «wings» that rise from the sides and fold over the back
+      const gp = new T.PlaneGeometry(1, 1, 30, 8), pp = gp.getAttribute('position');
+      for (let i = 0; i < pp.count; i++) { const u = pp.getX(i) + 0.5, v = pp.getY(i) + 0.5, x = -1.55 + u * 3.2, wide = Math.sin(Math.PI * clamp(u * 0.9 + 0.05));
+        pp.setXYZ(i, x, 0.35 + wide * (0.95 * Math.sin(v * 1.75)) + 0.05 * Math.sin(u * 28) * v, s * (0.98 - 0.62 * v * v * wide + 0.05 * Math.sin(u * 19 + 1) * v) * (0.75 + 0.25 * wide)); }
+      gp.computeVertexNormals(); animal.add(new T.Mesh(gp, flap));
+    }
+    animal.add(shaped((x, y, z) => [x * 1.0 + 0.1, y * 0.24 + 0.98, z * 0.5], mantleM));                                    // the mantle, a soft roof over the gill
+    const gill = new T.Group(); gill.position.set(0.55, 0.86, 0.34); animal.add(gill);
+    for (let i = 0; i < 13; i++) { const a = (i - 6) * 0.17, leaf = shaped((x, y, z) => [x * 0.07, y * 0.34 + 0.3, z * 0.035 + 0.05 * Math.sin(y * 6)], gillM); leaf.rotation.set(0.5 + (i % 2) * 0.15, 0, -a); leaf.position.set(Math.sin(a) * 0.55, 0, (i % 3 - 1) * 0.06); gill.add(leaf); }
+    const siphon = new T.Mesh(new T.LatheGeometry([[0.13, 0], [0.15, 0.25], [0.19, 0.5], [0.27, 0.66]].map(p => new T.Vector2(p[0], p[1])), 24), phys({ color: 0xD9A7A0, side: T.DoubleSide })); siphon.position.set(1.25, 0.86, 0); siphon.rotation.z = -0.75; animal.add(siphon); fades.push(siphon.material);
+    /* --- the sea floor, a few plants, things drifting in the water --- */
+    const sandTex = blotchTexture('#8D8573', '#5E5848', '#B9B19C', 8); sandTex.repeat.set(7, 7);
+    const sand = new T.Mesh(new T.CircleGeometry(16, 48), new T.MeshStandardMaterial({ map: sandTex, bumpMap: sandTex, bumpScale: 0.5, roughness: 1, color: 0x9FB0AE, transparent: true })); sand.rotation.x = -Math.PI / 2; sand.position.y = 0.02; world.add(sand);
+    const weeds = [[-5.2, -2.2], [-4.6, -2.8], [4.9, -2.4], [5.4, -1.6], [3.2, -3.4]].map(([x, z], i) => { const w = new T.Mesh(new T.PlaneGeometry(0.22, 2.2 + (i % 3) * 0.5, 1, 6), mat(0x4F8F5C, { side: T.DoubleSide, opacity: 0.9 })); w.geometry.translate(0, 1.2, 0); w.position.set(x, 0, z); world.add(w); return w; });
+    const drift = makeSparks(world, 40, 0.025, 0xCFE8E8); const dr = lcg(12); drift.forEach(d => { d.userData.p = V((dr() - 0.5) * 14, dr() * 5, (dr() - 0.5) * 6); d.visible = true; d.material.opacity = 0.35; d.material.depthTest = true; });
+    const rod = new T.Group(); rod.add(new T.Mesh(new T.CylinderGeometry(0.03, 0.03, 2.6, 8), mat(0xDDE6E8, { opacity: 0.8 }))); rod.add(ball(0.06, mat(0xF6F3EC), 0, -1.3, 0)); rod.rotation.z = -0.45; world.add(rod);
+    /* --- the circuit of the reflex, inside the animal: one sensory neuron, one motor neuron (schematic) --- */
+    const circuit = new T.Group(); world.add(circuit);
+    const blue = mat(0x8FC4E8, { emissive: 0x8FC4E8, emissiveIntensity: 0.25 }), orange = mat(0xF0A040, { emissive: 0xF0A040, emissiveIntensity: 0.25 }), bag = mat(0xF2C14E, { opacity: 0.22, depthWrite: false });
+    const SYN = V(-0.52, 0.5, 0.05), sensPts = [V(1.55, 1.25, 0), V(1.2, 0.8, 0.05), V(0.5, 0.5, 0.12), V(-0.25, 0.52, 0.1), SYN.clone().add(V(0.06, 0.02, 0))], motPts = [SYN.clone().add(V(-0.06, -0.02, 0)), V(-0.75, 0.42, 0), V(-0.4, 0.62, 0.22), V(0.2, 0.74, 0.32), V(0.55, 0.9, 0.34)];
+    const sensC = new T.CatmullRomCurve3(sensPts), motC = new T.CatmullRomCurve3(motPts);
+    circuit.add(tube(sensPts, 0.025, blue, 40), ball(0.1, blue, -0.25, 0.52, 0.1), tube(motPts, 0.03, orange, 40), ball(0.13, orange, -0.75, 0.42, 0));
+    for (const d of [[0.12, 0.1], [-0.1, 0.12], [0.02, -0.12]]) circuit.add(tube([V(1.55, 1.25, 0), V(1.55 + d[0], 1.38, d[1])], 0.012, blue, 4));          // endings in the skin of the siphon
+    const blob = shaped((x, y, z) => [x * 0.5 - 0.5, y * 0.24 + 0.47, z * 0.3 + 0.03], bag); circuit.add(blob);
+    const gr = lcg(5); for (let i = 0; i < 12; i++) circuit.add(ball(0.045 + gr() * 0.04, mat(0xE8A24A, { opacity: 0.55 }), -0.5 + (gr() - 0.5) * 0.75, 0.47 + (gr() - 0.5) * 0.3, 0.03 + (gr() - 0.5) * 0.4));
+    const pulses = makeSparks(circuit, 2, 0.07, COR.sinal);
+    /* --- the synapse between the two, hugely magnified --- */
+    const LENS = V(-0.7, 2.75, 1.2), LR = 2.0, SC = 0.47;
+    const syn = makeSynapse(0x8FC4E8, 0xF0A040, true); syn.full = 64; syn.group.position.copy(LENS).add(V(0, -0.14, 0)); world.add(syn.group);
+    const glass = new T.Mesh(new T.CircleGeometry(1, 64), new T.MeshBasicMaterial({ color: 0x0E2730, transparent: true, depthWrite: false })); glass.position.copy(LENS).add(V(0, 0, -0.9)); world.add(glass);
+    const zoomM = new T.MeshBasicMaterial({ color: 0xF6F3EC, transparent: true }), zoomLine = new T.Group(); world.add(zoomLine);
+    for (const side of [-1, 1]) zoomLine.add(tube([SYN, LENS.clone().add(V(side * LR * 0.72, -LR * 0.69, -0.9))], 0.01, zoomM, 4));       // the two lines of a magnifier call-out
+    const lens = new T.Mesh(new T.TorusGeometry(1, 0.012, 8, 64), new T.MeshBasicMaterial({ color: 0xF6F3EC, transparent: true })); world.add(lens);
+    /* --- what the class does --- */
+    let n = 0, boost = 1, touchT = 9, r = 0, shown = 0, see = 0, micro = 0, shockT = 9;
     const response = k => Math.max(0.07, Math.pow(0.7, k - 1));                 // illustrative: about 30% less on each touch
-    const say = s => { if (out) out.textContent = s; };
-    function bar(cls) { if (!bars) return; const b = document.createElement('span'); b.className = cls; b.style.setProperty('--h', Math.round(Math.min(1, r) * 100) + '%'); bars.append(b); if (bars.children.length > 18) bars.firstChild.remove(); }
+    function bar(cls) { if (!bars) return; const b = document.createElement('span'); b.className = cls; b.style.setProperty('--h', Math.round(Math.min(1, r) * 100) + '%'); b.dataset.n = cls === 'apito' ? 'choque' : n + '.º'; bars.append(b); if (bars.children.length > 10) bars.firstChild.remove(); }
     slide.querySelector('[data-act="tocar"]').addEventListener('click', () => {
-      n++; r = Math.min(1.25, response(n) * boost); touchT = 0; som.toque(); bar(boost > 1 ? 'apito' : 'sirene');
-      say(boost > 1 ? 'Depois do choque, até um toque leve provoca uma resposta enorme: sensitização.' : n === 1 ? 'Primeiro toque: a brânquia encolhe-se toda.' : r < 0.2 ? 'Quase não se encolhe: habituou-se ao toque.' : 'Encolhe-se menos: o neurónio sensorial liberta menos neurotransmissor.');
+      n++; r = Math.min(1.2, response(n) * boost); touchT = 0; som.toque(); bar(boost > 1 ? 'apito' : 'sirene');
+      setTimeout(() => syn.release(Math.max(1, Math.round(8 * Math.min(1.2, r)))), 650);
+      say(boost > 1 ? 'Depois do choque, até um toque leve provoca uma resposta enorme: <b>sensitização</b>.' : n === 1 ? 'Primeiro toque: a brânquia encolhe-se toda.' : r < 0.2 ? 'Quase não se encolhe: <b>habituou-se</b> ao toque.' : 'Encolhe-se menos: a sinapse liberta menos neurotransmissor.');
       if (boost > 1 && n >= 3) boost = 1;
     });
-    slide.querySelector('[data-act="choque"]').addEventListener('click', () => { boost = 1.7; n = 0; som.apito(); say('Choque na cauda! Agora toca outra vez no sifão.'); });
+    slide.querySelector('[data-act="choque"]').addEventListener('click', () => { boost = 1.7; n = 0; shockT = 0; som.choque(); say('Choque na cauda! Agora toca outra vez no sifão.'); });
     slide.querySelector('[data-act="repor"]').addEventListener('click', () => { n = 0; boost = 1; r = 0; if (bars) bars.innerHTML = ''; say('Descansou umas horas: a resposta volta ao início. Toca no sifão.'); });
+    const tail = makeSparks(world, 1, 0.3, 0xFFF1A8)[0];
     const stage = makeStage(box, (step, dt, time) => {
-      cam(0, dt, time); touchT += dt;
-      const down = touchT < 0.5 ? ease(touchT / 0.25) * (1 - ease((touchT - 0.3) / 0.2)) : 0;       // the brush comes down and goes back
-      brush.position.set(0.95 - down * 0.35, 2.0 - down * 0.75, 0);
-      const pull = touchT > 0.2 && touchT < 2.6 ? ease((touchT - 0.2) / 0.3) * (1 - ease((touchT - 1.6) / 1.0)) : 0;
-      shown = toward(shown, pull * Math.min(1, r), dt, 9);
-      gill.scale.setScalar(1 - 0.78 * shown); gill.position.y = 0.55 - 0.25 * shown;
-      const count = Math.round(14 * Math.min(1, r)), go = (touchT - 0.25) / 0.7;
-      drops.forEach((d, i) => {
-        d.visible = i < count && go > 0 && go < 1.4;
-        d.position.set(syn.x + ((i % 5) - 2) * 0.1, syn.y + 0.12 - clamp(go) * 0.42, ((i % 3) - 1) * 0.1); d.material.opacity = clamp((1.4 - go) * 3);
-      });
+      cam(step, dt, time); touchT += dt; shockT += dt;
+      // the touch, and the gill pulling in (less each time)
+      const down = touchT < 0.5 ? ease(touchT / 0.25) * (1 - ease((touchT - 0.3) / 0.2)) : 0; rod.position.set(2.37 - down * 0.2, 3.05 - down * 0.5, 0); rod.visible = micro < 0.5;
+      const pull = touchT > 1.0 && touchT < 3.6 ? ease((touchT - 1.0) / 0.3) * (1 - ease((touchT - 2.5) / 1.0)) : 0;
+      shown = toward(shown, pull * Math.min(1, r), dt, 9); gill.scale.setScalar(1 - 0.72 * shown); siphon.scale.setScalar(1 - 0.3 * shown);
+      tail.visible = shockT < 0.5; if (tail.visible) { tail.position.set(2.5, 0.4, 0); tail.material.opacity = 1 - shockT * 2; }
+      // inside: the same signal in the sensory neuron every time; a weaker one in the motor neuron as the synapse weakens
+      see = toward(see, step >= 1 ? 1 : 0, dt, 3); micro = toward(micro, step >= 2 ? 1 : 0, dt, 2.5);
+      const bodyA = lerp(1, 0.2, see) * lerp(1, 0.6, micro); fades.forEach(m => { m.opacity = bodyA; m.depthWrite = bodyA > 0.9; }); sand.material.opacity = lerp(1, 0.35, micro);
+      circuit.visible = see > 0.02; circuit.scale.setScalar(1); [blue, orange].forEach(m => { m.opacity = see * lerp(1, 0.55, micro); }); bag.opacity = 0.22 * see * (1 - micro);
+      const k1 = (touchT - 0.25) / 0.45, k2 = (touchT - 0.75) / 0.4;
+      pulses[0].visible = see > 0.5 && k1 > 0 && k1 < 1; if (pulses[0].visible) pulses[0].position.copy(sensC.getPoint(k1));
+      pulses[1].visible = see > 0.5 && k2 > 0 && k2 < 1; if (pulses[1].visible) { pulses[1].position.copy(motC.getPoint(k2)); pulses[1].scale.setScalar(0.35 + Math.min(1.2, r)); }
+      // the magnified synapse grows out of the point where the two neurons meet
+      const sc = 0.001 + SC * ease(micro); syn.group.scale.setScalar(sc); syn.group.visible = micro > 0.02; syn.update(dt, time);
+      zoomLine.visible = lens.visible = glass.visible = micro > 0.05; zoomM.opacity = micro * 0.8; glass.material.opacity = micro * 0.88; lens.material.opacity = micro;
+      lens.position.copy(LENS); lens.scale.setScalar(LR * ease(micro)); glass.scale.setScalar(LR * ease(micro)); lens.quaternion.copy(stage.camera.quaternion); glass.quaternion.copy(stage.camera.quaternion);
+      weeds.forEach((w, i) => { w.rotation.z = Math.sin(time * 0.8 + i) * 0.12; });
+      drift.forEach((d, i) => { const p = d.userData.p; d.position.set(p.x + Math.sin(time * 0.2 + i) * 0.4, (p.y + time * 0.05 * (1 + i % 3)) % 5, p.z); });
     });
     if (!stage) return;
-    stage.scene.add(world);
-    const cam = director(stage.camera, [{ at: V(0.2, 0.95, 0), from: V(0.2, 3.85, 11.5) }], 1.8);
-    const pin = (x, y) => { const o = new T.Object3D(); o.position.set(x, y, 0); world.add(o); return o; };
-    stage.label('<b>brânquia</b>encolhe-se para se proteger', pin(-1.1, 1.25), () => true);
-    stage.label('<b>sifão</b>onde se toca', pin(0.6, 0.2), () => true, 'baixo');
-    stage.label('cabeça', pin(-4.2, 1.1), () => true, 'peq');
-    stage.label('<b>neurónio sensorial</b>sente o toque', pin(3.3, 2.45), s => s >= 1);
-    stage.label('<b>neurónio motor</b>encolhe a brânquia', pin(4.2, -0.4), s => s >= 1, 'baixo');
-    stage.label('neurotransmissor', pin(4.25, 0.5), s => s >= 1, 'peq');
+    stage.scene.add(world); stage.scene.fog = new T.FogExp2(0x15343D, 0.028);
+    const cam = director(stage.camera, [{ at: V(-0.3, 0.8, 0), from: V(-0.7, 2.9, 10.6) }, { at: V(0.45, 0.75, 0), from: V(0.55, 1.8, 7.6) }, { at: V(-0.2, 2.4, 1.2), from: V(-0.2, 2.7, 11.6) }, { at: V(-0.2, 2.4, 1.2), from: V(-0.2, 2.7, 11.6) }], 1.25);
+    const at = (x, y, z) => spot(world, x, y, z);
+    stage.label('<b>brânquia</b>por onde respira', at(-0.3, 2.6, 0.3), s => s === 0, '', at(0.55, 1.2, 0.34));
+    stage.label('<b>sifão</b>onde se toca', at(2.3, 2.1, 0), s => s === 0, '', at(1.55, 1.3, 0));
+    stage.label('cabeça', at(-3.2, 2.2, 0), s => s === 0, 'peq', at(-3.05, 1.3, 0));
+    stage.label('cauda', at(3.1, -0.1, 0), s => s === 0, 'peq', at(2.4, 0.4, 0));
+    stage.label('<b>1 · pele do sifão</b>sente o toque', at(2.3, 2.0, 0), s => s === 1, '', at(1.58, 1.33, 0));
+    stage.label('<b>2 · neurónio sensorial</b>leva o sinal', at(1.7, -0.4, 0.5), s => s === 1, '', at(0.6, 0.5, 0.12));
+    stage.label('<b>3 · sinapse</b>num gânglio', at(-1.3, -0.4, 0), s => s === 1, 'conceito', at(-0.52, 0.5, 0.05));
+    stage.label('<b>4 · neurónio motor</b>encolhe a brânquia', at(-0.5, 2.0, 0.4), s => s === 1, '', at(0.1, 0.74, 0.3));
+    stage.label('<b>neurónio sensorial</b>liberta neurotransmissor', at(2.5, 3.9, 1.2), s => s >= 2, '', at(-0.15, 3.5, 1.2));
+    stage.label('<b>neurónio motor</b>recebe-o', at(2.5, 1.8, 1.2), s => s >= 2, '', at(-0.15, 2.1, 1.2));
   };
 
-  /* ---------- 14. Building blocks for the scenes of degraus 2 to 5 ---------- */
+  /* ---------- 17. Building blocks for the scenes of degraus 2 to 5 ---------- */
   const box3 = (w, h, d, m, x, y, z) => { const b = new T.Mesh(new T.BoxGeometry(w, h, d), m); b.position.set(x || 0, y || 0, z || 0); return b; };
   const cyl = (r1, r2, h, m, x, y, z) => { const c = new T.Mesh(new T.CylinderGeometry(r1, r2, h, 18), m); c.position.set(x || 0, y || 0, z || 0); return c; };
   /** A sphere stretched into an ellipsoid: s = half-sizes, p = centre. */
@@ -756,7 +1206,7 @@
   som.vitoria = () => { tone(660, 0, 0.12, 'triangle', 0.15); tone(880, 0.12, 0.12, 'triangle', 0.15); tone(1320, 0.24, 0.25, 'triangle', 0.15); };
   som.pancada = () => tone(150, 0, 0.12, 'triangle', 0.18, 80);
 
-  /* ---------- 15. pavlov: teach the dog to salivate at the bell (degrau 2) ---------- */
+  /* ---------- 18. pavlov: teach the dog to salivate at the bell (degrau 2) ---------- */
   SCENES.pavlov = box => {
     const slide = box.closest('.slide'), say = sayIn(slide);
     const world = new T.Group(), fur = mat(0xC2925F, { roughness: 0.85 }), furDark = mat(0x7A5234, { roughness: 0.85 }), dark = mat(0x1E2A33), wood = mat(0x8A6B4A);
@@ -855,7 +1305,7 @@
     tags();
   };
 
-  /* ---------- 16. medo: the little Albert, seen in the brain (degrau 2) ---------- */
+  /* ---------- 19. medo: the little Albert, seen in the brain (degrau 2) ---------- */
   SCENES.medo = box => {
     if (!D) return box.classList.add('sem-3d');
     const head = buildHead(); head.osso.forEach(m => (m.visible = false)); head.hipocampo.forEach(m => (m.visible = false));
@@ -904,7 +1354,7 @@
     stage.label('<b>córtex pré-frontal</b>trava o alarme', head.anchor([14, 70, 26]), s => s >= 4, 'conceito azul', real('rh', [16, 60, -4]));
   };
 
-  /* ---------- 17. skinner: the box, the lever and four consequences (degrau 3) ---------- */
+  /* ---------- 20. skinner: the box, the lever and four consequences (degrau 3) ---------- */
   SCENES.skinner = box => {
     const slide = box.closest('.slide'), say = sayIn(slide), bars = slide.querySelector('.sustos'), runBtn = slide.querySelector('[data-act="correr"]');
     const world = new T.Group(), steel = mat(0x9AA4AD, { roughness: 0.45, metalness: 0.3 }), wall = mat(0xC9D1D8, { roughness: 0.6 }), dark = mat(0x1E2A33);
@@ -989,7 +1439,7 @@
     setMode('rp');
   };
 
-  /* ---------- 18. dopamina: what Skinner could not see (degrau 3) ---------- */
+  /* ---------- 21. dopamina: what Skinner could not see (degrau 3) ---------- */
   SCENES.dopamina = box => {
     const traco = box.querySelector('canvas.traco');
     const CUE = 1.2, REW = 3.0, T0 = 5;
@@ -1047,7 +1497,7 @@
     stage.label('<b>córtex pré-frontal</b>', head.anchor([-24, 66, 44]), () => true, '', head.anchor(onMesh('lh', pf)));
   };
 
-  /* ---------- 19. kohler: the chimpanzee, the stick and the banana (degrau 4) ---------- */
+  /* ---------- 22. kohler: the chimpanzee, the stick and the banana (degrau 4) ---------- */
   SCENES.kohler = box => {
     const world = new T.Group(), fur = mat(0x3A2E28, { roughness: 0.9 }), skin = mat(0xC49A7A), dark = mat(0x1E2A33), iron = mat(0x8A929A, { roughness: 0.4, metalness: 0.4 });
     world.add(ground(10, 0x46525D, -0.02), box3(5.7, 0.1, 4, mat(0x6A5A4A, { roughness: 1 }), -1.35, 0.03, 0));
@@ -1105,7 +1555,7 @@
     stage.label('<b>vara + banana</b>partes do mesmo problema', spot(world, 2.4, 1.5), s => s === 3, 'conceito');
   };
 
-  /* ---------- 20. tolman: a maze to explore with and without cheese (degrau 4) ---------- */
+  /* ---------- 23. tolman: a maze to explore with and without cheese (degrau 4) ---------- */
   SCENES.tolman = box => {
     const slide = box.closest('.slide'), say = sayIn(slide), log = box.querySelector('.registo ol');
     const N = 6, DX = [0, 1, 0, -1], DZ = [-1, 0, 1, 0];                      // directions: 0 = away from us, 1 = right, 2 = towards us, 3 = left
@@ -1187,7 +1637,7 @@
     forget();
   };
 
-  /* ---------- 21. regiao: one idea shown on the real brain (place cells; doing and watching) ---------- */
+  /* ---------- 24. regiao: one idea shown on the real brain (place cells; doing and watching) ---------- */
   SCENES.regiao = box => {
     if (!D) return box.classList.add('sem-3d');
     const head = buildHead(); head.osso.forEach(m => (m.visible = false));
@@ -1242,7 +1692,7 @@
     }
   };
 
-  /* ---------- 22. bobo: Bandura's doll, in 1961 and in 1965 (degrau 5) ---------- */
+  /* ---------- 25. bobo: Bandura's doll, in 1961 and in 1965 (degrau 5) ---------- */
   SCENES.bobo = box => {
     const late = box.dataset.modo === '1965';
     // per step: is the adult model there? how often does the child hit (hits per second; 0 = only watches)? is the child next to the doll?
@@ -1300,7 +1750,7 @@
     }
   };
 
-  /* ---------- 23. kolb: learning goes round a cycle of four moments (lesson 8) ---------- */
+  /* ---------- 26. kolb: learning goes round a cycle of four moments (lesson 8) ---------- */
   SCENES.kolb = box => {
     const world = new T.Group(), R = 2.7;
     const ringM = mat(0x55606A), ring = new T.Mesh(new T.TorusGeometry(R, 0.045, 10, 96), ringM); ring.rotation.x = Math.PI / 2; ring.position.y = 0.2; world.add(ring, ground(6.2, 0x3A4651, 0));
@@ -1354,6 +1804,6 @@
     stage.label('<b>quatro momentos</b>um clique para cada um', spot(world, 0, 1.1, 0), st => st === 0);
   };
 
-  /* ---------- 24. Start every scene present in the page ---------- */
+  /* ---------- 27. Start every scene present in the page ---------- */
   for (const box of boxes) { const make = SCENES[box.dataset.cena]; if (make) make(box); }
 })();

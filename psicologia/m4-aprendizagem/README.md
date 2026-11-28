@@ -73,6 +73,37 @@ As lições 4 a 8 ganharam onze slides 3D: três substituem versões em 2D (mant
 
 As versões anteriores a esta segunda parte estão em `archive/`, com o sufixo `_2026-11-27b`.
 
+## «Por dentro do cérebro» e Degrau 1: terceira ronda (28 de novembro de 2026)
+
+O bloco «Por dentro do cérebro» passou de seis para dez slides, e os dois slides 3D do Degrau 1 foram refeitos.
+
+| Slide | O que mudou |
+| --- | --- |
+| `s-n-memoria` (novo) | Como se guarda uma memória: zonas do córtex, **feixes de fibras reais**, hipocampo, consolidação durante o sono |
+| `s-n-neuronio` | Dois neurónios piramidais do córtex (dendrites com espinhas, corpo celular, axónio): 3 sinais não chegam, 7 sinais juntos fazem disparar |
+| `s-n-sinapse` (novo) | Uma sinapse muito ampliada: vesículas, neurotransmissor, recetores, entrada de sódio, despolarização |
+| `s-n-potencial` (novo) | O potencial de ação: canais de sódio e de potássio na membrana, com o gráfico da voltagem ao lado |
+| `s-n-rede` | Jogo «disparam juntos, ligam-se»: um aluno aprende o caminho para a escola (substitui o jogo «treina a rede») |
+| `s-n-cortex` | O cérebro aparece cortado: o córtex é a faixa laranja de fora e afina com o cursor da idade |
+| `s-n-medir` | O som é seguido em cerca de 60 mil pontos de luz («neurónios»), do nervo auditivo ao córtex auditivo |
+| `s-n-jogo` (novo) | Jogo de escolha múltipla (8 perguntas) sobre o bloco, com o botão «Jogar» |
+| `s-hab-sim` | O alarme: os mesmos pontos de luz, a amígdala a responder menos, e um gráfico grande ao lado |
+| `s-hab-kandel` | A lesma-do-mar em três escalas (animal, circuito, sinapse), com um gráfico grande ao lado |
+
+**Ficheiros novos:** `neuro-feixes.js` (oito feixes de fibras, 96 KB) e `tools/build_feixes.py`, o programa que o gera a partir do atlas HCP1065 (descarrega-se à parte, 588 MB; a morada está no cabeçalho do programa). Só é preciso voltar a correr o programa para acrescentar feixes.
+
+**Legendas fora do palco:** nos slides com um gráfico ao lado (`.hab-split`), a legenda fica por baixo (`<div class="leg3d fora">`, a seguir aos botões) e o palco leva `data-dy="0"`. A altura do par palco e gráfico é calculada a partir da altura do ecrã (`neuro3d.css`, secção 2), para que tudo caiba sem tapar o botão das notas: num ecrã de 720 píxeis de altura o palco fica com cerca de 300 píxeis, num de 1080 chega aos 620.
+
+**Cores fixas:** neurotransmissor a verde, sódio a laranja, potássio a violeta, nos slides da sinapse, do potencial de ação e da lesma.
+
+**O que é real e o que é modelo, nesta ronda:**
+
+- Real: a forma do cérebro e das estruturas profundas (FreeSurfer fsaverage), o corte do córtex, e os feixes de `neuro-feixes.js`: fascículo longitudinal inferior, cíngulo (parte para-hipocampal), fascículo uncinado, fórnix, fascículo fronto-occipital inferior, fascículo longitudinal superior e nervo auditivo. Vêm do atlas de tratografia HCP1065 (Fang-Cheng Yeh, *Nature Communications*, 2022), com licença CC BY-SA 4.0: a quem reutilizar pede-se a mesma licença e a referência.
+- Modelo: os pontos de luz (cada um representa muitos neurónios; os disparos são gerados ao acaso com uma frequência que a cena define, não são um registo), o troço entre o tálamo e o córtex auditivo (desenhado à mão, porque a «radiação acústica» do atlas não acaba no córtex auditivo), os neurónios piramidais, a sinapse, a membrana, a rede do caminho e a lesma. No corte do córtex, a diferença de espessura entre idades está ampliada 5 vezes; os milímetros mostrados são os reais.
+- A lesma é um modelo 3D feito por código (forma, pele com manchas, fundo do mar), não uma fotografia nem um modelo digitalizado do animal.
+
+As versões anteriores estão em `archive/`, com o sufixo `_2026-11-28`.
+
 ## Texto de apoio
 
 Cada slide tem, por baixo do título, um parágrafo curto de contexto (a classe `lede`), útil na aula e para quem estuda em casa. As notas do professor (tecla `N`) começam por um guião, «COMO CONDUZIR»: objetivo, o que dizer, o que perguntar e o que mostra cada clique. Os textos estão no ficheiro `leads.js` do gerador; no site, ficam diretamente no `index.html` e no `notes.js`.
@@ -85,6 +116,8 @@ Cada slide tem, por baixo do título, um parágrafo curto de contexto (a classe 
 | `style.css` | Aspeto (secção 16: as composições e simulações deste módulo; secção 17: as cenas animadas da lição 2) |
 | `app.js` | Comportamento: navegação, passos, jogos, simulações, temporizadores |
 | `notes.js` | Notas do professor, uma por slide |
+| `neuro3d.js`, `neuro3d.css` | As cenas 3D e o seu aspeto (uma secção por cena) |
+| `neuro-feixes.js` | Feixes de fibras reais usados nas cenas 3D (gerado por `tools/build_feixes.py`) |
 
 ## Atalhos na sala
 

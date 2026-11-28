@@ -1,0 +1,166 @@
+/* =====================================================================
+   neuro3d.css — the 3D slides of «Por dentro do cérebro», of the five degraus
+   and of Kolb's cycle (drawn by neuro3d.js). Uses the tokens of style.css.
+     1. The 3D stage, its labels and its captions
+     2. Controls under the stage (buttons, response bars)
+     3. The cortex slide: 3D brain beside the simplified plot
+     4. Degraus 2 to 5 and Kolb's cycle: concepts inside the scene, meters, cards, the maze pad
+     5. Phones
+   ===================================================================== */
+
+/* ---------- 1. Stage, labels, captions ---------- */
+.slide.n3d h2 { margin-bottom: 12px; font-size: 38px; }
+.slide.n3d .lede { margin: 0 0 12px; font-size: 18px; }
+.palco3d {
+  position: relative; overflow: hidden; border-radius: 12px;
+  height: min(62vh, 620px); min-height: 340px;
+  background: radial-gradient(ellipse at 50% 42%, #2b3945, var(--navy) 78%); color: var(--cream);
+}
+.palco3d > canvas.c3d { display: block; width: 100%; height: 100%; }      /* the one WebGL canvas of the page, lent to the current slide */
+.palco3d.sem-3d::after { content: "A animação 3D não está disponível neste navegador: as legendas contam a história."; position: absolute; inset: 38% 10% auto; text-align: center; color: var(--peach); }
+/* A label follows a point of the 3D scene (neuro3d.js moves it every frame). */
+.et3d { position: absolute; left: 0; top: 0; opacity: 0; transition: opacity .5s; pointer-events: none; white-space: nowrap; will-change: transform;
+  padding: 3px 11px; border-radius: 8px; background: rgba(18, 25, 31, .8); font-size: 15px; line-height: 1.25; color: var(--peach); text-align: center; }
+.et3d b { display: block; font: 700 17px var(--head); color: #fff; }
+.et3d.peq { font-size: 13px; padding: 1px 8px; }
+.et3d.baixo { translate: 0 118%; }                      /* written under its point instead of above */
+.et3d.lado { translate: 50% 50%; }                        /* written to the right of its point */
+.et3d.visivel { opacity: 1; }
+/* Arrows from a label to the exact place it names (one SVG layer per stage; neuro3d.js moves the lines every frame). */
+.setas3d { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; pointer-events: none; }
+.setas3d line { stroke: #fff; stroke-width: 2.5; stroke-linecap: round; opacity: 0; transition: opacity .5s; filter: drop-shadow(0 0 2px rgba(0, 0, 0, .9)); }
+.setas3d path { fill: #fff; }
+/* Captions: one per step, all in the same cell so the box keeps the size of the longest. */
+.leg3d { position: absolute; left: 16px; bottom: 16px; z-index: 2; display: grid; align-items: end; max-width: min(640px, calc(100% - 32px));
+  padding: 12px 16px; border-left: 4px solid var(--orange); border-radius: 4px; background: rgba(18, 25, 31, .88); }
+.leg3d > p { grid-area: 1 / 1; margin: 0; font-size: 19px; line-height: 1.35; color: var(--cream); }
+.leg3d > p:has(~ p.on) { opacity: 0; visibility: hidden; }
+.leg3d time { display: block; margin-bottom: 3px; font: 700 13px ui-monospace, Menlo, Consolas, monospace; letter-spacing: .14em; text-transform: uppercase; color: var(--accent); }
+.leg3d b { color: #fff; }
+.palco3d canvas.eeg { position: absolute; right: 16px; top: 16px; width: 280px; height: 130px; border-radius: 8px; background: rgba(18, 25, 31, .7); transition: opacity .5s; }
+
+/* ---------- 2. Controls and response bars ---------- */
+.ctl3d { display: flex; flex-wrap: wrap; align-items: center; gap: 10px 14px; margin-top: 12px; }
+.ctl3d output { flex: 1 1 260px; font-size: 18px; color: var(--navy); font-weight: 700; }
+.ctl3d .btn { font-size: 18px; }
+.sustos { display: flex; align-items: flex-end; gap: 6px; height: 96px; min-width: 150px; padding: 0 6px; border-bottom: 2px solid rgba(246, 243, 236, .5); }
+.sustos span { width: 20px; height: var(--h); border-radius: 4px 4px 0 0; background: var(--accent); animation: grow .5s var(--ease) both; transform-origin: bottom; }
+.sustos span.apito { background: #7FB0D0; }
+.sustos-caixa { position: absolute; right: 16px; top: 16px; z-index: 2; padding: 10px 12px 8px; border-radius: 8px; background: rgba(18, 25, 31, .8); }
+.sustos-caixa.esq { left: 16px; right: auto; }
+.sustos-caixa small { display: block; margin-top: 5px; font-size: 13px; color: var(--peach); text-align: center; }
+
+/* ---------- 3. Cortex: brain and plot side by side ---------- */
+.cortex-split { display: grid; grid-template-columns: 1fr 1.08fr; gap: 18px; align-items: stretch; }
+.cortex-split .palco3d { height: min(56vh, 560px); }
+.plot-lado { display: flex; flex-direction: column; gap: 8px; }
+.plot3d { flex: 1; border: 1px solid var(--line); border-radius: 12px; background: var(--white); padding: 6px; }
+.plot3d svg { display: block; width: 100%; height: 100%; max-height: 52vh; }
+.plot3d text { font: 19px var(--body); fill: var(--text); }
+.plot3d .tit { font-weight: 700; fill: var(--navy); }
+.plot3d .eixos line { stroke: var(--navy); stroke-width: 2.5; }
+.plot3d .eixos .grade { stroke: var(--line); stroke-width: 1; stroke-dasharray: 4 5; }
+.plot3d .pl-pontos circle { fill: var(--muted); opacity: .38; }
+.plot3d .pl-um line { stroke: var(--orange); stroke-width: 2; stroke-dasharray: 6 5; }
+.plot3d .pl-um circle { fill: var(--orange); }
+.plot3d .pl-um text { fill: var(--orange); font-weight: 700; }
+.plot3d path { fill: none; stroke-width: 6; stroke-linecap: round; }
+.plot3d .pl-todos { stroke: var(--navy); }
+.plot3d .baixo { stroke: var(--blue); } .plot3d .alto { stroke: var(--orange); }
+.plot3d text.baixo, .plot3d text.alto { stroke: none; font-size: 16px; font-weight: 700; }
+.plot3d text.baixo { fill: var(--blue); } .plot3d text.alto { fill: var(--orange); }
+.plot3d .pl-idade line { stroke: var(--navy); stroke-width: 1.5; stroke-dasharray: 3 4; }
+.plot3d .pl-idade circle { fill: var(--navy); stroke: #fff; stroke-width: 2; }
+/* each layer of the plot arrives with its step (classes ge1… on the slide, set by app.js) */
+.plot3d .pl-pontos, .plot3d .pl-todos, .plot3d .pl-dois, .plot3d .pl-idade { opacity: 0; transition: opacity .7s var(--ease); }
+.ge1 .plot3d .pl-pontos, .ge2 .plot3d .pl-todos, .ge2 .plot3d .pl-idade, .ge3 .plot3d .pl-dois { opacity: 1; }
+.ge1 .plot3d .pl-um, .ge3 .plot3d .pl-todos { opacity: 0; transition: opacity .5s; }
+.ge3 .plot3d .pl-pontos { opacity: .45; }
+.idade-ctl { display: flex; align-items: center; gap: 12px; font-size: 17px; color: var(--navy); font-weight: 700; }
+.idade-ctl input { flex: 1; accent-color: var(--orange); height: 28px; }
+/* the magnifier: a slab of cortex whose height is the thickness at the chosen age (enlarged 26 times) */
+.lupa { position: absolute; right: 14px; top: 14px; z-index: 2; display: grid; justify-items: center; gap: 4px; padding: 10px 14px; border-radius: 8px; background: rgba(18, 25, 31, .82); font-size: 14px; color: var(--peach); }
+.lupa i { display: block; width: 74px; height: var(--esp, 78px); border-radius: 6px 6px 0 0; background: linear-gradient(#E9B48E, #C98F6B); border-bottom: 5px solid #F6F3EC; transition: height .2s; }
+.lupa b { font: 700 18px var(--head); color: #fff; } .lupa output { font: 700 20px var(--head); color: var(--accent); }
+.fig-original { margin-top: 8px; font-size: 15px; }
+.fig-original img { display: block; max-width: min(100%, 520px); margin-top: 8px; border: 1px solid var(--line); border-radius: 8px; }
+
+/* ---------- 4. Degraus 2 to 5 and Kolb's cycle ---------- */
+/* A concept named inside the animation, on the object it belongs to (bigger than an ordinary label). */
+.et3d.conceito { padding: 5px 14px; background: var(--orange); color: #fff; font-size: 16px; box-shadow: 0 2px 12px rgba(0, 0, 0, .4); z-index: 1; }
+.et3d.conceito b { font-size: 21px; }
+.et3d.conceito.azul { background: var(--blue); }
+.et3d i { font-size: 15px; color: #fff; }
+/* Meters laid over the stage (the scene sets --saliva and --assoc on the stage, from 0 to 1). */
+.medidores { position: absolute; left: 16px; top: 16px; z-index: 2; display: grid; gap: 8px; min-width: 220px; padding: 10px 14px; border-radius: 8px; background: rgba(18, 25, 31, .82); font-size: 15px; color: var(--peach); }
+.medidores label { display: grid; gap: 3px; }
+.medidores i { display: block; height: 12px; border-radius: 6px; background: rgba(246, 243, 236, .18); overflow: hidden; }
+.medidores i::after { content: ""; display: block; height: 100%; width: calc(var(--v, 0) * 100%); border-radius: 6px; background: var(--accent); }
+.medidores .saliva { --v: var(--saliva, 0); } .medidores .saliva::after { background: #BFE3FF; }
+.medidores .assoc { --v: var(--assoc, 0); }
+.medidores b { color: #fff; }
+.medidores.canto { left: auto; top: auto; right: 16px; bottom: 16px; }
+#s-pav-sim .leg3d { max-width: min(560px, calc(100% - 290px)); }
+.ctl3d .btn[aria-pressed="true"] { background: var(--orange); color: #fff; border-color: var(--orange); }
+.ctl3d .btn[data-mode] { background: var(--white); color: var(--navy); border: 1px solid var(--navy); }
+.ctl3d .btn[data-mode][aria-pressed="true"] { background: var(--orange); color: #fff; border-color: var(--orange); }
+.ctl3d .btn[data-mode] small { display: block; font-size: 13px; font-weight: 400; opacity: .85; }
+.ctl3d.modos { margin-top: 8px; gap: 8px; }
+.ctl3d.modos .btn { flex: 1 1 150px; padding: 6px 10px; line-height: 1.2; }
+/* Cards and small plots that appear over the stage in some steps (data-em, switched by neuro3d.js). */
+.palco3d [data-em] { opacity: 0; visibility: hidden; transition: opacity .5s, visibility .5s; }
+.palco3d [data-em].agora { opacity: 1; visibility: visible; }
+.cartaz3d { position: absolute; right: 16px; top: 16px; z-index: 2; max-width: 46%; padding: 10px 16px; border-radius: 8px; background: rgba(18, 25, 31, .86); font: 700 22px var(--head); color: #fff; text-align: center; }
+.cartaz3d small { display: block; font: 400 15px var(--body); color: var(--peach); }
+.cartaz3d.esq { left: 16px; right: auto; }
+#s-espelho .cartaz3d { max-width: 250px; }                     /* narrow, so that it never covers the label of the parietal cortex */
+.cartaz3d.sob-traco { top: 195px; width: 400px; max-width: none; background: var(--orange); box-shadow: 0 2px 12px rgba(0, 0, 0, .4); } .cartaz3d.sob-traco small { color: #fff; }
+.cartaz3d.sob-traco.azul { background: var(--blue); }
+.duas-curvas { display: flex; gap: 14px; }
+.duas-curvas figure { margin: 0; } .duas-curvas svg { display: block; width: 170px; height: 100px; }
+.duas-curvas path { fill: none; stroke: var(--accent); stroke-width: 5; stroke-linecap: round; stroke-linejoin: round; }
+.duas-curvas line { stroke: rgba(246, 243, 236, .6); stroke-width: 2; }
+.duas-curvas figcaption { font: 700 17px var(--head); color: #fff; } .duas-curvas figcaption small { font-weight: 400; }
+.palco3d canvas.traco { position: absolute; right: 16px; top: 16px; width: 400px; height: 167px; border-radius: 8px; background: rgba(18, 25, 31, .86); transition: opacity .5s; }
+.palco3d canvas.arena { position: absolute; right: 16px; top: 16px; width: 230px; height: 230px; border-radius: 8px; background: rgba(18, 25, 31, .86); transition: opacity .5s; }
+/* The maze game: direction pad and list of runs. */
+.dpad { display: grid; grid-template: "a cima b" 46px "esq baixo dir" 46px / 52px 52px 52px; gap: 4px; }
+.dpad .btn { padding: 0; font-size: 22px; line-height: 1; }
+.dpad [data-act="cima"] { grid-area: cima; } .dpad [data-act="esq"] { grid-area: esq; } .dpad [data-act="baixo"] { grid-area: baixo; } .dpad [data-act="dir"] { grid-area: dir; }
+.registo { position: absolute; right: 16px; top: 16px; z-index: 2; min-width: 230px; padding: 10px 14px; border-radius: 8px; background: rgba(18, 25, 31, .86); font-size: 15px; color: var(--peach); }
+.registo.esq { left: 16px; right: auto; }
+.registo b { color: #fff; } .registo strong { display: block; font: 700 16px var(--head); color: #fff; }
+.registo ol { margin: 4px 0 0; padding-left: 20px; } .registo ol:empty::after { content: "ainda sem corridas"; margin-left: -20px; font-style: italic; }
+.ctl3d kbd { font-weight: 700; }
+/* slides with two rows of controls get a shorter stage; the one without controls, a taller one */
+#s-skinner-sim .palco3d { height: min(52vh, 540px); }
+#s-pav-sim .palco3d { height: min(56vh, 580px); }
+#s-tolman-jogo .palco3d { height: min(58vh, 580px); }
+#s-tolman-jogo .leg3d { left: auto; right: 16px; max-width: 300px; }       /* beside the maze, not over it */
+#s-kolb .palco3d { height: min(66vh, 680px); }
+
+/* ---------- 5. Phones ---------- */
+@media (max-width: 860px) {
+  .slide.n3d h2 { font-size: 26px; }
+  .palco3d { height: 60vh; min-height: 320px; }
+  .leg3d { left: 8px; bottom: 8px; max-width: calc(100% - 16px); padding: 9px 12px; } .leg3d > p { font-size: 15px; }
+  .et3d { font-size: 12px; } .et3d b { font-size: 13px; }
+  .setas3d line { stroke-width: 1.8; }
+  #s-n-caixa .et3d:has(b) { font-size: 0; padding: 2px 8px; }               /* five labels on a narrow screen: names only, the caption explains */
+  .cortex-split { grid-template-columns: 1fr; } .cortex-split .palco3d { height: 44vh; }
+  .palco3d canvas.eeg { width: 170px; height: 80px; }
+  .sustos { height: 60px; } .sustos span { width: 12px; }
+  .et3d.conceito { font-size: 12px; padding: 3px 8px; } .et3d.conceito b { font-size: 14px; } .et3d i { font-size: 12px; }
+  .medidores, .medidores.canto { left: auto; right: 8px; top: 8px; bottom: auto; min-width: 150px; padding: 7px 10px; font-size: 12px; gap: 5px; } .medidores i { height: 8px; }
+  #s-pav-sim .leg3d { max-width: calc(100% - 16px); }
+  .cartaz3d { right: 8px; top: 8px; max-width: 60%; padding: 7px 10px; font-size: 16px; } .cartaz3d small { font-size: 12px; }
+  .duas-curvas svg { width: 105px; height: 62px; } .duas-curvas figcaption { font-size: 13px; }
+  .palco3d canvas.traco { right: 8px; top: 8px; width: 230px; height: 96px; }
+  .cartaz3d.sob-traco { top: 110px; width: 230px; }
+  .registo.esq { left: 8px; }
+  #s-tolman-jogo .leg3d { display: none; }                                    /* on a phone the maze needs the whole stage */
+  .dpad { grid-template-rows: 44px 44px; grid-template-columns: repeat(3, 56px); }
+  .palco3d canvas.arena { right: 8px; top: 8px; width: 130px; height: 130px; }
+  .registo { right: 8px; top: 8px; min-width: 0; padding: 7px 10px; font-size: 12px; } .registo strong { font-size: 13px; }
+  .ctl3d.modos .btn { flex: 1 1 44%; font-size: 15px; }
+}
